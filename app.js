@@ -24,7 +24,7 @@
       this.canvas = document.getElementById(canvasId);
       if (!this.canvas) return;
       this.ctx = this.canvas.getContext('2d');
-      this.isEnabled = true;
+      this.isEnabled = false;
 
       // Multi-Shade Theme Palettes
       this.themes = {
@@ -687,32 +687,60 @@
       scoreboard.onHit(x, y, count);
     };
 
-    // 3. Setup Navbar On/Off Slide Switch (No text)
+    // 3. Setup Navbar Fun/Cosmic Mode Toggle Switch & Mission Announcement Toast
     const navFxToggle = document.getElementById('navFxToggle');
+    const fxSwitchWrapper = document.getElementById('fxSwitchWrapper');
     const fxWidget = document.getElementById('fxWidget');
     const fxPanel = document.getElementById('fxPanel');
     const botHud = document.getElementById('botHudWidget');
+    const missionToast = document.getElementById('missionToast');
+    const missionToastClose = document.getElementById('missionToastClose');
+    let toastTimer = null;
 
-    if (navFxToggle) {
-      navFxToggle.addEventListener('click', () => {
-        const isNowEnabled = !engine.isEnabled;
-        engine.toggleState(isNowEnabled);
+    function showMissionToast() {
+      if (!missionToast) return;
+      missionToast.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        if (missionToast) missionToast.classList.add('hidden');
+      }, 5500);
+    }
 
-        if (isNowEnabled) {
-          navFxToggle.classList.add('active');
-          navFxToggle.setAttribute('title', 'Background FX: ON');
-          if (fxWidget) fxWidget.classList.remove('hidden');
-          if (botHud) botHud.classList.remove('hidden');
-        } else {
-          navFxToggle.classList.remove('active');
-          navFxToggle.setAttribute('title', 'Background FX: OFF');
-          if (fxWidget) {
-            fxWidget.classList.add('hidden');
-            if (fxPanel) fxPanel.classList.remove('open');
-          }
-          if (botHud) botHud.classList.add('hidden');
-        }
+    if (missionToastClose && missionToast) {
+      missionToastClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        missionToast.classList.add('hidden');
       });
+    }
+
+    function toggleFunMode(forceState) {
+      const isNowEnabled = (typeof forceState === 'boolean') ? forceState : !engine.isEnabled;
+      engine.toggleState(isNowEnabled);
+
+      if (isNowEnabled) {
+        if (navFxToggle) navFxToggle.classList.add('active');
+        if (fxWidget) fxWidget.classList.remove('hidden');
+        if (botHud) botHud.classList.remove('hidden');
+        showMissionToast();
+        if (scoreboard) {
+          scoreboard.setFace('[★_★]', 1800);
+          scoreboard.setMessage('Weapons online! Vaporize comets, Cadet! 🚀');
+        }
+      } else {
+        if (navFxToggle) navFxToggle.classList.remove('active');
+        if (fxWidget) {
+          fxWidget.classList.add('hidden');
+          if (fxPanel) fxPanel.classList.remove('open');
+        }
+        if (botHud) botHud.classList.add('hidden');
+        if (missionToast) missionToast.classList.add('hidden');
+      }
+    }
+
+    if (fxSwitchWrapper) {
+      fxSwitchWrapper.addEventListener('click', () => toggleFunMode());
+    } else if (navFxToggle) {
+      navFxToggle.addEventListener('click', () => toggleFunMode());
     }
 
     // 4. Setup Floating FX Preset Switcher

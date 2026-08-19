@@ -80,12 +80,41 @@ body {
   opacity: 0 !important;
 }
 
-/* Minimalist Navbar FX Slider Switch (No text) */
-.fx-slider-switch {
-  width: 40px;
-  height: 22px;
+/* Fun Switch Wrapper & Hint Badge */
+.fx-switch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 3px 6px 3px 10px;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.12);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.fx-switch-wrapper:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 242, 254, 0.08);
+  box-shadow: 0 0 14px rgba(0, 242, 254, 0.2);
+}
+
+.fx-hint-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Minimalist Navbar FX Slider Switch */
+.fx-slider-switch {
+  width: 38px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   cursor: pointer;
@@ -94,7 +123,6 @@ body {
   align-items: center;
   outline: none;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-left: 4px;
 }
 
 .fx-slider-switch:hover {
@@ -102,8 +130,8 @@ body {
 }
 
 .fx-slider-knob {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #64748b;
   position: absolute;
@@ -113,15 +141,92 @@ body {
 }
 
 .fx-slider-switch.active {
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.35), rgba(59, 130, 246, 0.45));
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.45), rgba(59, 130, 246, 0.55));
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 12px rgba(0, 242, 254, 0.35);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
 }
 
 .fx-slider-switch.active .fx-slider-knob {
-  left: calc(100% - 17px);
+  left: calc(100% - 15px);
   background: #ffffff;
-  box-shadow: 0 0 8px rgba(0, 242, 254, 0.8), 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.9), 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Mission Announcement Toast Banner */
+.mission-toast {
+  position: fixed;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(9, 14, 28, 0.94);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--radius-lg);
+  padding: 12px 20px 12px 16px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 254, 0.35);
+  max-width: 520px;
+  width: calc(100vw - 32px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.mission-toast.hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateX(-50%) translateY(-24px) scale(0.92) !important;
+}
+
+.mission-toast-icon {
+  font-size: 1.5rem;
+  color: var(--accent-cyan);
+  animation: iconPulse 1s infinite alternate;
+  flex-shrink: 0;
+}
+
+.mission-toast-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mission-toast-title {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  letter-spacing: 0.06em;
+}
+
+.mission-toast-desc {
+  font-size: 0.8rem;
+  color: #f8fafc;
+  line-height: 1.35;
+}
+
+.mission-toast-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+  border-radius: 4px;
+  margin-left: auto;
+  transition: color 0.15s ease;
+}
+
+.mission-toast-close:hover {
+  color: #ffffff;
+}
+
+@keyframes iconPulse {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1.15); filter: drop-shadow(0 0 10px #00f2fe); }
 }
 
 /* Floating FX Preset Widget */
