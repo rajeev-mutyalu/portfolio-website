@@ -306,11 +306,11 @@ body {
   box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
 }
 
-/* Robot Avatar Box */
+/* Robot Avatar Box (Spacious 50px container so all emoji eyes stay on one single line) */
 .bot-avatar-box {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
   background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(59, 130, 246, 0.25));
   border: 1px solid rgba(0, 242, 254, 0.4);
   display: flex;
@@ -320,6 +320,7 @@ body {
   cursor: pointer;
   flex-shrink: 0;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
 }
 
 .bot-avatar-box:hover {
@@ -330,12 +331,20 @@ body {
 
 .bot-face {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--accent-cyan);
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: center;
   transition: all 0.15s ease;
   text-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+}
+
+.bot-face.compact {
+  font-size: 0.70rem;
+  letter-spacing: -0.06em;
 }
 
 .bot-antenna {
@@ -390,7 +399,7 @@ body {
 .bot-score-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: nowrap;
   justify-content: flex-start;
 }
@@ -428,7 +437,7 @@ body {
   flex-shrink: 0;
   white-space: nowrap;
   transform-origin: center;
-  margin-left: auto;
+  margin-left: 8px;
   box-shadow: 0 0 8px rgba(255, 87, 66, 0.4);
 }
 

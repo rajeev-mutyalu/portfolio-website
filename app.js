@@ -629,9 +629,17 @@
     setFace(faceStr, duration = 500) {
       if (!this.faceEl) return;
       this.faceEl.innerText = faceStr;
+      if (faceStr.includes('🔥') || faceStr.includes('💥') || faceStr.includes('⚡') || faceStr.includes('♥') || faceStr.length > 5) {
+        this.faceEl.classList.add('compact');
+      } else {
+        this.faceEl.classList.remove('compact');
+      }
       clearTimeout(this._faceTimer);
       this._faceTimer = setTimeout(() => {
-        if (this.faceEl) this.faceEl.innerText = this.faces.idle[0];
+        if (this.faceEl) {
+          this.faceEl.classList.remove('compact');
+          this.faceEl.innerText = this.faces.idle[0];
+        }
       }, duration);
     }
 
