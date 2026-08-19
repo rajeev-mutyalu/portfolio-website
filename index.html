@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=14" />
+  <link rel="stylesheet" href="style.css?v=15" />
 </head>
 
 <body>
@@ -70,7 +70,7 @@
           </svg>
         </a>
         <a href="#contact" class="btn btn-primary btn-sm">Get in Touch</a>
-        <div class="fx-switch-wrapper" id="fxSwitchWrapper" title="Toggle Interactive Cosmic Game Mode">
+        <button type="button" class="fx-switch-wrapper" id="fxSwitchWrapper" title="Toggle Interactive Cosmic Game Mode" aria-label="Toggle Interactive Cosmic Game Mode">
           <span class="fx-hint-badge">
             <svg class="fx-joy-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#joyOrangeGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <defs>
@@ -87,11 +87,10 @@
             </svg>
             <span>Game Mode</span>
           </span>
-          <button type="button" class="fx-slider-switch" id="navFxToggle" title="Toggle Cosmic Game Mode"
-            aria-label="Toggle Cosmic Game Mode">
+          <span class="fx-slider-switch" id="navFxToggle">
             <span class="fx-slider-knob"></span>
-          </button>
-        </div>
+          </span>
+        </button>
       </div>
     </div>
   </header>
@@ -852,7 +851,7 @@
     <button type="button" class="mission-toast-close" id="missionToastClose" title="Dismiss">&times;</button>
   </div>
 
-  <script src="app.js?v=14"></script>
+  <script src="app.js?v=15"></script>
 </body>
 
 </html>

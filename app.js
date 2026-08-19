@@ -891,9 +891,11 @@
     }
 
     if (fxSwitchWrapper) {
-      fxSwitchWrapper.addEventListener('click', () => toggleFunMode());
-    } else if (navFxToggle) {
-      navFxToggle.addEventListener('click', () => toggleFunMode());
+      fxSwitchWrapper.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleFunMode();
+      });
     }
 
     // 4. Setup Floating FX Preset Switcher
