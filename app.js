@@ -1,13 +1,13 @@
 /**
- * Rajeev Mutyalu Portfolio — Interactive Engine & "Play Fetch With Donut"
+ * Rajeev Mutyalu Portfolio — Frame-by-Frame Donut Animation Engine
  * 
  * Features:
- * - Real Smooth Fox Terrier Donut (extracted from 3D turnaround & video)
- * - Duo-Tone SportsPet Fetch Ball: Smooth cursor follower + gentle idle bounce when stationary
- * - Donut turns & runs smoothly across screen towards the ball
- * - Arrives, pants happily, and wags tail
- * - 10-Second Idle Catch: Donut leaps, catches ball with "CHOMP! 🐾✨", holds ball in mouth, stays in place!
- * - Click to Release: Clicking Donut releases the ball back to cursor & repeats
+ * - 4-Frame Dynamic Running Cycle (Moving legs, open panting mouth)
+ * - 4-Frame Sitting & Wagging Idle Cycle (Panting with pink tongue, alert ears, tail wagging)
+ * - 4-Frame Jumping & Catch Cycle (Leaping up, biting ball with jaws around ball, landing proudly)
+ * - Correct directional facing: Donut's face ALWAYS looks at the ball
+ * - 15-Second Idle Catch timer
+ * - Click on Donut to release the ball back to cursor & repeat
  * - Interactive Pipeline Architecture Flow switcher
  * - Smooth scroll navigation spy
  */
@@ -16,7 +16,7 @@
   'use strict';
 
   // ==========================================================================
-  // 1. "Play Fetch With Donut" Interactive Companion Engine
+  // 1. Frame-by-Frame Donut Companion Engine
   // ==========================================================================
   const fetchBall = document.getElementById('fetchBall');
   const donutDog = document.getElementById('donutDog');
@@ -25,40 +25,70 @@
   const donutChomp = document.getElementById('donutChomp');
 
   if (fetchBall && donutDog && donutSprite) {
+    // Animation Frames Preloader
+    const FRAMES = {
+      run: ['sprites/run_1.png', 'sprites/run_2.png', 'sprites/run_3.png', 'sprites/run_4.png'],
+      sit: ['sprites/sit_1.png', 'sprites/sit_2.png', 'sprites/sit_3.png', 'sprites/sit_4.png'],
+      catch: ['sprites/catch_1.png', 'sprites/catch_2.png', 'sprites/catch_3.png', 'sprites/catch_4.png']
+    };
+
+    // Preload all frames in browser cache
+    Object.values(FRAMES).flat().forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
     // Ball State
     const ball = {
       x: window.innerWidth / 2,
       y: window.innerHeight / 2,
       targetX: window.innerWidth / 2,
       targetY: window.innerHeight / 2,
-      visible: true,
       bouncing: true
     };
 
-    // Donut Dog State
+    // Donut State
     const dog = {
       x: window.innerWidth - 180,
-      y: window.innerHeight - 200,
+      y: window.innerHeight - 220,
       targetX: window.innerWidth - 180,
-      targetY: window.innerHeight - 200,
+      targetY: window.innerHeight - 220,
+      state: 'sit', // 'run' | 'sit' | 'catch'
+      frameIdx: 0,
       facingRight: false,
-      isRunning: false,
       isHoldingBall: false,
-      speed: 0.08
+      speed: 0.085
     };
 
     // Timers
-    let idleTimer = null;
+    let idleCatchTimer = null;
     let stopMotionTimer = null;
-    const IDLE_CATCH_DELAY = 10000; // 10 seconds
+    let animFrameInterval = null;
+    const IDLE_CATCH_DELAY = 15000; // 15 Seconds
 
-    // Preload dog sprites
-    const imgIdle = new Image();
-    imgIdle.src = 'donut_idle.png';
-    const imgRun = new Image();
-    imgRun.src = 'donut_run.png';
-    const imgCatch = new Image();
-    imgCatch.src = 'donut_catch.png';
+    // Frame Animation Loop
+    function startFrameAnimation(stateKey, intervalMs) {
+      if (dog.state === stateKey && animFrameInterval) return;
+      clearInterval(animFrameInterval);
+      dog.state = stateKey;
+      dog.frameIdx = 0;
+
+      animFrameInterval = setInterval(() => {
+        const frameList = FRAMES[dog.state];
+        if (!frameList) return;
+
+        if (dog.state === 'catch') {
+          // Play catch sequence once and hold on the final frame (catch_4.png)
+          if (dog.frameIdx < frameList.length - 1) {
+            dog.frameIdx++;
+          }
+        } else {
+          dog.frameIdx = (dog.frameIdx + 1) % frameList.length;
+        }
+
+        donutSprite.src = frameList[dog.frameIdx];
+      }, intervalMs);
+    }
 
     // Mouse Tracking
     window.addEventListener('mousemove', (e) => {
@@ -71,29 +101,26 @@
         fetchBall.classList.remove('bouncing');
         ball.bouncing = false;
 
-        // Reset 10s idle catch timer on movement
-        clearTimeout(idleTimer);
+        // Reset 15s idle timer
+        clearTimeout(idleCatchTimer);
         clearTimeout(stopMotionTimer);
 
-        // When mouse stops moving for 220ms, start idle bounce & send Donut
+        // When mouse pauses for 200ms, start bouncing & send Donut
         stopMotionTimer = setTimeout(() => {
           if (!dog.isHoldingBall) {
             fetchBall.classList.add('bouncing');
             ball.bouncing = true;
 
-            // Send Donut running towards the ball
             sendDonutToBall();
-
-            // Start 10s idle countdown to catch
             startIdleCatchTimer();
           }
-        }, 220);
+        }, 200);
       }
     });
 
     function startIdleCatchTimer() {
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => {
+      clearTimeout(idleCatchTimer);
+      idleCatchTimer = setTimeout(() => {
         if (!dog.isHoldingBall) {
           executeDonutCatch();
         }
@@ -101,32 +128,31 @@
     }
 
     function sendDonutToBall() {
-      // Offset Donut so the ball remains visible right in front of his snout
-      const offsetX = ball.targetX > dog.x ? -110 : 20;
+      // Offset Donut so his head faces the ball
+      const offsetX = ball.targetX > dog.x ? -100 : 30;
       const offsetY = -40;
-      dog.targetX = Math.max(20, Math.min(window.innerWidth - 160, ball.targetX + offsetX));
-      dog.targetY = Math.max(20, Math.min(window.innerHeight - 200, ball.targetY + offsetY));
+      dog.targetX = Math.max(30, Math.min(window.innerWidth - 160, ball.targetX + offsetX));
+      dog.targetY = Math.max(30, Math.min(window.innerHeight - 200, ball.targetY + offsetY));
     }
 
     function executeDonutCatch() {
       dog.isHoldingBall = true;
-      clearTimeout(idleTimer);
+      clearTimeout(idleCatchTimer);
 
-      // Move Donut right to ball position
-      const catchOffsetX = dog.facingRight ? -100 : -10;
+      // Snap Donut to exact ball coordinates
+      const catchOffsetX = dog.facingRight ? -80 : -20;
       dog.targetX = ball.x + catchOffsetX;
       dog.targetY = ball.y - 70;
       dog.x = dog.targetX;
       dog.y = dog.targetY;
 
-      // Hide standalone bouncing ball immediately
+      // Hide standalone bouncing ball
       fetchBall.style.display = 'none';
       fetchBall.style.opacity = '0';
       fetchBall.classList.remove('bouncing');
 
-      donutDog.classList.remove('running', 'wagging');
       donutDog.classList.add('catching', 'show-chomp');
-      donutSprite.src = 'donut_catch.png';
+      startFrameAnimation('catch', 160);
 
       donutSpeech.innerText = 'Click Donut to throw again! 🐶';
       donutDog.classList.add('show-speech');
@@ -143,15 +169,15 @@
       if (dog.isHoldingBall) {
         // Release Ball back to cursor
         dog.isHoldingBall = false;
-        donutSprite.src = 'donut_idle.png';
         donutDog.classList.remove('catching');
         
-        // Show standalone ball at cursor
         fetchBall.style.display = 'flex';
         fetchBall.style.opacity = '1';
         ball.x = e.clientX || ball.targetX;
         ball.y = e.clientY || ball.targetY;
         fetchBall.classList.add('bouncing');
+
+        startFrameAnimation('sit', 240);
 
         donutSpeech.innerText = 'Woof! Throw it again! 🎾';
         donutDog.classList.add('show-speech');
@@ -165,7 +191,6 @@
         // Pet Donut
         donutSpeech.innerText = '*Pants happily & wags tail* 🐾';
         donutDog.classList.add('show-speech');
-        donutDog.classList.add('wagging');
 
         setTimeout(() => {
           donutDog.classList.remove('show-speech');
@@ -173,50 +198,43 @@
       }
     });
 
-    // Companion Physics Loop (60 FPS)
+    // 60 FPS Physics & Motion Loop
     function updateCompanion() {
-      // 1. Update Ball Position (smooth lerp)
+      // 1. Smooth Ball Movement
       if (!dog.isHoldingBall) {
         ball.x += (ball.targetX - ball.x) * 0.18;
         ball.y += (ball.targetY - ball.y) * 0.18;
         fetchBall.style.transform = `translate3d(${ball.x}px, ${ball.y}px, 0)`;
       }
 
-      // 2. Update Donut Position (smooth running lerp)
+      // 2. Smooth Dog Motion
       const dx = dog.targetX - dog.x;
       const dy = dog.targetY - dog.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (dist > 6) {
+      if (dist > 8 && !dog.isHoldingBall) {
         dog.x += dx * dog.speed;
         dog.y += dy * dog.speed;
 
-        if (!dog.isRunning) {
-          dog.isRunning = true;
-          if (!dog.isHoldingBall) {
-            donutSprite.src = 'donut_run.png';
-          }
-          donutDog.classList.add('running');
-          donutDog.classList.remove('wagging');
-        }
+        // Switch to 4-Frame Run Animation
+        startFrameAnimation('run', 110);
+        donutDog.classList.add('running');
+        donutDog.classList.remove('wagging');
 
-        // Direction flipping
+        // Direction facing: Face the movement direction
         dog.facingRight = dx > 0;
-        donutSprite.style.transform = dog.facingRight ? 'scaleX(-1)' : 'scaleX(1)';
+        donutSprite.style.transform = dog.facingRight ? 'scaleX(1)' : 'scaleX(-1)';
       } else {
-        if (dog.isRunning) {
-          dog.isRunning = false;
-          donutDog.classList.remove('running');
+        donutDog.classList.remove('running');
 
-          if (!dog.isHoldingBall) {
-            donutSprite.src = 'donut_idle.png';
-            donutDog.classList.add('wagging');
-            donutSpeech.innerText = 'Donut is ready! 🎾';
-            donutDog.classList.add('show-speech');
-            setTimeout(() => {
-              donutDog.classList.remove('show-speech');
-            }, 2000);
-          }
+        if (!dog.isHoldingBall) {
+          // Switch to 4-Frame Sitting & Wagging Idle Animation
+          startFrameAnimation('sit', 260);
+          donutDog.classList.add('wagging');
+
+          // Face towards the ball so head/eyes always look at ball
+          dog.facingRight = ball.x >= dog.x;
+          donutSprite.style.transform = dog.facingRight ? 'scaleX(1)' : 'scaleX(-1)';
         }
       }
 
@@ -228,7 +246,7 @@
     // Initial setup
     fetchBall.style.transform = `translate3d(${ball.x}px, ${ball.y}px, 0)`;
     donutDog.style.transform = `translate3d(${dog.x}px, ${dog.y}px, 0)`;
-    donutSprite.src = 'donut_idle.png';
+    startFrameAnimation('sit', 260);
     startIdleCatchTimer();
     updateCompanion();
   }

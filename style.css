@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Rajeev Mutyalu Portfolio — Vetric Design System & Fetch Companion
+   Rajeev Mutyalu Portfolio — Vetric Design System & Animated Donut
    ========================================================================== */
 
 :root {
@@ -59,7 +59,7 @@ body {
 }
 
 /* ==========================================================================
-   🐕 Play Fetch With Donut — Realistic Dog & Duo-Tone Ball Companion
+   🐕 Play Fetch With Donut — Frame-by-Frame Animated Companion
    ========================================================================== */
 
 /* Fetch Ball (Proper ~26px realistic proportion) */
@@ -83,7 +83,6 @@ body {
   object-fit: contain;
   border-radius: 50%;
   filter: drop-shadow(0 4px 10px rgba(0, 242, 254, 0.5));
-  transition: transform 0.15s ease;
 }
 
 /* Subtle Idle Bounce when stationary */
@@ -115,26 +114,28 @@ body {
   100% { transform: scale(0.5); opacity: 0.2; }
 }
 
-/* Donut Dog Companion (Realistic Smooth Fox Terrier ~140px) */
+/* Donut Dog Companion (Frame-by-Frame Sprite Display) */
 .donut-companion {
   position: fixed;
   top: 0;
   left: 0;
   width: 140px;
-  height: auto;
+  height: 155px;
   z-index: 9998;
   cursor: pointer;
   transform-origin: center bottom;
   user-select: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 .donut-sprite {
   width: 100%;
-  height: auto;
-  max-height: 180px;
+  height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.8));
-  transition: filter 0.2s ease;
+  transition: transform 0.1s ease-out;
 }
 
 .donut-shadow {
@@ -146,38 +147,6 @@ body {
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.6);
   filter: blur(5px);
-}
-
-/* Dynamic Running Animation */
-.donut-companion.running .donut-sprite {
-  animation: dogRunStep 0.28s ease-in-out infinite alternate;
-}
-
-@keyframes dogRunStep {
-  0% { transform: translateY(0px) rotate(-2deg); }
-  100% { transform: translateY(-10px) rotate(3deg); }
-}
-
-/* Idle Breathing & Tail Wag Animation */
-.donut-companion.wagging .donut-sprite {
-  animation: dogIdlePant 1.4s ease-in-out infinite alternate;
-}
-
-@keyframes dogIdlePant {
-  0% { transform: scale(1, 1) rotate(0deg); }
-  50% { transform: scale(1.02, 0.98) rotate(-1deg); }
-  100% { transform: scale(0.99, 1.02) rotate(1.5deg); }
-}
-
-/* Donut Jump & Catch Animation */
-.donut-companion.catching .donut-sprite {
-  animation: dogCatchLeap 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes dogCatchLeap {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-24px) scale(1.1); }
-  100% { transform: translateY(0) scale(1); }
 }
 
 /* Donut Speech Bubble */
@@ -245,7 +214,7 @@ body {
 
 /* ==========================================================================
    Ambient Background Glows
-   ========================================================================== */
+   ========================================================================= */
 .ambient-glow {
   position: absolute;
   border-radius: 50%;
