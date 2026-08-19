@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rajeev Mutyalu — Lead Software Architect &amp; VFX Pipeline Specialist</title>
-  <meta name="description" content="Portfolio of Rajeev Mutyalu: Lead Software Architect at Astra Studios specializing in OpenUSD VFX Pipelines, Zero-Touch n8n Studio Automation, Conform Ingest, and GenAI Video Creation." />
-  
+  <meta name="description"
+    content="Portfolio of Rajeev Mutyalu: Lead Software Architect at Astra Studios specializing in OpenUSD VFX Pipelines, Zero-Touch n8n Studio Automation, Conform Ingest, and GenAI Video Creation." />
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!-- =========================================================================
+       ✨ Interactive Comet Cascade Canvas Background (Inspired by getdesign.md)
+       ========================================================================= -->
+  <canvas id="cometCanvas"></canvas>
+
   <!-- Ambient Background Glows -->
   <div class="ambient-glow glow-top-left"></div>
   <div class="ambient-glow glow-top-right"></div>
@@ -38,18 +48,25 @@
       </nav>
 
       <div class="nav-actions">
-        <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" rel="noopener" class="btn btn-ghost btn-icon" title="LinkedIn Profile">
+        <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" rel="noopener"
+          class="btn btn-ghost btn-icon" title="LinkedIn Profile">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z"/>
+            <path
+              d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />
           </svg>
         </a>
-        <a href="https://github.com/rajeev-mutyalu" target="_blank" rel="noopener" class="btn btn-ghost btn-icon" title="GitHub Profile">
+        <a href="https://github.com/rajeev-mutyalu" target="_blank" rel="noopener" class="btn btn-ghost btn-icon"
+          title="GitHub Profile">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
+            <path
+              d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z" />
           </svg>
         </a>
-        <a href="donut_preview.html" class="btn btn-secondary btn-sm" title="View Donut Animation & Sprite Showcase">🐶 Donut Sprites</a>
         <a href="#contact" class="btn btn-primary btn-sm">Get in Touch</a>
+        <button type="button" class="fx-slider-switch active" id="navFxToggle" title="Toggle Background FX"
+          aria-label="Toggle Background FX">
+          <span class="fx-slider-knob"></span>
+        </button>
       </div>
     </div>
   </header>
@@ -69,11 +86,14 @@
       </div>
 
       <h1 class="hero-title">
-        Architecting <span class="gradient-text">Next-Gen USD Pipelines</span> &amp; Autonomous <span class="gradient-accent">GenAI Studio Workflows</span>
+        Architecting <span class="gradient-text">Next-Gen USD Pipelines</span> &amp; Autonomous <span
+          class="gradient-accent">GenAI Studio Workflows</span>
       </h1>
 
       <p class="hero-sub">
-        Over 18 years leading software architecture, R&amp;D, and engineering for world-class VFX and creative studios (Astra Studios, Technicolor, MPC Film). Specialized in end-to-end OpenUSD pipelines, conform-based plate ingest with pattern recognition, zero-touch <strong>n8n</strong> automation, and frontier generative video creation.
+        Over 18 years leading software architecture, R&amp;D, and engineering for world-class VFX and creative studios
+        (Astra Studios, Technicolor, MPC Film). Specialized in end-to-end OpenUSD pipelines, conform-based plate ingest
+        with pattern recognition, zero-touch <strong>n8n</strong> automation, and frontier generative video creation.
       </p>
 
       <div class="hero-badges">
@@ -94,7 +114,9 @@
       <div class="hero-cta-group">
         <a href="#initiatives" class="btn btn-primary btn-lg">
           <span>Explore Current Initiatives</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
         </a>
         <a href="#films" class="btn btn-secondary btn-lg">
           <span>View Feature Film Credits</span>
@@ -108,7 +130,8 @@
     <div class="section-header">
       <div class="tag-label">Astra Studios Vanguard</div>
       <h2 class="section-title">Current Focus &amp; Innovations</h2>
-      <p class="section-desc">Pioneering the modern studio pipeline: fusing Universal Scene Description, autonomous automation engines, and generative AI video foundation models.</p>
+      <p class="section-desc">Pioneering next-generation visual effects infrastructure: modular OpenUSD composition,
+        zero-touch studio automation, and enterprise GenAI feature production.</p>
     </div>
 
     <div class="grid-3">
@@ -121,15 +144,18 @@
             <polyline points="2 12 12 17 22 12"></polyline>
           </svg>
         </div>
-        <h3>End-to-End USD Pipeline</h3>
+        <h3>Astra VFX USD Pipeline</h3>
         <p class="card-text">
-          Designing and building an <strong>OpenUSD</strong> pipeline from scratch with the team—from Modeling, Rigging, and Layout to Lighting and Compositing for both full CG and plate-based live action VFX.
+          Architecting an enterprise <strong>OpenUSD</strong> pipeline from scratch. Unifies modular asset creation across
+          Modeling, Groom, LookDev, and Rigging with a non-destructive shot workflow spanning Layout, Animation,
+          Simulation, FX, and Lighting for complete studio-scale production.
         </p>
         <div class="card-tags">
-          <span class="pill">OpenUSD Stage</span>
-          <span class="pill">Hydra Viewport</span>
-          <span class="pill">Houdini &bull; Maya &bull; Nuke</span>
-          <span class="pill">Full CG &amp; Live Plate VFX</span>
+          <span class="pill">OpenUSD Architecture</span>
+          <span class="pill">Modular Asset Creation</span>
+          <span class="pill">Shot Sublayer Pipeline</span>
+          <span class="pill">Non-Destructive Workflow</span>
+          <span class="pill">Unified Deliverables</span>
         </div>
       </div>
 
@@ -140,15 +166,18 @@
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
           </svg>
         </div>
-        <h3>Zero-Touch Studio Automation</h3>
+        <h3>Zero-Touch n8n Automation</h3>
         <p class="card-text">
-          Automating studio-wide workflows with <strong>n8n</strong>. Eliminating manual intervention by triggering complex multi-department tasks directly from app events, chat messages, and webhooks.
+          Engineering event-driven studio orchestration with <strong>n8n</strong>. Eliminates manual bottlenecks with
+          automated project onboarding, smart regex pattern recognition for VFX plate validation, automated transcode and
+          farm render dispatch, and bidirectional <strong>ShotGrid</strong> synchronization.
         </p>
         <div class="card-tags">
-          <span class="pill">n8n Workflow Hub</span>
-          <span class="pill">Event-Driven Architecture</span>
-          <span class="pill">Webhooks</span>
-          <span class="pill">Zero Manual Intervention</span>
+          <span class="pill">n8n Event-Driven Hub</span>
+          <span class="pill">Automated Project Onboarding</span>
+          <span class="pill">Smart Plate Pattern Recognition</span>
+          <span class="pill">Ingest &amp; Render Automation</span>
+          <span class="pill">ShotGrid &amp; Slack Sync</span>
         </div>
       </div>
 
@@ -160,15 +189,19 @@
             <path d="m10 15 5-3-5-3v6z"></path>
           </svg>
         </div>
-        <h3>GenAI Prompt-to-Video Engine</h3>
+        <h3>Studio.AI GenAI Production</h3>
         <p class="card-text">
-          Architecting automated production pipelines to generate high-fidelity content purely from prompts using frontier generative video and image models including <strong>Google Veo</strong>, <strong>Higgsfield</strong>, <strong>Seedance</strong>, and <strong>Kling AI</strong>.
+          Architecting <strong>Studio.AI (Scene Weaver)</strong>—an enterprise generative AI platform for managing and
+          orchestrating feature film production. Connects script/storyboard parsing, prompt routing across <strong>Google
+            Veo</strong>, <strong>Kling AI</strong>, <strong>Higgsfield</strong>, and <strong>Seedance</strong>, character
+          latent consistency, and ACES studio conforming.
         </p>
         <div class="card-tags">
-          <span class="pill">Google Veo</span>
-          <span class="pill">Kling AI</span>
-          <span class="pill">Higgsfield</span>
-          <span class="pill">Seedance</span>
+          <span class="pill">Studio.AI (Scene Weaver)</span>
+          <span class="pill">Prompt Studio &amp; Multi-Model Router</span>
+          <span class="pill">Google Veo &bull; Kling AI &bull; Higgsfield</span>
+          <span class="pill">Latent Consistency &amp; Identity Lock</span>
+          <span class="pill">ACES Studio Conform</span>
         </div>
       </div>
     </div>
@@ -179,21 +212,26 @@
     <div class="section-header">
       <div class="tag-label">Core Pipeline Mastery</div>
       <h2 class="section-title">Conform Ingest, Plate Ingestion &amp; Pattern Recognition</h2>
-      <p class="section-desc">Architecting robust client turnover pipelines, automated metadata validation, and smart pattern matching for visual effects production.</p>
+      <p class="section-desc">Architecting robust client turnover pipelines, automated metadata validation, and smart
+        pattern matching for visual effects production.</p>
     </div>
 
     <div class="grid-3">
       <div class="feature-card glass-card">
         <div class="card-icon icon-cyan">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+            </path>
             <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
             <line x1="12" y1="22.08" x2="12" y2="12"></line>
           </svg>
         </div>
         <h3>Conform-Based Ingest System</h3>
         <p class="card-text">
-          Supervised the entire development lifecycle of Conform Ingest using Hiero/Nuke Studio, replacing legacy unstructured systems with a scalable conform-driven architecture processing client turnovers, plates, edits, grades, and references seamlessly.
+          Supervised the entire development lifecycle of Conform Ingest using Hiero/Nuke Studio, replacing legacy
+          unstructured systems with a scalable conform-driven architecture processing client turnovers, plates, edits,
+          grades, and references seamlessly.
         </p>
         <div class="card-tags">
           <span class="pill">Hiero / Nuke Studio</span>
@@ -213,7 +251,9 @@
         </div>
         <h3>Smart Pattern Recognition</h3>
         <p class="card-text">
-          Engineered <strong>Smart Folders</strong> and regex-based pattern recognition algorithms. Automatically parses complex camera codes, reel numbers, and color spaces, paired with automated ShotGrid frame range checks to eliminate editorial discrepancies.
+          Engineered <strong>Smart Folders</strong> and regex-based pattern recognition algorithms. Automatically parses
+          complex camera codes, reel numbers, and color spaces, paired with automated ShotGrid frame range checks to
+          eliminate editorial discrepancies.
         </p>
         <div class="card-tags">
           <span class="pill">Smart Folder Scanning</span>
@@ -231,7 +271,8 @@
         </div>
         <h3>Re-Conform &amp; Split-Shot Paths</h3>
         <p class="card-text">
-          Designed rapid Re-Conform workflows, AAF-less ingest paths, automated CDL/grade application, and split-shot handling for zero-downtime editorial turnover updates as client cuts iterate during post-production.
+          Designed rapid Re-Conform workflows, AAF-less ingest paths, automated CDL/grade application, and split-shot
+          handling for zero-downtime editorial turnover updates as client cuts iterate during post-production.
         </p>
         <div class="card-tags">
           <span class="pill">Re-Conform Automation</span>
@@ -247,12 +288,13 @@
     <div class="section-header">
       <div class="tag-label">Interactive Systems Flow</div>
       <h2 class="section-title">Studio Pipeline Architecture</h2>
-      <p class="section-desc">Explore how modern USD composition, n8n automated dispatch, and GenAI inference integrate into a unified studio ecosystem.</p>
+      <p class="section-desc">Explore how modern USD composition, n8n automated dispatch, and GenAI inference integrate
+        into a unified studio ecosystem.</p>
     </div>
 
     <div class="arch-box glass-card">
       <div class="arch-controls">
-        <button class="arch-btn active" data-flow="usd">🎬 OpenUSD Stage</button>
+        <button class="arch-btn active" data-flow="usd">🎬 USD Pipeline</button>
         <button class="arch-btn" data-flow="automation">⚡ n8n Studio Automation</button>
         <button class="arch-btn" data-flow="genai">🤖 GenAI Prompt-to-Video</button>
       </div>
@@ -272,7 +314,8 @@
     <div class="section-header">
       <div class="tag-label">Hollywood Pedigree</div>
       <h2 class="section-title">Feature Credits &amp; Filmography</h2>
-      <p class="section-desc">Software &amp; pipeline architecture supporting major motion pictures, Academy Award winners, and global visual effects productions.</p>
+      <p class="section-desc">Software &amp; pipeline architecture supporting major motion pictures, Academy Award
+        winners, and global visual effects productions.</p>
     </div>
 
     <div class="films-grid">
@@ -284,7 +327,8 @@
             <span class="film-badge badge-oscar">🏆 Academy Award Winner &bull; Best VFX</span>
           </div>
           <h3 class="film-title">1917</h3>
-          <p class="film-desc">Groundbreaking continuous-take visual effects pipeline, custom Nuke comps, and high-throughput review workflows at MPC Film.</p>
+          <p class="film-desc">Groundbreaking continuous-take visual effects pipeline, custom Nuke comps, and
+            high-throughput review workflows at MPC Film.</p>
           <span class="film-link-tag">View on IMDb &rarr;</span>
         </div>
       </a>
@@ -297,7 +341,8 @@
             <span class="film-badge badge-oscar">🏆 Academy Award Winner</span>
           </div>
           <h3 class="film-title">RRR</h3>
-          <p class="film-desc">High-octane visual effects execution, massive creature dynamics, and multi-facility shot evaluation and delivery pipeline.</p>
+          <p class="film-desc">High-octane visual effects execution, massive creature dynamics, and multi-facility shot
+            evaluation and delivery pipeline.</p>
           <span class="film-link-tag">View on IMDb &rarr;</span>
         </div>
       </a>
@@ -310,7 +355,8 @@
             <span class="film-badge">Disney Feature</span>
           </div>
           <h3 class="film-title">Mufasa: The Lion King</h3>
-          <p class="film-desc">Next-level photorealistic digital cinematography, massive environments, and advanced review/comp toolsets.</p>
+          <p class="film-desc">Next-level photorealistic digital cinematography, massive environments, and advanced
+            review/comp toolsets.</p>
           <span class="film-link-tag">View on IMDb &rarr;</span>
         </div>
       </a>
@@ -323,7 +369,8 @@
             <span class="film-badge">Action / Feature</span>
           </div>
           <h3 class="film-title">Back in Action</h3>
-          <p class="film-desc">High-energy visual effects execution, plate ingestion conform, and automated multi-department review workflows.</p>
+          <p class="film-desc">High-energy visual effects execution, plate ingestion conform, and automated
+            multi-department review workflows.</p>
           <span class="film-link-tag">View on IMDb &rarr;</span>
         </div>
       </a>
@@ -336,7 +383,8 @@
             <span class="film-badge">Sci-Fi Drama</span>
           </div>
           <h3 class="film-title">Spaceman</h3>
-          <p class="film-desc">Photorealistic creature integration, atmospheric cosmic environment pipelines, and deep comp asset management.</p>
+          <p class="film-desc">Photorealistic creature integration, atmospheric cosmic environment pipelines, and deep
+            comp asset management.</p>
           <span class="film-link-tag">View on IMDb &rarr;</span>
         </div>
       </a>
@@ -349,7 +397,8 @@
             <span class="film-badge">Apple TV+ Landmark</span>
           </div>
           <h3 class="film-title">Prehistoric Planet</h3>
-          <p class="film-desc">Award-winning natural history VFX pipeline, seamless live-action plate integration, and high-resolution review frameworks.</p>
+          <p class="film-desc">Award-winning natural history VFX pipeline, seamless live-action plate integration, and
+            high-resolution review frameworks.</p>
           <span class="film-link-tag">View on IMDb &rarr;</span>
         </div>
       </a>
@@ -361,7 +410,8 @@
     <div class="section-header">
       <div class="tag-label">Industry Endorsements</div>
       <h2 class="section-title">What Leaders Say</h2>
-      <p class="section-desc">Direct recommendations from VFX Supervisors, Directors, and R&amp;D Executives who have worked closely with Rajeev.</p>
+      <p class="section-desc">Direct recommendations from VFX Supervisors, Directors, and R&amp;D Executives who have
+        worked closely with Rajeev.</p>
     </div>
 
     <div class="endorsements-grid">
@@ -375,7 +425,8 @@
           <span class="linkedin-verified">Verified LinkedIn</span>
         </div>
         <blockquote class="quote-body">
-          "Rajeev led our review and 2D team, and was great to work with. Always striving to understand the goals and improve the workflows. Willing to both brainstorm and get practical. A great partner."
+          "Rajeev led our review and 2D team, and was great to work with. Always striving to understand the goals and
+          improve the workflows. Willing to both brainstorm and get practical. A great partner."
         </blockquote>
       </div>
 
@@ -389,7 +440,10 @@
           <span class="linkedin-verified">Verified LinkedIn</span>
         </div>
         <blockquote class="quote-body">
-          "I have had the pleasure of working closely with Rajeev for almost a decade... His approach to solving complex technical challenges is both pragmatic and effective. An exceptional hands-on leader who oversees a large global 2D development team, driving multiple initiatives across locations with empathy and technical excellence."
+          "I have had the pleasure of working closely with Rajeev for almost a decade... His approach to solving complex
+          technical challenges is both pragmatic and effective. An exceptional hands-on leader who oversees a large
+          global 2D development team, driving multiple initiatives across locations with empathy and technical
+          excellence."
         </blockquote>
       </div>
 
@@ -403,7 +457,9 @@
           <span class="linkedin-verified">Verified LinkedIn</span>
         </div>
         <blockquote class="quote-body">
-          "Rajeev was a pivotal force at MPC and one of the strongest developers and development leaders we had in Technicolor R&D. Rajeev's technical leadership provided for a transformative period in MPC's approach to Comp as well as the evolution of Technicolor's RPM/MM toolsets. Rajeev is a gem for any organization."
+          "Rajeev was a pivotal force at MPC and one of the strongest developers and development leaders we had in
+          Technicolor R&D. Rajeev's technical leadership provided for a transformative period in MPC's approach to Comp
+          as well as the evolution of Technicolor's RPM/MM toolsets. Rajeev is a gem for any organization."
         </blockquote>
       </div>
 
@@ -417,7 +473,9 @@
           <span class="linkedin-verified">Verified LinkedIn</span>
         </div>
         <blockquote class="quote-body">
-          "Rajeev played a key role in several critical projects... demonstrating exceptional leadership in guiding the ReviewTool, compositing, and RPM teams across global locations. He is proactive in finding solutions, often addressing related issues before they are even flagged."
+          "Rajeev played a key role in several critical projects... demonstrating exceptional leadership in guiding the
+          ReviewTool, compositing, and RPM teams across global locations. He is proactive in finding solutions, often
+          addressing related issues before they are even flagged."
         </blockquote>
       </div>
 
@@ -431,7 +489,9 @@
           <span class="linkedin-verified">Verified LinkedIn</span>
         </div>
         <blockquote class="quote-body">
-          "Rajeev has been an amazing colleague, learning fast about terminology and processes in a VFX pipeline. Rajeev acted not only as a facilitator and a bridge with less senior developers, but also as a key contributor to the projects we worked on together, allowing concepts and visions to become concrete action items."
+          "Rajeev has been an amazing colleague, learning fast about terminology and processes in a VFX pipeline. Rajeev
+          acted not only as a facilitator and a bridge with less senior developers, but also as a key contributor to the
+          projects we worked on together, allowing concepts and visions to become concrete action items."
         </blockquote>
       </div>
     </div>
@@ -442,7 +502,8 @@
     <div class="section-header">
       <div class="tag-label">Leadership Journey</div>
       <h2 class="section-title">Career Timeline</h2>
-      <p class="section-desc">Over 18 years of technical mastery, pipeline innovation, and high-performance team leadership.</p>
+      <p class="section-desc">Over 18 years of technical mastery, pipeline innovation, and high-performance team
+        leadership.</p>
     </div>
 
     <div class="timeline">
@@ -458,7 +519,9 @@
             <span class="role-period">Sept 2025 &ndash; Present</span>
           </div>
           <p class="role-desc">
-            Designing and building end-to-end OpenUSD pipeline from modeling to comp for full CG and live-action plate VFX. Building zero-touch n8n studio workflow automation and prompt-to-video generative AI pipelines with Veo, Kling AI, Higgsfield, and Seedance.
+            Designing and building end-to-end OpenUSD pipeline from modeling to comp for full CG and live-action plate
+            VFX. Building zero-touch n8n studio workflow automation and prompt-to-video generative AI pipelines with
+            Veo, Kling AI, Higgsfield, and Seedance.
           </p>
         </div>
       </div>
@@ -475,7 +538,10 @@
             <span class="role-period">Jan 2022 &ndash; Feb 2025 (3+ Years)</span>
           </div>
           <p class="role-desc">
-            Led globally distributed R&D teams across London, Montreal, and Bangalore supporting Compositing, Roto, Paint Prep, Camera Tracking, and Rotoanim. Spearheaded the VFX Review System (ReviewTool with real-time 4K+ media caching), ProNuke modular shot assembly, Meshroom matchmove integration, and Conform Ingest workflows. Multiple award winner &amp; Associate Member of the Technicolor Fellowship Network.
+            Led globally distributed R&D teams across London, Montreal, and Bangalore supporting Compositing, Roto,
+            Paint Prep, Camera Tracking, and Rotoanim. Spearheaded the VFX Review System (ReviewTool with real-time 4K+
+            media caching), ProNuke modular shot assembly, Meshroom matchmove integration, and Conform Ingest workflows.
+            Multiple award winner &amp; Associate Member of the Technicolor Fellowship Network.
           </p>
         </div>
       </div>
@@ -492,7 +558,10 @@
             <span class="role-period">Jul 2017 &ndash; Dec 2021 (4.5 Years)</span>
           </div>
           <p class="role-desc">
-            Led core ingest and 2D/3D pipeline solutions. Unified Roto, Prep, Matchmove, and Rotoanim (RPM Unification) across MPC, MR.X, and The Mill. Engineered Nuke Bridge with Tractor, ShotGrid, and Tessa AMS integration, delivering high-efficiency render order traversal and asset versioning for blockbuster films (1917, RRR, Moonfall).
+            Led core ingest and 2D/3D pipeline solutions. Unified Roto, Prep, Matchmove, and Rotoanim (RPM Unification)
+            across MPC, MR.X, and The Mill. Engineered Nuke Bridge with Tractor, ShotGrid, and Tessa AMS integration,
+            delivering high-efficiency render order traversal and asset versioning for blockbuster films (1917, RRR,
+            Moonfall).
           </p>
         </div>
       </div>
@@ -509,7 +578,9 @@
             <span class="role-period">Jul 2012 &ndash; Jun 2017 (5 Years)</span>
           </div>
           <p class="role-desc">
-            Developed macOS QuickTime/AVFoundation media processing components (Channel Mapper, Convert Rate, Compliance Edit List). Created bitmap font auto-kerning engines and managed a team of 7 developers across C++, Java, PHP, Objective-C, and Cocoa for high-efficiency production compression and authoring.
+            Developed macOS QuickTime/AVFoundation media processing components (Channel Mapper, Convert Rate, Compliance
+            Edit List). Created bitmap font auto-kerning engines and managed a team of 7 developers across C++, Java,
+            PHP, Objective-C, and Cocoa for high-efficiency production compression and authoring.
           </p>
         </div>
       </div>
@@ -526,7 +597,9 @@
             <span class="role-period">Jul 2011 &ndash; Jun 2012 (1 Year)</span>
           </div>
           <p class="role-desc">
-            Traveled to Los Angeles to collaborate directly with Disney to develop the Fast Menu Load (FML) template and integrate Generation 2 Bootloader (G2B). Engineered buffer size calculation tools and authoring optimization platforms.
+            Traveled to Los Angeles to collaborate directly with Disney to develop the Fast Menu Load (FML) template and
+            integrate Generation 2 Bootloader (G2B). Engineered buffer size calculation tools and authoring optimization
+            platforms.
           </p>
         </div>
       </div>
@@ -543,7 +616,9 @@
             <span class="role-period">Oct 2009 &ndash; Jun 2011 (1.8 Years)</span>
           </div>
           <p class="role-desc">
-            Traveled to Technicolor's R&amp;I office in Hannover, Germany, to incorporate 3D capabilities into the BD-J Authoring framework. Key contributor to the world's first released 3D Blu-ray disc. Developed disc templates for Disney, Universal, Paramount, DreamWorks, MGM, Relativity, and Weinstein.
+            Traveled to Technicolor's R&amp;I office in Hannover, Germany, to incorporate 3D capabilities into the BD-J
+            Authoring framework. Key contributor to the world's first released 3D Blu-ray disc. Developed disc templates
+            for Disney, Universal, Paramount, DreamWorks, MGM, Relativity, and Weinstein.
           </p>
         </div>
       </div>
@@ -560,7 +635,8 @@
             <span class="role-period">2006 &ndash; 2008 (2 Years)</span>
           </div>
           <p class="role-desc">
-            Trained on game physics (Bouncing Ball physics) and Java ME. Ported mobile game titles to Nokia, Motorola, Samsung, and Sony Ericsson devices for T-Mobile and Verizon; developed Windows Mobile touch interfaces.
+            Trained on game physics (Bouncing Ball physics) and Java ME. Ported mobile game titles to Nokia, Motorola,
+            Samsung, and Sony Ericsson devices for T-Mobile and Verizon; developed Windows Mobile touch interfaces.
           </p>
         </div>
       </div>
@@ -572,7 +648,8 @@
     <div class="section-header">
       <div class="tag-label">Technical Mastery</div>
       <h2 class="section-title">Core Competencies &amp; Arsenal</h2>
-      <p class="section-desc">Comprehensive toolsets spanning visual effects architecture, generative AI, studio automation, and high-performance backend systems.</p>
+      <p class="section-desc">Comprehensive toolsets spanning visual effects architecture, generative AI, studio
+        automation, and high-performance backend systems.</p>
     </div>
 
     <div class="skills-grid">
@@ -643,9 +720,9 @@
     <div class="contact-card glass-card">
       <div class="contact-header">
         <span class="tag-label">Let's Connect</span>
-        <h2 class="contact-title">Let's Build the Future of VFX &amp; AI</h2>
+        <h2 class="contact-title">Let's Build the Future of VFX &amp; AI Pipelines</h2>
         <p class="contact-sub">
-          Interested in discussing OpenUSD pipeline architecture, zero-touch n8n studio automation, conform-based plate ingest, or next-generation GenAI content production? I'd love to connect.
+          Open for technical leadership in OpenUSD architecture, zero-touch studio automation, and GenAI production.
         </p>
       </div>
 
@@ -658,16 +735,19 @@
           <span>muthyalu.rajeev@gmail.com</span>
         </a>
 
-        <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" rel="noopener" class="contact-btn btn-linkedin">
+        <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" rel="noopener"
+          class="contact-btn btn-linkedin">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z"/>
+            <path
+              d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />
           </svg>
           <span>Connect on LinkedIn</span>
         </a>
 
         <a href="https://github.com/rajeev-mutyalu" target="_blank" rel="noopener" class="contact-btn btn-github">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
+            <path
+              d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z" />
           </svg>
           <span>GitHub Projects</span>
         </a>
@@ -682,19 +762,41 @@
     </div>
   </footer>
 
-  <!-- 🐕 "Play Fetch With Donut" Interactive Companion Elements -->
-  <div id="fetchBall" class="fetch-ball-element bouncing">
-    <img src="fetch_ball.png" alt="SportsPet Fetch Ball" class="ball-img" />
-    <div class="ball-shadow"></div>
-  </div>
+  <!-- Floating FX Preset Control Widget -->
+  <div class="fx-control-widget" id="fxWidget">
+    <div class="fx-panel" id="fxPanel">
+      <div class="fx-panel-header">
+        <span>Comet FX Presets</span>
+        <span style="font-size: 0.68rem; color: var(--muted);">60 FPS</span>
+      </div>
+      <button type="button" class="fx-theme-btn active" data-theme="comet">
+        <span>⚡ Comet Cascade</span>
+        <span class="fx-dot" style="background: #00f2fe; box-shadow: 0 0 8px #00f2fe;"></span>
+      </button>
+      <button type="button" class="fx-theme-btn" data-theme="solar">
+        <span>🔥 Solar Flare</span>
+        <span class="fx-dot" style="background: #f59e0b; box-shadow: 0 0 8px #f59e0b;"></span>
+      </button>
+      <button type="button" class="fx-theme-btn" data-theme="aurora">
+        <span>🌌 Aurora Borealis</span>
+        <span class="fx-dot" style="background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+      </button>
+      <button type="button" class="fx-theme-btn" data-theme="diamond">
+        <span>💎 Hyper Diamond</span>
+        <span class="fx-dot" style="background: #ffffff; box-shadow: 0 0 8px #ffffff;"></span>
+      </button>
+    </div>
 
-  <div id="donutDog" class="donut-companion" title="Click Donut to throw the ball again! 🐶">
-    <div class="donut-speech-bubble" id="donutSpeech">Donut is ready! 🎾</div>
-    <div class="donut-chomp-effect" id="donutChomp">CHOMP! 🐾✨</div>
-    <div class="donut-shadow"></div>
-    <img id="donutSprite" class="donut-sprite" src="sprites/sit_1.png" alt="Donut Animated Dog" />
+    <button type="button" class="fx-toggle-btn" id="fxToggleBtn" title="Customize Background Comet FX">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path
+          d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+      </svg>
+      <span>FX: Comet Cascade</span>
+    </button>
   </div>
 
   <script src="app.js"></script>
 </body>
+
 </html>
