@@ -286,15 +286,30 @@
       }
     }
 
+    getTheme() {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (!isLight) return this.theme;
+
+      return {
+        ...this.theme,
+        highlight: this.currentThemeKey === 'comet' ? '#0284c7' : (this.currentThemeKey === 'solar' ? '#d97706' : (this.currentThemeKey === 'aurora' ? '#059669' : '#0f172a')),
+        midBright: this.currentThemeKey === 'comet' ? '#2563eb' : (this.currentThemeKey === 'solar' ? '#f59e0b' : (this.currentThemeKey === 'aurora' ? '#10b981' : '#334155')),
+        midDark: this.currentThemeKey === 'comet' ? '#1d4ed8' : (this.currentThemeKey === 'solar' ? '#b45309' : (this.currentThemeKey === 'aurora' ? '#047857' : '#64748b')),
+        deepDark: this.currentThemeKey === 'comet' ? '#1e3a8a' : (this.currentThemeKey === 'solar' ? '#78350f' : (this.currentThemeKey === 'aurora' ? '#064e3b' : '#94a3b8')),
+        spark: this.currentThemeKey === 'comet' ? '#0284c7' : (this.currentThemeKey === 'solar' ? '#d97706' : (this.currentThemeKey === 'aurora' ? '#059669' : '#0f172a'))
+      };
+    }
+
     draw() {
       if (!this.isEnabled) return;
       this.ctx.clearRect(0, 0, this.width, this.height);
+      const activeTheme = this.getTheme();
 
       // 1. Draw Ripples
       this.ripples.forEach(r => {
         this.ctx.beginPath();
         this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-        this.ctx.strokeStyle = this.theme.midBright;
+        this.ctx.strokeStyle = activeTheme.midBright;
         this.ctx.lineWidth = 1.2;
         this.ctx.globalAlpha = r.alpha;
         this.ctx.stroke();
@@ -309,16 +324,16 @@
           const radGrad = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 2.2);
 
           if (p.shadeTier >= 2) {
-            radGrad.addColorStop(0, this.theme.highlight);
-            radGrad.addColorStop(0.4, this.theme.midBright);
+            radGrad.addColorStop(0, activeTheme.highlight);
+            radGrad.addColorStop(0.4, activeTheme.midBright);
             radGrad.addColorStop(1, 'transparent');
           } else if (p.shadeTier === 1) {
-            radGrad.addColorStop(0, this.theme.midBright);
-            radGrad.addColorStop(0.6, this.theme.midDark);
+            radGrad.addColorStop(0, activeTheme.midBright);
+            radGrad.addColorStop(0.6, activeTheme.midDark);
             radGrad.addColorStop(1, 'transparent');
           } else {
-            radGrad.addColorStop(0, this.theme.midDark);
-            radGrad.addColorStop(0.7, this.theme.deepDark);
+            radGrad.addColorStop(0, activeTheme.midDark);
+            radGrad.addColorStop(0.7, activeTheme.deepDark);
             radGrad.addColorStop(1, 'transparent');
           }
 
@@ -330,7 +345,7 @@
           // Solid bright core
           this.ctx.beginPath();
           this.ctx.arc(p.x, p.y, Math.max(0.8, p.radius * 0.4), 0, Math.PI * 2);
-          this.ctx.fillStyle = this.theme.highlight;
+          this.ctx.fillStyle = activeTheme.highlight;
           this.ctx.fill();
 
         } else {
@@ -345,14 +360,14 @@
           const linGrad = this.ctx.createLinearGradient(p.x, p.y, tailX, tailY);
 
           if (p.shadeTier >= 2) {
-            linGrad.addColorStop(0, this.theme.highlight);
-            linGrad.addColorStop(0.3, this.theme.midBright);
-            linGrad.addColorStop(0.8, this.theme.midDark);
+            linGrad.addColorStop(0, activeTheme.highlight);
+            linGrad.addColorStop(0.3, activeTheme.midBright);
+            linGrad.addColorStop(0.8, activeTheme.midDark);
             linGrad.addColorStop(1, 'transparent');
           } else {
-            linGrad.addColorStop(0, this.theme.midBright);
-            linGrad.addColorStop(0.4, this.theme.midDark);
-            linGrad.addColorStop(0.9, this.theme.deepDark);
+            linGrad.addColorStop(0, activeTheme.midBright);
+            linGrad.addColorStop(0.4, activeTheme.midDark);
+            linGrad.addColorStop(0.9, activeTheme.deepDark);
             linGrad.addColorStop(1, 'transparent');
           }
 
@@ -367,7 +382,7 @@
           // Subtle head glow
           this.ctx.beginPath();
           this.ctx.arc(p.x, p.y, p.radius * 0.8, 0, Math.PI * 2);
-          this.ctx.fillStyle = this.theme.highlight;
+          this.ctx.fillStyle = activeTheme.highlight;
           this.ctx.fill();
         }
       });
@@ -376,15 +391,13 @@
       this.shards.forEach(s => {
         this.ctx.beginPath();
         this.ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-        this.ctx.fillStyle = this.theme.spark;
+        this.ctx.fillStyle = activeTheme.spark;
         this.ctx.globalAlpha = s.alpha;
         this.ctx.shadowBlur = 6;
-        this.ctx.shadowColor = this.theme.midBright;
+        this.ctx.shadowColor = activeTheme.midBright;
         this.ctx.fill();
         this.ctx.shadowBlur = 0;
       });
-
-      this.ctx.globalAlpha = 1;
     }
 
     animate() {
@@ -466,7 +479,29 @@
     // 1. Initialize Particle Engine
     const engine = new ParticleEngine('cometCanvas');
 
-    // 2. Setup Navbar On/Off Slide Switch (No text)
+    // 2. Setup Dark / Light Mode Toggle (Persistent with LocalStorage)
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const newTheme = isLight ? 'dark' : 'light';
+
+        if (newTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+          localStorage.setItem('portfolio-theme', 'light');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          localStorage.setItem('portfolio-theme', 'dark');
+        }
+      });
+    }
+
+    // 3. Setup Navbar On/Off Slide Switch (No text)
     const navFxToggle = document.getElementById('navFxToggle');
     const fxWidget = document.getElementById('fxWidget');
     const fxPanel = document.getElementById('fxPanel');
@@ -491,7 +526,7 @@
       });
     }
 
-    // 3. Setup Floating FX Preset Switcher
+    // 4. Setup Floating FX Preset Switcher
     const fxToggleBtn = document.getElementById('fxToggleBtn');
     const fxThemeButtons = document.querySelectorAll('.fx-theme-btn');
 
