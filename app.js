@@ -406,7 +406,7 @@
         { title: 'CFX & FX Simulation', sub: 'Cloth, Hair & VDB Volumes' },
         { title: 'Lighting & Final Render', sub: 'Lookdev Binding & Master Deliverables', highlight: true }
       ],
-      description: '<strong>Astra VFX USD Pipeline Architecture:</strong> Grounded in the two-tier Astra VFX USD specification (Asset Creation → Shot Pipeline SH0010). Unifies modular asset publishing (characters, props, vehicles, environments) with a non-destructive shot sublayer workflow across Layout, Animation, CFX Simulation, FX, and Lighting to generate unified, studio-scale renderable deliverables with zero geometry duplication.'
+      description: '<strong>OpenUSD Production Pipeline Architecture:</strong> Grounded in a modular two-tier USD specification (Asset Creation → Shot Pipeline SH0010). Unifies modular asset publishing (characters, props, vehicles, environments) with a non-destructive shot sublayer workflow across Layout, Animation, CFX Simulation, FX, and Lighting to generate unified, studio-scale renderable deliverables with zero geometry duplication.'
     },
     automation: {
       nodes: [

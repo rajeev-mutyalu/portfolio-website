@@ -1,13 +1,13 @@
 # Rajeev Mutyalu — Portfolio Website 🎬
 
-A modern, high-performance personal portfolio website for **Rajeev Mutyalu** (Lead Software Architect @ **Astra Studios**), showcasing his 18+ years of technical leadership in **Universal Scene Description (USD) Pipelines**, **Zero-Touch Studio Automation (n8n)**, **Generative Video AI (Veo, Kling, Higgsfield, Seedance)**, and Oscar-winning feature film contributions (*1917*, *RRR*, *Moonfall*).
+A modern, high-performance personal portfolio website for **Rajeev Mutyalu** (Lead Software Architect &amp; VFX Pipeline Specialist), showcasing his 18+ years of technical leadership in **Universal Scene Description (USD) Pipelines**, **Zero-Touch Studio Automation (n8n)**, **Generative Video AI (Veo, Kling, Higgsfield, Seedance)**, and Oscar-winning feature film contributions (*1917*, *RRR*, *Moonfall*).
 
 ---
 
 ## 🌟 Sections Included
 
 - **Hero & Impact Headline**: High-level summary of software architecture leadership in London, UK.
-- **Astra Studios Initiatives**: Deep dives into USD pipeline architecture, n8n zero-touch studio automation, and GenAI prompt-to-video production engines.
+- **Core Focus & Technical Innovations**: Deep dives into USD pipeline architecture, n8n zero-touch studio automation, and GenAI prompt-to-video production engines.
 - **Interactive Pipeline Architecture Visualizer**: Live interactive node graph switcher demonstrating OpenUSD, n8n, and GenAI workflows.
 - **Hollywood Filmography & Pedigree**: Showcasing major feature film pipeline contributions (*1917*, *RRR*, *Moonfall*, Disney BD-J/G2B).
 - **Verified Industry Endorsements**: Recommendations from Oscar-winning VFX Supervisors, Heads of Departments, and R&D Directors (Adam Valdez, Viktor Radulov, Sriram Viswanathan, Jamie Winn, Lorena Pérez, Philippe Soeiro).
