@@ -14,8 +14,20 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Interactive Physics Canvas Background (Mouse Reaction & Bouncing Particles) -->
-  <canvas id="fxCanvas" class="fx-canvas"></canvas>
+  <!-- =========================================================================
+       🐕 Play Fetch With Donut — Interactive Companion Layer
+       ========================================================================= -->
+  <div id="fetchBall" class="fetch-ball-element" title="Fetch Ball! Move cursor to throw, stop to bounce">
+    <img src="fetch_ball.png" alt="SportsPet Fetch Ball" class="ball-img" />
+    <div class="ball-shadow"></div>
+  </div>
+
+  <div id="donutDog" class="donut-companion" title="Click Donut to fetch again!">
+    <div id="donutSpeech" class="donut-speech-bubble">Donut is ready! 🎾</div>
+    <div id="donutChomp" class="donut-chomp-effect">CHOMP! 🐾✨</div>
+    <img id="donutSprite" src="donut_idle.png" alt="Donut the Smooth Fox Terrier" class="donut-sprite" />
+    <div class="donut-shadow"></div>
+  </div>
 
   <!-- Ambient Background Glows -->
   <div class="ambient-glow glow-top-left"></div>

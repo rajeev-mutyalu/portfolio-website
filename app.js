@@ -1,9 +1,11 @@
 /**
- * Rajeev Mutyalu Portfolio — Interactive Engine & Hybrid Cyber Physics Canvas
+ * Rajeev Mutyalu Portfolio — Interactive Engine & "Play Fetch With Donut" Companion
  * Features:
- * - Floating ambient glowing spheres (gumballs / orbs)
- * - Mouse pointer proximity physics (acceleration, elastic bounce, repulsion)
- * - Luminous comet particle trails
+ * - Duo-Tone Fetch Ball: Smooth cursor follower + gentle idle bounce when stationary
+ * - Donut (Smooth Fox Terrier): Runs freely across screen towards the ball
+ * - Arrives & wags tail happily
+ * - 10-Second Idle Catch: Donut leaps, catches the ball with "CHOMP! 🐾✨", holds in mouth
+ * - Click to Release: Clicking Donut releases the ball back to cursor & repeats
  * - Interactive Pipeline Architecture Flow switcher
  * - Smooth scroll navigation spy
  */
@@ -12,184 +14,200 @@
   'use strict';
 
   // ==========================================================================
-  // 1. Hybrid Cyber Physics Canvas Engine
+  // 1. "Play Fetch With Donut" Interactive Companion Engine
   // ==========================================================================
-  const canvas = document.getElementById('fxCanvas');
-  if (!canvas) return;
+  const fetchBall = document.getElementById('fetchBall');
+  const donutDog = document.getElementById('donutDog');
+  const donutSprite = document.getElementById('donutSprite');
+  const donutSpeech = document.getElementById('donutSpeech');
+  const donutChomp = document.getElementById('donutChomp');
 
-  const ctx = canvas.getContext('2d');
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  if (fetchBall && donutDog && donutSprite) {
+    // Ball State
+    const ball = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      targetX: window.innerWidth / 2,
+      targetY: window.innerHeight / 2,
+      visible: true,
+      bouncing: true
+    };
 
-  // Mouse State
-  const mouse = {
-    x: -1000,
-    y: -1000,
-    radius: 140,
-    active: false
-  };
+    // Donut Dog State
+    const dog = {
+      x: window.innerWidth - 140,
+      y: window.innerHeight - 140,
+      targetX: window.innerWidth - 140,
+      targetY: window.innerHeight - 140,
+      facingRight: false,
+      isRunning: false,
+      isHoldingBall: false,
+      speed: 0.075 // smooth interpolation speed
+    };
 
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-    mouse.active = true;
-  });
+    // Idle Timer (10 Seconds)
+    let idleTimer = null;
+    let stopMotionTimer = null;
+    const IDLE_CATCH_DELAY = 10000; // 10 seconds
 
-  window.addEventListener('mouseleave', () => {
-    mouse.active = false;
-  });
+    // Mouse Tracking
+    window.addEventListener('mousemove', (e) => {
+      ball.targetX = e.clientX;
+      ball.targetY = e.clientY;
 
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-    initParticles();
-  });
+      if (!dog.isHoldingBall) {
+        fetchBall.classList.remove('bouncing');
+        ball.bouncing = false;
 
-  // Color Palette for Glowing Spheres & Comet Trails
-  const PALETTE = [
-    { fill: 'rgba(0, 242, 254, 0.85)', glow: '#00f2fe', trail: 'rgba(0, 242, 254, ' },
-    { fill: 'rgba(59, 130, 246, 0.85)', glow: '#3b82f6', trail: 'rgba(59, 130, 246, ' },
-    { fill: 'rgba(0, 245, 155, 0.85)', glow: '#00f59b', trail: 'rgba(0, 245, 155, ' },
-    { fill: 'rgba(245, 166, 35, 0.85)', glow: '#f5a623', trail: 'rgba(245, 166, 35, ' },
-    { fill: 'rgba(255, 87, 66, 0.85)', glow: '#ff5742', trail: 'rgba(255, 87, 66, ' },
-    { fill: 'rgba(168, 85, 247, 0.85)', glow: '#a855f7', trail: 'rgba(168, 85, 247, ' }
-  ];
+        // Reset 10s idle catch timer on movement
+        clearTimeout(idleTimer);
+        clearTimeout(stopMotionTimer);
 
-  class CyberOrb {
-    constructor() {
-      this.reset(true);
+        // When mouse stops moving for 200ms, start idle bounce & send Donut
+        stopMotionTimer = setTimeout(() => {
+          if (!dog.isHoldingBall) {
+            fetchBall.classList.add('bouncing');
+            ball.bouncing = true;
+
+            // Send Donut running towards the ball
+            sendDonutToBall();
+
+            // Start 10s idle countdown to catch
+            startIdleCatchTimer();
+          }
+        }, 200);
+      }
+    });
+
+    function startIdleCatchTimer() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        if (!dog.isHoldingBall) {
+          executeDonutCatch();
+        }
+      }, IDLE_CATCH_DELAY);
     }
 
-    reset(initial = false) {
-      this.radius = Math.random() * 9 + 5; // sphere size: 5px to 14px
-      this.x = initial ? Math.random() * width : Math.random() < 0.5 ? 0 : width;
-      this.y = initial ? Math.random() * height : Math.random() * height;
-      
-      // Ambient floating drift velocity
-      this.vx = (Math.random() - 0.5) * 1.2;
-      this.vy = (Math.random() - 0.5) * 1.2;
-      this.baseVx = this.vx;
-      this.baseVy = this.vy;
-
-      this.colorObj = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-      this.friction = 0.96; // deceleration after mouse push
-      this.trail = [];
-      this.maxTrail = 10;
+    function sendDonutToBall() {
+      // Position Donut slightly offset so ball stays visible next to him
+      const offsetX = ball.targetX > dog.x ? -45 : 45;
+      const offsetY = 15;
+      dog.targetX = Math.max(40, Math.min(window.innerWidth - 100, ball.targetX + offsetX));
+      dog.targetY = Math.max(40, Math.min(window.innerHeight - 100, ball.targetY + offsetY));
     }
 
-    update() {
-      // Record trailing points for comet streak
-      this.trail.push({ x: this.x, y: this.y });
-      if (this.trail.length > this.maxTrail) {
-        this.trail.shift();
+    function executeDonutCatch() {
+      dog.isHoldingBall = true;
+      clearTimeout(idleTimer);
+
+      // Snap Donut to ball
+      dog.targetX = ball.x - 20;
+      dog.targetY = ball.y - 20;
+
+      donutDog.classList.remove('running', 'wagging');
+      donutDog.classList.add('catching', 'show-chomp');
+
+      // Pop "CHOMP!" effect
+      setTimeout(() => {
+        donutSprite.src = 'donut_catch.png';
+        fetchBall.style.opacity = '0'; // hide standalone ball
+        donutSpeech.innerText = 'Click Donut to throw again! 🐶';
+        donutDog.classList.add('show-speech');
+      }, 300);
+
+      setTimeout(() => {
+        donutDog.classList.remove('show-chomp');
+      }, 1500);
+    }
+
+    // Click on Donut to Release Ball
+    donutDog.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      if (dog.isHoldingBall) {
+        // Release Ball back to mouse
+        dog.isHoldingBall = false;
+        donutSprite.src = 'donut_idle.png';
+        fetchBall.style.opacity = '1';
+        donutDog.classList.remove('catching');
+        
+        donutSpeech.innerText = 'Woof! Throw it again! 🎾';
+        donutDog.classList.add('show-speech');
+
+        // Pop ball slightly
+        ball.x = e.clientX || ball.targetX;
+        ball.y = e.clientY || ball.targetY;
+        fetchBall.classList.add('bouncing');
+
+        setTimeout(() => {
+          donutDog.classList.remove('show-speech');
+        }, 2200);
+
+        startIdleCatchTimer();
+      } else {
+        // Pet Donut
+        donutSpeech.innerText = '*Tail wags happily* 🐾';
+        donutDog.classList.add('show-speech');
+        donutDog.classList.add('wagging');
+
+        setTimeout(() => {
+          donutDog.classList.remove('show-speech');
+        }, 1800);
+      }
+    });
+
+    // Companion Physics Loop (60 FPS)
+    function updateCompanion() {
+      // 1. Update Ball Position (smooth lerp)
+      if (!dog.isHoldingBall) {
+        ball.x += (ball.targetX - ball.x) * 0.18;
+        ball.y += (ball.targetY - ball.y) * 0.18;
+        fetchBall.style.transform = `translate3d(${ball.x}px, ${ball.y}px, 0)`;
       }
 
-      // Mouse Repulsion & Impulse Physics
-      if (mouse.active) {
-        const dx = this.x - mouse.x;
-        const dy = this.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+      // 2. Update Donut Position (running lerp)
+      const dx = dog.targetX - dog.x;
+      const dy = dog.targetY - dog.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < mouse.radius && dist > 0) {
-          const force = (mouse.radius - dist) / mouse.radius;
-          const angle = Math.atan2(dy, dx);
-          const pushPower = force * 6.5;
+      if (dist > 8) {
+        dog.x += dx * dog.speed;
+        dog.y += dy * dog.speed;
+        dog.isRunning = true;
 
-          this.vx += Math.cos(angle) * pushPower;
-          this.vy += Math.sin(angle) * pushPower;
+        // Flip Donut sprite based on movement direction
+        dog.facingRight = dx > 0;
+        donutSprite.style.transform = dog.facingRight ? 'scaleX(-1)' : 'scaleX(1)';
+
+        donutDog.classList.add('running');
+        donutDog.classList.remove('wagging');
+      } else {
+        if (dog.isRunning) {
+          dog.isRunning = false;
+          donutDog.classList.remove('running');
+
+          if (!dog.isHoldingBall) {
+            donutDog.classList.add('wagging');
+            donutSpeech.innerText = 'Donut is ready! 🎾';
+            donutDog.classList.add('show-speech');
+            setTimeout(() => {
+              donutDog.classList.remove('show-speech');
+            }, 2000);
+          }
         }
       }
 
-      // Apply friction towards ambient drift
-      this.vx *= this.friction;
-      this.vy *= this.friction;
+      donutDog.style.transform = `translate3d(${dog.x}px, ${dog.y}px, 0)`;
 
-      // Soft ambient nudge so orbs keep floating smoothly
-      this.vx += (this.baseVx - this.vx) * 0.03;
-      this.vy += (this.baseVy - this.vy) * 0.03;
-
-      this.x += this.vx;
-      this.y += this.vy;
-
-      // Elastic Wall Bounce with damping
-      if (this.x - this.radius <= 0) {
-        this.x = this.radius;
-        this.vx = -this.vx * 0.85;
-      } else if (this.x + this.radius >= width) {
-        this.x = width - this.radius;
-        this.vx = -this.vx * 0.85;
-      }
-
-      if (this.y - this.radius <= 0) {
-        this.y = this.radius;
-        this.vy = -this.vy * 0.85;
-      } else if (this.y + this.radius >= height) {
-        this.y = height - this.radius;
-        this.vy = -this.vy * 0.85;
-      }
+      requestAnimationFrame(updateCompanion);
     }
 
-    draw() {
-      // 1. Draw Subtle Comet Tail
-      if (this.trail.length > 2) {
-        for (let i = 0; i < this.trail.length - 1; i++) {
-          const p1 = this.trail[i];
-          const p2 = this.trail[i + 1];
-          const alpha = (i / this.trail.length) * 0.45;
-          const strokeWidth = (i / this.trail.length) * (this.radius * 0.8);
-
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `${this.colorObj.trail}${alpha})`;
-          ctx.lineWidth = strokeWidth;
-          ctx.lineCap = 'round';
-          ctx.stroke();
-        }
-      }
-
-      // 2. Draw Glowing Core Sphere (Gumball Orb)
-      ctx.save();
-      ctx.shadowColor = this.colorObj.glow;
-      ctx.shadowBlur = 14;
-
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = this.colorObj.fill;
-      ctx.fill();
-
-      // Inner highlight reflection
-      ctx.beginPath();
-      ctx.arc(this.x - this.radius * 0.3, this.y - this.radius * 0.3, this.radius * 0.35, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.fill();
-
-      ctx.restore();
-    }
+    // Initial setup
+    fetchBall.style.transform = `translate3d(${ball.x}px, ${ball.y}px, 0)`;
+    donutDog.style.transform = `translate3d(${dog.x}px, ${dog.y}px, 0)`;
+    startIdleCatchTimer();
+    updateCompanion();
   }
-
-  let particles = [];
-  function initParticles() {
-    particles = [];
-    const count = Math.min(Math.floor((width * height) / 22000), 55); // Responsive particle count (30-55)
-    for (let i = 0; i < count; i++) {
-      particles.push(new CyberOrb());
-    }
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  initParticles();
-  animate();
 
   // ==========================================================================
   // 2. Interactive Pipeline Architecture Visualizer
