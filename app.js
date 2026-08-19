@@ -84,6 +84,7 @@
       this.ripples = [];
       this.particleCount = 100;
       this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      this.onShatter = null;
 
       this.init();
     }
@@ -110,10 +111,25 @@
         this.targetAngle = Math.PI / 2;
       });
 
-      // Supernova Click Burst
+      // Supernova Click Burst & Comet Shatter
       window.addEventListener('click', (e) => {
         if (!this.isEnabled) return;
-        this.triggerShatterBurst(e.clientX, e.clientY, 24);
+        this.triggerShatterBurst(e.clientX, e.clientY, 20);
+
+        let blastedCount = 0;
+        this.particles.forEach((p, index) => {
+          const dx = e.clientX - p.x;
+          const dy = e.clientY - p.y;
+          if (Math.hypot(dx, dy) < 95) {
+            this.triggerShatterBurst(p.x, p.y, 8);
+            this.particles[index] = this.createParticle(false);
+            blastedCount++;
+          }
+        });
+
+        if (this.onShatter) {
+          this.onShatter(e.clientX, e.clientY, Math.max(1, blastedCount));
+        }
       });
 
       // Populate Initial Particles
@@ -232,6 +248,7 @@
           // Impact collision radius ~36px
           if (dist < 36) {
             this.triggerShatterBurst(p.x, p.y, 6);
+            if (this.onShatter) this.onShatter(p.x, p.y, 1);
             // Destroy particle upon hit and respawn at top
             this.particles[i] = this.createParticle(false);
             continue;
@@ -457,16 +474,194 @@
   }
 
   // ==========================================================================
-  // 3. UI Navigation, FX Controls & Scroll Spy Initialization
+  // 3. Sentinel-X Cyber-Bot Scoreboard & Gamified HUD
+  // ==========================================================================
+  class SentinelScoreboard {
+    constructor() {
+      this.score = 0;
+      this.combo = 0;
+      this.comboTimer = null;
+      this.lastHitTime = 0;
+
+      this.hudWidget = document.getElementById('botHudWidget');
+      this.avatarBox = document.getElementById('botAvatarBox');
+      this.faceEl = document.getElementById('botFace');
+      this.rankEl = document.getElementById('botRank');
+      this.scoreEl = document.getElementById('botScoreNum');
+      this.comboBadge = document.getElementById('botComboBadge');
+      this.msgEl = document.getElementById('botMessage');
+      this.minBtn = document.getElementById('botMinimizeBtn');
+
+      this.faces = {
+        idle: ['[•_•]', '[o_o]', '[•_•]'],
+        blink: '[-_-]',
+        happy: ['[^_^]', '[^o^]', '[★_★]', '[✧_✧]'],
+        fire: ['[⚡_⚡]', '[🔥_🔥]', '[💥_💥]'],
+        poke: ['[>_<]', '[OwO]', '[♥_♥]', '[¬_¬]']
+      };
+
+      this.pokeQuotes = [
+        "Bleep bloop! Keep blasting comets! 🤖",
+        "USD sublayer cache is running at 100%! ⚡",
+        "Zero-touch automation online! 🚀",
+        "Hey! Stop poking my antenna! (>_<)",
+        "GPU temperature nominal. Fire away! 🔥"
+      ];
+
+      this.milestones = [
+        { count: 1, rank: 'CADET', msg: 'Target locked! Pew pew! 🎯' },
+        { count: 10, rank: 'SCOUT', msg: 'Pipeline anomaly eradicated! 🤖' },
+        { count: 25, rank: 'SENTINEL', msg: 'Render farm running hot! ⚡' },
+        { count: 50, rank: 'VFX SPECIALIST', msg: 'USD Sublayer cleared! You are a pro! 🚀' },
+        { count: 100, rank: 'PHOTON DESTROYER', msg: 'Overclocking GPUs to 9000%! 🔥' },
+        { count: 200, rank: 'COSMIC ARCHITECT', msg: 'Oscar-worthy precision achieved! 🏆' },
+        { count: 500, rank: 'MULTIVERSE OVERLORD', msg: 'You vaporized the whole multiverse! 🌌' }
+      ];
+
+      this.init();
+    }
+
+    init() {
+      // Idle blink animation loop
+      setInterval(() => {
+        if (Math.random() > 0.6 && this.faceEl) {
+          this.faceEl.innerText = this.faces.blink;
+          setTimeout(() => {
+            if (this.faceEl && this.faceEl.innerText === this.faces.blink) {
+              this.faceEl.innerText = this.faces.idle[0];
+            }
+          }, 200);
+        }
+      }, 3500);
+
+      // Poke reaction
+      if (this.avatarBox) {
+        this.avatarBox.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const pokeFace = this.faces.poke[Math.floor(Math.random() * this.faces.poke.length)];
+          const pokeQuote = this.pokeQuotes[Math.floor(Math.random() * this.pokeQuotes.length)];
+          this.setFace(pokeFace, 900);
+          this.setMessage(pokeQuote);
+        });
+      }
+
+      // Minimize / Expand
+      if (this.minBtn && this.hudWidget) {
+        this.minBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.hudWidget.classList.toggle('minimized');
+          this.minBtn.innerHTML = this.hudWidget.classList.contains('minimized') ? '+' : '&times;';
+        });
+      }
+    }
+
+    onHit(x, y, count = 1) {
+      this.score += count;
+      const now = Date.now();
+
+      // Combo streak
+      if (now - this.lastHitTime < 1400) {
+        this.combo += count;
+      } else {
+        this.combo = count;
+      }
+      this.lastHitTime = now;
+
+      // Update score display with pop animation
+      if (this.scoreEl) {
+        this.scoreEl.innerText = this.score;
+        this.scoreEl.classList.remove('pop');
+        void this.scoreEl.offsetWidth; // Force reflow
+        this.scoreEl.classList.add('pop');
+      }
+
+      // Combo badge
+      if (this.comboBadge) {
+        if (this.combo >= 3) {
+          this.comboBadge.innerText = `COMBO x${this.combo}!`;
+          this.comboBadge.classList.remove('hidden');
+        }
+        clearTimeout(this.comboTimer);
+        this.comboTimer = setTimeout(() => {
+          if (this.comboBadge) this.comboBadge.classList.add('hidden');
+          this.combo = 0;
+        }, 1800);
+      }
+
+      // Robot facial expression reaction
+      if (this.combo >= 5) {
+        const fireFace = this.faces.fire[Math.floor(Math.random() * this.faces.fire.length)];
+        this.setFace(fireFace, 600);
+      } else {
+        const happyFace = this.faces.happy[Math.floor(Math.random() * this.faces.happy.length)];
+        this.setFace(happyFace, 500);
+      }
+
+      // Spawn floating visual score popup
+      this.spawnPopup(x, y, this.combo >= 4 ? `+${count} COMBO!` : `+${count}💥`);
+
+      // Check milestones
+      this.checkMilestones();
+    }
+
+    setFace(faceStr, duration = 500) {
+      if (!this.faceEl) return;
+      this.faceEl.innerText = faceStr;
+      clearTimeout(this._faceTimer);
+      this._faceTimer = setTimeout(() => {
+        if (this.faceEl) this.faceEl.innerText = this.faces.idle[0];
+      }, duration);
+    }
+
+    setMessage(msg) {
+      if (this.msgEl) {
+        this.msgEl.innerText = msg;
+      }
+    }
+
+    checkMilestones() {
+      for (let i = this.milestones.length - 1; i >= 0; i--) {
+        const m = this.milestones[i];
+        if (this.score >= m.count) {
+          if (this.rankEl) this.rankEl.innerText = m.rank;
+          if (this.score === m.count || this.score === m.count + 1) {
+            this.setMessage(m.msg);
+          }
+          break;
+        }
+      }
+    }
+
+    spawnPopup(x, y, text) {
+      if (!x || !y) return;
+      const el = document.createElement('div');
+      el.className = 'shatter-popup';
+      el.innerText = text;
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 700);
+    }
+  }
+
+  // ==========================================================================
+  // 4. UI Navigation, FX Controls & Scroll Spy Initialization
   // ==========================================================================
   function init() {
     // 1. Initialize Particle Engine
     const engine = new ParticleEngine('cometCanvas');
 
-    // 2. Setup Navbar On/Off Slide Switch (No text)
+    // 2. Initialize Sentinel-X Scoreboard
+    const scoreboard = new SentinelScoreboard();
+    engine.onShatter = (x, y, count) => {
+      scoreboard.onHit(x, y, count);
+    };
+
+    // 3. Setup Navbar On/Off Slide Switch (No text)
     const navFxToggle = document.getElementById('navFxToggle');
     const fxWidget = document.getElementById('fxWidget');
     const fxPanel = document.getElementById('fxPanel');
+    const botHud = document.getElementById('botHudWidget');
 
     if (navFxToggle) {
       navFxToggle.addEventListener('click', () => {
@@ -477,6 +672,7 @@
           navFxToggle.classList.add('active');
           navFxToggle.setAttribute('title', 'Background FX: ON');
           if (fxWidget) fxWidget.classList.remove('hidden');
+          if (botHud) botHud.classList.remove('hidden');
         } else {
           navFxToggle.classList.remove('active');
           navFxToggle.setAttribute('title', 'Background FX: OFF');
@@ -484,6 +680,7 @@
             fxWidget.classList.add('hidden');
             if (fxPanel) fxPanel.classList.remove('open');
           }
+          if (botHud) botHud.classList.add('hidden');
         }
       });
     }
@@ -517,7 +714,7 @@
       });
     }
 
-    // 4. Setup Architecture Flow
+    // 5. Setup Architecture Flow
     renderArchitectureFlow('usd');
     archButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -528,7 +725,7 @@
       });
     });
 
-    // 5. Scroll Spy Navigation
+    // 6. Scroll Spy Navigation
     const sections = document.querySelectorAll('section[id]');
     window.addEventListener('scroll', () => {
       const scrollY = window.pageYOffset;

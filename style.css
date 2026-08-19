@@ -250,6 +250,240 @@ body {
 }
 
 /* ==========================================================================
+   🤖 Sentinel-X Cyber-Bot Score HUD & Comet Destroyer
+   ========================================================================== */
+.bot-hud-widget {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(10, 16, 30, 0.88);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 242, 254, 0.28);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px 10px 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 242, 254, 0.15);
+  font-family: var(--font-sans);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 380px;
+  user-select: none;
+}
+
+.bot-hud-widget:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 254, 0.25);
+  transform: translateY(-2px);
+}
+
+.bot-hud-widget.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(20px) scale(0.9) !important;
+}
+
+.bot-hud-widget.minimized .bot-info-box,
+.bot-hud-widget.minimized .bot-minimize-btn {
+  display: none;
+}
+
+.bot-hud-widget.minimized {
+  padding: 6px;
+  border-radius: 16px;
+}
+
+/* Robot Avatar Box */
+.bot-avatar-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(59, 130, 246, 0.25));
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bot-avatar-box:hover {
+  transform: scale(1.1) rotate(4deg);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.6);
+}
+
+.bot-face {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: -0.05em;
+  transition: all 0.15s ease;
+  text-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+}
+
+.bot-antenna {
+  position: absolute;
+  top: -4px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  box-shadow: 0 0 8px var(--accent-emerald);
+  animation: dotPulse 1.4s infinite;
+}
+
+/* Info Box */
+.bot-info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 190px;
+}
+
+.bot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.bot-name {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: 0.05em;
+}
+
+.bot-rank {
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.bot-score-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.bot-score-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.bot-score-num {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+  transition: transform 0.1s ease;
+}
+
+.bot-score-num.pop {
+  transform: scale(1.35);
+  color: var(--accent-cyan);
+}
+
+.bot-combo-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff5742, #f59e0b);
+  color: #050811;
+  padding: 1px 6px;
+  border-radius: 4px;
+  animation: pulseCombo 0.4s infinite alternate;
+}
+
+.bot-combo-badge.hidden {
+  display: none;
+}
+
+@keyframes pulseCombo {
+  0% { transform: scale(0.95); }
+  100% { transform: scale(1.12); }
+}
+
+.bot-message {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.2;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 215px;
+}
+
+.bot-minimize-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  margin-left: 2px;
+}
+
+.bot-minimize-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Floating Shatter Popups near Cursor/Hit */
+.shatter-popup {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.9);
+  animation: floatFadeOut 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes floatFadeOut {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.8) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.25) translateY(-18px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95) translateY(-34px);
+  }
+}
+
+@media (max-width: 768px) {
+  .bot-hud-widget {
+    bottom: 80px;
+    left: 16px;
+    max-width: calc(100vw - 32px);
+  }
+}
+
+/* ==========================================================================
    Ambient Background Glows
    ========================================================================== */
 .ambient-glow {

@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
 </head>
 
 <body>
@@ -804,7 +804,28 @@
     </button>
   </div>
 
-  <script src="app.js?v=5"></script>
+  <!-- 🤖 Cyber-Bot Sentinel-X Scoreboard HUD -->
+  <div class="bot-hud-widget" id="botHudWidget">
+    <div class="bot-avatar-box" id="botAvatarBox" title="Click to poke Sentinel-X!">
+      <div class="bot-antenna"></div>
+      <div class="bot-face" id="botFace">[•_•]</div>
+    </div>
+    <div class="bot-info-box">
+      <div class="bot-header">
+        <span class="bot-name">SENTINEL-X</span>
+        <span class="bot-rank" id="botRank">CADET</span>
+      </div>
+      <div class="bot-score-row">
+        <span class="bot-score-label">SHATTERED:</span>
+        <span class="bot-score-num" id="botScoreNum">0</span>
+        <span class="bot-combo-badge hidden" id="botComboBadge">COMBO x2!</span>
+      </div>
+      <div class="bot-message" id="botMessage">Move mouse or click comets to vaporize!</div>
+    </div>
+    <button type="button" class="bot-minimize-btn" id="botMinimizeBtn" title="Minimize Sentinel HUD">&times;</button>
+  </div>
+
+  <script src="app.js?v=6"></script>
 </body>
 
 </html>
