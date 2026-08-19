@@ -514,8 +514,9 @@
         { count: 25, rank: 'SENTINEL', msg: 'Render farm running hot! ⚡' },
         { count: 50, rank: 'VFX SPECIALIST', msg: 'USD Sublayer cleared! You are a pro! 🚀' },
         { count: 100, rank: 'PHOTON DESTROYER', msg: 'Overclocking GPUs to 9000%! 🔥' },
-        { count: 200, rank: 'COSMIC ARCHITECT', msg: 'Oscar-worthy precision achieved! 🏆' },
-        { count: 500, rank: 'MULTIVERSE OVERLORD', msg: 'You vaporized the whole multiverse! 🌌' }
+        { count: 250, rank: 'COSMIC ARCHITECT', msg: 'Oscar-worthy precision achieved! 🏆' },
+        { count: 500, rank: 'MULTIVERSE OVERLORD', msg: 'You vaporized the whole multiverse! 🌌' },
+        { count: 1000, rank: 'SUPREME DEITY 👑', msg: '1,000+ Shattered! Infinite power! ⚡' }
       ];
 
       this.init();
@@ -588,9 +589,9 @@
       }
       this.lastHitTime = now;
 
-      // Update score display with pop animation
+      // Update score display with pop animation and localized comma format
       if (this.scoreEl) {
-        this.scoreEl.innerText = this.score;
+        this.scoreEl.innerText = this.score >= 1000 ? this.score.toLocaleString() : this.score;
         this.scoreEl.classList.remove('pop');
         void this.scoreEl.offsetWidth; // Force reflow
         this.scoreEl.classList.add('pop');
