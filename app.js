@@ -76,9 +76,10 @@
         isHovered: false
       };
 
-      // Flow Dynamics
+      // Flow Dynamics & Speed Scaling
       this.globalAngle = Math.PI / 2; // Default 90 deg vertical rain
       this.targetAngle = Math.PI / 2;
+      this.speedMultiplier = 1.0;
       this.particles = [];
       this.shards = [];
       this.ripples = [];
@@ -121,7 +122,7 @@
           const dx = e.clientX - p.x;
           const dy = e.clientY - p.y;
           if (Math.hypot(dx, dy) < 95) {
-            this.triggerShatterBurst(p.x, p.y, 8);
+            this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 14 : 8, p.isSuperFast);
             this.particles[index] = this.createParticle(false);
             blastedCount++;
           }
@@ -156,6 +157,10 @@
       }
     }
 
+    setSpeedMultiplier(mult = 1.0) {
+      this.speedMultiplier = mult;
+    }
+
     toggleState(enable) {
       this.isEnabled = (typeof enable === 'boolean') ? enable : !this.isEnabled;
       if (this.isEnabled) {
@@ -170,7 +175,10 @@
       const angle = this.globalAngle + angleVariation;
 
       // 65% Streak/Comet vs 35% Glowing Circular Orb
-      const isOrb = Math.random() < 0.35;
+      const isOrb = Math.random() < 0.32;
+
+      // 22% Chance of Hyper-Speed Meteor with extended tail & energetic velocity
+      const isSuperFast = Math.random() < 0.22;
 
       // Opacity: Random variation from 0.25 to 0.95 (light and dark layered depth)
       const opacity = 0.25 + Math.random() * 0.70;
@@ -178,10 +186,10 @@
       // Shade tone variation: 0 = deepDark, 1 = midDark, 2 = midBright, 3 = highlight
       const shadeTier = Math.floor(Math.random() * 4);
 
-      // Speed & Size
-      const speed = 1.4 + Math.random() * 2.8;
-      const radius = isOrb ? (1.5 + Math.random() * 4.0) : (1.0 + Math.random() * 1.8);
-      const length = isOrb ? 0 : (30 + Math.random() * 65);
+      // Speed & Size (scaled by dynamic speedMultiplier)
+      const baseSpeed = (1.4 + Math.random() * 2.8) * (isSuperFast ? (1.75 + Math.random() * 0.45) : 1.0) * this.speedMultiplier;
+      const radius = isOrb ? (1.5 + Math.random() * 4.0) : (isSuperFast ? (1.3 + Math.random() * 1.8) : (1.0 + Math.random() * 1.6));
+      const length = isOrb ? 0 : ((30 + Math.random() * 65) * (isSuperFast ? 1.55 : 1.0));
 
       const spawnX = initial ? Math.random() * (this.width + 600) - 300 : Math.random() * (this.width + 800) - 400;
       const spawnY = initial ? Math.random() * this.height : -80 - Math.random() * 140;
@@ -189,11 +197,12 @@
       return {
         x: spawnX,
         y: spawnY,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        baseSpeed: speed,
+        vx: Math.cos(angle) * baseSpeed,
+        vy: Math.sin(angle) * baseSpeed,
+        baseSpeed: baseSpeed,
         angleOffset: angleVariation,
         isOrb: isOrb,
+        isSuperFast: isSuperFast,
         radius: radius,
         length: length,
         opacity: opacity,
@@ -204,16 +213,17 @@
       };
     }
 
-    triggerShatterBurst(x, y, count = 8) {
-      for (let i = 0; i < count; i++) {
+    triggerShatterBurst(x, y, count = 8, isExtra = false) {
+      const finalCount = isExtra ? 14 : count;
+      for (let i = 0; i < finalCount; i++) {
         const pAngle = Math.random() * Math.PI * 2;
-        const pSpeed = 1.5 + Math.random() * 3.8;
+        const pSpeed = (1.5 + Math.random() * 3.8) * (isExtra ? 1.35 : 1.0);
         this.shards.push({
           x: x,
           y: y,
           vx: Math.cos(pAngle) * pSpeed,
           vy: Math.sin(pAngle) * pSpeed,
-          radius: 1.0 + Math.random() * 1.8,
+          radius: 1.0 + Math.random() * (isExtra ? 2.2 : 1.6),
           alpha: 1.0,
           decay: 0.025 + Math.random() * 0.03
         });
@@ -223,9 +233,9 @@
         x: x,
         y: y,
         radius: 2,
-        maxRadius: 28,
-        alpha: 0.8,
-        speed: 1.4
+        maxRadius: isExtra ? 36 : 28,
+        alpha: 0.85,
+        speed: isExtra ? 1.8 : 1.4
       });
     }
 
@@ -564,6 +574,11 @@
         { count: 1000, rank: 'SUPREME DEITY 👑', msg: '1,000+ Shattered! Infinite power! ⚡' }
       ];
 
+      this.themesCycle = ['comet', 'solar', 'aurora', 'diamond'];
+      this.currentThemeIndex = 0;
+      this.onThemeChange = null;
+      this.onSpeedChange = null;
+
       this.isMilestoneLocked = false;
       this.milestoneLockTimer = null;
       this.lastQuote = '';
@@ -727,6 +742,35 @@
     }
 
     checkMilestones() {
+      // 1. Auto-Preset Progression & Speed Scaling every 250 Points
+      const targetThemeIndex = Math.min(3, Math.floor(this.score / 250));
+      if (this.score >= 250 && targetThemeIndex !== this.currentThemeIndex) {
+        this.currentThemeIndex = targetThemeIndex;
+        const newTheme = this.themesCycle[targetThemeIndex];
+        if (this.onThemeChange) this.onThemeChange(newTheme);
+
+        // Progressive global speed scaling (+15% per 250 points stage)
+        const speedMult = 1.0 + (targetThemeIndex * 0.15);
+        if (this.onSpeedChange) this.onSpeedChange(speedMult);
+
+        const shiftAnnouncements = {
+          solar: { face: '[🔥_🔥]', msg: 'HYPERDRIVE: Solar Flare Stage 2 active! 🔥' },
+          aurora: { face: '[✧_✧]', msg: 'HYPERDRIVE: Aurora Matrix Stage 3 online! 🌌' },
+          diamond: { face: '[★_★]', msg: 'MAX VELOCITY: Hyper Diamond Overdrive! 💎' }
+        };
+
+        if (shiftAnnouncements[newTheme]) {
+          this.setFace(shiftAnnouncements[newTheme].face, 2400);
+          this.setMessage(shiftAnnouncements[newTheme].msg);
+          this.isMilestoneLocked = true;
+          clearTimeout(this.milestoneLockTimer);
+          this.milestoneLockTimer = setTimeout(() => {
+            this.isMilestoneLocked = false;
+          }, 3800);
+        }
+      }
+
+      // 2. Rank & Milestone Check
       for (let i = this.milestones.length - 1; i >= 0; i--) {
         const m = this.milestones[i];
         if (this.score >= m.count) {
@@ -782,6 +826,27 @@
     const fxToggleBtn = document.getElementById('fxToggleBtn');
     const fxThemeButtons = document.querySelectorAll('.fx-theme-btn');
     let toastTimer = null;
+
+    function updateThemeUI(themeKey) {
+      if (!engine) return;
+      engine.setTheme(themeKey);
+      fxThemeButtons.forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-theme') === themeKey);
+      });
+      const activeBtn = document.querySelector(`.fx-theme-btn[data-theme="${themeKey}"]`);
+      if (activeBtn && fxToggleBtn) {
+        const themeName = activeBtn.querySelector('span:first-child').innerText;
+        fxToggleBtn.querySelector('span').innerText = `FX: ${themeName.replace(/[⚡🔥🌌💎]/g, '').trim()}`;
+      }
+    }
+
+    scoreboard.onThemeChange = (themeKey) => {
+      updateThemeUI(themeKey);
+    };
+
+    scoreboard.onSpeedChange = (mult) => {
+      if (engine) engine.setSpeedMultiplier(mult);
+    };
 
     function showMissionToast() {
       if (!missionToast) return;

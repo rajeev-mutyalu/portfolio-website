@@ -176,32 +176,43 @@ body {
   box-shadow: 0 0 8px rgba(0, 242, 254, 0.9), 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-/* Mission Announcement Toast Banner */
+/* Mission Announcement Toast Banner (Directly below Game Mode Switch) */
 .mission-toast {
   position: fixed;
-  top: 76px;
-  left: 50%;
-  transform: translateX(-50%) translateY(0);
+  top: 72px;
+  right: 24px;
+  left: auto;
+  transform: translateY(0);
   z-index: 9999;
   display: flex;
   align-items: center;
-  gap: 14px;
-  background: rgba(9, 14, 28, 0.94);
+  gap: 12px;
+  background: rgba(9, 14, 28, 0.95);
   backdrop-filter: blur(24px);
   border: 1px solid var(--accent-cyan);
   border-radius: var(--radius-lg);
-  padding: 12px 20px 12px 16px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 254, 0.35);
-  max-width: 520px;
-  width: calc(100vw - 32px);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 12px 18px 12px 14px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 242, 254, 0.35);
+  max-width: 440px;
+  width: auto;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
 }
 
 .mission-toast.hidden {
   opacity: 0 !important;
   pointer-events: none !important;
-  transform: translateX(-50%) translateY(-24px) scale(0.92) !important;
+  transform: translateY(-20px) scale(0.92) !important;
+}
+
+@media (max-width: 600px) {
+  .mission-toast {
+    right: 12px;
+    left: 12px;
+    top: 68px;
+    max-width: none;
+    width: auto;
+  }
 }
 
 .mission-toast-icon {
