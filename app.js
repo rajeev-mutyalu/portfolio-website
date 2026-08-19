@@ -534,10 +534,28 @@
         }
       }, 3500);
 
-      // Poke reaction
+      // Click anywhere on minimized widget to Expand
+      if (this.hudWidget) {
+        this.hudWidget.addEventListener('click', (e) => {
+          if (this.hudWidget.classList.contains('minimized')) {
+            e.stopPropagation();
+            this.hudWidget.classList.remove('minimized');
+            if (this.minBtn) this.minBtn.innerHTML = '&minus;';
+            if (this.avatarBox) this.avatarBox.setAttribute('title', 'Click to poke Sentinel-X!');
+          }
+        });
+      }
+
+      // Poke reaction when open, or Expand if minimized
       if (this.avatarBox) {
         this.avatarBox.addEventListener('click', (e) => {
           e.stopPropagation();
+          if (this.hudWidget && this.hudWidget.classList.contains('minimized')) {
+            this.hudWidget.classList.remove('minimized');
+            if (this.minBtn) this.minBtn.innerHTML = '&minus;';
+            if (this.avatarBox) this.avatarBox.setAttribute('title', 'Click to poke Sentinel-X!');
+            return;
+          }
           const pokeFace = this.faces.poke[Math.floor(Math.random() * this.faces.poke.length)];
           const pokeQuote = this.pokeQuotes[Math.floor(Math.random() * this.pokeQuotes.length)];
           this.setFace(pokeFace, 900);
@@ -545,12 +563,15 @@
         });
       }
 
-      // Minimize / Expand
+      // Minimize / Expand Button
       if (this.minBtn && this.hudWidget) {
         this.minBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          this.hudWidget.classList.toggle('minimized');
-          this.minBtn.innerHTML = this.hudWidget.classList.contains('minimized') ? '+' : '&times;';
+          const isMin = this.hudWidget.classList.toggle('minimized');
+          this.minBtn.innerHTML = isMin ? '+' : '&minus;';
+          if (this.avatarBox) {
+            this.avatarBox.setAttribute('title', isMin ? 'Click to open Sentinel Scoreboard!' : 'Click to poke Sentinel-X!');
+          }
         });
       }
     }

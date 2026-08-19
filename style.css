@@ -268,7 +268,9 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 242, 254, 0.15);
   font-family: var(--font-sans);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  max-width: 380px;
+  min-width: 290px;
+  max-width: 440px;
+  width: auto;
   user-select: none;
 }
 
@@ -293,6 +295,13 @@ body {
 .bot-hud-widget.minimized {
   padding: 6px;
   border-radius: 16px;
+  min-width: auto;
+  cursor: pointer;
+}
+
+.bot-hud-widget.minimized:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
 }
 
 /* Robot Avatar Box */
@@ -344,7 +353,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  min-width: 190px;
+  min-width: 210px;
+  flex: 1;
+  overflow: hidden;
 }
 
 .bot-header {
@@ -376,8 +387,9 @@ body {
 
 .bot-score-row {
   display: flex;
-  align-items: baseline;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
 .bot-score-label {
@@ -408,6 +420,9 @@ body {
   padding: 1px 6px;
   border-radius: 4px;
   animation: pulseCombo 0.4s infinite alternate;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transform-origin: center;
 }
 
 .bot-combo-badge.hidden {
@@ -415,8 +430,8 @@ body {
 }
 
 @keyframes pulseCombo {
-  0% { transform: scale(0.95); }
-  100% { transform: scale(1.12); }
+  0% { transform: scale(0.98); }
+  100% { transform: scale(1.06); }
 }
 
 .bot-message {
@@ -427,7 +442,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 215px;
+  max-width: 250px;
 }
 
 .bot-minimize-btn {
