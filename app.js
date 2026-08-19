@@ -428,7 +428,7 @@
         { title: 'Editorial & Review', sub: 'Director Approval & Visual Diff' },
         { title: 'ACES Studio Conform', sub: 'Plate Match & Comp Delivery' }
       ],
-      description: '<strong>Studio.AI (Scene Weaver) GenAI Production Platform:</strong> Enterprise orchestration engine for generative visual effects and cinematic video pipelines (<a href="https://astra-aipipeline2.lovable.app/" target="_blank" rel="noopener" style="color: var(--accent-cyan); text-decoration: underline;">astra-aipipeline2.lovable.app</a>). Features prompt optimization across Google Veo, Kling AI, Higgsfield, and Seedance, multi-view character identity locking, editorial timeline conforming, and automated ShotGrid asset synchronization.'
+      description: '<strong>Studio.AI (Scene Weaver) GenAI Production Platform:</strong> Enterprise orchestration engine for generative visual effects and cinematic video pipelines. Features prompt optimization across Google Veo, Kling AI, Higgsfield, and Seedance, multi-view character identity locking, editorial timeline conforming, and automated ShotGrid asset synchronization.'
     }
   };
 
