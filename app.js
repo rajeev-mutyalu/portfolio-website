@@ -500,12 +500,57 @@
         poke: ['[>_<]', '[OwO]', '[♥_♥]', '[¬_¬]']
       };
 
+      this.actionQuotes = [
+        // OpenUSD & Scene Pipeline
+        "USD stage composition running at 100%! ⚡",
+        "USD sublayers resolved: 0 layer conflicts! 💎",
+        "Hydra render delegate compiling shaders! ✨",
+        "Overclocking USD schema parser! 🤖",
+        "Payload unloaded, framerate locked @ 60 FPS! 🚀",
+        "USD prim composition validated across shots! 📐",
+        "Astra VFX USD pipeline nominal! 🎬",
+
+        // Render Farm & Distributed Computing
+        "Render farm dispatching 10,000 blade nodes! 🔥",
+        "GPU raytracing cores at peak thermal efficiency! ⚡",
+        "Deadlock cleared on render cluster queue! 🏆",
+        "Frame buffer cache hit rate: 99.8%! 🌌",
+        "Baking ambient occlusion in real-time! 💥",
+        "Multi-GPU render tiles syncing seamlessly! 🚀",
+
+        // Conforming, Ingest & AI Models
+        "Zero-touch conform pipeline active: 0 errors! 🛠️",
+        "Auto-ingesting raw 8K EXR sequences at speed! ⚡",
+        "Building pattern recognition neural models! 🧠",
+        "Conform validation passed across all color spaces! 🎨",
+        "OCIO ACEScg color pipeline calibrated! 🌈",
+        "Shotgrid automated publish hook dispatched! 📦",
+
+        // Arcade & Cosmic Combat
+        "Cosmic photon beam dialed to maximum power! 🎯",
+        "Direct comet hit! Debris vaporized! 💥",
+        "Target lock acquired! Super streak active! 🔥",
+        "Incoming comet cluster eradicated! ☄️",
+        "Spacetime fabric restored! Keep blasting! 🌌",
+        "Pew pew! Critical hit on cosmic anomaly! ⚡",
+        "Photon lasers operating at 9,000 MW! 🚀",
+        "Orb core shattered! +100 Style points! 💎"
+      ];
+
+      this.idleQuotes = [
+        "Move mouse or click comets to vaporize! ☄️",
+        "Radar detecting incoming comets! Take aim! 🎯",
+        "USD stage ready... waiting for your laser cursor! 🚀",
+        "Conform queue idle. Fire at will, Cadet! 🤖"
+      ];
+
       this.pokeQuotes = [
         "Bleep bloop! Keep blasting comets! 🤖",
         "USD sublayer cache is running at 100%! ⚡",
         "Zero-touch automation online! 🚀",
         "Hey! Stop poking my antenna! (>_<)",
-        "GPU temperature nominal. Fire away! 🔥"
+        "GPU temperature nominal. Fire away! 🔥",
+        "Pattern match complete: You are awesome! ✨"
       ];
 
       this.milestones = [
@@ -518,6 +563,12 @@
         { count: 500, rank: 'MULTIVERSE OVERLORD', msg: 'You vaporized the whole multiverse! 🌌' },
         { count: 1000, rank: 'SUPREME DEITY 👑', msg: '1,000+ Shattered! Infinite power! ⚡' }
       ];
+
+      this.isMilestoneLocked = false;
+      this.milestoneLockTimer = null;
+      this.lastQuote = '';
+      this.hitCountSinceQuote = 0;
+      this.idleTimer = null;
 
       this.init();
     }
@@ -622,8 +673,34 @@
       // Spawn floating visual score popup
       this.spawnPopup(x, y, this.combo >= 4 ? `+${count} COMBO!` : `+${count}💥`);
 
-      // Check milestones
+      // Check milestones first
       this.checkMilestones();
+
+      // Reset idle timer
+      clearTimeout(this.idleTimer);
+      this.idleTimer = setTimeout(() => {
+        if (!this.isMilestoneLocked && this.idleQuotes.length) {
+          const idleQ = this.idleQuotes[Math.floor(Math.random() * this.idleQuotes.length)];
+          this.setMessage(idleQ);
+        }
+      }, 6500);
+
+      // Trigger dynamic randomized action quote every 3-5 hits or high combo
+      this.hitCountSinceQuote++;
+      if (!this.isMilestoneLocked && (this.hitCountSinceQuote >= 4 || this.combo === 4 || this.combo === 8)) {
+        this.triggerRandomActionQuote();
+        this.hitCountSinceQuote = 0;
+      }
+    }
+
+    triggerRandomActionQuote() {
+      if (this.isMilestoneLocked || !this.actionQuotes.length) return;
+      let quote = this.actionQuotes[Math.floor(Math.random() * this.actionQuotes.length)];
+      if (quote === this.lastQuote && this.actionQuotes.length > 1) {
+        quote = this.actionQuotes[(this.actionQuotes.indexOf(quote) + 1) % this.actionQuotes.length];
+      }
+      this.lastQuote = quote;
+      this.setMessage(quote);
     }
 
     setFace(faceStr, duration = 500) {
@@ -653,9 +730,16 @@
       for (let i = this.milestones.length - 1; i >= 0; i--) {
         const m = this.milestones[i];
         if (this.score >= m.count) {
-          if (this.rankEl) this.rankEl.innerText = m.rank;
+          if (this.rankEl && this.rankEl.innerText !== m.rank) {
+            this.rankEl.innerText = m.rank;
+          }
           if (this.score === m.count || this.score === m.count + 1) {
             this.setMessage(m.msg);
+            this.isMilestoneLocked = true;
+            clearTimeout(this.milestoneLockTimer);
+            this.milestoneLockTimer = setTimeout(() => {
+              this.isMilestoneLocked = false;
+            }, 3800);
           }
           break;
         }

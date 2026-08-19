@@ -574,13 +574,14 @@ body {
 
 .bot-message {
   font-size: 0.72rem;
-  color: var(--text-secondary);
-  line-height: 1.2;
-  margin-top: 1px;
+  color: #94a3b8;
+  line-height: 1.25;
+  margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 250px;
+  max-width: 290px;
+  transition: color 0.2s ease;
 }
 
 .bot-minimize-btn {
