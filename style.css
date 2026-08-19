@@ -91,6 +91,13 @@ body {
   border-radius: var(--radius-full);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  user-select: none;
+}
+
+.fx-switch-wrapper * {
+  pointer-events: none;
 }
 
 .fx-switch-wrapper:hover {

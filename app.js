@@ -927,18 +927,7 @@
       });
     }
 
-    // 5. Setup Architecture Flow
-    renderArchitectureFlow('usd');
-    archButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        archButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const flowKey = btn.getAttribute('data-flow');
-        renderArchitectureFlow(flowKey);
-      });
-    });
-
-    // 6. Scroll Spy Navigation
+    // 5. Scroll Spy Navigation
     const sections = document.querySelectorAll('section[id]');
     window.addEventListener('scroll', () => {
       const scrollY = window.pageYOffset;
