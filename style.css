@@ -85,28 +85,45 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 3px 6px 3px 10px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  padding: 4px 8px 4px 10px;
   border-radius: var(--radius-full);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 
 .fx-switch-wrapper:hover {
-  border-color: var(--accent-cyan);
-  background: rgba(0, 242, 254, 0.08);
-  box-shadow: 0 0 14px rgba(0, 242, 254, 0.2);
+  border-color: #ff7a00;
+  background: rgba(255, 122, 0, 0.12);
+  box-shadow: 0 0 16px rgba(255, 122, 0, 0.35);
+  transform: translateY(-1px);
 }
 
 .fx-hint-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  color: var(--accent-cyan);
+  color: #ffffff;
   letter-spacing: 0.02em;
   white-space: nowrap;
   user-select: none;
+}
+
+.fx-joy-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(255, 122, 0, 0.75));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.fx-switch-wrapper:hover .fx-joy-icon {
+  transform: scale(1.15) rotate(-6deg);
+  filter: drop-shadow(0 0 10px rgba(255, 122, 0, 1));
 }
 
 /* Minimalist Navbar FX Slider Switch */

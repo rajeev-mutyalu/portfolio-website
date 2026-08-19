@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=10" />
+  <link rel="stylesheet" href="style.css?v=11" />
 </head>
 
 <body>
@@ -71,7 +71,22 @@
         </a>
         <a href="#contact" class="btn btn-primary btn-sm">Get in Touch</a>
         <div class="fx-switch-wrapper" id="fxSwitchWrapper" title="Want some fun? Toggle Interactive Cosmic Mode!">
-          <span class="fx-hint-badge">🎮 Want fun?</span>
+          <span class="fx-hint-badge">
+            <svg class="fx-joy-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#joyOrangeGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <defs>
+                <linearGradient id="joyOrangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff7a00" />
+                  <stop offset="100%" stop-color="#f59e0b" />
+                </linearGradient>
+              </defs>
+              <line x1="6" y1="12" x2="10" y2="12"></line>
+              <line x1="8" y1="10" x2="8" y2="14"></line>
+              <circle cx="15" cy="13" r="1.2" fill="#f59e0b"></circle>
+              <circle cx="18" cy="11" r="1.2" fill="#ff7a00"></circle>
+              <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+            </svg>
+            <span>Want fun?</span>
+          </span>
           <button type="button" class="fx-slider-switch" id="navFxToggle" title="Toggle Cosmic Game Mode"
             aria-label="Toggle Cosmic Game Mode">
             <span class="fx-slider-knob"></span>
@@ -837,7 +852,7 @@
     <button type="button" class="mission-toast-close" id="missionToastClose" title="Dismiss">&times;</button>
   </div>
 
-  <script src="app.js?v=10"></script>
+  <script src="app.js?v=11"></script>
 </body>
 
 </html>
