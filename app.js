@@ -832,9 +832,6 @@
     }
 
     // 4. Setup Floating FX Preset Switcher
-    const fxToggleBtn = document.getElementById('fxToggleBtn');
-    const fxThemeButtons = document.querySelectorAll('.fx-theme-btn');
-
     if (fxToggleBtn && fxPanel) {
       fxToggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
