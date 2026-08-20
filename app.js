@@ -938,15 +938,15 @@
       },
       automation: {
         nodes: [
-          { title: '1. Event Trigger', sub: 'Webhook / Editorial Ingest' },
+          { title: '1. Inbound Webhook', sub: 'Editorial & Plate Event' },
           { title: '2. n8n Core Hub', sub: 'Logic & Branching Engine', highlight: true },
           { title: '3. Project Onboarding', sub: 'Auto Structure & Shot Setup' },
           { title: '4. Pattern Recognition', sub: 'VFX Plates & Color Space' },
           { title: '5. Ingest & Render', sub: 'Blade Dispatch & Transcode' },
           { title: '6. ShotGrid Update', sub: 'Version Metadata & Status' },
-          { title: '7. Production Notification', sub: 'Zero-Touch Team Alert' }
+          { title: '7. Reverse Webhook', sub: 'Bidirectional Studio Callback' }
         ],
-        description: '<strong>Zero-Touch n8n Studio Automation:</strong> Automated event-driven dispatch and intelligent pattern recognition for VFX plates, project onboarding, automated transcoding, farm blade dispatch, ShotGrid updates, and instant production notifications with zero human friction.'
+        description: '<strong>Zero-Touch n8n Studio Automation:</strong> Automated event-driven dispatch utilizing inbound <strong>webhooks</strong> and <strong>reverse webhooks</strong> for bidirectional studio communication. Ingests editorial turnovers, applies pattern recognition for raw VFX plates, dispatches farm render nodes, updates ShotGrid metadata, and triggers reverse webhook callbacks to production dashboards with zero human friction.'
       },
       genai: {
         nodes: [
