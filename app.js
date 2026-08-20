@@ -923,33 +923,35 @@
     const FLOWS = {
       usd: {
         nodes: [
-          { title: 'Asset Modeling', sub: 'Geometry & UVs' },
-          { title: 'USD Stage', sub: 'Layering & Variants', highlight: true },
-          { title: 'Lighting & Shading', sub: 'Hydra / MaterialX' },
-          { title: 'Live Nuke USD', sub: 'Deep Comp Integration' },
-          { title: 'Final Delivery', sub: 'ACES / Plate Match' }
+          { title: 'Asset Ingest & DCC', sub: 'Maya / Houdini / ZBrush' },
+          { title: 'USD Sublayering', sub: 'Layer Stack & Composition' },
+          { title: 'Astra USD Stage v3', sub: 'Non-Destructive Core Spec', highlight: true },
+          { title: 'Hydra Viewport', sub: 'Storm / Karma / MaterialX' },
+          { title: 'Nuke Deep Comp', sub: 'Live USD & ACES Match' }
         ],
-        description: '<strong>OpenUSD Pipeline Architecture:</strong> End-to-end stage composition unifying modeling, layout, lighting, and compositing with non-destructive layering and real-time Hydra viewport feedback.'
+        description: '<strong>Astra VFX USD Pipeline v3:</strong> Production-grade OpenUSD pipeline architecture unifying asset ingestion, non-destructive sublayer composition, live Hydra viewport rendering, and deep Nuke compositing integration. <br><br><a href="docs/Astra_VFX_USD_Pipeline_v3.pdf" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px; margin-top:8px; text-decoration:none; padding:6px 14px; font-size:0.8rem; border-radius:6px; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); color:#00f2fe;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> View Astra VFX USD Pipeline Spec (PDF)</a>'
       },
       automation: {
         nodes: [
-          { title: 'Event Trigger', sub: 'Slack / Webhook' },
-          { title: 'n8n Core Hub', sub: 'Logic & Branching', highlight: true },
-          { title: 'DCC Tool Task', sub: 'Nuke / Maya API' },
-          { title: 'ShotGrid Update', sub: 'Status & Metadata' },
-          { title: 'Artist Notification', sub: 'Zero Friction' }
+          { title: 'Event Trigger', sub: 'Slack / Webhook / Ingest' },
+          { title: 'n8n Core Hub', sub: 'Logic & Branching Engine', highlight: true },
+          { title: 'Project Onboarding', sub: 'Auto Structure & Shot Setup' },
+          { title: 'Pattern Recognition', sub: 'VFX Plates & Color Space' },
+          { title: 'Ingest & Render', sub: 'Blade Dispatch & Transcode' },
+          { title: 'ShotGrid Update', sub: 'Version Metadata & Status' },
+          { title: 'Production Notification', sub: 'Zero-Touch Team Alert' }
         ],
-        description: '<strong>Zero-Touch n8n Studio Automation:</strong> Automated event-driven dispatch eliminating manual repetitive tasks across review systems, render monitoring, and ingest/egress pipelines.'
+        description: '<strong>Zero-Touch n8n Studio Automation:</strong> Automated event-driven dispatch and intelligent pattern recognition for VFX plates, project onboarding, automated transcoding, farm blade dispatch, ShotGrid updates, and instant production notifications with zero human friction.'
       },
       genai: {
         nodes: [
-          { title: 'Prompt & Directives', sub: 'Text / Multi-modal' },
-          { title: 'GenAI Router', sub: 'Veo / Kling / Seedance', highlight: true },
+          { title: 'Prompt & Directives', sub: 'Text / Multi-modal Input' },
+          { title: 'GenAI Router Hub', sub: 'Veo / Kling / Seedance', highlight: true },
           { title: 'Frame Consistency', sub: 'Higgsfield / Latent Match' },
           { title: 'Upscale & Color', sub: 'Studio ACES Conform' },
-          { title: 'Comp Pipeline', sub: 'Plate Merge & Final' }
+          { title: 'Comp Pipeline', sub: 'Plate Merge & Final Output' }
         ],
-        description: '<strong>GenAI Prompt-to-Video Engine:</strong> Autonomous generation pipelines harnessing Google Veo, Kling AI, Higgsfield, and Seedance for high-fidelity content generation from text prompts.'
+        description: '<strong>Studio.AI GenAI Prompt-to-Video Platform:</strong> Autonomous generation pipelines harnessing Google Veo, Kling AI, Higgsfield, and Seedance for high-fidelity cinematic video generation from text prompts. <br><br><a href="https://astra-aipipeline2.lovable.app/" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px; margin-top:8px; text-decoration:none; padding:6px 14px; font-size:0.8rem; border-radius:6px; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); color:#00f2fe;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Launch Interactive GenAI Platform</a>'
       }
     };
 
