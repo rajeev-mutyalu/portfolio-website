@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=34" />
+  <link rel="stylesheet" href="style.css?v=35" />
 </head>
 
 <body>
@@ -877,7 +877,17 @@
     <button type="button" class="mission-toast-close" id="missionToastClose" title="Dismiss">&times;</button>
   </div>
 
-  <script src="app.js?v=34"></script>
+  <!-- 💻 Mobile Notice Toast (Desktop Only Feature) -->
+  <div class="mission-toast desktop-notice-toast hidden" id="desktopNoticeToast">
+    <div class="mission-toast-icon">💻</div>
+    <div class="mission-toast-content">
+      <div class="mission-toast-title">DESKTOP / LAPTOP FEATURE</div>
+      <div class="mission-toast-desc">Cosmic Game Mode &amp; Sentinel-X mascot are designed for desktop browsers with mouse/trackpad precision. Please open on a desktop or laptop to play!</div>
+    </div>
+    <button type="button" class="mission-toast-close" id="desktopNoticeToastClose" title="Dismiss">&times;</button>
+  </div>
+
+  <script src="app.js?v=35"></script>
 </body>
 
 </html>

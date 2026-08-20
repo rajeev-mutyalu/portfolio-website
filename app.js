@@ -883,10 +883,40 @@
       });
     }
 
+    const desktopNoticeToast = document.getElementById('desktopNoticeToast');
+    const desktopNoticeToastClose = document.getElementById('desktopNoticeToastClose');
+    const mobileDesktopHint = document.querySelector('.mobile-desktop-hint');
+    let desktopNoticeTimer = null;
+
+    function showDesktopOnlyNotice() {
+      if (!desktopNoticeToast) return;
+      desktopNoticeToast.classList.remove('hidden');
+      clearTimeout(desktopNoticeTimer);
+      desktopNoticeTimer = setTimeout(() => {
+        if (desktopNoticeToast) desktopNoticeToast.classList.add('hidden');
+      }, 5000);
+    }
+
+    if (desktopNoticeToastClose && desktopNoticeToast) {
+      desktopNoticeToastClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        desktopNoticeToast.classList.add('hidden');
+      });
+    }
+
+    if (mobileDesktopHint) {
+      mobileDesktopHint.style.cursor = 'pointer';
+      mobileDesktopHint.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showDesktopOnlyNotice();
+      });
+    }
+
     function toggleFunMode(forceState) {
       if (window.innerWidth <= 768) {
-        if (engine) engine.toggleState(false);
+        showDesktopOnlyNotice();
         if (navFxToggle) navFxToggle.classList.remove('active');
+        if (engine) engine.toggleState(false);
         if (fxWidget) fxWidget.classList.add('hidden');
         if (botHud) botHud.classList.add('hidden');
         if (missionToast) missionToast.classList.add('hidden');

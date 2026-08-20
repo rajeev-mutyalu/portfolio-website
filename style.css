@@ -2021,14 +2021,48 @@ body {
     justify-content: center;
   }
 
-  /* Hide Game Mode & FX entirely on Mobile Screens */
-  .fx-switch-wrapper,
-  #fxSwitchWrapper,
+  /* Mobile Game Switch & Desktop Only Notice */
+  .fx-switch-wrapper {
+    display: flex !important;
+    padding: 3px 6px;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .fx-switch-wrapper span:first-child span {
+    display: none;
+  }
+
+  /* Desktop Notice Toast on Mobile */
+  .desktop-notice-toast {
+    display: flex !important;
+    position: fixed !important;
+    top: 64px !important;
+    left: 12px !important;
+    right: 12px !important;
+    max-width: none !important;
+    width: auto !important;
+    z-index: 99999 !important;
+    border-color: var(--accent-amber) !important;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(245, 158, 11, 0.3) !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    padding: 10px 14px !important;
+  }
+
+  .desktop-notice-toast.hidden {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(-20px) scale(0.92) !important;
+  }
+
+  /* Hide Game HUD, FX Canvas, and Presets on Mobile Screens */
   .fx-widget,
   #fxWidget,
   .bot-hud-widget,
   #botHudWidget,
-  .mission-toast,
   #missionToast,
   #cometCanvas,
   .shatter-popup {
