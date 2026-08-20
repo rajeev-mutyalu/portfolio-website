@@ -50,6 +50,65 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ==========================================================================
+   ✨ Custom Cyber Scrollbar (Matching Obsidian Dark & Cyan/Blue Neon Theme)
+   ========================================================================== */
+
+/* Standard Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 242, 254, 0.45) #050811;
+}
+
+/* Chrome, Edge, Safari, Opera & Brave Webkit Scrollbars */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050811;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(0, 242, 254, 0.42) 0%, rgba(59, 130, 246, 0.45) 50%, rgba(147, 51, 234, 0.38) 100%);
+  border-radius: 9999px;
+  border: 2px solid #050811;
+  background-clip: padding-box;
+  transition: all 0.25s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00f2fe 0%, #3b82f6 50%, #8b5cf6 100%);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.6);
+}
+
+::-webkit-scrollbar-corner {
+  background: #050811;
+}
+
+/* Horizontal Flow Container Scrollbars (Architecture Canvas & Touch Areas) */
+.arch-canvas::-webkit-scrollbar {
+  height: 6px;
+}
+
+.arch-canvas::-webkit-scrollbar-track {
+  background: rgba(5, 8, 17, 0.7);
+  border-radius: 9999px;
+}
+
+.arch-canvas::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, rgba(0, 242, 254, 0.5), rgba(59, 130, 246, 0.5));
+  border-radius: 9999px;
+  border: none;
+}
+
+.arch-canvas::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #00f2fe, #3b82f6);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.7);
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-main);
