@@ -923,13 +923,19 @@
     const FLOWS = {
       usd: {
         nodes: [
-          { title: 'Asset Ingest & DCC', sub: 'Maya / Houdini / ZBrush' },
-          { title: 'USD Sublayering', sub: 'Layer Stack & Composition' },
-          { title: 'USD Stage Composition', sub: 'Non-Destructive Core Spec', highlight: true },
-          { title: 'Hydra Viewport', sub: 'Storm / Karma / MaterialX' },
-          { title: 'Nuke Deep Comp', sub: 'Live USD & ACES Match' }
+          { title: '1. Asset Creation', sub: 'Model → Groom → Look → Rig' },
+          { title: '2. Env Master Assembly', sub: 'Element Refs & Instancing' },
+          { title: '3. Layout Base Layer', sub: 'Camera, Blocking & Dressing' },
+          { title: '4. Anim & Deforming Geo', sub: '/Characters & Class Inherits' },
+          { title: '5. CFX & FX Caches', sub: 'Cloth, Crowds & Volumes in /FX' },
+          { title: '6. Lighting & Shading', sub: 'Look Binds & Lights in /Lights' },
+          { title: '7. Composed usdShot', sub: 'Hydra Viewport & Deep Comp', highlight: true }
         ],
-        description: '<strong>USD Pipeline Architecture:</strong> Production-grade OpenUSD pipeline architecture unifying asset ingestion, non-destructive sublayer composition, live Hydra viewport rendering, and deep Nuke compositing integration. <br><br><a href="docs/Astra_VFX_USD_Pipeline_v3.pdf" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px; margin-top:8px; text-decoration:none; padding:6px 14px; font-size:0.8rem; border-radius:6px; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); color:#00f2fe;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> View USD Pipeline Specification (PDF)</a>'
+        description: '<strong>USD Pipeline Architecture (Asset, Environment &amp; Shot Workflow):</strong><br>' +
+          '• <strong>Asset Creation Tier:</strong> Department isolation across Modeling (LOD variants in <code>model.usda</code>), Groom (<code>groom.usda</code>), LookDev (<code>look.usda</code>), and Rigging (<code>rig.ma</code>), combined into a lightweight renderable <code>assembly.usda</code>.<br>' +
+          '• <strong>Environment Workflow:</strong> Composes standalone published prop and set element assemblies into a unified <code>master_assembly.usda</code> with instancing, transforms, and variant selections.<br>' +
+          '• <strong>Shot Composition Tier:</strong> Multi-department non-destructive sublayer stack (Layout &rarr; Animation &rarr; Simulation &rarr; FX &rarr; Lighting) authoring opinions into master <code>{shot}_usdShot.usda</code> rendered through Hydra and integrated into deep Nuke compositing.<br><br>' +
+          '<a href="docs/Astra_VFX_USD_Pipeline_v3.pdf" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px; margin-top:6px; text-decoration:none; padding:6px 14px; font-size:0.8rem; border-radius:6px; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); color:#00f2fe;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> View Complete USD Pipeline Spec (PDF)</a>'
       },
       automation: {
         nodes: [
@@ -945,13 +951,18 @@
       },
       genai: {
         nodes: [
-          { title: 'Prompt & Directives', sub: 'Text / Multi-modal Input' },
-          { title: 'GenAI Router Hub', sub: 'Veo / Kling / Seedance', highlight: true },
-          { title: 'Frame Consistency', sub: 'Higgsfield / Latent Match' },
-          { title: 'Upscale & Color', sub: 'Studio ACES Conform' },
-          { title: 'Comp Pipeline', sub: 'Plate Merge & Final Output' }
+          { title: '1. Prompt & Camera Directives', sub: 'Natural Language & Lens Specs' },
+          { title: '2. Multi-Model Router', sub: 'Veo / Kling / Seedance Dispatch', highlight: true },
+          { title: '3. Style & Character LoRA', sub: 'Higgsfield & Latent Identity' },
+          { title: '4. Temporal Coherence', sub: 'Motion Flow & Cross-Frame Sync' },
+          { title: '5. Neural Upscale', sub: '4K Super-Res & Denoise' },
+          { title: '6. OCIO ACES Conform', sub: 'ACEScg Color Pipeline' },
+          { title: '7. Nuke Comp & EXR Deliver', sub: 'Deep VFX Plate Integration' }
         ],
-        description: '<strong>GenAI Prompt-to-Video Platform:</strong> Autonomous generation pipelines harnessing Google Veo, Kling AI, Higgsfield, and Seedance for high-fidelity cinematic video generation from text prompts. <br><br><a href="https://astra-aipipeline2.lovable.app/" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px; margin-top:8px; text-decoration:none; padding:6px 14px; font-size:0.8rem; border-radius:6px; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); color:#00f2fe;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Launch Interactive GenAI Platform</a>'
+        description: '<strong>GenAI Prompt-to-Video Production Architecture:</strong><br>' +
+          '• <strong>Directorial Input & Multi-Model Dispatch:</strong> Translates cinematic prompts, lens optics (focal length, depth of field), and camera paths (dolly, pan, crane) into optimized payloads routed dynamically to frontier models (Google Veo, Kling AI, Seedance).<br>' +
+          '• <strong>Identity & Temporal Consistency:</strong> Enforces character preservation and environment continuity across generated shots using Higgsfield models, custom LoRA embeddings, and latent frame-matching engines.<br>' +
+          '• <strong>Studio VFX Integration & Output:</strong> Features automated temporal frame interpolation, 4K super-resolution upscaling, OpenColorIO (OCIO) ACEScg color space transformation, and multi-layer EXR plate delivery ready for deep compositing in Nuke and final turnover.'
       }
     };
 
