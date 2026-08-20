@@ -950,18 +950,18 @@
       },
       genai: {
         nodes: [
-          { title: '1. Prompt & Camera Directives', sub: 'Natural Language & Lens Specs' },
-          { title: '2. Multi-Model Router', sub: 'Veo / Kling / Seedance Dispatch', highlight: true },
-          { title: '3. Style & Character LoRA', sub: 'Higgsfield & Latent Identity' },
-          { title: '4. Temporal Coherence', sub: 'Motion Flow & Cross-Frame Sync' },
-          { title: '5. Neural Upscale', sub: '4K Super-Res & Denoise' },
-          { title: '6. OCIO ACES Conform', sub: 'ACEScg Color Pipeline' },
-          { title: '7. Nuke Comp & EXR Deliver', sub: 'Deep VFX Plate Integration' }
+          { title: '1. Script & Storyboard', sub: 'Scene Breakdown & Intent' },
+          { title: '2. Character & Env Assets', sub: 'Consistent Visual DNA / LORAs' },
+          { title: '3. Prompt Studio', sub: 'Directorial Directives & Lenses' },
+          { title: '4. Generation Queue', sub: 'Veo / Kling / Seedance Dispatch', highlight: true },
+          { title: '5. Latent Consistency', sub: 'Higgsfield & Temporal Flow' },
+          { title: '6. Timeline Assembly', sub: 'Scene Sequencing & Cut' },
+          { title: '7. Editorial Review', sub: 'Director Dailies & Approval' }
         ],
-        description: '<strong>GenAI Prompt-to-Video Production Architecture:</strong><br>' +
-          '• <strong>Directorial Input & Multi-Model Dispatch:</strong> Translates cinematic prompts, lens optics (focal length, depth of field), and camera paths (dolly, pan, crane) into optimized payloads routed dynamically to frontier models (Google Veo, Kling AI, Seedance).<br>' +
-          '• <strong>Identity & Temporal Consistency:</strong> Enforces character preservation and environment continuity across generated shots using Higgsfield models, custom LoRA embeddings, and latent frame-matching engines.<br>' +
-          '• <strong>Studio VFX Integration & Output:</strong> Features automated temporal frame interpolation, 4K super-resolution upscaling, OpenColorIO (OCIO) ACEScg color space transformation, and multi-layer EXR plate delivery ready for deep compositing in Nuke and final turnover.'
+        description: '<strong>GenAI Prompt-to-Video Production Platform (Scene Weaver):</strong><br>' +
+          '• <strong>Script & Visual Asset Foundation:</strong> Ingests screenplays and storyboards, establishing persistent visual identity for characters, environments, and stylistic DNA across multi-scene projects.<br>' +
+          '• <strong>Prompt Studio & Multi-Model Generation Queue:</strong> Translates cinematic directorial directives into optimized model payloads dispatched across frontier foundation video models (Google Veo, Kling AI, Seedance).<br>' +
+          '• <strong>Temporal Coherence & Editorial Review:</strong> Leverages latent consistency caching and Higgsfield models to eliminate character drift, assembling generated shots into an interactive editorial timeline ready for director dailies and final review.'
       }
     };
 
