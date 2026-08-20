@@ -91,8 +91,21 @@
     }
 
     init() {
-      this.resize();
-      window.addEventListener('resize', () => this.resize());
+      // Disable completely on mobile screens
+      if (window.innerWidth <= 768) {
+        this.isEnabled = false;
+        if (this.canvas) this.canvas.classList.add('fx-disabled');
+      } else {
+        this.resize();
+      }
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth <= 768) {
+          if (this.isEnabled) this.toggleState(false);
+        } else {
+          this.resize();
+        }
+      });
 
       // Mouse Trackers
       window.addEventListener('mousemove', (e) => {
@@ -871,6 +884,15 @@
     }
 
     function toggleFunMode(forceState) {
+      if (window.innerWidth <= 768) {
+        if (engine) engine.toggleState(false);
+        if (navFxToggle) navFxToggle.classList.remove('active');
+        if (fxWidget) fxWidget.classList.add('hidden');
+        if (botHud) botHud.classList.add('hidden');
+        if (missionToast) missionToast.classList.add('hidden');
+        return;
+      }
+
       const isNowEnabled = (typeof forceState === 'boolean') ? forceState : !engine.isEnabled;
       engine.toggleState(isNowEnabled);
 

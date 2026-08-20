@@ -872,6 +872,41 @@ body {
   color: var(--accent-cyan);
 }
 
+.mobile-desktop-hint {
+  margin-top: 0.4rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px dashed rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mobile-desktop-hint .hint-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.mobile-desktop-hint .hint-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mobile-desktop-hint .hint-text strong {
+  font-size: 0.8rem;
+  color: #f59e0b;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.mobile-desktop-hint .hint-text span {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
@@ -1831,13 +1866,6 @@ body {
   .nav-actions .btn-primary {
     display: none;
   }
-  .fx-switch-wrapper {
-    padding: 3px 6px;
-    gap: 4px;
-  }
-  .fx-switch-wrapper span:first-child span {
-    display: none;
-  }
   .mobile-nav-toggle {
     display: inline-flex;
   }
@@ -1993,39 +2021,21 @@ body {
     justify-content: center;
   }
 
-  /* Scoreboard HUD on Mobile: Float as compact round badge, expand on tap */
-  .bot-hud-widget {
-    bottom: 16px !important;
-    right: 16px !important;
-    left: auto !important;
-    max-width: calc(100vw - 32px) !important;
-    z-index: 9998 !important;
-  }
-  
-  .bot-hud-widget.minimized {
-    width: 50px !important;
-    height: 50px !important;
-    padding: 3px !important;
-    border-radius: 50% !important;
-  }
-  
-  .bot-hud-widget:not(.minimized) {
-    width: calc(100vw - 32px) !important;
-    max-width: 320px !important;
-  }
-
-  /* Mission Toast on Mobile */
-  .mission-toast {
-    top: 60px !important;
-    left: 12px !important;
-    right: 12px !important;
-    max-width: none !important;
-    width: auto !important;
-    padding: 8px 12px !important;
-    font-size: 0.78rem !important;
-  }
-  .mission-toast-desc {
-    font-size: 0.72rem !important;
+  /* Hide Game Mode & FX entirely on Mobile Screens */
+  .fx-switch-wrapper,
+  #fxSwitchWrapper,
+  .fx-widget,
+  #fxWidget,
+  .bot-hud-widget,
+  #botHudWidget,
+  .mission-toast,
+  #missionToast,
+  #cometCanvas,
+  .shatter-popup {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
   }
 }
 
