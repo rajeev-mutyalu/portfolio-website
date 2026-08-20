@@ -642,6 +642,15 @@
           }
         });
       }
+
+      // Auto-minimize on mobile & small tablet screens (<= 768px) to prevent blocking content
+      if (window.innerWidth <= 768 && this.hudWidget) {
+        this.hudWidget.classList.add('minimized');
+        if (this.minBtn) this.minBtn.innerHTML = '+';
+        if (this.avatarBox) {
+          this.avatarBox.setAttribute('title', 'Click to open Sentinel Scoreboard!');
+        }
+      }
     }
 
     onHit(x, y, count = 1) {
@@ -1023,6 +1032,36 @@
         }
       });
     });
+
+    // 7. Mobile Navigation Drawer Toggle & Link Handler
+    const mobileNavToggle = document.getElementById('mobileNavToggle');
+    const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    if (mobileNavToggle && mobileNavDrawer) {
+      mobileNavToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = mobileNavDrawer.classList.toggle('open');
+        mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        mobileNavToggle.querySelector('.nav-bar-icon').innerHTML = isOpen ? '&times;' : '&#9776;';
+      });
+
+      mobileNavLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileNavDrawer.classList.remove('open');
+          mobileNavToggle.setAttribute('aria-expanded', 'false');
+          mobileNavToggle.querySelector('.nav-bar-icon').innerHTML = '&#9776;';
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!mobileNavDrawer.contains(e.target) && !mobileNavToggle.contains(e.target)) {
+          mobileNavDrawer.classList.remove('open');
+          mobileNavToggle.setAttribute('aria-expanded', 'false');
+          mobileNavToggle.querySelector('.nav-bar-icon').innerHTML = '&#9776;';
+        }
+      });
+    }
   }
 
   if (document.readyState === 'loading') {

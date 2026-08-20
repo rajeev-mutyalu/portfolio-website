@@ -721,6 +721,7 @@ body {
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-subtle);
   padding: 0.75rem 1.5rem;
+  transition: all 0.25s ease;
 }
 
 .nav-container {
@@ -792,10 +793,83 @@ body {
   white-space: nowrap;
 }
 
-@media (max-width: 900px) {
-  .nav-links {
-    display: none;
-  }
+/* Mobile Nav Toggle */
+.mobile-nav-toggle {
+  display: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.65rem;
+  font-size: 1.15rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.2s ease;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-nav-toggle:hover {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+/* Mobile Nav Drawer */
+.mobile-nav-drawer {
+  display: none;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  width: 100vw;
+  background: rgba(5, 8, 17, 0.96);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(0, 242, 254, 0.3);
+  padding: 1.25rem 1.5rem 1.5rem;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.85);
+  z-index: 99;
+  flex-direction: column;
+  gap: 0.75rem;
+  transform: translateY(-10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-nav-drawer.open {
+  display: flex;
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-nav-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.mobile-nav-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link:active {
+  background: rgba(0, 242, 254, 0.12);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
 }
 
 /* Buttons */
@@ -1183,110 +1257,6 @@ body {
   color: var(--text-secondary);
   padding: 0.2rem 0.55rem;
   border-radius: var(--radius-sm);
-}
-
-/* Architecture Visualizer Box */
-.arch-box {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 2rem;
-}
-
-.arch-controls {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.arch-btn {
-  background: var(--bg-surface);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.6rem 1.15rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.arch-btn:hover {
-  color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.arch-btn.active {
-  background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(59, 130, 246, 0.15));
-  color: var(--accent-cyan);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
-}
-
-.arch-canvas {
-  background: #03060c;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 1.75rem;
-  min-height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.arch-flow-diagram {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-}
-
-.arch-node {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-md);
-  padding: 0.85rem 1.1rem;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-  min-width: 130px;
-}
-
-.arch-node.highlight {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 16px rgba(0, 242, 254, 0.25);
-}
-
-.arch-node-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  margin-bottom: 0.2rem;
-}
-
-.arch-node-sub {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.arch-arrow {
-  color: var(--accent-cyan);
-  font-weight: 800;
-  font-size: 1.2rem;
-}
-
-.arch-details {
-  background: rgba(0, 0, 0, 0.25);
-  border-left: 3px solid var(--accent-cyan);
-  padding: 0.85rem 1.25rem;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-size: 0.88rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
 }
 
 /* Films Grid */
@@ -1779,4 +1749,293 @@ body {
   text-align: center;
   font-size: 0.8rem;
   color: var(--text-muted);
+}
+
+/* ==========================================================================
+   📱 Responsive Design & Device-Specific Adaptations
+   ========================================================================== */
+
+/* 1. Laptops & Medium Screens (1024px – 1366px) */
+@media (max-width: 1280px) {
+  .nav-container {
+    gap: 0.65rem;
+  }
+  .nav-links {
+    gap: 0.65rem;
+  }
+  .nav-link {
+    font-size: 0.76rem;
+  }
+  .hero-title {
+    font-size: clamp(2.2rem, 3.8vw, 2.85rem);
+  }
+  .bot-hud-widget {
+    width: 255px;
+    min-width: 255px;
+    max-width: 255px;
+    bottom: 18px;
+    left: 18px;
+    padding: 8px 12px 8px 10px;
+  }
+  .bot-hud-widget .bot-message {
+    font-size: 0.68rem;
+    line-height: 1.25;
+  }
+}
+
+/* 2. Compact Laptops & Tablets (769px – 1023px) */
+@media (max-width: 1023px) {
+  .nav-links {
+    display: none;
+  }
+  .mobile-nav-toggle {
+    display: inline-flex;
+  }
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .films-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .section-container {
+    padding: 3.5rem 1.25rem;
+  }
+  .hero-title {
+    font-size: 2.3rem;
+  }
+  .bot-hud-widget {
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+    bottom: 16px;
+    left: 16px;
+  }
+}
+
+/* 3. Mobile Phones (320px – 768px) */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.6rem 1rem;
+  }
+  .nav-container {
+    gap: 0.5rem;
+  }
+  .logo-text {
+    font-size: 0.95rem;
+  }
+  .nav-actions .btn-ghost {
+    display: none;
+  }
+  .nav-actions .btn-primary {
+    display: none;
+  }
+  .fx-switch-wrapper {
+    padding: 3px 6px;
+    gap: 4px;
+  }
+  .fx-switch-wrapper span:first-child span {
+    display: none;
+  }
+  .mobile-nav-toggle {
+    display: inline-flex;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    padding: 2.8rem 1rem 2.2rem;
+  }
+  .hero-avatar-wrapper {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 0.25rem;
+  }
+  .hero-title {
+    font-size: clamp(1.6rem, 6.5vw, 2.1rem);
+    line-height: 1.2;
+    max-width: 100%;
+  }
+  .hero-sub {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    max-width: 100%;
+  }
+  .hero-badges {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 340px;
+  }
+  .metric-chip {
+    padding: 0.5rem 0.75rem;
+  }
+  .metric-num {
+    font-size: 1.1rem;
+  }
+  .metric-txt {
+    font-size: 0.7rem;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  /* Cards & Sections */
+  .section-container {
+    padding: 2.8rem 1rem;
+  }
+  .section-header {
+    margin-bottom: 1.75rem;
+  }
+  .section-title {
+    font-size: 1.6rem;
+    line-height: 1.25;
+  }
+  .section-desc {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .grid-3,
+  .films-grid,
+  .endorsements-grid,
+  .skills-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+  .glass-card {
+    padding: 1.25rem 1.1rem;
+  }
+
+  /* Architecture Flow Diagram */
+  .arch-box {
+    padding: 1.25rem 1rem;
+    gap: 1rem;
+  }
+  .arch-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .arch-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.82rem;
+    padding: 0.55rem 0.8rem;
+  }
+  .arch-canvas {
+    padding: 1.25rem 0.75rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .arch-node {
+    min-width: 125px;
+    padding: 0.7rem 0.85rem;
+  }
+  .arch-node-title {
+    font-size: 0.8rem;
+  }
+  .arch-node-sub {
+    font-size: 0.68rem;
+  }
+  .arch-arrow {
+    font-size: 1rem;
+  }
+  .arch-details {
+    font-size: 0.82rem;
+    padding: 0.85rem 1rem;
+  }
+
+  /* Timeline */
+  .timeline::before {
+    left: 8px;
+  }
+  .timeline-marker {
+    margin-left: 2px;
+    width: 12px;
+    height: 12px;
+    margin-top: 1.2rem;
+  }
+  .timeline-item {
+    gap: 0.75rem;
+  }
+  .role-title {
+    font-size: 1.05rem;
+  }
+  .role-desc {
+    font-size: 0.84rem;
+  }
+
+  /* Contact */
+  .contact-card {
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+  }
+  .contact-title {
+    font-size: clamp(1.2rem, 5.2vw, 1.55rem) !important;
+    white-space: normal !important;
+    word-break: break-word;
+  }
+  .contact-sub {
+    font-size: 0.85rem;
+  }
+  .contact-links {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+  }
+  .contact-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Scoreboard HUD on Mobile: Float as compact round badge, expand on tap */
+  .bot-hud-widget {
+    bottom: 16px !important;
+    right: 16px !important;
+    left: auto !important;
+    max-width: calc(100vw - 32px) !important;
+    z-index: 9998 !important;
+  }
+  
+  .bot-hud-widget.minimized {
+    width: 50px !important;
+    height: 50px !important;
+    padding: 3px !important;
+    border-radius: 50% !important;
+  }
+  
+  .bot-hud-widget:not(.minimized) {
+    width: calc(100vw - 32px) !important;
+    max-width: 320px !important;
+  }
+
+  /* Mission Toast on Mobile */
+  .mission-toast {
+    top: 60px !important;
+    left: 12px !important;
+    right: 12px !important;
+    max-width: none !important;
+    width: auto !important;
+    padding: 8px 12px !important;
+    font-size: 0.78rem !important;
+  }
+  .mission-toast-desc {
+    font-size: 0.72rem !important;
+  }
+}
+
+/* 4. Extra Small Phones (< 380px) */
+@media (max-width: 380px) {
+  .hero-badges {
+    grid-template-columns: 1fr;
+  }
+  .status-pill {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.65rem;
+  }
 }
