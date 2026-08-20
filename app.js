@@ -934,18 +934,17 @@
         description: '<strong>USD Pipeline Architecture (Asset, Environment &amp; Shot Workflow):</strong><br>' +
           '• <strong>Asset Creation Tier:</strong> Department isolation across Modeling (LOD variants in <code>model.usda</code>), Groom (<code>groom.usda</code>), LookDev (<code>look.usda</code>), and Rigging (<code>rig.ma</code>), combined into a lightweight renderable <code>assembly.usda</code>.<br>' +
           '• <strong>Environment Workflow:</strong> Composes standalone published prop and set element assemblies into a unified <code>master_assembly.usda</code> with instancing, transforms, and variant selections.<br>' +
-          '• <strong>Shot Composition Tier:</strong> Multi-department non-destructive sublayer stack (Layout &rarr; Animation &rarr; Simulation &rarr; FX &rarr; Lighting) authoring opinions into master <code>{shot}_usdShot.usda</code> rendered through Hydra and integrated into deep Nuke compositing.<br><br>' +
-          '<a href="docs/Astra_VFX_USD_Pipeline_v3.pdf" target="_blank" rel="noopener" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px; margin-top:6px; text-decoration:none; padding:6px 14px; font-size:0.8rem; border-radius:6px; background:rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.3); color:#00f2fe;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> View Complete USD Pipeline Spec (PDF)</a>'
+          '• <strong>Shot Composition Tier:</strong> Multi-department non-destructive sublayer stack (Layout &rarr; Animation &rarr; Simulation &rarr; FX &rarr; Lighting) authoring opinions into master <code>{shot}_usdShot.usda</code> rendered through Hydra and integrated into deep Nuke compositing.'
       },
       automation: {
         nodes: [
-          { title: 'Event Trigger', sub: 'Webhook / Editorial Ingest' },
-          { title: 'n8n Core Hub', sub: 'Logic & Branching Engine', highlight: true },
-          { title: 'Project Onboarding', sub: 'Auto Structure & Shot Setup' },
-          { title: 'Pattern Recognition', sub: 'VFX Plates & Color Space' },
-          { title: 'Ingest & Render', sub: 'Blade Dispatch & Transcode' },
-          { title: 'ShotGrid Update', sub: 'Version Metadata & Status' },
-          { title: 'Production Notification', sub: 'Zero-Touch Team Alert' }
+          { title: '1. Event Trigger', sub: 'Webhook / Editorial Ingest' },
+          { title: '2. n8n Core Hub', sub: 'Logic & Branching Engine', highlight: true },
+          { title: '3. Project Onboarding', sub: 'Auto Structure & Shot Setup' },
+          { title: '4. Pattern Recognition', sub: 'VFX Plates & Color Space' },
+          { title: '5. Ingest & Render', sub: 'Blade Dispatch & Transcode' },
+          { title: '6. ShotGrid Update', sub: 'Version Metadata & Status' },
+          { title: '7. Production Notification', sub: 'Zero-Touch Team Alert' }
         ],
         description: '<strong>Zero-Touch n8n Studio Automation:</strong> Automated event-driven dispatch and intelligent pattern recognition for VFX plates, project onboarding, automated transcoding, farm blade dispatch, ShotGrid updates, and instant production notifications with zero human friction.'
       },
