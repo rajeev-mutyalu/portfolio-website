@@ -922,6 +922,7 @@ body {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center 15%;
   border: 3px solid #050811;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
   z-index: 2;
