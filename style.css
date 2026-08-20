@@ -410,9 +410,9 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 242, 254, 0.15);
   font-family: var(--font-sans);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  width: 245px;
-  min-width: 245px;
-  max-width: 245px;
+  width: 295px;
+  min-width: 295px;
+  max-width: 295px;
   box-sizing: border-box;
   user-select: none;
 }
