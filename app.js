@@ -985,17 +985,19 @@
       usd: {
         nodes: [
           { title: '1. Asset Creation', sub: 'Model → Groom → Look → Rig' },
-          { title: '2. Env Master Assembly', sub: 'Element Refs & Instancing' },
+          { title: '2. Env Master Assembly', sub: 'Set Dressing & Instancing' },
           { title: '3. Layout Base Layer', sub: 'Camera, Blocking & Dressing' },
-          { title: '4. Anim & Deforming Geo', sub: '/Characters & Class Inherits' },
-          { title: '5. CFX & FX Caches', sub: 'Cloth, Crowds & Volumes in /FX' },
-          { title: '6. Lighting & Shading', sub: 'Look Binds & Lights in /Lights' },
-          { title: '7. Composed usdShot', sub: 'Hydra Viewport & Deep Comp', highlight: true }
+          { title: '4. Anim & Deforming Geo', sub: 'Character Caches & Overrides' },
+          { title: '5. CFX & FX Caches', sub: 'Cloth, Crowds & Volumes' },
+          { title: '6. Lighting & Shading', sub: 'Material Binds & Light Rigs' },
+          { title: '7. USD Plate Architecture', sub: 'Dept Sublayers & Manifest' },
+          { title: '8. Master Shot Assembly', sub: 'Hydra Viewport & Deep Comp', highlight: true }
         ],
-        description: '<strong>USD Pipeline Architecture (Asset, Environment &amp; Shot Workflow):</strong><br>' +
-          '• <strong>Asset Creation Tier:</strong> Department isolation across Modeling (LOD variants in <code>model.usda</code>), Groom (<code>groom.usda</code>), LookDev (<code>look.usda</code>), and Rigging (<code>rig.ma</code>), combined into a lightweight renderable <code>assembly.usda</code>.<br>' +
-          '• <strong>Environment Workflow:</strong> Composes standalone published prop and set element assemblies into a unified <code>master_assembly.usda</code> with instancing, transforms, and variant selections.<br>' +
-          '• <strong>Shot Composition Tier:</strong> Multi-department non-destructive sublayer stack (Layout &rarr; Animation &rarr; Simulation &rarr; FX &rarr; Lighting) authoring opinions into master <code>{shot}_usdShot.usda</code> rendered through Hydra and integrated into deep Nuke compositing.'
+        description: '<strong>USD Pipeline Architecture (Asset, Environment &amp; Shot Composition):</strong><br>' +
+          '• <strong>Asset Creation Tier:</strong> Departmental isolation across Modeling, Groom, LookDev, and Rigging with LOD variants, published into unified, renderable asset packages.<br>' +
+          '• <strong>Environment &amp; Set Assembly:</strong> Composes standalone published props and modular set assemblies into scalable master environments utilizing point instancing, transform hierarchies, and dynamic variant selections.<br>' +
+          '• <strong>USD Plate Architecture:</strong> Designed and implemented department-layered USD composition for shot plates: per-dept sublayers (ingest / derivatives / lighting / session) composed under a manifest-driven umbrella, with strength-ordering and edit-target rules. Built as a composition layer over existing filesystem product storage; aligned with AYON backend integration.<br>' +
+          '• <strong>Shot Composition Tier:</strong> Non-destructive multi-department sublayer stack (Layout &rarr; Animation &rarr; Simulation &rarr; FX &rarr; Lighting) authoring scoped opinions into master shot compositions, rendered via Hydra viewports and integrated into final compositing.'
       },
       automation: {
         nodes: [
