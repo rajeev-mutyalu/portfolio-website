@@ -3316,6 +3316,48 @@ body.cv-theme-light .cv-skill-list strong {
   font-weight: 700 !important;
 }
 
+body.cv-theme-light .cv-job {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.cv-theme-light .cv-job-highlight {
+  background: #f8fafc !important;
+  border: 1.5px solid #0284c7 !important;
+}
+
+body.cv-theme-light .cv-featured-pill {
+  color: #0284c7 !important;
+  font-weight: 800 !important;
+}
+
+body.cv-theme-light .cv-job-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+body.cv-theme-light .cv-company-location {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+body.cv-theme-light .cv-job-period {
+  background: #f0f9ff !important;
+  color: #0369a1 !important;
+  border-color: #bae6fd !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .cv-bullet-list {
+  color: #334155 !important;
+}
+
+body.cv-theme-light .cv-bullet-list strong {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
 /* ==========================================================================
    🖨️ Print & PDF Export Optimization (A4 / Letter Precision Layout)
    ========================================================================== */
