@@ -2747,36 +2747,49 @@ body.cv-theme-light .cv-contact-item-full {
 
 .cv-skill-badge {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: var(--radius-sm);
   display: inline-block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
 }
 
-.ai-badge {
-  background: rgba(0, 242, 254, 0.15);
+.badge-cyan, .ai-badge {
+  background: rgba(0, 242, 254, 0.12);
   color: var(--accent-cyan);
-  border: 1px solid rgba(0, 242, 254, 0.3);
+  border: 1px solid rgba(0, 242, 254, 0.35);
 }
 
-.auto-badge {
-  background: rgba(255, 107, 107, 0.15);
-  color: var(--accent-coral);
-  border: 1px solid rgba(255, 107, 107, 0.3);
+.badge-emerald, .auto-badge {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
-.lead-badge {
-  background: rgba(245, 158, 11, 0.15);
-  color: var(--accent-amber);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+.badge-purple, .usd-badge {
+  background: rgba(139, 92, 246, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(139, 92, 246, 0.35);
 }
 
-.usd-badge {
-  background: rgba(139, 92, 246, 0.15);
-  color: var(--accent-purple);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+.badge-amber, .lead-badge {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.badge-coral {
+  background: rgba(255, 87, 66, 0.12);
+  color: #fb7185;
+  border: 1px solid rgba(255, 87, 66, 0.35);
+}
+
+.badge-blue {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.35);
 }
 
 .cv-skill-header h3 {
@@ -3185,25 +3198,73 @@ body.cv-theme-light .cv-inline-link {
 }
 
 body.cv-theme-light .cv-skill-box {
-  background: #f8fafc !important;
-  border: 1px solid #e2e8f0 !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
 }
 
 body.cv-theme-light .cv-highlight-box {
-  background: #f0f9ff !important;
-  border-color: #bae6fd !important;
+  background: #f8fafc !important;
+  border: 1.5px solid #0284c7 !important;
 }
 
 body.cv-theme-light .cv-skill-header h3 {
   color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+body.cv-theme-light .cv-skill-badge {
+  font-weight: 800 !important;
+  border-width: 1px !important;
+}
+
+body.cv-theme-light .badge-cyan,
+body.cv-theme-light .ai-badge {
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+  border-color: #7dd3fc !important;
+}
+
+body.cv-theme-light .badge-emerald,
+body.cv-theme-light .auto-badge {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+  border-color: #86efac !important;
+}
+
+body.cv-theme-light .badge-purple,
+body.cv-theme-light .usd-badge {
+  background: #f3e8ff !important;
+  color: #7e22ce !important;
+  border-color: #d8b4fe !important;
+}
+
+body.cv-theme-light .badge-amber,
+body.cv-theme-light .lead-badge {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #fcd34d !important;
+}
+
+body.cv-theme-light .badge-coral {
+  background: #ffe4e6 !important;
+  color: #be123c !important;
+  border-color: #fda4af !important;
+}
+
+body.cv-theme-light .badge-blue {
+  background: #dbeafe !important;
+  color: #1d4ed8 !important;
+  border-color: #93c5fd !important;
 }
 
 body.cv-theme-light .cv-skill-list {
-  color: #475569 !important;
+  color: #334155 !important;
 }
 
 body.cv-theme-light .cv-skill-list strong {
   color: #0f172a !important;
+  font-weight: 700 !important;
 }
 
 /* Print Handling for Opted Theme (Downloads the chosen version!) */
