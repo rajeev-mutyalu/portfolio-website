@@ -3630,63 +3630,103 @@ body.cv-theme-light .cv-bullet-list strong {
 body.cv-theme-light .awards-card {
   background: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
 }
 
 body.cv-theme-light .awards-card.fellowship-theme {
-  border-color: #0284c7 !important;
-  background: #f0f9ff !important;
+  border-color: #cbd5e1 !important;
+  border-top: 3.5px solid #0284c7 !important;
+  background: #ffffff !important;
 }
 
 body.cv-theme-light .awards-card.studio-theme {
-  border-color: #f59e0b !important;
-  background: #fffbeb !important;
+  border-color: #cbd5e1 !important;
+  border-top: 3.5px solid #d97706 !important;
+  background: #ffffff !important;
 }
 
 body.cv-theme-light .awards-card-title-group h3 {
   color: #0f172a !important;
+  font-weight: 800 !important;
 }
 
 body.cv-theme-light .fellowship-theme .awards-card-subtitle {
-  color: #0284c7 !important;
+  color: #0369a1 !important;
+  font-weight: 600 !important;
 }
 
 body.cv-theme-light .studio-theme .awards-card-subtitle {
   color: #b45309 !important;
+  font-weight: 600 !important;
 }
 
-body.cv-theme-light .award-badge-pill.pill-cyan {
-  background: #e0f2fe !important;
-  color: #0369a1 !important;
-  border-color: #7dd3fc !important;
-}
-
-body.cv-theme-light .award-badge-pill.pill-amber {
-  background: #fef3c7 !important;
-  color: #92400e !important;
-  border-color: #fde68a !important;
-}
-
-body.cv-theme-light .awards-quote-box {
-  background: #ffffff !important;
-  border-left-color: #0284c7 !important;
-  color: #334155 !important;
-}
-
-body.cv-theme-light .awards-quote-author {
+body.cv-theme-light .card-icon.icon-cyan {
+  background: #f0f9ff !important;
+  border: 1px solid #bae6fd !important;
   color: #0284c7 !important;
 }
 
-body.cv-theme-light .awards-mini-item {
+body.cv-theme-light .card-icon.icon-amber {
+  background: #fffbeb !important;
+  border: 1px solid #fde68a !important;
+  color: #d97706 !important;
+}
+
+body.cv-theme-light .award-badge-pill.pill-cyan {
+  background: #f0f9ff !important;
+  color: #0369a1 !important;
+  border: 1px solid #bae6fd !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .award-badge-pill.pill-amber {
+  background: #fffbeb !important;
+  color: #b45309 !important;
+  border: 1px solid #fde68a !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .awards-quote-box {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-left: 3.5px solid #0284c7 !important;
   color: #334155 !important;
+  padding: 0.75rem 0.95rem !important;
+  border-radius: 0 6px 6px 0 !important;
+}
+
+body.cv-theme-light .awards-quote-author {
+  color: #0369a1 !important;
+  font-weight: 700 !important;
+  margin-top: 6px !important;
+}
+
+body.cv-theme-light .pill {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 600 !important;
+}
+
+body.cv-theme-light .awards-mini-item {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #334155 !important;
+  padding: 6px 10px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
 }
 
 body.cv-theme-light .awards-mini-item strong {
   color: #0f172a !important;
+  font-weight: 700 !important;
 }
 
 body.cv-theme-light .awards-mini-item em {
   color: #64748b !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
 }
 
 body.cv-theme-light .cv-award-row {
