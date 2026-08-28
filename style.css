@@ -2756,25 +2756,38 @@ body.cv-theme-light .cv-contact-item-full {
   letter-spacing: 0.02em;
 }
 
-.badge-cyan, .ai-badge {
+/* 10 Unique Non-Repeating Badge Colors (Dark Theme) */
+.badge-cyan {
   background: rgba(0, 242, 254, 0.12);
   color: var(--accent-cyan);
   border: 1px solid rgba(0, 242, 254, 0.35);
 }
 
-.badge-emerald, .auto-badge {
+.badge-emerald {
   background: rgba(16, 185, 129, 0.12);
   color: #34d399;
   border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
-.badge-purple, .usd-badge {
-  background: rgba(139, 92, 246, 0.12);
+.badge-violet {
+  background: rgba(168, 85, 247, 0.12);
   color: #c084fc;
-  border: 1px solid rgba(139, 92, 246, 0.35);
+  border: 1px solid rgba(168, 85, 247, 0.35);
 }
 
-.badge-amber, .lead-badge {
+.badge-fuchsia {
+  background: rgba(232, 121, 249, 0.12);
+  color: #f0abfc;
+  border: 1px solid rgba(232, 121, 249, 0.35);
+}
+
+.badge-lime {
+  background: rgba(132, 204, 22, 0.12);
+  color: #a3e635;
+  border: 1px solid rgba(132, 204, 22, 0.35);
+}
+
+.badge-amber {
   background: rgba(245, 158, 11, 0.12);
   color: #fbbf24;
   border: 1px solid rgba(245, 158, 11, 0.35);
@@ -2790,6 +2803,18 @@ body.cv-theme-light .cv-contact-item-full {
   background: rgba(59, 130, 246, 0.12);
   color: #60a5fa;
   border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.badge-teal {
+  background: rgba(45, 212, 191, 0.12);
+  color: #2dd4bf;
+  border: 1px solid rgba(45, 212, 191, 0.35);
+}
+
+.badge-orange {
+  background: rgba(251, 146, 60, 0.12);
+  color: #fb923c;
+  border: 1px solid rgba(251, 146, 60, 0.35);
 }
 
 .cv-skill-header h3 {
@@ -3218,29 +3243,37 @@ body.cv-theme-light .cv-skill-badge {
   border-width: 1px !important;
 }
 
-body.cv-theme-light .badge-cyan,
-body.cv-theme-light .ai-badge {
+body.cv-theme-light .badge-cyan {
   background: #e0f2fe !important;
   color: #0369a1 !important;
   border-color: #7dd3fc !important;
 }
 
-body.cv-theme-light .badge-emerald,
-body.cv-theme-light .auto-badge {
+body.cv-theme-light .badge-emerald {
   background: #dcfce7 !important;
   color: #15803d !important;
   border-color: #86efac !important;
 }
 
-body.cv-theme-light .badge-purple,
-body.cv-theme-light .usd-badge {
+body.cv-theme-light .badge-violet {
   background: #f3e8ff !important;
   color: #7e22ce !important;
   border-color: #d8b4fe !important;
 }
 
-body.cv-theme-light .badge-amber,
-body.cv-theme-light .lead-badge {
+body.cv-theme-light .badge-fuchsia {
+  background: #fae8ff !important;
+  color: #86198f !important;
+  border-color: #f0abfc !important;
+}
+
+body.cv-theme-light .badge-lime {
+  background: #ecfccb !important;
+  color: #3f6212 !important;
+  border-color: #bef264 !important;
+}
+
+body.cv-theme-light .badge-amber {
   background: #fef3c7 !important;
   color: #92400e !important;
   border-color: #fcd34d !important;
@@ -3256,6 +3289,18 @@ body.cv-theme-light .badge-blue {
   background: #dbeafe !important;
   color: #1d4ed8 !important;
   border-color: #93c5fd !important;
+}
+
+body.cv-theme-light .badge-teal {
+  background: #ccfbf1 !important;
+  color: #0f766e !important;
+  border-color: #5eead4 !important;
+}
+
+body.cv-theme-light .badge-orange {
+  background: #ffedd5 !important;
+  color: #c2410c !important;
+  border-color: #fed7aa !important;
 }
 
 body.cv-theme-light .cv-skill-list {
