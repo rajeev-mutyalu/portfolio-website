@@ -2844,7 +2844,70 @@ body.cv-theme-light .cv-contact-item-full {
   color: #f1f5f9;
 }
 
-/* Timeline Jobs */
+/* Timeline Jobs with Left Visual Rail & Node Markers */
+.cv-timeline-rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-left: 32px;
+}
+
+.cv-timeline-rail::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 9px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent-cyan), rgba(0, 242, 254, 0.3) 80%, transparent);
+}
+
+body.cv-theme-light .cv-timeline-rail::before {
+  background: linear-gradient(180deg, #0284c7, #cbd5e1 85%, transparent) !important;
+}
+
+.cv-timeline-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.cv-timeline-marker {
+  position: absolute;
+  left: -32px;
+  top: 24px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #06080e;
+  border: 3px solid var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.7);
+  z-index: 2;
+}
+
+.cv-timeline-marker.marker-current {
+  background: var(--accent-cyan);
+  border-color: #ffffff;
+  box-shadow: 0 0 16px #00f2fe;
+}
+
+body.cv-theme-light .cv-timeline-marker {
+  background: #ffffff !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 8px rgba(2, 132, 199, 0.4) !important;
+}
+
+body.cv-theme-light .cv-timeline-marker.marker-current {
+  background: #0284c7 !important;
+  border-color: #0369a1 !important;
+}
+
+.cv-timeline-item .cv-job {
+  width: 100%;
+}
+
 .cv-timeline {
   display: flex;
   flex-direction: column;
@@ -3566,6 +3629,16 @@ body.cv-theme-light .cv-bullet-list strong {
   }
 
   /* Jobs & Experience in Print */
+  .cv-timeline-rail {
+    padding-left: 0 !important;
+    gap: 14px !important;
+  }
+
+  .cv-timeline-rail::before,
+  .cv-timeline-marker {
+    display: none !important;
+  }
+
   .cv-timeline {
     gap: 14px !important;
   }
