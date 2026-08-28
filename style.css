@@ -2755,10 +2755,29 @@ body.cv-theme-light .cv-contact-item-full {
   margin-bottom: 6px;
 }
 
-.ai-badge { background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 242, 254, 0.3); }
-.auto-badge { background: rgba(255, 107, 107, 0.15); color: var(--accent-coral); border: 1px solid rgba(255, 107, 107, 0.3); }
-.lead-badge { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3); }
-.usd-badge { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border: 1px solid rgba(139, 92, 246, 0.3); }
+.ai-badge {
+  background: rgba(0, 242, 254, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+.auto-badge {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--accent-coral);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.lead-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.usd-badge {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-purple);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
 
 .cv-skill-header h3 {
   font-size: 1.05rem;
@@ -3160,56 +3179,9 @@ body.cv-theme-light .cv-summary-text strong {
   border-bottom-color: var(--accent-cyan);
 }
 
-body.cv-theme-light .cv-matrix-container {
-  background: #f8fafc !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: none !important;
-}
-
-body.cv-theme-light .ai-stack-category h4 {
-  color: #0f172a !important;
-}
-
-body.cv-theme-light .pill {
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #334155 !important;
-}
-
-body.cv-theme-light .pill-cyan {
-  background: #f0f9ff !important;
+body.cv-theme-light .cv-inline-link {
   color: #0284c7 !important;
-  border-color: #bae6fd !important;
-}
-
-body.cv-theme-light .pill-emerald {
-  background: #ecfdf5 !important;
-  color: #047857 !important;
-  border-color: #a7f3d0 !important;
-}
-
-body.cv-theme-light .pill-violet {
-  background: #f5f3ff !important;
-  color: #7c3aed !important;
-  border-color: #ddd6fe !important;
-}
-
-body.cv-theme-light .pill-amber {
-  background: #fffbeb !important;
-  color: #b45309 !important;
-  border-color: #fde68a !important;
-}
-
-body.cv-theme-light .pill-coral {
-  background: #fff1f2 !important;
-  color: #e11d48 !important;
-  border-color: #fecdd3 !important;
-}
-
-body.cv-theme-light .pill-blue {
-  background: #eff6ff !important;
-  color: #2563eb !important;
-  border-color: #bfdbfe !important;
+  border-bottom-color: rgba(2, 132, 199, 0.4) !important;
 }
 
 /* Print Handling for Opted Theme (Downloads the chosen version!) */
