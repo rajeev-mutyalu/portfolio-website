@@ -47,12 +47,12 @@
 
       <nav class="nav-links">
         <a href="#initiatives" class="nav-link">Arsenal</a>
-        <a href="#conform" class="nav-link">Turnover &amp; Conform</a>
         <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#conform" class="nav-link">Turnover &amp; Conform</a>
         <a href="#films" class="nav-link">Credits</a>
-        <a href="#endorsements" class="nav-link">Endorsements</a>
         <a href="#experience" class="nav-link">Timeline</a>
         <a href="#awards" class="nav-link">Honors &amp; Awards</a>
+        <a href="#endorsements" class="nav-link">Endorsements</a>
         <a href="#contact" class="nav-link">Contact</a>
       </nav>
 
@@ -115,14 +115,13 @@
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-content">
         <a href="cv.html" class="mobile-nav-link" style="color: var(--accent-cyan); font-weight: 700;">📄 View Curriculum Vitae (CV)</a>
-        <a href="#initiatives" class="mobile-nav-link">🚀 Core Focus</a>
-        <a href="#conform" class="mobile-nav-link">📦 Conform Ingest</a>
+        <a href="#initiatives" class="mobile-nav-link">🚀 Core Focus &amp; Arsenal</a>
         <a href="#architecture" class="mobile-nav-link">🎬 Architecture Flow</a>
+        <a href="#conform" class="mobile-nav-link">📦 Conform Ingest</a>
         <a href="#films" class="mobile-nav-link">🏆 Credits &amp; Filmography</a>
-        <a href="#endorsements" class="mobile-nav-link">⭐ Endorsements</a>
         <a href="#experience" class="mobile-nav-link">⏳ Career Timeline</a>
         <a href="#awards" class="mobile-nav-link">🏆 Honors &amp; Awards</a>
-        <a href="#skills" class="mobile-nav-link">⚡ Skills Matrix</a>
+        <a href="#endorsements" class="mobile-nav-link">⭐ Endorsements</a>
         <a href="#contact" class="mobile-nav-link">📬 Get in Touch</a>
 
         <div class="mobile-desktop-hint">
@@ -449,6 +448,32 @@
     </div>
   </section>
 
+  <!-- Interactive Pipeline Architecture Visualizer -->
+  <section class="section-container" id="architecture">
+    <div class="section-header">
+      <div class="tag-label">Interactive Systems Flow</div>
+      <h2 class="section-title">Studio Pipeline Architecture</h2>
+      <p class="section-desc">Explore how modern USD composition, n8n automated dispatch, and GenAI inference integrate
+        into a unified studio ecosystem.</p>
+    </div>
+
+    <div class="arch-box glass-card">
+      <div class="arch-controls">
+        <button class="arch-btn active" data-flow="usd">🎬 USD Pipeline</button>
+        <button class="arch-btn" data-flow="automation">⚡ n8n Studio Automation</button>
+        <button class="arch-btn" data-flow="genai">🤖 GenAI Prompt-to-Video</button>
+      </div>
+
+      <div class="arch-canvas" id="archCanvas">
+        <!-- Rendered dynamically in app.js -->
+      </div>
+
+      <div class="arch-details" id="archDetails">
+        <!-- Dynamic detail explanation -->
+      </div>
+    </div>
+  </section>
+
   <!-- Conform Ingest & VFX Plate Pipeline Deep Dive -->
   <section class="section-container" id="conform">
     <div class="section-header">
@@ -526,32 +551,6 @@
           <span class="pill">Multi-Track Timeline Line-Up</span>
           <span class="pill">V0s &bull; Anim &bull; Final EXR Sends</span>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Interactive Pipeline Architecture Visualizer -->
-  <section class="section-container" id="architecture">
-    <div class="section-header">
-      <div class="tag-label">Interactive Systems Flow</div>
-      <h2 class="section-title">Studio Pipeline Architecture</h2>
-      <p class="section-desc">Explore how modern USD composition, n8n automated dispatch, and GenAI inference integrate
-        into a unified studio ecosystem.</p>
-    </div>
-
-    <div class="arch-box glass-card">
-      <div class="arch-controls">
-        <button class="arch-btn active" data-flow="usd">🎬 USD Pipeline</button>
-        <button class="arch-btn" data-flow="automation">⚡ n8n Studio Automation</button>
-        <button class="arch-btn" data-flow="genai">🤖 GenAI Prompt-to-Video</button>
-      </div>
-
-      <div class="arch-canvas" id="archCanvas">
-        <!-- Rendered dynamically in app.js -->
-      </div>
-
-      <div class="arch-details" id="archDetails">
-        <!-- Dynamic detail explanation -->
       </div>
     </div>
   </section>
@@ -649,116 +648,6 @@
           <span class="film-link-tag">View on IMDb &rarr;</span>
         </div>
       </a>
-    </div>
-  </section>
-
-  <!-- Verified Endorsements (Detlef removed) -->
-  <section class="section-container" id="endorsements">
-    <div class="section-header">
-      <div class="tag-label">Industry Endorsements</div>
-      <h2 class="section-title">What Leaders Say</h2>
-      <p class="section-desc">Direct recommendations from VFX Supervisors, Directors, and R&amp;D Executives who have
-        worked closely with Rajeev.</p>
-    </div>
-
-    <div class="endorsements-grid">
-      <!-- Viktor Radulov -->
-      <div class="quote-card glass-card">
-        <div class="quote-header">
-          <div class="author-info">
-            <h4 class="author-name">Viktor Radulov</h4>
-            <p class="author-title">Head of Department | VFX &amp; Creative Technology | Workflow Systems</p>
-          </div>
-          <span class="linkedin-verified">Verified LinkedIn</span>
-        </div>
-        <blockquote class="quote-body">
-          "I had the pleasure of working alongside Rajeev at MPC, where he was the R&amp;D Supervisor for the software
-          team in compositing, and I was the Head of Compositing and Lead Creative Stakeholder for template framework
-          development in the Nuke pipeline. We collaborated closely on building and refining the software, and
-          throughout the process, Rajeev consistently demonstrated exceptional technical expertise, problem-solving
-          skills, and a deep understanding of VFX workflows."
-        </blockquote>
-      </div>
-
-      <!-- Adam Valdez -->
-      <div class="quote-card glass-card">
-        <div class="quote-header">
-          <div class="author-info">
-            <h4 class="author-name">Adam Valdez</h4>
-            <p class="author-title">Director &bull; Academy Award-Winning VFX Supervisor</p>
-          </div>
-          <span class="linkedin-verified">Verified LinkedIn</span>
-        </div>
-        <blockquote class="quote-body">
-          "Rajeev led our review and 2D team, and was great to work with. Always striving to understand the goals and
-          improve the workflows. Willing to both brainstorm and get practical. A great partner."
-        </blockquote>
-      </div>
-
-      <!-- Sriram Viswanathan -->
-      <div class="quote-card glass-card">
-        <div class="quote-header">
-          <div class="author-info">
-            <h4 class="author-name">Sriram Viswanathan</h4>
-            <p class="author-title">Pipeline TD @ DNEG | Ex-Technicolor, MPC, DreamWorks</p>
-          </div>
-          <span class="linkedin-verified">Verified LinkedIn</span>
-        </div>
-        <blockquote class="quote-body">
-          "I have had the pleasure of working closely with Rajeev for almost a decade... His approach to solving complex
-          technical challenges is both pragmatic and effective. An exceptional hands-on leader who oversees a large
-          global 2D development team, driving multiple initiatives across locations with empathy and technical
-          excellence."
-        </blockquote>
-      </div>
-
-      <!-- Jamie Winn -->
-      <div class="quote-card glass-card">
-        <div class="quote-header">
-          <div class="author-info">
-            <h4 class="author-name">Jamie Winn</h4>
-            <p class="author-title">Program &amp; People Management Leader | Ex-Technicolor R&amp;D</p>
-          </div>
-          <span class="linkedin-verified">Verified LinkedIn</span>
-        </div>
-        <blockquote class="quote-body">
-          "Rajeev was a pivotal force at MPC and one of the strongest developers and development leaders we had in
-          Technicolor R&D. Rajeev's technical leadership provided for a transformative period in MPC's approach to Comp
-          as well as the evolution of Technicolor's RPM/MM toolsets. Rajeev is a gem for any organization."
-        </blockquote>
-      </div>
-
-      <!-- Lorena Pérez -->
-      <div class="quote-card glass-card">
-        <div class="quote-header">
-          <div class="author-info">
-            <h4 class="author-name">Lorena Pérez</h4>
-            <p class="author-title">Senior Programme Manager | AI &amp; Tech Transformation</p>
-          </div>
-          <span class="linkedin-verified">Verified LinkedIn</span>
-        </div>
-        <blockquote class="quote-body">
-          "Rajeev played a key role in several critical projects... demonstrating exceptional leadership in guiding the
-          ReviewTool, compositing, and RPM teams across global locations. He is proactive in finding solutions, often
-          addressing related issues before they are even flagged."
-        </blockquote>
-      </div>
-
-      <!-- Philippe Soeiro -->
-      <div class="quote-card glass-card">
-        <div class="quote-header">
-          <div class="author-info">
-            <h4 class="author-name">Philippe Soeiro</h4>
-            <p class="author-title">Product Manager | Flame Artist | VFX Supervisor</p>
-          </div>
-          <span class="linkedin-verified">Verified LinkedIn</span>
-        </div>
-        <blockquote class="quote-body">
-          "Rajeev has been an amazing colleague, learning fast about terminology and processes in a VFX pipeline. Rajeev
-          acted not only as a facilitator and a bridge with less senior developers, but also as a key contributor to the
-          projects we worked on together, allowing concepts and visions to become concrete action items."
-        </blockquote>
-      </div>
     </div>
   </section>
 
@@ -981,6 +870,116 @@
             <div><strong>Extra Miler &amp; Executive Team Awards (2011, 2013)</strong> &mdash; <em>DVD/Blu-ray software &amp; dedication</em></div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verified Endorsements (Detlef removed) -->
+  <section class="section-container" id="endorsements">
+    <div class="section-header">
+      <div class="tag-label">Industry Endorsements</div>
+      <h2 class="section-title">What Leaders Say</h2>
+      <p class="section-desc">Direct recommendations from VFX Supervisors, Directors, and R&amp;D Executives who have
+        worked closely with Rajeev.</p>
+    </div>
+
+    <div class="endorsements-grid">
+      <!-- Viktor Radulov -->
+      <div class="quote-card glass-card">
+        <div class="quote-header">
+          <div class="author-info">
+            <h4 class="author-name">Viktor Radulov</h4>
+            <p class="author-title">Head of Department | VFX &amp; Creative Technology | Workflow Systems</p>
+          </div>
+          <span class="linkedin-verified">Verified LinkedIn</span>
+        </div>
+        <blockquote class="quote-body">
+          "I had the pleasure of working alongside Rajeev at MPC, where he was the R&amp;D Supervisor for the software
+          team in compositing, and I was the Head of Compositing and Lead Creative Stakeholder for template framework
+          development in the Nuke pipeline. We collaborated closely on building and refining the software, and
+          throughout the process, Rajeev consistently demonstrated exceptional technical expertise, problem-solving
+          skills, and a deep understanding of VFX workflows."
+        </blockquote>
+      </div>
+
+      <!-- Adam Valdez -->
+      <div class="quote-card glass-card">
+        <div class="quote-header">
+          <div class="author-info">
+            <h4 class="author-name">Adam Valdez</h4>
+            <p class="author-title">Director &bull; Academy Award-Winning VFX Supervisor</p>
+          </div>
+          <span class="linkedin-verified">Verified LinkedIn</span>
+        </div>
+        <blockquote class="quote-body">
+          "Rajeev led our review and 2D team, and was great to work with. Always striving to understand the goals and
+          improve the workflows. Willing to both brainstorm and get practical. A great partner."
+        </blockquote>
+      </div>
+
+      <!-- Sriram Viswanathan -->
+      <div class="quote-card glass-card">
+        <div class="quote-header">
+          <div class="author-info">
+            <h4 class="author-name">Sriram Viswanathan</h4>
+            <p class="author-title">Pipeline TD @ DNEG | Ex-Technicolor, MPC, DreamWorks</p>
+          </div>
+          <span class="linkedin-verified">Verified LinkedIn</span>
+        </div>
+        <blockquote class="quote-body">
+          "I have had the pleasure of working closely with Rajeev for almost a decade... His approach to solving complex
+          technical challenges is both pragmatic and effective. An exceptional hands-on leader who oversees a large
+          global 2D development team, driving multiple initiatives across locations with empathy and technical
+          excellence."
+        </blockquote>
+      </div>
+
+      <!-- Jamie Winn -->
+      <div class="quote-card glass-card">
+        <div class="quote-header">
+          <div class="author-info">
+            <h4 class="author-name">Jamie Winn</h4>
+            <p class="author-title">Program &amp; People Management Leader | Ex-Technicolor R&amp;D</p>
+          </div>
+          <span class="linkedin-verified">Verified LinkedIn</span>
+        </div>
+        <blockquote class="quote-body">
+          "Rajeev was a pivotal force at MPC and one of the strongest developers and development leaders we had in
+          Technicolor R&D. Rajeev's technical leadership provided for a transformative period in MPC's approach to Comp
+          as well as the evolution of Technicolor's RPM/MM toolsets. Rajeev is a gem for any organization."
+        </blockquote>
+      </div>
+
+      <!-- Lorena Pérez -->
+      <div class="quote-card glass-card">
+        <div class="quote-header">
+          <div class="author-info">
+            <h4 class="author-name">Lorena Pérez</h4>
+            <p class="author-title">Senior Programme Manager | AI &amp; Tech Transformation</p>
+          </div>
+          <span class="linkedin-verified">Verified LinkedIn</span>
+        </div>
+        <blockquote class="quote-body">
+          "Rajeev played a key role in several critical projects... demonstrating exceptional leadership in guiding the
+          ReviewTool, compositing, and RPM teams across global locations. He is proactive in finding solutions, often
+          addressing related issues before they are even flagged."
+        </blockquote>
+      </div>
+
+      <!-- Philippe Soeiro -->
+      <div class="quote-card glass-card">
+        <div class="quote-header">
+          <div class="author-info">
+            <h4 class="author-name">Philippe Soeiro</h4>
+            <p class="author-title">Product Manager | Flame Artist | VFX Supervisor</p>
+          </div>
+          <span class="linkedin-verified">Verified LinkedIn</span>
+        </div>
+        <blockquote class="quote-body">
+          "Rajeev has been an amazing colleague, learning fast about terminology and processes in a VFX pipeline. Rajeev
+          acted not only as a facilitator and a bridge with less senior developers, but also as a key contributor to the
+          projects we worked on together, allowing concepts and visions to become concrete action items."
+        </blockquote>
       </div>
     </div>
   </section>
