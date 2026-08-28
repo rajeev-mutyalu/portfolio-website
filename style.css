@@ -1072,19 +1072,23 @@ body {
 /* Avatar Styling */
 .hero-avatar-wrapper {
   position: relative;
-  width: 130px;
-  height: 130px;
+  width: 136px;
+  height: 136px;
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .avatar-glow {
   position: absolute;
-  inset: -6px;
+  inset: -4px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-coral), var(--accent-violet));
-  filter: blur(12px);
-  opacity: 0.75;
-  animation: rotateGlow 6s linear infinite;
+  background: linear-gradient(135deg, var(--accent-cyan), rgba(0, 242, 254, 0.3), var(--accent-violet));
+  filter: blur(10px);
+  opacity: 0.6;
+  animation: rotateGlow 8s linear infinite;
+  z-index: 1;
 }
 
 @keyframes rotateGlow {
@@ -1103,11 +1107,11 @@ body {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  object-position: center 15%;
-  border: 3px solid #050811;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  object-position: center center;
+  border: 2.5px solid rgba(0, 242, 254, 0.6);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 254, 0.2);
   z-index: 2;
-  background: #ffffff;
+  background: #0d1117;
 }
 
 .status-pill {
