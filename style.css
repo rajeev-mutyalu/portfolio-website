@@ -3184,6 +3184,28 @@ body.cv-theme-light .cv-inline-link {
   border-bottom-color: rgba(2, 132, 199, 0.4) !important;
 }
 
+body.cv-theme-light .cv-skill-box {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+body.cv-theme-light .cv-highlight-box {
+  background: #f0f9ff !important;
+  border-color: #bae6fd !important;
+}
+
+body.cv-theme-light .cv-skill-header h3 {
+  color: #0f172a !important;
+}
+
+body.cv-theme-light .cv-skill-list {
+  color: #475569 !important;
+}
+
+body.cv-theme-light .cv-skill-list strong {
+  color: #0f172a !important;
+}
+
 /* Print Handling for Opted Theme (Downloads the chosen version!) */
 @media print {
   .cv-inline-link {
