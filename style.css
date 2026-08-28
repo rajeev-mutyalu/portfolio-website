@@ -2775,10 +2775,10 @@ body.cv-theme-light .cv-contact-item-full {
   border: 1px solid rgba(168, 85, 247, 0.35);
 }
 
-.badge-fuchsia {
-  background: rgba(232, 121, 249, 0.12);
-  color: #f0abfc;
-  border: 1px solid rgba(232, 121, 249, 0.35);
+.badge-pink {
+  background: rgba(236, 72, 153, 0.12);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.35);
 }
 
 .badge-lime {
@@ -3261,10 +3261,10 @@ body.cv-theme-light .badge-violet {
   border-color: #d8b4fe !important;
 }
 
-body.cv-theme-light .badge-fuchsia {
-  background: #fae8ff !important;
-  color: #86198f !important;
-  border-color: #f0abfc !important;
+body.cv-theme-light .badge-pink {
+  background: #fdf2f8 !important;
+  color: #9d174d !important;
+  border-color: #fbcfe8 !important;
 }
 
 body.cv-theme-light .badge-lime {
