@@ -3122,6 +3122,45 @@ body.cv-theme-light .cv-timeline-marker.marker-current {
   color: var(--text-muted);
 }
 
+/* Education */
+.cv-education-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.cv-edu-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-card);
+}
+
+.cv-edu-year {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #38bdf8;
+  white-space: nowrap;
+}
+
+.cv-edu-details h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+}
+
+.cv-edu-institution {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
 /* Responsive Header */
 @media (max-width: 768px) {
   .cv-header-identity {
@@ -3442,6 +3481,42 @@ body.cv-theme-light .cv-award-details p {
   color: #475569 !important;
 }
 
+body.cv-theme-light .cv-endorsement-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.cv-theme-light .cv-quote {
+  color: #334155 !important;
+}
+
+body.cv-theme-light .cv-author-name {
+  color: #0f172a !important;
+}
+
+body.cv-theme-light .cv-author-title {
+  color: #64748b !important;
+}
+
+body.cv-theme-light .cv-edu-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.cv-theme-light .cv-edu-details h3 {
+  color: #0f172a !important;
+}
+
+body.cv-theme-light .cv-edu-institution {
+  color: #475569 !important;
+}
+
+body.cv-theme-light .cv-edu-year {
+  color: #0369a1 !important;
+}
+
 /* ==========================================================================
    🖨️ Print & PDF Export Optimization (A4 / Letter Precision Layout)
    ========================================================================== */
@@ -3709,5 +3784,40 @@ body.cv-theme-light .cv-award-details p {
 
   .cv-bullet-list strong {
     color: #0f172a !important;
+  }
+
+  /* Awards, Endorsements, and Education in Print */
+  .cv-award-row,
+  .cv-endorsement-card,
+  .cv-edu-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 10px 14px !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .cv-endorsements-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .cv-quote {
+    font-size: 7.8pt !important;
+    line-height: 1.45 !important;
+    color: #334155 !important;
+  }
+
+  .cv-author-name {
+    font-size: 8.5pt !important;
+    color: #0f172a !important;
+  }
+
+  .cv-author-title {
+    font-size: 7.2pt !important;
+    color: #64748b !important;
   }
 }
