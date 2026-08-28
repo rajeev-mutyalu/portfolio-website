@@ -3421,6 +3421,27 @@ body.cv-theme-light .cv-bullet-list strong {
   font-weight: 700 !important;
 }
 
+body.cv-theme-light .cv-award-row {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+body.cv-theme-light .cv-award-year {
+  color: #0369a1 !important;
+}
+
+body.cv-theme-light .cv-award-details {
+  color: #334155 !important;
+}
+
+body.cv-theme-light .cv-award-details strong {
+  color: #0f172a !important;
+}
+
+body.cv-theme-light .cv-award-details p {
+  color: #475569 !important;
+}
+
 /* ==========================================================================
    🖨️ Print & PDF Export Optimization (A4 / Letter Precision Layout)
    ========================================================================== */
