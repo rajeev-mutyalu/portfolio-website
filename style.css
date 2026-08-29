@@ -2683,31 +2683,30 @@ body {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 35px rgba(0, 242, 254, 0.06) !important;
 }
 
-/* --- Section 1: Header Identity with Big Photo --- */
+/* --- Section 1: Header Identity with Balanced Photo --- */
 .cv-header {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .cv-header-identity {
   display: flex;
-  align-items: stretch;
-  gap: 32px;
-  margin-bottom: 28px;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 20px;
 }
 
 .cv-avatar-wrap {
   flex-shrink: 0;
-  display: flex;
 }
 
 .cv-avatar-img {
-  width: 175px;
-  height: 215px;
-  border-radius: 18px;
+  width: 140px;
+  height: 140px;
+  border-radius: 16px;
   object-fit: cover;
-  object-position: center 10%;
-  border: 2.5px solid rgba(0, 242, 254, 0.5);
-  box-shadow: 0 12px 36px rgba(0, 242, 254, 0.22), 0 0 20px rgba(0, 0, 0, 0.8);
+  object-position: center center;
+  border: 2px solid rgba(0, 242, 254, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 242, 254, 0.18), 0 0 16px rgba(0, 0, 0, 0.7);
   display: block;
   background: #060912;
   transition: transform 0.3s ease, border-color 0.3s ease;
@@ -3866,7 +3865,7 @@ body.cv-theme-light .cv-edu-year {
 
   /* Force Horizontal Left-Aligned Header in Print (NEVER CENTER) */
   .cv-header {
-    margin-bottom: 14px !important;
+    margin-bottom: 8px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
@@ -3874,28 +3873,25 @@ body.cv-theme-light .cv-edu-year {
   .cv-header-identity {
     display: flex !important;
     flex-direction: row !important;
-    align-items: stretch !important;
+    align-items: center !important;
     justify-content: flex-start !important;
     text-align: left !important;
-    gap: 20px !important;
-    margin-bottom: 12px !important;
+    gap: 16px !important;
+    margin-bottom: 8px !important;
   }
 
   .cv-avatar-wrap {
     flex-shrink: 0 !important;
     margin: 0 !important;
-    display: flex !important;
-    align-self: stretch !important;
   }
 
   .cv-avatar-img {
-    width: 145px !important;
-    height: 100% !important;
-    min-height: 175px !important;
-    border-radius: 10px !important;
+    width: 95px !important;
+    height: 95px !important;
+    border-radius: 8px !important;
     border: 1.5px solid #cbd5e1 !important;
     object-fit: cover !important;
-    object-position: center 10% !important;
+    object-position: center center !important;
     box-shadow: none !important;
     display: block !important;
   }
