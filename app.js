@@ -1415,7 +1415,7 @@
     const aiChatStream = document.getElementById('aiChatStream');
     const aiChatForm = document.getElementById('aiChatForm');
     const aiInputField = document.getElementById('aiInputField');
-    const aiTopicPills = document.querySelectorAll('.ai-topic-pill');
+    const aiSidebarBtns = document.querySelectorAll('.ai-sidebar-btn, .ai-topic-pill');
 
     const AI_KNOWLEDGE_BASE = [
       {
@@ -1716,11 +1716,17 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
       });
     }
 
-    if (aiTopicPills.length) {
-      aiTopicPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-          const query = pill.getAttribute('data-query');
-          if (query) renderBotResponse(query);
+    if (aiSidebarBtns.length) {
+      aiSidebarBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const query = btn.getAttribute('data-query');
+          if (query) {
+            aiSidebarBtns.forEach(b => b.classList.remove('active'));
+            if (btn.classList.contains('ai-sidebar-btn')) {
+              btn.classList.add('active');
+            }
+            renderBotResponse(query);
+          }
         });
       });
     }
@@ -1731,6 +1737,7 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
         const q = aiInputField.value.trim();
         if (!q) return;
         aiInputField.value = '';
+        aiSidebarBtns.forEach(b => b.classList.remove('active'));
         renderBotResponse(q);
       });
     }
