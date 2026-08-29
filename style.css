@@ -2690,29 +2690,31 @@ body {
 
 .cv-header-identity {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 32px;
   margin-bottom: 28px;
 }
 
 .cv-avatar-wrap {
   flex-shrink: 0;
+  display: flex;
 }
 
 .cv-avatar-img {
-  width: 155px;
-  height: 155px;
-  border-radius: 20px;
+  width: 175px;
+  height: 215px;
+  border-radius: 18px;
   object-fit: cover;
+  object-position: center 10%;
   border: 2.5px solid rgba(0, 242, 254, 0.5);
   box-shadow: 0 12px 36px rgba(0, 242, 254, 0.22), 0 0 20px rgba(0, 0, 0, 0.8);
   display: block;
-  background: #000;
+  background: #060912;
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .cv-avatar-img:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
   border-color: var(--accent-cyan);
 }
 
@@ -3872,7 +3874,7 @@ body.cv-theme-light .cv-edu-year {
   .cv-header-identity {
     display: flex !important;
     flex-direction: row !important;
-    align-items: flex-start !important;
+    align-items: stretch !important;
     justify-content: flex-start !important;
     text-align: left !important;
     gap: 18px !important;
@@ -3882,13 +3884,16 @@ body.cv-theme-light .cv-edu-year {
   .cv-avatar-wrap {
     flex-shrink: 0 !important;
     margin: 0 !important;
+    display: flex !important;
   }
 
   .cv-avatar-img {
-    width: 100px !important;
-    height: 100px !important;
-    border-radius: 12px !important;
+    width: 125px !important;
+    height: 155px !important;
+    border-radius: 10px !important;
     border: 1.5px solid #cbd5e1 !important;
+    object-fit: cover !important;
+    object-position: center 10% !important;
     box-shadow: none !important;
     display: block !important;
   }
