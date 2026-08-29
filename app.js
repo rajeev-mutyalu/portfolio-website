@@ -1410,7 +1410,7 @@
     }
 
     // =========================================================================
-    // 8. Interactive Rajeev-AI Pipeline Assistant & Architecture Console
+    // 8. Interactive Charlie AI Assistant & Technical Knowledge Base
     // =========================================================================
     const aiChatStream = document.getElementById('aiChatStream');
     const aiChatForm = document.getElementById('aiChatForm');
@@ -1419,120 +1419,134 @@
 
     const AI_KNOWLEDGE_BASE = [
       {
-        id: 'vibe_coding',
-        keywords: ['vibe coding', 'vibe code', 'vibe', 'agentic', 'agents', 'agent', 'claude code', 'antigravity', 'devin', 'swarms', 'autonomous coding'],
-        title: 'Vibe Coding & Agentic AI Systems',
-        response: `<strong>⚡ Vibe Coding &amp; Agentic Engineering:</strong><br/>
-Vibe coding represents the high-leverage transition from manual line-by-line syntax writing to <strong>high-level architectural orchestration</strong> using frontier AI agents (Claude Code / CLI tools, Devin, Google Antigravity).<br/><br/>
-• <strong>Architectural Role:</strong> As Lead Architect, I define systems topologies, data schemas, API contracts, and security boundaries, while directing agentic swarms to implement and refactor modules with rigorous test verification.<br/>
-• <strong>Production Velocity:</strong> Accelerates prototyping, pipeline tooling, and refactoring by <strong>5x–10x</strong> while maintaining enterprise code quality through automated linting and human-in-the-loop review.<br/>
-• <strong>Toolchain Integration:</strong> Combined with custom MCP servers and terminal automation to orchestrate complex VFX pipelines without context switching.`,
+        id: 'mcp',
+        keywords: ['mcp', 'model context protocol', 'mcp server', 'tooling', 'json-rpc', 'context bridges', 'api tool binding', 'anthropic mcp'],
+        title: 'Model Context Protocol (MCP)',
+        response: `<strong>🔌 Model Context Protocol (MCP) in Studio Automation:</strong><br/><br/>
+• <strong>📌 What is it?</strong> An open, standardized JSON-RPC protocol created by Anthropic that allows AI models to discover, read, and invoke tools/data from external studio applications.<br/>
+• <strong>🎯 Where is it used?</strong> Connected directly to DCC applications (Maya, Houdini, Nuke), ShotGrid/Flow Production databases, file systems, and render farm queues.<br/>
+• <strong>💡 Why is it used?</strong> LLMs inherently lack direct access to proprietary studio databases and files. MCP creates a secure, standardized bridge without needing custom proprietary API code for each new AI model.<br/>
+• <strong>🚀 How it helps production:</strong> Enables AI agents to query live shot statuses, check asset dependencies, inspect USD stage composition arcs, and validate frames directly from natural language prompts with strict read-only sandboxing.`,
         followups: [
-          'What is MCP and how do you build custom MCP servers?',
+          'How do you deploy On-Premise LLMs and quantization in studios?',
+          'What is vibe coding and how do you use agentic systems?',
+          'Explain your OpenUSD VFX pipeline architecture'
+        ]
+      },
+      {
+        id: 'vibe_coding',
+        keywords: ['vibe coding', 'vibe code', 'vibe', 'agentic', 'agents', 'agent', 'claude code', 'antigravity', 'devin', 'swarms', 'autonomous coding', 'claude cowork', 'claude design'],
+        title: 'Vibe Coding & Agentic Engineering',
+        response: `<strong>⚡ Vibe Coding &amp; Agentic AI Engineering:</strong><br/><br/>
+• <strong>📌 What is it?</strong> A high-leverage engineering paradigm where software architects steer autonomous AI agents (Claude Code CLI, Google Antigravity, Devin) using natural language directives, architectural contracts, and automated verification loops.<br/>
+• <strong>🎯 Where is it used?</strong> Full-stack pipeline engineering, UI development, API refactoring, test suite synthesis, and automated CI/CD workflows.<br/>
+• <strong>💡 Why is it used?</strong> Eliminates repetitive manual boilerplate syntax typing, allowing the Lead Architect to focus 100% on high-level system topology, data schemas, security boundaries, and edge cases.<br/>
+• <strong>🚀 How it helps production:</strong> Accelerates feature delivery, tool prototyping, and bug remediation by <strong>5x–10x</strong> while enforcing enterprise code quality through automated test gates and human-in-the-loop architectural supervision.`,
+        followups: [
+          'What is Model Context Protocol (MCP) and how is it used?',
           'How do you deploy On-Premise LLMs and quantization in studios?',
           'Explain your OpenUSD VFX pipeline architecture'
         ]
       },
       {
         id: 'openusd',
-        keywords: ['usd', 'openusd', 'composition', 'solaris', 'hydra', 'sublayer', 'payload', 'otio', 'opentimelineio', 'ocio', 'aces', 'stage'],
-        title: 'OpenUSD VFX Pipeline & Open Standards',
-        response: `<strong>🎬 OpenUSD (Universal Scene Description) Production Architecture:</strong><br/>
-Designed and implemented scalable <strong>2-Tier OpenUSD pipelines</strong> bridging Asset Creation with non-destructive Shot Composition:<br/><br/>
-• <strong>Tier 1 — Asset Layering:</strong> Modular publishing for Modeling, Groom, LookDev (MaterialX/Karma), Rigging, and Assembly with strict payload separation.<br/>
-• <strong>Tier 2 — Shot Composition (SH0010):</strong> Non-destructive shot sublayering across Layout, Animation cache, CFX simulation, and Lighting overrides without duplicating heavy geometry.<br/>
-• <strong>Hydra &amp; Cross-DCC Interop:</strong> Seamless viewport synchronization between Maya, Houdini Solaris, Unreal Engine, and render dispatch (Karma/Arnold/RenderMan).<br/>
-• <strong>Open Standards:</strong> Integrated with <strong>OpenTimelineIO (OTIO)</strong> for editorial conform and <strong>OpenColorIO (OCIO) / ACEScg</strong> color management.`,
+        keywords: ['usd', 'openusd', 'composition', 'solaris', 'hydra', 'sublayer', 'payload', 'stage', 'asset layering', 'shot composition', 'karma', 'materialx'],
+        title: 'OpenUSD VFX Production Architecture',
+        response: `<strong>🎬 OpenUSD (Universal Scene Description) Pipeline Architecture:</strong><br/><br/>
+• <strong>📌 What is it?</strong> Pixar's open-source high-performance 3D scene description framework, file format, and composition engine for interchange across visual effects and animation.<br/>
+• <strong>🎯 Where is it used?</strong> Core studio 3D pipeline across Maya, Houdini Solaris, Unreal Engine, and Hydra renderers (Karma, Arnold, RenderMan).<br/>
+• <strong>💡 Why is it used?</strong> Monolithic files create multi-department bottlenecks. OpenUSD allows dozens of artists across Modeling, Groom, LookDev, Animation, and Lighting to collaborate simultaneously without overwriting data.<br/>
+• <strong>🚀 How it helps production:</strong> Rajeev's <strong>2-Tier Architecture</strong> separates modular Asset Publishing from non-destructive Shot Sublayering (SH0010). Geometry is referenced via payloads with zero file bloat and sub-second shot load times.`,
         followups: [
           'How does your Conform Ingest and turnover pipeline work?',
-          'What is MCP and how do you build custom MCP servers?',
+          'Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO)',
+          'What is Model Context Protocol (MCP) and how is it used?'
+        ]
+      },
+      {
+        id: 'otio_ocio',
+        keywords: ['otio', 'opentimelineio', 'ocio', 'opencolorio', 'aces', 'acescg', 'color pipeline', 'editorial standards', 'lut'],
+        title: 'OpenTimelineIO & OpenColorIO (ACES)',
+        response: `<strong>📦 Open Standards: OpenTimelineIO (OTIO) &amp; OpenColorIO (OCIO):</strong><br/><br/>
+• <strong>📌 What is it?</strong> Industry-standard open-source interchange formats for editorial timelines (OTIO) and scientific color management (OCIO / ACEScg).<br/>
+• <strong>🎯 Where is it used?</strong> Editorial cut turnovers, dailies review systems, Nuke studio compositing, and DI grade color transforms.<br/>
+• <strong>💡 Why is it used?</strong> Proprietary EDLs, XMLs, and custom LUTs cause cut mismatches, missing tracks, and color shifts between editorial and VFX.<br/>
+• <strong>🚀 How it helps production:</strong> Guarantees 100% frame-accurate cut synchronization across Hiero/Nuke Studio, tracks VFX plate metadata at the track level, and ensures strict ACEScg color fidelity from camera raw to final theatrical master.`,
+        followups: [
+          'How does your Conform Ingest and turnover pipeline work?',
+          'Explain your OpenUSD VFX pipeline architecture',
           'How does n8n zero-touch automation orchestrate the pipeline?'
         ]
       },
       {
         id: 'conform_ingest',
-        keywords: ['conform', 'ingest', 'turnover', 'editorial', 'di', 'discrepancy', 'plate', 'regex', 'hiero', 'nuke studio', 'shotgrid'],
+        keywords: ['conform', 'ingest', 'turnover', 'editorial', 'di', 'discrepancy', 'plate', 'regex', 'hiero', 'nuke studio', 'shotgrid', 'turnover inspection'],
         title: 'Editorial Turnover, Conform & Ingest Systems',
-        response: `<strong>📦 Editorial Turnover, Conform &amp; VFX Plate Pipeline:</strong><br/>
-Engineered enterprise editorial ingestion and DI discrepancy detection systems for high-throughput feature films:<br/><br/>
-• <strong>Package Inspection &amp; DI Reporting:</strong> Automated verification of client turnovers (EDL/XML/AAF, QuickTimes, raw plates) with immediate discrepancy reports sent back to DI facilities.<br/>
-• <strong>Regex Pattern Matching:</strong> Dynamically compiles regex schemas to extract reel numbers, camera codes, color spaces (ACEScg), and timecode metadata.<br/>
-• <strong>Zero-Touch Ingest:</strong> Automatically creates shot folder hierarchies, publishes plates to ShotGrid, and dispatches background proxy transcodes with a <strong>99.4% automated pass rate</strong>.`,
+        response: `<strong>📦 Editorial Turnover, Conform &amp; VFX Plate Ingest:</strong><br/><br/>
+• <strong>📌 What is it?</strong> Automated systems that ingest editorial turnover packages (AAF, XML, EDL, QuickTimes, raw plates) and validate them against studio databases.<br/>
+• <strong>🎯 Where is it used?</strong> Ingest departments, editorial turnover stations, automated transcoding render farms, and ShotGrid synchronization.<br/>
+• <strong>💡 Why is it used?</strong> High-budget tentpole films receive thousands of cut changes. Manual ingest is extremely slow and prone to costly frame discrepancies during final DI conform.<br/>
+• <strong>🚀 How it helps production:</strong> Performs automated turnover package inspection, instant DI discrepancy reporting back to client editorial, dynamic regex camera metadata extraction, and automatic proxy creation with a <strong>99.4% automated pass rate</strong>.`,
         followups: [
-          'Explain your OpenUSD VFX pipeline architecture',
           'How does n8n zero-touch automation orchestrate the pipeline?',
-          'What is MCP and how do you build custom MCP servers?'
-        ]
-      },
-      {
-        id: 'mcp',
-        keywords: ['mcp', 'model context protocol', 'mcp server', 'tooling', 'json-rpc', 'context bridges', 'api tool binding'],
-        title: 'Model Context Protocol (MCP) in Studio Automation',
-        response: `<strong>🔌 Model Context Protocol (MCP) in VFX &amp; Studio Automation:</strong><br/>
-MCP allows AI agents to securely connect to studio databases, file systems, and DCC software via standardized JSON-RPC client-server protocols:<br/><br/>
-• <strong>Custom Studio MCP Servers:</strong> Built specialized Python/FastAPI MCP servers that expose safe endpoints to ShotGrid/Flow Production Tracking, OpenUSD scene graph inspection, and farm queue managers.<br/>
-• <strong>Autonomous Task Execution:</strong> AI agents can query shot statuses, check asset dependencies, inspect USD stage composition arcs, and validate file checksums directly from natural language requests.<br/>
-• <strong>Security Boundaries:</strong> Enforces read-only sandboxing and human-in-the-loop approval for all mutating production actions.`,
-        followups: [
-          'How do you deploy On-Premise LLMs and quantization in studios?',
-          'What is vibe coding and how do you use agentic systems?',
+          'Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO)',
           'Explain your OpenUSD VFX pipeline architecture'
         ]
       },
       {
         id: 'on_prem_llms',
         keywords: ['on-prem', 'on prem', 'quantization', 'local llm', 'ollama', 'vllm', 'gguf', 'awq', 'msty', 'lm studio', 'nous hermes', 'openclaw', 'security', 'privacy'],
-        title: 'On-Premise Private LLMs & High-Throughput Quantization',
-        response: `<strong>🔒 On-Premise LLMs &amp; High-Throughput Quantization:</strong><br/>
-Deploying local AI models inside air-gapped studio networks to guarantee 100% intellectual property security and zero cloud leakage:<br/><br/>
-• <strong>Quantization Strategies:</strong> 4-bit and 8-bit quantization (AWQ, GPTQ, GGUF) reducing memory footprint by <strong>60%–75%</strong> while retaining 98%+ model reasoning fidelity on local NVIDIA RTX/A100 GPUs.<br/>
-• <strong>Inference Engines:</strong> Powered by <strong>vLLM</strong> (paged attention, continuous batching) and <strong>Ollama / MSTY Studio / LM Studio</strong> for sub-50ms token generation across studio artist tools.<br/>
-• <strong>Zero Data Leakage:</strong> All prompts, codebases, scripts, and proprietary VFX assets remain strictly confined to the studio's on-premise firewall.`,
+        title: 'On-Premise Private LLMs & Quantization',
+        response: `<strong>🔒 On-Premise Private LLMs &amp; High-Throughput Quantization:</strong><br/><br/>
+• <strong>📌 What is it?</strong> Localized deployment of frontier LLMs inside air-gapped studio networks, compressed using 4-bit/8-bit quantization algorithms (GGUF, AWQ, GPTQ).<br/>
+• <strong>🎯 Where is it used?</strong> Private studio GPU compute nodes, local artist workstations, Ollama, and high-throughput vLLM inference clusters.<br/>
+• <strong>💡 Why is it used?</strong> Movie studios have strict non-disclosure security requirements prohibiting proprietary scripts, prompts, and unreleased assets from reaching public cloud LLMs.<br/>
+• <strong>🚀 How it helps production:</strong> Reduces model GPU memory footprint by <strong>60%–75%</strong> while maintaining 98%+ reasoning precision. Delivers sub-50ms token generation locally with <strong>zero cloud data leakage</strong>.`,
         followups: [
-          'What is MCP and how do you build custom MCP servers?',
-          'How does n8n zero-touch automation orchestrate the pipeline?',
-          'What is vibe coding and how do you use agentic systems?'
+          'What is Model Context Protocol (MCP) and how is it used?',
+          'What is OpenClaw and what is the roadmap for online real-time Charlie?',
+          'How does n8n zero-touch automation orchestrate the pipeline?'
         ]
       },
       {
         id: 'n8n_automation',
-        keywords: ['n8n', 'automation', 'webhook', 'webhooks', 'reverse webhook', 'event-driven', 'event routing', 'dispatch'],
-        title: 'Zero-Touch n8n Event-Driven Studio Automation',
-        response: `<strong>⚡ Zero-Touch Studio Automation with n8n:</strong><br/>
-Engineered event-driven studio orchestration using <strong>n8n</strong> workflow hubs for bidirectional pipeline dispatch:<br/><br/>
-• <strong>Bidirectional Webhooks:</strong> Inbound webhooks listen to editorial uploads, ShotGrid status changes, and git commits; reverse webhooks broadcast render progress and Slack/Teams alerts.<br/>
-• <strong>Smart Plate Ingest:</strong> Automated regex pattern recognition validates incoming frames, creates directory structures, and triggers farm transcoding jobs without human intervention.<br/>
-• <strong>Async Event Routing:</strong> Eliminates cron polling bottlenecks, saving hundreds of engineering hours during active tentpole deliveries.`,
+        keywords: ['n8n', 'automation', 'webhook', 'webhooks', 'reverse webhook', 'event-driven', 'event routing', 'dispatch', 'zero-touch'],
+        title: 'Zero-Touch n8n Studio Automation',
+        response: `<strong>⚡ Zero-Touch Studio Automation with n8n:</strong><br/><br/>
+• <strong>📌 What is it?</strong> An event-driven, visual workflow automation hub utilizing bidirectional inbound webhooks and reverse webhooks to connect studio tools.<br/>
+• <strong>🎯 Where is it used?</strong> Automated project onboarding, editorial plate ingest, render farm dispatch, and team messaging sync (Slack/Teams).<br/>
+• <strong>💡 Why is it used?</strong> Traditional cron polling scripts poll databases every few minutes, creating massive database latency and delayed notifications.<br/>
+• <strong>🚀 How it helps production:</strong> Reacts instantaneously to studio events (e.g. editorial file drops or ShotGrid approvals), validates file integrity, initiates background farm jobs, and pushes real-time status alerts without human intervention.`,
         followups: [
           'How does your Conform Ingest and turnover pipeline work?',
           'Tell me about your GenAI video pipelines with Veo and Kling',
-          'What is MCP and how do you build custom MCP servers?'
+          'What is Model Context Protocol (MCP) and how is it used?'
         ]
       },
       {
         id: 'voice_ai',
-        keywords: ['voice', 'retell', 'vapi', 'cal.ai', 'telephony', 'speech', 'conversational voice'],
+        keywords: ['voice', 'retell', 'vapi', 'cal.ai', 'telephony', 'speech', 'conversational voice', 'voice ai'],
         title: 'Conversational Voice AI (Retell / Vapi)',
-        response: `<strong>🎙️ Conversational Voice AI &amp; Real-Time Pipelines:</strong><br/>
-Integrating low-latency voice agents for real-time production coordination and operational workflows:<br/><br/>
-• <strong>Voice Pipelines:</strong> Architected conversational agents using <strong>Retell AI</strong> and <strong>Vapi</strong> with sub-400ms end-to-end voice latency.<br/>
-• <strong>Context Injection:</strong> Dynamically injects live production schedules, task assignments, and calendar bookings (Cal.ai) into voice agent prompts.<br/>
-• <strong>Hands-Free Studio Operations:</strong> Enables studio leads and supervisors to query asset statuses and schedule reviews via voice commands on mobile or desk phones.`,
+        response: `<strong>🎙️ Conversational Voice AI (Retell AI &amp; Vapi):</strong><br/><br/>
+• <strong>📌 What is it?</strong> Ultra-low-latency real-time voice synthesis and conversational AI pipelines with bidirectional live speech recognition.<br/>
+• <strong>🎯 Where is it used?</strong> Hands-free studio supervisor voice interfaces, mobile review calls, and automated review session booking with Cal.ai.<br/>
+• <strong>💡 Why is it used?</strong> Supervisors and executives reviewing shots on calibrated monitors need fast pipeline information without having to switch windows or type on keyboards.<br/>
+• <strong>🚀 How it helps production:</strong> Delivers sub-400ms voice round-trip response times, dynamically injecting live production schedules and shot metadata so leads can query asset statuses and schedule dailies via natural voice.`,
         followups: [
           'What is vibe coding and how do you use agentic systems?',
-          'How do you deploy On-Premise LLMs and quantization in studios?',
+          'What is OpenClaw and what is the roadmap for online real-time Charlie?',
           'What is your 20-year career background and contact info?'
         ]
       },
       {
         id: 'genai_video',
-        keywords: ['video', 'veo', 'google veo', 'kling', 'higgsfield', 'seedance', 'scene weaver', 'studio.ai', 'genai video', 'latent'],
-        title: 'GenAI Video Production & Studio.AI Platform',
-        response: `<strong>🎥 Studio.AI (Scene Weaver) &amp; Generative Video Pipelines:</strong><br/>
-Architected <strong>Studio.AI</strong>—an enterprise generative AI platform for feature film and VFX production:<br/><br/>
-• <strong>Multi-Model Prompt Router:</strong> Connects script/storyboard parsing with automated prompt routing across <strong>Google Veo</strong>, <strong>Kling AI</strong>, <strong>Higgsfield</strong>, and <strong>Seedance</strong>.<br/>
-• <strong>Character Latent Consistency:</strong> Maintains facial identity, wardrobe consistency, and lighting coherence across generated video shots.<br/>
-• <strong>ACES Studio Conform:</strong> Ingests generated outputs directly into OCIO/ACES color spaces for seamless compositing in Nuke.`,
+        keywords: ['video', 'veo', 'google veo', 'kling', 'higgsfield', 'seedance', 'scene weaver', 'studio.ai', 'genai video', 'latent', 'firecrawl'],
+        title: 'GenAI Video Production & Studio.AI (Scene Weaver)',
+        response: `<strong>🎥 Studio.AI (Scene Weaver) &amp; Generative Video Pipelines:</strong><br/><br/>
+• <strong>📌 What is it?</strong> An enterprise multi-model generative AI platform for feature film storyboarding, visual development, and shot synthesis.<br/>
+• <strong>🎯 Where is it used?</strong> Previsualization, concept ideation, multi-model prompt routing (Google Veo, Kling AI, Higgsfield), and web asset extraction via FireCrawl.<br/>
+• <strong>💡 Why is it used?</strong> Out-of-the-box video models produce inconsistent character faces, unstable wardrobe details, and non-standard color spaces.<br/>
+• <strong>🚀 How it helps production:</strong> Enforces character latent identity consistency across video shots, automates prompt generation from screenplays, and conformed outputs directly into OCIO/ACEScg for Nuke compositing.`,
         followups: [
           'Explain your OpenUSD VFX pipeline architecture',
           'How does n8n zero-touch automation orchestrate the pipeline?',
@@ -1541,31 +1555,45 @@ Architected <strong>Studio.AI</strong>—an enterprise generative AI platform fo
       },
       {
         id: 'core_python_ui',
-        keywords: ['python', 'pyqt', 'pyside', 'docker', 'containers', 'linux', 'shell', 'fastapi', 'rest', 'git', 'ui systems'],
-        title: 'Core Software, Python & UI Systems',
-        response: `<strong>🐍 Core Software &amp; UI Systems Engineering:</strong><br/>
-20+ years building mission-critical software foundations for world-leading VFX facilities:<br/><br/>
-• <strong>Python &amp; PySide/PyQt:</strong> Built dozens of high-performance desktop artist tools, DCC plugin suites, and pipeline review UIs.<br/>
-• <strong>Infrastructure &amp; Microservices:</strong> Dockerized microservices, FastAPI REST backends, and Linux/Shell cluster dispatch.<br/>
-• <strong>Version Control:</strong> Enterprise Git/Subversion workflows with automated CI/CD validation and branch management.`,
+        keywords: ['python', 'pyqt', 'pyside', 'docker', 'containers', 'linux', 'shell', 'fastapi', 'rest', 'git', 'ui systems', 'software engineering'],
+        title: 'Core Software, Python & PySide UI Systems',
+        response: `<strong>🐍 Core Python, PySide UI &amp; Systems Engineering:</strong><br/><br/>
+• <strong>📌 What is it?</strong> Foundational software engineering stack: Python 3.x, Qt/PySide desktop GUIs, FastAPI microservices, Docker containers, and Linux cluster dispatch.<br/>
+• <strong>🎯 Where is it used?</strong> In-DCC artist tools (Maya, Houdini, Nuke), standalone desktop review applications, and studio backend microservices.<br/>
+• <strong>💡 Why is it used?</strong> Artists require responsive, multi-threaded desktop user interfaces that handle large datasets without freezing or crashing DCC viewports.<br/>
+• <strong>🚀 How it helps production:</strong> 20+ years of architecting scalable, rock-solid desktop tools and modular Python libraries supporting hundreds of active studio artists across London and Bangalore with zero downtime.`,
         followups: [
           'Explain your OpenUSD VFX pipeline architecture',
-          'What is MCP and how do you build custom MCP servers?',
+          'What is Model Context Protocol (MCP) and how is it used?',
           'What is your 20-year career background and contact info?'
+        ]
+      },
+      {
+        id: 'openclaw_roadmap',
+        keywords: ['openclaw', 'roadmap', 'online', 'future charlie', 'real time agent', 'real-time', 'open claw', 'assistant roadmap'],
+        title: 'OpenClaw & Future Online Real-Time Charlie Agent',
+        response: `<strong>🐾 OpenClaw &amp; The Future of Charlie:</strong><br/><br/>
+• <strong>📌 What is it?</strong> Rajeev's upcoming real-time AI agent orchestration framework (OpenClaw) designed to give Charlie live autonomous execution capabilities.<br/>
+• <strong>🎯 Where is it used?</strong> Future online agent runtime connecting Charlie to private on-premise LLMs, live cloud endpoints, and studio databases.<br/>
+• <strong>💡 Why is it used?</strong> To transition Charlie from a built-in knowledge base into a fully autonomous, real-time agent that can execute live queries, generate USD scripts, and trigger pipeline events.<br/>
+• <strong>🚀 How it helps production:</strong> Will allow Charlie to act as a 24/7 autonomous copilot for artists: inspecting live ShotGrid tasks, diagnosing render farm failures, generating OpenUSD compositions on demand, and assisting technical directors in real time!`,
+        followups: [
+          'What is Model Context Protocol (MCP) and how is it used?',
+          'How do you deploy On-Premise LLMs and quantization in studios?',
+          'What is vibe coding and how do you use agentic systems?'
         ]
       },
       {
         id: 'career_contact',
         keywords: ['career', 'experience', 'timeline', 'background', 'credits', 'films', 'contact', 'email', 'phone', 'linkedin', '1917', 'lion king', 'technicolor', 'mpc', 'astra', 'who are you'],
         title: 'Career Highlights & Contact Matrix',
-        response: `<strong>🏆 Rajeev Mutyalu — Executive Summary &amp; Contact:</strong><br/>
-Lead Software Architect &amp; Creative Technologist based in London, UK (British Citizen) with <strong>20+ years of Tier-1 leadership</strong>:<br/><br/>
-• <strong>Career Tenures:</strong> Astra Studios (2024–Pres.), Technicolor London (2021–2024), Technicolor Bangalore (2017–2021), MPC Film (2014–2017).<br/>
-• <strong>Oscar &amp; Tentpole Credits:</strong> <em>1917</em> (Academy Award Winner), <em>The Lion King</em>, <em>Cruella</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>.<br/>
-• <strong>Global Leadership:</strong> Led cross-site R&amp;D teams across London, Montreal, and Bangalore.<br/>
-• <strong>Direct Contact:</strong> <span style="color:#38bdf8; font-weight:700;">mutyalu.rajeev@gmail.com</span> &bull; <span style="color:#38bdf8; font-weight:700;">+44 7827 498399</span> &bull; <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" style="color:#38bdf8; text-decoration:underline;">LinkedIn Profile</a>`,
+        response: `<strong>🏆 Rajeev Mutyalu — Executive Summary &amp; Contact:</strong><br/><br/>
+• <strong>📌 Leadership Background:</strong> Lead Software Architect &amp; Creative Technologist based in London, UK (British Citizen) with <strong>20+ years of Tier-1 leadership</strong>.<br/>
+• <strong>🎯 Studio Tenures:</strong> Astra Studios (2024–Pres.), Technicolor London (2021–2024), Technicolor Bangalore (2017–2021), MPC Film (2014–2017).<br/>
+• <strong>💡 Tentpole Film Credits:</strong> <em>1917</em> (Academy Award Winner), <em>The Lion King</em>, <em>Cruella</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>.<br/>
+• <strong>🚀 Direct Contact:</strong> <span style="color:#38bdf8; font-weight:700;">mutyalu.rajeev@gmail.com</span> &bull; <span style="color:#38bdf8; font-weight:700;">+44 7827 498399</span> &bull; <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" style="color:#38bdf8; text-decoration:underline;">LinkedIn Profile</a>`,
         followups: [
-          'What is vibe coding and how do you use agentic systems?',
+          'What is Model Context Protocol (MCP) and how is it used?',
           'Explain your OpenUSD VFX pipeline architecture',
           'How does your Conform Ingest and turnover pipeline work?'
         ]
@@ -1659,7 +1687,7 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
         botMsgDiv.innerHTML = `
           <div class="ai-msg-avatar">CH</div>
           <div class="ai-msg-body">
-            <div class="ai-msg-author">Charlie <span>Rajeev's AI Pipeline Assistant</span></div>
+            <div class="ai-msg-author">Charlie <span>Rajeev's AI Assistant</span></div>
             <div class="ai-msg-content">${match.response}</div>
             ${followupsHtml}
           </div>
