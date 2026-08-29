@@ -2683,31 +2683,31 @@ body {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 35px rgba(0, 242, 254, 0.06) !important;
 }
 
-/* --- Section 1: Header Identity with Balanced Photo --- */
+/* --- Section 1: Header Identity with Big Photo --- */
 .cv-header {
-  margin-bottom: 22px;
+  margin-bottom: 28px;
 }
 
 .cv-header-identity {
   display: flex;
-  align-items: flex-start;
-  gap: 28px;
-  margin-bottom: 22px;
+  align-items: stretch;
+  gap: 32px;
+  margin-bottom: 28px;
 }
 
 .cv-avatar-wrap {
   flex-shrink: 0;
-  align-self: flex-start;
+  display: flex;
 }
 
 .cv-avatar-img {
-  width: 165px;
-  height: 175px;
+  width: 175px;
+  height: 215px;
   border-radius: 18px;
   object-fit: cover;
-  object-position: center 15%;
-  border: 2px solid rgba(0, 242, 254, 0.5);
-  box-shadow: 0 8px 24px rgba(0, 242, 254, 0.18), 0 0 16px rgba(0, 0, 0, 0.7);
+  object-position: center 10%;
+  border: 2.5px solid rgba(0, 242, 254, 0.5);
+  box-shadow: 0 12px 36px rgba(0, 242, 254, 0.22), 0 0 20px rgba(0, 0, 0, 0.8);
   display: block;
   background: #060912;
   transition: transform 0.3s ease, border-color 0.3s ease;
@@ -3866,7 +3866,7 @@ body.cv-theme-light .cv-edu-year {
 
   /* Force Horizontal Left-Aligned Header in Print (NEVER CENTER) */
   .cv-header {
-    margin-bottom: 8px !important;
+    margin-bottom: 14px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
@@ -3874,26 +3874,26 @@ body.cv-theme-light .cv-edu-year {
   .cv-header-identity {
     display: flex !important;
     flex-direction: row !important;
-    align-items: flex-start !important;
+    align-items: stretch !important;
     justify-content: flex-start !important;
     text-align: left !important;
-    gap: 16px !important;
-    margin-bottom: 10px !important;
+    gap: 18px !important;
+    margin-bottom: 12px !important;
   }
 
   .cv-avatar-wrap {
     flex-shrink: 0 !important;
     margin: 0 !important;
-    align-self: flex-start !important;
+    display: flex !important;
   }
 
   .cv-avatar-img {
-    width: 118px !important;
-    height: 130px !important;
-    border-radius: 8px !important;
+    width: 125px !important;
+    height: 155px !important;
+    border-radius: 10px !important;
     border: 1.5px solid #cbd5e1 !important;
     object-fit: cover !important;
-    object-position: center 15% !important;
+    object-position: center 10% !important;
     box-shadow: none !important;
     display: block !important;
   }
