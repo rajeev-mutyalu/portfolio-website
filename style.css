@@ -3474,6 +3474,42 @@ body.cv-theme-light .ambient-glow {
   border-color: rgba(56, 189, 248, 0.4) !important;
 }
 
+/* Print / Save PDF Button in CV Topbar (Permanent Glowing Cyan/Blue on iPad & Desktop) */
+#printCvBtn,
+.cv-topbar .btn-primary {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: #0284c7 !important;
+  background-image: linear-gradient(135deg, #00f2fe 0%, #2563eb 100%) !important;
+  color: #050811 !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(0, 242, 254, 0.5) !important;
+  box-shadow: 0 3px 12px rgba(0, 242, 254, 0.35) !important;
+  -webkit-tap-highlight-color: transparent !important;
+  transform: translateZ(0) !important;
+  isolation: isolate !important;
+}
+
+#printCvBtn:hover,
+.cv-topbar .btn-primary:hover {
+  background-color: #0284c7 !important;
+  background-image: linear-gradient(135deg, #26f5ff 0%, #3b82f6 100%) !important;
+  color: #050811 !important;
+  box-shadow: 0 4px 18px rgba(0, 242, 254, 0.55) !important;
+  transform: translateY(-1px) translateZ(0) !important;
+}
+
+#printCvBtn:focus,
+#printCvBtn:active,
+.cv-topbar .btn-primary:focus,
+.cv-topbar .btn-primary:active {
+  background-color: #0284c7 !important;
+  background-image: linear-gradient(135deg, #00d2de 0%, #1d4ed8 100%) !important;
+  color: #050811 !important;
+  outline: none !important;
+  transform: translateY(0) translateZ(0) !important;
+}
+
 body.cv-theme-light .cv-card {
   background: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
