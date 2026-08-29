@@ -559,41 +559,55 @@
       return this.isMuted;
     }
 
-    // 1. Mouse Comet Collision & Shatter Sound Effect
+    // 1. Mouse Comet Collision & Shatter Sound Effect (Crystal Star Burst Chime)
     playHit(combo = 1) {
       if (this.isMuted) return;
       this.ensureContext();
       if (!this.ctx) return;
 
       const now = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      const filter = this.ctx.createBiquadFilter();
 
-      // Pitch scales musically with combo streak (C5 -> C6)
+      // Pentatonic Musical Scale (C5, D5, E5, G5, A5, C6, D6, E6)
       const pentatonicScales = [
         523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51
       ];
       const scaleIndex = Math.min(pentatonicScales.length - 1, (combo - 1) % pentatonicScales.length);
-      const baseFreq = pentatonicScales[scaleIndex];
+      const freq = pentatonicScales[scaleIndex];
 
-      osc.type = combo > 4 ? 'sawtooth' : 'triangle';
-      osc.frequency.setValueAtTime(baseFreq * 1.7, now);
-      osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.45, now + 0.08);
+      // Primary Crystal Bell Tone (Pure Sine)
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now);
+      osc1.frequency.exponentialRampToValueAtTime(freq * 0.98, now + 0.12);
 
+      gain1.gain.setValueAtTime(0.20, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+      // Shimmering High Harmonic (Glass Sparkle at 2.76x)
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2.76, now);
+
+      gain2.gain.setValueAtTime(0.09, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+      // Soft lowpass filter to keep sound warm and melodic
+      const filter = this.ctx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(combo > 4 ? 4200 : 2800, now);
-      filter.frequency.exponentialRampToValueAtTime(350, now + 0.08);
+      filter.frequency.setValueAtTime(3200, now);
 
-      gain.gain.setValueAtTime(0.24, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc1.connect(gain1);
+      osc2.connect(gain2);
+      gain1.connect(filter);
+      gain2.connect(filter);
+      filter.connect(this.sfxGain);
 
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.sfxGain);
-
-      osc.start(now);
-      osc.stop(now + 0.09);
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + 0.13);
+      osc2.stop(now + 0.06);
     }
 
     // 2. Triumphant Level Up / Rank Advancement Fanfare
