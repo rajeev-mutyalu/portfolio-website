@@ -3826,7 +3826,7 @@ body.cv-theme-light .cv-edu-year {
    ========================================================================== */
 @media print {
   @page {
-    margin: 10mm 12mm;
+    margin: 0;
     size: A4 portrait;
   }
 
@@ -3845,8 +3845,9 @@ body.cv-theme-light .cv-edu-year {
     font-size: 9.5pt !important;
     line-height: 1.45 !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 10mm 12mm !important;
     width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .cv-page-wrapper {
@@ -3866,7 +3867,7 @@ body.cv-theme-light .cv-edu-year {
 
   /* Force Horizontal Left-Aligned Header in Print (NEVER CENTER) */
   .cv-header {
-    margin-bottom: 14px !important;
+    margin-bottom: 12px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
@@ -3878,7 +3879,7 @@ body.cv-theme-light .cv-edu-year {
     justify-content: flex-start !important;
     text-align: left !important;
     gap: 18px !important;
-    margin-bottom: 12px !important;
+    margin-bottom: 10px !important;
   }
 
   .cv-avatar-wrap {
@@ -3888,8 +3889,8 @@ body.cv-theme-light .cv-edu-year {
   }
 
   .cv-avatar-img {
-    width: 138px !important;
-    height: 172px !important;
+    width: 120px !important;
+    height: 140px !important;
     border-radius: 10px !important;
     border: 1.5px solid #cbd5e1 !important;
     object-fit: cover !important;
