@@ -3824,7 +3824,7 @@ body.cv-theme-light .cv-edu-year {
    ========================================================================== */
 @media print {
   @page {
-    margin: 12mm 15mm;
+    margin: 10mm 12mm;
     size: A4 portrait;
   }
 
@@ -3840,8 +3840,8 @@ body.cv-theme-light .cv-edu-year {
   html, body {
     background: #ffffff !important;
     color: #0f172a !important;
-    font-size: 10pt !important;
-    line-height: 1.5 !important;
+    font-size: 9.5pt !important;
+    line-height: 1.45 !important;
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
@@ -3863,14 +3863,20 @@ body.cv-theme-light .cv-edu-year {
   }
 
   /* Force Horizontal Left-Aligned Header in Print (NEVER CENTER) */
+  .cv-header {
+    margin-bottom: 14px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
   .cv-header-identity {
     display: flex !important;
     flex-direction: row !important;
     align-items: flex-start !important;
     justify-content: flex-start !important;
     text-align: left !important;
-    gap: 20px !important;
-    margin-bottom: 16px !important;
+    gap: 18px !important;
+    margin-bottom: 12px !important;
   }
 
   .cv-avatar-wrap {
@@ -3879,8 +3885,8 @@ body.cv-theme-light .cv-edu-year {
   }
 
   .cv-avatar-img {
-    width: 110px !important;
-    height: 110px !important;
+    width: 100px !important;
+    height: 100px !important;
     border-radius: 12px !important;
     border: 1.5px solid #cbd5e1 !important;
     box-shadow: none !important;
@@ -3893,19 +3899,19 @@ body.cv-theme-light .cv-edu-year {
   }
 
   .cv-name {
-    font-size: 20pt !important;
+    font-size: 19pt !important;
     color: #0f172a !important;
     text-align: left !important;
-    margin: 0 0 4px 0 !important;
+    margin: 0 0 3px 0 !important;
     line-height: 1.15 !important;
   }
 
   .cv-role-headline {
-    font-size: 9.5pt !important;
+    font-size: 9pt !important;
     color: #334155 !important;
     text-align: left !important;
-    margin-bottom: 8px !important;
-    line-height: 1.4 !important;
+    margin-bottom: 6px !important;
+    line-height: 1.35 !important;
   }
 
   .cv-accent-highlight {
@@ -3916,12 +3922,12 @@ body.cv-theme-light .cv-edu-year {
     display: flex !important;
     flex-wrap: wrap !important;
     justify-content: flex-start !important;
-    gap: 6px !important;
+    gap: 5px !important;
   }
 
   .cv-chip {
-    font-size: 7pt !important;
-    padding: 3px 8px !important;
+    font-size: 6.8pt !important;
+    padding: 2px 7px !important;
     border-width: 1px !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -3932,22 +3938,19 @@ body.cv-theme-light .cv-edu-year {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 6px 14px !important;
-    padding: 10px 14px !important;
+    padding: 8px 14px !important;
     background: #f8fafc !important;
     border: 1px solid #e2e8f0 !important;
-    font-size: 8pt !important;
-    margin-bottom: 16px !important;
+    font-size: 7.8pt !important;
+    margin-bottom: 12px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  .cv-contact-item-full {
-    grid-column: 1 / -1 !important;
-    border-top: 1px dashed #cbd5e1 !important;
-  }
-
   .cv-contact-label {
-    font-size: 7.5pt !important;
+    font-size: 7.2pt !important;
     color: #64748b !important;
   }
 
@@ -3957,69 +3960,96 @@ body.cv-theme-light .cv-edu-year {
 
   .cv-divider {
     background: #e2e8f0 !important;
-    margin: 16px 0 !important;
+    margin: 12px 0 !important;
     height: 1px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
-  /* Section Titles */
+  /* Section Titles: Prevent Orphan Headings */
+  .cv-section {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    margin-bottom: 14px !important;
+  }
+
   .cv-section-title {
-    font-size: 12pt !important;
+    font-size: 11.5pt !important;
     color: #0f172a !important;
-    margin-bottom: 10px !important;
-    page-break-after: avoid;
+    margin-bottom: 8px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    break-after: avoid-page !important;
+  }
+
+  .cv-summary-content {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   .cv-summary-text {
-    font-size: 8.5pt !important;
-    line-height: 1.55 !important;
+    font-size: 8.2pt !important;
+    line-height: 1.5 !important;
     color: #334155 !important;
+    orphans: 3;
+    widows: 3;
   }
 
   .cv-summary-text strong {
     color: #0f172a !important;
   }
 
-  .cv-inline-link {
-    color: #0f172a !important;
-    text-decoration: none !important;
-    border-bottom: none !important;
-  }
-
   /* Skills Grid in Print (Clean 2-Column Balanced Matrix) */
   .cv-skills-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
+    gap: 8px 12px !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
   }
 
   .cv-skill-box {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
-    padding: 10px 12px !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
+    padding: 8px 11px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-inside: avoid-page !important;
     box-shadow: none !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
+  .cv-skill-header {
+    margin-bottom: 6px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
   .cv-skill-header h3 {
-    font-size: 9pt !important;
+    font-size: 8.6pt !important;
     color: #0f172a !important;
+    margin: 0 !important;
   }
 
   .cv-skill-badge {
-    font-size: 6.5pt !important;
-    padding: 2px 6px !important;
+    font-size: 6.2pt !important;
+    padding: 1.5px 5px !important;
+    margin-bottom: 4px !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
   .cv-skill-list {
-    font-size: 7.8pt !important;
-    line-height: 1.45 !important;
+    font-size: 7.5pt !important;
+    line-height: 1.4 !important;
     color: #475569 !important;
     padding-left: 14px !important;
+    margin: 0 !important;
+  }
+
+  .cv-skill-list li {
+    margin-bottom: 3px !important;
   }
 
   .cv-skill-list strong {
@@ -4029,7 +4059,9 @@ body.cv-theme-light .cv-edu-year {
   /* Jobs & Experience in Print */
   .cv-timeline-rail {
     padding-left: 0 !important;
-    gap: 14px !important;
+    gap: 12px !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
   }
 
   .cv-timeline-rail::before,
@@ -4037,16 +4069,24 @@ body.cv-theme-light .cv-edu-year {
     display: none !important;
   }
 
+  .cv-timeline-item {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-inside: avoid-page !important;
+    margin-bottom: 12px !important;
+  }
+
   .cv-timeline {
-    gap: 14px !important;
+    gap: 12px !important;
   }
 
   .cv-job {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
-    padding: 12px 16px !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
+    padding: 10px 14px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-inside: avoid-page !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
@@ -4056,82 +4096,158 @@ body.cv-theme-light .cv-edu-year {
     flex-direction: row !important;
     justify-content: space-between !important;
     align-items: flex-start !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .cv-featured-pill {
+    font-size: 6.5pt !important;
+    margin-bottom: 2px !important;
   }
 
   .cv-job-title {
-    font-size: 10.5pt !important;
+    font-size: 9.8pt !important;
     color: #0f172a !important;
+    margin-bottom: 2px !important;
   }
 
   .cv-company-location {
-    font-size: 8pt !important;
+    font-size: 7.6pt !important;
     color: #64748b !important;
   }
 
   .cv-job-period {
-    font-size: 7.5pt !important;
+    font-size: 7.2pt !important;
     color: #0284c7 !important;
     background: #f0f9ff !important;
     border: 1px solid #bae6fd !important;
     padding: 2px 6px !important;
   }
 
-  .cv-bullet-list {
-    font-size: 8pt !important;
-    line-height: 1.5 !important;
+  .cv-job-intro {
+    font-size: 7.8pt !important;
+    line-height: 1.45 !important;
     color: #334155 !important;
-    padding-left: 16px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .cv-achievements {
+    gap: 8px !important;
+  }
+
+  .cv-achievement-block {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .cv-achievement-block h4 {
+    font-size: 8.2pt !important;
+    color: #0f172a !important;
+    margin-bottom: 3px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .cv-bullet-list {
+    font-size: 7.6pt !important;
+    line-height: 1.42 !important;
+    color: #334155 !important;
+    padding-left: 15px !important;
+    margin: 0 !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  .cv-bullet-list li {
+    margin-bottom: 3px !important;
   }
 
   .cv-bullet-list strong {
     color: #0f172a !important;
   }
 
+  /* Credits Grid in Print */
+  .cv-credits-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .cv-credit-badge {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 6px 10px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .cv-credit-title {
+    font-size: 8pt !important;
+    color: #0f172a !important;
+  }
+
+  .cv-credit-tag {
+    font-size: 6.8pt !important;
+    color: #64748b !important;
+  }
+
   /* Awards, Endorsements, and Education in Print */
   .awards-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
+    gap: 10px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   .awards-card {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
-    padding: 10px 14px !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
+    padding: 9px 12px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-inside: avoid-page !important;
     box-shadow: none !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
+  .awards-card-header {
+    margin-bottom: 6px !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
   .awards-card-title-group h3 {
-    font-size: 9.5pt !important;
+    font-size: 8.8pt !important;
     color: #0f172a !important;
   }
 
   .awards-card-subtitle {
-    font-size: 7.5pt !important;
+    font-size: 7.2pt !important;
   }
 
   .award-badge-pill {
-    font-size: 7pt !important;
-    padding: 2px 6px !important;
+    font-size: 6.8pt !important;
+    padding: 1.5px 5px !important;
   }
 
   .awards-quote-box {
-    font-size: 7.8pt !important;
-    line-height: 1.45 !important;
-    padding: 6px 10px !important;
+    font-size: 7.4pt !important;
+    line-height: 1.4 !important;
+    padding: 5px 8px !important;
     background: #f8fafc !important;
     border-left: 2px solid #0284c7 !important;
     color: #334155 !important;
+    margin: 4px 0 !important;
   }
 
   .awards-mini-item {
-    font-size: 7.6pt !important;
-    line-height: 1.4 !important;
+    font-size: 7.2pt !important;
+    line-height: 1.35 !important;
     color: #334155 !important;
   }
 
@@ -4144,32 +4260,51 @@ body.cv-theme-light .cv-edu-year {
   .cv-edu-card {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
-    padding: 10px 14px !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
+    padding: 8px 12px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-inside: avoid-page !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  .cv-edu-details h3 {
+    font-size: 8.8pt !important;
+    color: #0f172a !important;
+    margin-bottom: 2px !important;
+  }
+
+  .cv-edu-institution {
+    font-size: 7.5pt !important;
+    color: #475569 !important;
+  }
+
+  .cv-edu-year {
+    font-size: 7.2pt !important;
+    color: #0284c7 !important;
   }
 
   .cv-endorsements-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
+    gap: 8px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   .cv-quote {
-    font-size: 7.8pt !important;
-    line-height: 1.45 !important;
+    font-size: 7.4pt !important;
+    line-height: 1.4 !important;
     color: #334155 !important;
   }
 
   .cv-author-name {
-    font-size: 8.5pt !important;
+    font-size: 8pt !important;
     color: #0f172a !important;
   }
 
   .cv-author-title {
-    font-size: 7.2pt !important;
+    font-size: 6.8pt !important;
     color: #64748b !important;
   }
 }
