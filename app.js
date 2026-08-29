@@ -1176,7 +1176,11 @@
 
     function toggleFunMode(forceState) {
       if (window.innerWidth <= 768) {
-        showDesktopOnlyNotice();
+        if (forceState === false) {
+          if (desktopNoticeToast) desktopNoticeToast.classList.add('hidden');
+        } else {
+          showDesktopOnlyNotice();
+        }
         soundEngine.stopBGM();
         if (navFxToggle) navFxToggle.classList.remove('active');
         if (engine) engine.toggleState(false);
