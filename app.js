@@ -524,15 +524,15 @@
         this.ctx = new AudioCtx();
 
         this.masterGain = this.ctx.createGain();
-        this.masterGain.gain.setValueAtTime(0.85, this.ctx.currentTime);
+        this.masterGain.gain.setValueAtTime(1.0, this.ctx.currentTime);
         this.masterGain.connect(this.ctx.destination);
 
         this.sfxGain = this.ctx.createGain();
-        this.sfxGain.gain.setValueAtTime(0.40, this.ctx.currentTime);
+        this.sfxGain.gain.setValueAtTime(0.70, this.ctx.currentTime);
         this.sfxGain.connect(this.masterGain);
 
         this.bgmGain = this.ctx.createGain();
-        this.bgmGain.gain.setValueAtTime(0.075, this.ctx.currentTime);
+        this.bgmGain.gain.setValueAtTime(0.20, this.ctx.currentTime);
         this.bgmGain.connect(this.masterGain);
       } catch (e) {
         console.warn('Web Audio API not supported', e);
@@ -542,14 +542,14 @@
     ensureContext() {
       this.init();
       if (this.ctx && this.ctx.state === 'suspended') {
-        this.ctx.resume();
+        this.ctx.resume().catch(() => {});
       }
     }
 
     setMuted(muted) {
       this.isMuted = muted;
       if (this.masterGain && this.ctx) {
-        const target = muted ? 0.0001 : 0.85;
+        const target = muted ? 0.0001 : 1.0;
         this.masterGain.gain.setTargetAtTime(target, this.ctx.currentTime, 0.04);
       }
     }
@@ -564,6 +564,9 @@
       if (this.isMuted) return;
       this.ensureContext();
       if (!this.ctx) return;
+      if (this.ctx.state === 'suspended') {
+        this.ctx.resume().catch(() => {});
+      }
 
       const now = this.ctx.currentTime;
 
@@ -579,10 +582,10 @@
       const gain1 = this.ctx.createGain();
       osc1.type = 'sine';
       osc1.frequency.setValueAtTime(freq, now);
-      osc1.frequency.exponentialRampToValueAtTime(freq * 0.98, now + 0.12);
+      osc1.frequency.exponentialRampToValueAtTime(freq * 0.98, now + 0.14);
 
-      gain1.gain.setValueAtTime(0.20, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      gain1.gain.setValueAtTime(0.38, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
 
       // Shimmering High Harmonic (Glass Sparkle at 2.76x)
       const osc2 = this.ctx.createOscillator();
@@ -590,13 +593,13 @@
       osc2.type = 'triangle';
       osc2.frequency.setValueAtTime(freq * 2.76, now);
 
-      gain2.gain.setValueAtTime(0.09, now);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      gain2.gain.setValueAtTime(0.16, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
 
       // Soft lowpass filter to keep sound warm and melodic
       const filter = this.ctx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(3200, now);
+      filter.frequency.setValueAtTime(3600, now);
 
       osc1.connect(gain1);
       osc2.connect(gain2);
@@ -606,8 +609,8 @@
 
       osc1.start(now);
       osc2.start(now);
-      osc1.stop(now + 0.13);
-      osc2.stop(now + 0.06);
+      osc1.stop(now + 0.15);
+      osc2.stop(now + 0.07);
     }
 
     // 2. Triumphant Level Up / Rank Advancement Fanfare
@@ -615,6 +618,9 @@
       if (this.isMuted) return;
       this.ensureContext();
       if (!this.ctx) return;
+      if (this.ctx.state === 'suspended') {
+        this.ctx.resume().catch(() => {});
+      }
 
       const now = this.ctx.currentTime;
       const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50]; // C Major Triad Fanfare
@@ -633,9 +639,9 @@
         filter.frequency.setValueAtTime(freq * 1.4, noteStart);
         filter.Q.setValueAtTime(3.0, noteStart);
 
-        const dur = (idx === notes.length - 1) ? 0.55 : 0.11;
+        const dur = (idx === notes.length - 1) ? 0.60 : 0.12;
         gain.gain.setValueAtTime(0.001, noteStart);
-        gain.gain.linearRampToValueAtTime(0.22, noteStart + 0.015);
+        gain.gain.linearRampToValueAtTime(0.28, noteStart + 0.015);
         gain.gain.exponentialRampToValueAtTime(0.001, noteStart + dur);
 
         osc.connect(filter);
@@ -652,7 +658,7 @@
       subOsc.type = 'sine';
       subOsc.frequency.setValueAtTime(115, now + 0.42);
       subOsc.frequency.exponentialRampToValueAtTime(45, now + 0.90);
-      subGain.gain.setValueAtTime(0.24, now + 0.42);
+      subGain.gain.setValueAtTime(0.30, now + 0.42);
       subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.90);
 
       subOsc.connect(subGain);
@@ -674,6 +680,10 @@
 
       const playBgmStep = () => {
         if (!this.isPlayingBGM || !this.ctx) return;
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume().catch(() => {});
+        }
+
         if (!this.isMuted) {
           const now = this.ctx.currentTime;
           const freq = this.bgmNotes[this.bgmStep % this.bgmNotes.length];
@@ -687,11 +697,11 @@
           osc.frequency.setValueAtTime(freq, now);
 
           filter.type = 'lowpass';
-          filter.frequency.setValueAtTime(850, now);
-          filter.frequency.exponentialRampToValueAtTime(280, now + 0.38);
+          filter.frequency.setValueAtTime(950, now);
+          filter.frequency.exponentialRampToValueAtTime(300, now + 0.38);
 
           gain.gain.setValueAtTime(0.001, now);
-          gain.gain.linearRampToValueAtTime(0.060, now + 0.03);
+          gain.gain.linearRampToValueAtTime(0.12, now + 0.03);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
           osc.connect(filter);
@@ -708,7 +718,7 @@
             bassOsc.type = 'triangle';
             bassOsc.frequency.setValueAtTime(110.00, now); // A2
             bassGain.gain.setValueAtTime(0.001, now);
-            bassGain.gain.linearRampToValueAtTime(0.040, now + 0.08);
+            bassGain.gain.linearRampToValueAtTime(0.09, now + 0.08);
             bassGain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
             bassOsc.connect(bassGain);
             bassGain.connect(this.bgmGain);
@@ -1071,6 +1081,14 @@
 
     // 2. Initialize Cosmic Audio Synthesizer Engine
     const soundEngine = new CosmicSoundEngine();
+
+    // Global User Gesture Audio Unlock (Unlocks Web Audio on first click / touch / key)
+    const unlockAudio = () => {
+      soundEngine.ensureContext();
+    };
+    ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, unlockAudio, { passive: true });
+    });
 
     // 3. Initialize Sentinel-X Scoreboard
     const scoreboard = new SentinelScoreboard();
