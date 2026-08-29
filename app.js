@@ -1598,7 +1598,7 @@ Lead Software Architect &amp; Creative Technologist based in London, UK (British
         id: 'fallback',
         title: 'Technical Arsenal Overview',
         response: `<strong>🤖 Query Processed:</strong> "${escapeHtml(query)}"<br/><br/>
-I have extensive technical architecture knowledge across:<br/>
+Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge across Rajeev's work:<br/>
 • <strong>⚡ Vibe Coding:</strong> Frontier agentic workflows &amp; autonomous coding swarms<br/>
 • <strong>🎬 OpenUSD:</strong> 2-Tier composition, OTIO, OCIO, and Solaris/Hydra interop<br/>
 • <strong>📦 Conform &amp; Ingest:</strong> Editorial turnover, regex metadata parsing, and DI reporting<br/>
@@ -1657,9 +1657,9 @@ I have extensive technical architecture knowledge across:<br/>
         }
 
         botMsgDiv.innerHTML = `
-          <div class="ai-msg-avatar">RM</div>
+          <div class="ai-msg-avatar">CH</div>
           <div class="ai-msg-body">
-            <div class="ai-msg-author">Rajeev-AI System <span>Lead Software Architect</span></div>
+            <div class="ai-msg-author">Charlie <span>Rajeev's AI Pipeline Assistant</span></div>
             <div class="ai-msg-content">${match.response}</div>
             ${followupsHtml}
           </div>
