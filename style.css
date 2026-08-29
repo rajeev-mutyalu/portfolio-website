@@ -3826,7 +3826,7 @@ body.cv-theme-light .cv-edu-year {
    ========================================================================== */
 @media print {
   @page {
-    margin: 0;
+    margin: 10mm 12mm;
     size: A4 portrait;
   }
 
@@ -3845,9 +3845,8 @@ body.cv-theme-light .cv-edu-year {
     font-size: 9.5pt !important;
     line-height: 1.45 !important;
     margin: 0 !important;
-    padding: 10mm 12mm !important;
+    padding: 0 !important;
     width: 100% !important;
-    box-sizing: border-box !important;
   }
 
   .cv-page-wrapper {
