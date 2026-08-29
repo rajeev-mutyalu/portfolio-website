@@ -2685,26 +2685,27 @@ body {
 
 /* --- Section 1: Header Identity with Balanced Photo --- */
 .cv-header {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .cv-header-identity {
   display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  gap: 28px;
+  margin-bottom: 22px;
 }
 
 .cv-avatar-wrap {
   flex-shrink: 0;
+  align-self: flex-start;
 }
 
 .cv-avatar-img {
-  width: 140px;
-  height: 140px;
-  border-radius: 16px;
+  width: 165px;
+  height: 175px;
+  border-radius: 18px;
   object-fit: cover;
-  object-position: center center;
+  object-position: center 15%;
   border: 2px solid rgba(0, 242, 254, 0.5);
   box-shadow: 0 8px 24px rgba(0, 242, 254, 0.18), 0 0 16px rgba(0, 0, 0, 0.7);
   display: block;
@@ -3873,25 +3874,26 @@ body.cv-theme-light .cv-edu-year {
   .cv-header-identity {
     display: flex !important;
     flex-direction: row !important;
-    align-items: center !important;
+    align-items: flex-start !important;
     justify-content: flex-start !important;
     text-align: left !important;
     gap: 16px !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 10px !important;
   }
 
   .cv-avatar-wrap {
     flex-shrink: 0 !important;
     margin: 0 !important;
+    align-self: flex-start !important;
   }
 
   .cv-avatar-img {
-    width: 95px !important;
-    height: 95px !important;
+    width: 118px !important;
+    height: 130px !important;
     border-radius: 8px !important;
     border: 1.5px solid #cbd5e1 !important;
     object-fit: cover !important;
-    object-position: center center !important;
+    object-position: center 15% !important;
     box-shadow: none !important;
     display: block !important;
   }
