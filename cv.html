@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=51" />
+  <link rel="stylesheet" href="style.css?v=52" />
 </head>
 
 <body class="cv-body">
@@ -613,11 +613,15 @@
     if (copyBtn) {
       copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText('mutyalu.rajeev@gmail.com | +44 7827 498399').then(() => {
-          copyText.textContent = 'Copied!';
+          if (copyText) {
+            copyText.innerHTML = '<span class="btn-text-full">Copied!</span><span class="btn-text-short">Copied!</span>';
+          }
           copyBtn.style.borderColor = 'var(--accent-emerald)';
           copyBtn.style.color = 'var(--accent-emerald)';
           setTimeout(() => {
-            copyText.textContent = 'Copy Email';
+            if (copyText) {
+              copyText.innerHTML = '<span class="btn-text-full">Copy Email</span><span class="btn-text-short">Email</span>';
+            }
             copyBtn.style.borderColor = '';
             copyBtn.style.color = '';
           }, 2500);
