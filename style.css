@@ -3971,11 +3971,7 @@ body.cv-theme-light .cv-edu-year {
   }
 
   .cv-divider {
-    background: #e2e8f0 !important;
-    margin: 8px 0 !important;
-    height: 1px !important;
-    page-break-after: avoid !important;
-    break-after: avoid !important;
+    display: none !important;
   }
 
   /* Section Titles: Prevent Orphan Headings */
