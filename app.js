@@ -1408,6 +1408,304 @@
         }
       });
     }
+
+    // =========================================================================
+    // 8. Interactive Rajeev-AI Pipeline Assistant & Architecture Console
+    // =========================================================================
+    const aiChatStream = document.getElementById('aiChatStream');
+    const aiChatForm = document.getElementById('aiChatForm');
+    const aiInputField = document.getElementById('aiInputField');
+    const aiTopicPills = document.querySelectorAll('.ai-topic-pill');
+
+    const AI_KNOWLEDGE_BASE = [
+      {
+        id: 'vibe_coding',
+        keywords: ['vibe coding', 'vibe code', 'vibe', 'agentic', 'agents', 'agent', 'claude code', 'antigravity', 'devin', 'swarms', 'autonomous coding'],
+        title: 'Vibe Coding & Agentic AI Systems',
+        response: `<strong>⚡ Vibe Coding &amp; Agentic Engineering:</strong><br/>
+Vibe coding represents the high-leverage transition from manual line-by-line syntax writing to <strong>high-level architectural orchestration</strong> using frontier AI agents (Claude Code / CLI tools, Devin, Google Antigravity).<br/><br/>
+• <strong>Architectural Role:</strong> As Lead Architect, I define systems topologies, data schemas, API contracts, and security boundaries, while directing agentic swarms to implement and refactor modules with rigorous test verification.<br/>
+• <strong>Production Velocity:</strong> Accelerates prototyping, pipeline tooling, and refactoring by <strong>5x–10x</strong> while maintaining enterprise code quality through automated linting and human-in-the-loop review.<br/>
+• <strong>Toolchain Integration:</strong> Combined with custom MCP servers and terminal automation to orchestrate complex VFX pipelines without context switching.`,
+        followups: [
+          'What is MCP and how do you build custom MCP servers?',
+          'How do you deploy On-Premise LLMs and quantization in studios?',
+          'Explain your OpenUSD VFX pipeline architecture'
+        ]
+      },
+      {
+        id: 'openusd',
+        keywords: ['usd', 'openusd', 'composition', 'solaris', 'hydra', 'sublayer', 'payload', 'otio', 'opentimelineio', 'ocio', 'aces', 'stage'],
+        title: 'OpenUSD VFX Pipeline & Open Standards',
+        response: `<strong>🎬 OpenUSD (Universal Scene Description) Production Architecture:</strong><br/>
+Designed and implemented scalable <strong>2-Tier OpenUSD pipelines</strong> bridging Asset Creation with non-destructive Shot Composition:<br/><br/>
+• <strong>Tier 1 — Asset Layering:</strong> Modular publishing for Modeling, Groom, LookDev (MaterialX/Karma), Rigging, and Assembly with strict payload separation.<br/>
+• <strong>Tier 2 — Shot Composition (SH0010):</strong> Non-destructive shot sublayering across Layout, Animation cache, CFX simulation, and Lighting overrides without duplicating heavy geometry.<br/>
+• <strong>Hydra &amp; Cross-DCC Interop:</strong> Seamless viewport synchronization between Maya, Houdini Solaris, Unreal Engine, and render dispatch (Karma/Arnold/RenderMan).<br/>
+• <strong>Open Standards:</strong> Integrated with <strong>OpenTimelineIO (OTIO)</strong> for editorial conform and <strong>OpenColorIO (OCIO) / ACEScg</strong> color management.`,
+        followups: [
+          'How does your Conform Ingest and turnover pipeline work?',
+          'What is MCP and how do you build custom MCP servers?',
+          'How does n8n zero-touch automation orchestrate the pipeline?'
+        ]
+      },
+      {
+        id: 'conform_ingest',
+        keywords: ['conform', 'ingest', 'turnover', 'editorial', 'di', 'discrepancy', 'plate', 'regex', 'hiero', 'nuke studio', 'shotgrid'],
+        title: 'Editorial Turnover, Conform & Ingest Systems',
+        response: `<strong>📦 Editorial Turnover, Conform &amp; VFX Plate Pipeline:</strong><br/>
+Engineered enterprise editorial ingestion and DI discrepancy detection systems for high-throughput feature films:<br/><br/>
+• <strong>Package Inspection &amp; DI Reporting:</strong> Automated verification of client turnovers (EDL/XML/AAF, QuickTimes, raw plates) with immediate discrepancy reports sent back to DI facilities.<br/>
+• <strong>Regex Pattern Matching:</strong> Dynamically compiles regex schemas to extract reel numbers, camera codes, color spaces (ACEScg), and timecode metadata.<br/>
+• <strong>Zero-Touch Ingest:</strong> Automatically creates shot folder hierarchies, publishes plates to ShotGrid, and dispatches background proxy transcodes with a <strong>99.4% automated pass rate</strong>.`,
+        followups: [
+          'Explain your OpenUSD VFX pipeline architecture',
+          'How does n8n zero-touch automation orchestrate the pipeline?',
+          'What is MCP and how do you build custom MCP servers?'
+        ]
+      },
+      {
+        id: 'mcp',
+        keywords: ['mcp', 'model context protocol', 'mcp server', 'tooling', 'json-rpc', 'context bridges', 'api tool binding'],
+        title: 'Model Context Protocol (MCP) in Studio Automation',
+        response: `<strong>🔌 Model Context Protocol (MCP) in VFX &amp; Studio Automation:</strong><br/>
+MCP allows AI agents to securely connect to studio databases, file systems, and DCC software via standardized JSON-RPC client-server protocols:<br/><br/>
+• <strong>Custom Studio MCP Servers:</strong> Built specialized Python/FastAPI MCP servers that expose safe endpoints to ShotGrid/Flow Production Tracking, OpenUSD scene graph inspection, and farm queue managers.<br/>
+• <strong>Autonomous Task Execution:</strong> AI agents can query shot statuses, check asset dependencies, inspect USD stage composition arcs, and validate file checksums directly from natural language requests.<br/>
+• <strong>Security Boundaries:</strong> Enforces read-only sandboxing and human-in-the-loop approval for all mutating production actions.`,
+        followups: [
+          'How do you deploy On-Premise LLMs and quantization in studios?',
+          'What is vibe coding and how do you use agentic systems?',
+          'Explain your OpenUSD VFX pipeline architecture'
+        ]
+      },
+      {
+        id: 'on_prem_llms',
+        keywords: ['on-prem', 'on prem', 'quantization', 'local llm', 'ollama', 'vllm', 'gguf', 'awq', 'msty', 'lm studio', 'nous hermes', 'openclaw', 'security', 'privacy'],
+        title: 'On-Premise Private LLMs & High-Throughput Quantization',
+        response: `<strong>🔒 On-Premise LLMs &amp; High-Throughput Quantization:</strong><br/>
+Deploying local AI models inside air-gapped studio networks to guarantee 100% intellectual property security and zero cloud leakage:<br/><br/>
+• <strong>Quantization Strategies:</strong> 4-bit and 8-bit quantization (AWQ, GPTQ, GGUF) reducing memory footprint by <strong>60%–75%</strong> while retaining 98%+ model reasoning fidelity on local NVIDIA RTX/A100 GPUs.<br/>
+• <strong>Inference Engines:</strong> Powered by <strong>vLLM</strong> (paged attention, continuous batching) and <strong>Ollama / MSTY Studio / LM Studio</strong> for sub-50ms token generation across studio artist tools.<br/>
+• <strong>Zero Data Leakage:</strong> All prompts, codebases, scripts, and proprietary VFX assets remain strictly confined to the studio's on-premise firewall.`,
+        followups: [
+          'What is MCP and how do you build custom MCP servers?',
+          'How does n8n zero-touch automation orchestrate the pipeline?',
+          'What is vibe coding and how do you use agentic systems?'
+        ]
+      },
+      {
+        id: 'n8n_automation',
+        keywords: ['n8n', 'automation', 'webhook', 'webhooks', 'reverse webhook', 'event-driven', 'event routing', 'dispatch'],
+        title: 'Zero-Touch n8n Event-Driven Studio Automation',
+        response: `<strong>⚡ Zero-Touch Studio Automation with n8n:</strong><br/>
+Engineered event-driven studio orchestration using <strong>n8n</strong> workflow hubs for bidirectional pipeline dispatch:<br/><br/>
+• <strong>Bidirectional Webhooks:</strong> Inbound webhooks listen to editorial uploads, ShotGrid status changes, and git commits; reverse webhooks broadcast render progress and Slack/Teams alerts.<br/>
+• <strong>Smart Plate Ingest:</strong> Automated regex pattern recognition validates incoming frames, creates directory structures, and triggers farm transcoding jobs without human intervention.<br/>
+• <strong>Async Event Routing:</strong> Eliminates cron polling bottlenecks, saving hundreds of engineering hours during active tentpole deliveries.`,
+        followups: [
+          'How does your Conform Ingest and turnover pipeline work?',
+          'Tell me about your GenAI video pipelines with Veo and Kling',
+          'What is MCP and how do you build custom MCP servers?'
+        ]
+      },
+      {
+        id: 'voice_ai',
+        keywords: ['voice', 'retell', 'vapi', 'cal.ai', 'telephony', 'speech', 'conversational voice'],
+        title: 'Conversational Voice AI (Retell / Vapi)',
+        response: `<strong>🎙️ Conversational Voice AI &amp; Real-Time Pipelines:</strong><br/>
+Integrating low-latency voice agents for real-time production coordination and operational workflows:<br/><br/>
+• <strong>Voice Pipelines:</strong> Architected conversational agents using <strong>Retell AI</strong> and <strong>Vapi</strong> with sub-400ms end-to-end voice latency.<br/>
+• <strong>Context Injection:</strong> Dynamically injects live production schedules, task assignments, and calendar bookings (Cal.ai) into voice agent prompts.<br/>
+• <strong>Hands-Free Studio Operations:</strong> Enables studio leads and supervisors to query asset statuses and schedule reviews via voice commands on mobile or desk phones.`,
+        followups: [
+          'What is vibe coding and how do you use agentic systems?',
+          'How do you deploy On-Premise LLMs and quantization in studios?',
+          'What is your 20-year career background and contact info?'
+        ]
+      },
+      {
+        id: 'genai_video',
+        keywords: ['video', 'veo', 'google veo', 'kling', 'higgsfield', 'seedance', 'scene weaver', 'studio.ai', 'genai video', 'latent'],
+        title: 'GenAI Video Production & Studio.AI Platform',
+        response: `<strong>🎥 Studio.AI (Scene Weaver) &amp; Generative Video Pipelines:</strong><br/>
+Architected <strong>Studio.AI</strong>—an enterprise generative AI platform for feature film and VFX production:<br/><br/>
+• <strong>Multi-Model Prompt Router:</strong> Connects script/storyboard parsing with automated prompt routing across <strong>Google Veo</strong>, <strong>Kling AI</strong>, <strong>Higgsfield</strong>, and <strong>Seedance</strong>.<br/>
+• <strong>Character Latent Consistency:</strong> Maintains facial identity, wardrobe consistency, and lighting coherence across generated video shots.<br/>
+• <strong>ACES Studio Conform:</strong> Ingests generated outputs directly into OCIO/ACES color spaces for seamless compositing in Nuke.`,
+        followups: [
+          'Explain your OpenUSD VFX pipeline architecture',
+          'How does n8n zero-touch automation orchestrate the pipeline?',
+          'How do you deploy On-Premise LLMs and quantization in studios?'
+        ]
+      },
+      {
+        id: 'core_python_ui',
+        keywords: ['python', 'pyqt', 'pyside', 'docker', 'containers', 'linux', 'shell', 'fastapi', 'rest', 'git', 'ui systems'],
+        title: 'Core Software, Python & UI Systems',
+        response: `<strong>🐍 Core Software &amp; UI Systems Engineering:</strong><br/>
+20+ years building mission-critical software foundations for world-leading VFX facilities:<br/><br/>
+• <strong>Python &amp; PySide/PyQt:</strong> Built dozens of high-performance desktop artist tools, DCC plugin suites, and pipeline review UIs.<br/>
+• <strong>Infrastructure &amp; Microservices:</strong> Dockerized microservices, FastAPI REST backends, and Linux/Shell cluster dispatch.<br/>
+• <strong>Version Control:</strong> Enterprise Git/Subversion workflows with automated CI/CD validation and branch management.`,
+        followups: [
+          'Explain your OpenUSD VFX pipeline architecture',
+          'What is MCP and how do you build custom MCP servers?',
+          'What is your 20-year career background and contact info?'
+        ]
+      },
+      {
+        id: 'career_contact',
+        keywords: ['career', 'experience', 'timeline', 'background', 'credits', 'films', 'contact', 'email', 'phone', 'linkedin', '1917', 'lion king', 'technicolor', 'mpc', 'astra', 'who are you'],
+        title: 'Career Highlights & Contact Matrix',
+        response: `<strong>🏆 Rajeev Mutyalu — Executive Summary &amp; Contact:</strong><br/>
+Lead Software Architect &amp; Creative Technologist based in London, UK (British Citizen) with <strong>20+ years of Tier-1 leadership</strong>:<br/><br/>
+• <strong>Career Tenures:</strong> Astra Studios (2024–Pres.), Technicolor London (2021–2024), Technicolor Bangalore (2017–2021), MPC Film (2014–2017).<br/>
+• <strong>Oscar &amp; Tentpole Credits:</strong> <em>1917</em> (Academy Award Winner), <em>The Lion King</em>, <em>Cruella</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>.<br/>
+• <strong>Global Leadership:</strong> Led cross-site R&amp;D teams across London, Montreal, and Bangalore.<br/>
+• <strong>Direct Contact:</strong> <span style="color:#38bdf8; font-weight:700;">mutyalu.rajeev@gmail.com</span> &bull; <span style="color:#38bdf8; font-weight:700;">+44 7827 498399</span> &bull; <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" style="color:#38bdf8; text-decoration:underline;">LinkedIn Profile</a>`,
+        followups: [
+          'What is vibe coding and how do you use agentic systems?',
+          'Explain your OpenUSD VFX pipeline architecture',
+          'How does your Conform Ingest and turnover pipeline work?'
+        ]
+      }
+    ];
+
+    function matchQueryToKnowledge(query) {
+      const q = query.toLowerCase().trim();
+      let bestMatch = null;
+      let maxScore = 0;
+
+      for (const item of AI_KNOWLEDGE_BASE) {
+        let score = 0;
+        for (const kw of item.keywords) {
+          if (q.includes(kw)) {
+            score += kw.length * 2;
+          }
+        }
+        if (score > maxScore) {
+          maxScore = score;
+          bestMatch = item;
+        }
+      }
+
+      if (maxScore > 0 && bestMatch) {
+        return bestMatch;
+      }
+
+      return {
+        id: 'fallback',
+        title: 'Technical Arsenal Overview',
+        response: `<strong>🤖 Query Processed:</strong> "${escapeHtml(query)}"<br/><br/>
+I have extensive technical architecture knowledge across:<br/>
+• <strong>⚡ Vibe Coding:</strong> Frontier agentic workflows &amp; autonomous coding swarms<br/>
+• <strong>🎬 OpenUSD:</strong> 2-Tier composition, OTIO, OCIO, and Solaris/Hydra interop<br/>
+• <strong>📦 Conform &amp; Ingest:</strong> Editorial turnover, regex metadata parsing, and DI reporting<br/>
+• <strong>🔌 Model Context Protocol:</strong> Custom Python/FastAPI MCP servers for studio DCCs<br/>
+• <strong>🔒 Private LLMs:</strong> On-premise GGUF/AWQ quantization (Ollama/vLLM)<br/>
+• <strong>⚡ n8n Studio Automation:</strong> Event-driven webhooks and render farm orchestration<br/>
+• <strong>🎙️ Conversational Voice AI:</strong> Retell &amp; Vapi low-latency voice pipelines<br/>
+• <strong>🎥 Generative Video:</strong> Google Veo, Kling AI, and Scene Weaver platforms<br/><br/>
+<em>Select one of the suggested follow-ups below to explore:</em>`,
+        followups: [
+          'What is vibe coding and how do you use agentic systems?',
+          'Explain your OpenUSD VFX pipeline architecture',
+          'What is MCP and how do you build custom MCP servers?',
+          'How do you deploy On-Premise LLMs and quantization in studios?'
+        ]
+      };
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function renderBotResponse(query) {
+      if (!aiChatStream) return;
+
+      // 1. Append user message
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = 'ai-message user-message';
+      userMsgDiv.innerHTML = `
+        <div class="ai-msg-avatar">YOU</div>
+        <div class="ai-msg-body">
+          <div class="ai-msg-author">You</div>
+          <div class="ai-msg-content">${escapeHtml(query)}</div>
+        </div>
+      `;
+      aiChatStream.appendChild(userMsgDiv);
+      aiChatStream.scrollTop = aiChatStream.scrollHeight;
+
+      // 2. Bot Response
+      const match = matchQueryToKnowledge(query);
+
+      setTimeout(() => {
+        const botMsgDiv = document.createElement('div');
+        botMsgDiv.className = 'ai-message bot-message';
+
+        let followupsHtml = '';
+        if (match.followups && match.followups.length) {
+          followupsHtml = `
+            <div class="ai-followup-container">
+              <span class="ai-followup-label">Explore Next:</span>
+              <div class="ai-followup-chips">
+                ${match.followups.map(f => `<button type="button" class="ai-followup-btn" data-query="${escapeHtml(f)}">&rarr; ${escapeHtml(f)}</button>`).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        botMsgDiv.innerHTML = `
+          <div class="ai-msg-avatar">RM</div>
+          <div class="ai-msg-body">
+            <div class="ai-msg-author">Rajeev-AI System <span>Lead Software Architect</span></div>
+            <div class="ai-msg-content">${match.response}</div>
+            ${followupsHtml}
+          </div>
+        `;
+
+        aiChatStream.appendChild(botMsgDiv);
+        aiChatStream.scrollTop = aiChatStream.scrollHeight;
+
+        botMsgDiv.querySelectorAll('.ai-followup-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const nextQuery = btn.getAttribute('data-query');
+            if (nextQuery) {
+              renderBotResponse(nextQuery);
+            }
+          });
+        });
+      }, 200);
+    }
+
+    if (aiChatStream) {
+      aiChatStream.querySelectorAll('.ai-followup-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const query = btn.getAttribute('data-query');
+          if (query) renderBotResponse(query);
+        });
+      });
+    }
+
+    if (aiTopicPills.length) {
+      aiTopicPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          const query = pill.getAttribute('data-query');
+          if (query) renderBotResponse(query);
+        });
+      });
+    }
+
+    if (aiChatForm && aiInputField) {
+      aiChatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const q = aiInputField.value.trim();
+        if (!q) return;
+        aiInputField.value = '';
+        renderBotResponse(q);
+      });
+    }
   }
 
   if (document.readyState === 'loading') {

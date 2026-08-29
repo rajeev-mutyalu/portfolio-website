@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=55" />
+  <link rel="stylesheet" href="style.css?v=58" />
 </head>
 
 <body>
@@ -46,6 +46,7 @@
       </a>
 
       <nav class="nav-links">
+        <a href="#ai-assistant" class="nav-link" style="color: var(--accent-cyan); font-weight: 600;">AI Assistant</a>
         <a href="#initiatives" class="nav-link">Arsenal</a>
         <a href="#architecture" class="nav-link">Architecture</a>
         <a href="#conform" class="nav-link">Turnover &amp; Conform</a>
@@ -115,6 +116,7 @@
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-content">
         <a href="cv.html" class="mobile-nav-link" style="color: var(--accent-cyan); font-weight: 700;">📄 View Curriculum Vitae (CV)</a>
+        <a href="#ai-assistant" class="mobile-nav-link" style="color: #38bdf8; font-weight: 600;">🤖 AI Pipeline Assistant</a>
         <a href="#initiatives" class="mobile-nav-link">🚀 Core Focus &amp; Arsenal</a>
         <a href="#architecture" class="mobile-nav-link">🎬 Architecture Flow</a>
         <a href="#conform" class="mobile-nav-link">📦 Conform Ingest</a>
@@ -190,6 +192,102 @@
           </svg>
         </a>
       </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       🤖 Interactive AI Pipeline Terminal & Architecture Bot
+       ========================================================================= -->
+  <section class="section-container" id="ai-assistant">
+    <div class="section-header">
+      <div class="tag-label" style="background: rgba(56, 189, 248, 0.12); color: var(--accent-cyan); border-color: rgba(56, 189, 248, 0.35);">Interactive Architecture Console</div>
+      <h2 class="section-title">Rajeev-AI Pipeline Assistant</h2>
+      <p class="section-desc">Interact with my live engineering knowledge base. Type any technical question or select quick topics below to explore architecture decisions across the full Technical Arsenal.</p>
+    </div>
+
+    <!-- AI Terminal Window -->
+    <div class="ai-bot-terminal glass-card">
+      <div class="ai-bot-header">
+        <div class="ai-bot-dots">
+          <span class="bot-dot bot-dot-red"></span>
+          <span class="bot-dot bot-dot-yellow"></span>
+          <span class="bot-dot bot-dot-green"></span>
+        </div>
+        <div class="ai-bot-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span>rajeev-ai --session=architect-console [ONLINE]</span>
+        </div>
+        <div class="ai-bot-status-pill">
+          <span class="ai-status-pulse"></span>
+          <span>READY</span>
+        </div>
+      </div>
+
+      <!-- Quick Topic Starter Pills from Technical Arsenal -->
+      <div class="ai-quick-topics">
+        <span class="ai-topics-label">Technical Arsenal Topics:</span>
+        <button type="button" class="ai-topic-pill" data-query="What is vibe coding and how do you use agentic systems?">⚡ Vibe Coding &amp; Agents</button>
+        <button type="button" class="ai-topic-pill" data-query="Explain your OpenUSD VFX pipeline architecture">🎬 OpenUSD &amp; OTIO</button>
+        <button type="button" class="ai-topic-pill" data-query="How does your Conform Ingest and turnover pipeline work?">📦 Conform Ingest &amp; DI</button>
+        <button type="button" class="ai-topic-pill" data-query="What is MCP and how do you build custom MCP servers?">🔌 MCP Studio Tooling</button>
+        <button type="button" class="ai-topic-pill" data-query="How do you deploy On-Premise LLMs and quantization in studios?">🔒 On-Prem LLMs &amp; GGUF</button>
+        <button type="button" class="ai-topic-pill" data-query="How does n8n zero-touch automation orchestrate the pipeline?">⚡ n8n Studio Automation</button>
+        <button type="button" class="ai-topic-pill" data-query="How do you use Conversational Voice AI like Retell and Vapi?">🎙️ Voice AI (Retell / Vapi)</button>
+        <button type="button" class="ai-topic-pill" data-query="Tell me about your GenAI video pipelines with Veo and Kling">🎥 GenAI Video (Veo/Kling)</button>
+        <button type="button" class="ai-topic-pill" data-query="What is your 20-year career background and contact info?">🏆 Career &amp; Contact</button>
+      </div>
+
+      <!-- Conversation Stream -->
+      <div class="ai-chat-stream" id="aiChatStream">
+        <!-- Initial Welcome Message from Bot -->
+        <div class="ai-message bot-message">
+          <div class="ai-msg-avatar">RM</div>
+          <div class="ai-msg-body">
+            <div class="ai-msg-author">Rajeev-AI System <span>Lead Software Architect</span></div>
+            <div class="ai-msg-content">
+              Welcome to the <strong>Interactive Architecture Console</strong>! I can answer deep technical questions covering everything in my <strong>Technical Arsenal</strong>:
+              <br/><br/>
+              • <strong>Vibe Coding &amp; Agentic AI:</strong> Claude Code CLI, Antigravity, Subagent Swarms<br/>
+              • <strong>VFX Open Standards:</strong> 2-tier OpenUSD composition, OTIO, OCIO, ACES color<br/>
+              • <strong>Editorial &amp; Ingest:</strong> Conform packages, DI discrepancy reporting, regex pattern building<br/>
+              • <strong>MCP Ecosystem:</strong> Custom MCP servers bridging Maya, Houdini, and ShotGrid<br/>
+              • <strong>Private AI:</strong> On-Premise LLM Quantization (GGUF/AWQ), Ollama, vLLM air-gapped security<br/>
+              • <strong>Studio Orchestration:</strong> n8n webhooks, Generative Video (Veo/Kling), Conversational Voice AI (Retell/Vapi)
+              <br/><br/>
+              <em>Type any question below or click a topic to explore!</em>
+            </div>
+            <div class="ai-followup-container">
+              <span class="ai-followup-label">Try Asking:</span>
+              <div class="ai-followup-chips">
+                <button type="button" class="ai-followup-btn" data-query="What is vibe coding and how do you use agentic systems?">⚡ What is Vibe Coding?</button>
+                <button type="button" class="ai-followup-btn" data-query="Explain your OpenUSD VFX pipeline architecture">🎬 Explain OpenUSD Pipeline</button>
+                <button type="button" class="ai-followup-btn" data-query="How does your Conform Ingest and turnover pipeline work?">📦 How does Conform Ingest work?</button>
+                <button type="button" class="ai-followup-btn" data-query="What is MCP and how do you build custom MCP servers?">🔌 What is MCP in VFX?</button>
+                <button type="button" class="ai-followup-btn" data-query="How do you deploy On-Premise LLMs and quantization in studios?">🔒 How do On-Prem LLMs work?</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Bar -->
+      <form class="ai-chat-input-bar" id="aiChatForm">
+        <div class="ai-input-wrapper">
+          <span class="ai-input-prefix">&gt;</span>
+          <input type="text" class="ai-input-field" id="aiInputField" placeholder="Ask about Vibe Coding, OpenUSD, Conform Ingest, MCP, On-Prem LLMs, n8n..." autocomplete="off" spellcheck="false" />
+        </div>
+        <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send Technical Query">
+          <span>Send</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
     </div>
   </section>
 
@@ -1111,7 +1209,7 @@
     <button type="button" class="mission-toast-close" id="desktopNoticeToastClose" title="Dismiss">&times;</button>
   </div>
 
-  <script src="app.js?v=47"></script>
+  <script src="app.js?v=58"></script>
 </body>
 
 </html>
