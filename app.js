@@ -498,7 +498,226 @@
   }
 
   // ==========================================================================
-  // 3. Sentinel-X Cyber-Bot Scoreboard & Gamified HUD
+  // 3. Cosmic Game Audio Engine (Zero-Latency Procedural Web Audio Synth)
+  // ==========================================================================
+  class CosmicSoundEngine {
+    constructor() {
+      this.ctx = null;
+      this.isMuted = false;
+      this.isPlayingBGM = false;
+      this.bgmTimer = null;
+      this.masterGain = null;
+      this.bgmGain = null;
+      this.sfxGain = null;
+      this.bgmStep = 0;
+      this.bgmNotes = [
+        // A minor / Cyberpunk Pentatonic Cosmic Sequence
+        220.00, 261.63, 329.63, 392.00, 440.00, 523.25, 659.25, 523.25,
+        392.00, 329.63, 440.00, 523.25, 659.25, 783.99, 659.25, 440.00
+      ];
+    }
+
+    init() {
+      if (this.ctx) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioCtx();
+
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.setValueAtTime(0.85, this.ctx.currentTime);
+        this.masterGain.connect(this.ctx.destination);
+
+        this.sfxGain = this.ctx.createGain();
+        this.sfxGain.gain.setValueAtTime(0.40, this.ctx.currentTime);
+        this.sfxGain.connect(this.masterGain);
+
+        this.bgmGain = this.ctx.createGain();
+        this.bgmGain.gain.setValueAtTime(0.075, this.ctx.currentTime);
+        this.bgmGain.connect(this.masterGain);
+      } catch (e) {
+        console.warn('Web Audio API not supported', e);
+      }
+    }
+
+    ensureContext() {
+      this.init();
+      if (this.ctx && this.ctx.state === 'suspended') {
+        this.ctx.resume();
+      }
+    }
+
+    setMuted(muted) {
+      this.isMuted = muted;
+      if (this.masterGain && this.ctx) {
+        const target = muted ? 0.0001 : 0.85;
+        this.masterGain.gain.setTargetAtTime(target, this.ctx.currentTime, 0.04);
+      }
+    }
+
+    toggleMute() {
+      this.setMuted(!this.isMuted);
+      return this.isMuted;
+    }
+
+    // 1. Mouse Comet Collision & Shatter Sound Effect
+    playHit(combo = 1) {
+      if (this.isMuted) return;
+      this.ensureContext();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const filter = this.ctx.createBiquadFilter();
+
+      // Pitch scales musically with combo streak (C5 -> C6)
+      const pentatonicScales = [
+        523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51
+      ];
+      const scaleIndex = Math.min(pentatonicScales.length - 1, (combo - 1) % pentatonicScales.length);
+      const baseFreq = pentatonicScales[scaleIndex];
+
+      osc.type = combo > 4 ? 'sawtooth' : 'triangle';
+      osc.frequency.setValueAtTime(baseFreq * 1.7, now);
+      osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.45, now + 0.08);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(combo > 4 ? 4200 : 2800, now);
+      filter.frequency.exponentialRampToValueAtTime(350, now + 0.08);
+
+      gain.gain.setValueAtTime(0.24, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.sfxGain);
+
+      osc.start(now);
+      osc.stop(now + 0.09);
+    }
+
+    // 2. Triumphant Level Up / Rank Advancement Fanfare
+    playLevelUp() {
+      if (this.isMuted) return;
+      this.ensureContext();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50]; // C Major Triad Fanfare
+      const noteDuration = 0.07;
+
+      notes.forEach((freq, idx) => {
+        const noteStart = now + (idx * noteDuration);
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, noteStart);
+
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(freq * 1.4, noteStart);
+        filter.Q.setValueAtTime(3.0, noteStart);
+
+        const dur = (idx === notes.length - 1) ? 0.55 : 0.11;
+        gain.gain.setValueAtTime(0.001, noteStart);
+        gain.gain.linearRampToValueAtTime(0.22, noteStart + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.001, noteStart + dur);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.sfxGain);
+
+        osc.start(noteStart);
+        osc.stop(noteStart + dur);
+      });
+
+      // Sub-bass celebratory boom
+      const subOsc = this.ctx.createOscillator();
+      const subGain = this.ctx.createGain();
+      subOsc.type = 'sine';
+      subOsc.frequency.setValueAtTime(115, now + 0.42);
+      subOsc.frequency.exponentialRampToValueAtTime(45, now + 0.90);
+      subGain.gain.setValueAtTime(0.24, now + 0.42);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.90);
+
+      subOsc.connect(subGain);
+      subGain.connect(this.sfxGain);
+      subOsc.start(now + 0.42);
+      subOsc.stop(now + 0.95);
+    }
+
+    // 3. Ambient Cosmic Background Music for Comets Falling
+    startBGM() {
+      if (this.isPlayingBGM) return;
+      this.ensureContext();
+      if (!this.ctx) return;
+      this.isPlayingBGM = true;
+
+      // Start Ambient Cosmic Arpeggiator Loop (~107 BPM)
+      const stepInterval = 280;
+      this.bgmStep = 0;
+
+      const playBgmStep = () => {
+        if (!this.isPlayingBGM || !this.ctx) return;
+        if (!this.isMuted) {
+          const now = this.ctx.currentTime;
+          const freq = this.bgmNotes[this.bgmStep % this.bgmNotes.length];
+
+          // Lead Arp Note
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const filter = this.ctx.createBiquadFilter();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now);
+
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(850, now);
+          filter.frequency.exponentialRampToValueAtTime(280, now + 0.38);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.060, now + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.bgmGain);
+
+          osc.start(now);
+          osc.stop(now + 0.38);
+
+          // Sub bass drone on downbeats (every 8 steps)
+          if (this.bgmStep % 8 === 0) {
+            const bassOsc = this.ctx.createOscillator();
+            const bassGain = this.ctx.createGain();
+            bassOsc.type = 'triangle';
+            bassOsc.frequency.setValueAtTime(110.00, now); // A2
+            bassGain.gain.setValueAtTime(0.001, now);
+            bassGain.gain.linearRampToValueAtTime(0.040, now + 0.08);
+            bassGain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+            bassOsc.connect(bassGain);
+            bassGain.connect(this.bgmGain);
+            bassOsc.start(now);
+            bassOsc.stop(now + 1.9);
+          }
+        }
+
+        this.bgmStep++;
+        this.bgmTimer = setTimeout(playBgmStep, stepInterval);
+      };
+
+      playBgmStep();
+    }
+
+    stopBGM() {
+      this.isPlayingBGM = false;
+      clearTimeout(this.bgmTimer);
+    }
+  }
+
+  // ==========================================================================
+  // 4. Sentinel-X Cyber-Bot Scoreboard & Gamified HUD
   // ==========================================================================
   class SentinelScoreboard {
     constructor() {
@@ -506,6 +725,7 @@
       this.combo = 0;
       this.comboTimer = null;
       this.lastHitTime = 0;
+      this.soundEngine = null;
 
       this.hudWidget = document.getElementById('botHudWidget');
       this.avatarBox = document.getElementById('botAvatarBox');
@@ -678,6 +898,11 @@
       }
       this.lastHitTime = now;
 
+      // Play pointer comet collision sound
+      if (this.soundEngine) {
+        this.soundEngine.playHit(this.combo);
+      }
+
       // Update score display with pop animation and localized comma format
       if (this.scoreEl) {
         this.scoreEl.innerText = this.score >= 1000 ? this.score.toLocaleString() : this.score;
@@ -771,6 +996,7 @@
         this.currentThemeIndex = targetThemeIndex;
         const newTheme = this.themesCycle[targetThemeIndex];
         if (this.onThemeChange) this.onThemeChange(newTheme);
+        if (this.soundEngine) this.soundEngine.playLevelUp();
 
         const shiftAnnouncements = {
           solar: { face: '[🔥_🔥]', msg: 'HYPERDRIVE: Solar Flare Stage 2 active! 🔥' },
@@ -795,6 +1021,7 @@
         if (this.score >= m.count) {
           if (this.rankEl && this.rankEl.innerText !== m.rank) {
             this.rankEl.innerText = m.rank;
+            if (this.soundEngine) this.soundEngine.playLevelUp();
           }
           if (this.score === m.count || this.score === m.count + 1) {
             this.setMessage(m.msg);
@@ -822,14 +1049,18 @@
   }
 
   // ==========================================================================
-  // 4. UI Navigation, FX Controls & Scroll Spy Initialization
+  // 5. UI Navigation, FX Controls & Scroll Spy Initialization
   // ==========================================================================
   function init() {
     // 1. Initialize Particle Engine
     const engine = new ParticleEngine('cometCanvas');
 
-    // 2. Initialize Sentinel-X Scoreboard
+    // 2. Initialize Cosmic Audio Synthesizer Engine
+    const soundEngine = new CosmicSoundEngine();
+
+    // 3. Initialize Sentinel-X Scoreboard
     const scoreboard = new SentinelScoreboard();
+    scoreboard.soundEngine = soundEngine;
     engine.onShatter = (x, y, count) => {
       scoreboard.onHit(x, y, count);
     };
@@ -915,6 +1146,7 @@
     function toggleFunMode(forceState) {
       if (window.innerWidth <= 768) {
         showDesktopOnlyNotice();
+        soundEngine.stopBGM();
         if (navFxToggle) navFxToggle.classList.remove('active');
         if (engine) engine.toggleState(false);
         if (fxWidget) fxWidget.classList.add('hidden');
@@ -927,15 +1159,18 @@
       engine.toggleState(isNowEnabled);
 
       if (isNowEnabled) {
+        soundEngine.ensureContext();
+        soundEngine.startBGM();
         if (navFxToggle) navFxToggle.classList.add('active');
         if (fxWidget) fxWidget.classList.remove('hidden');
         if (botHud) botHud.classList.remove('hidden');
         showMissionToast();
         if (scoreboard) {
           scoreboard.setFace('[★_★]', 1800);
-          scoreboard.setMessage('Weapons online! Vaporize comets, Cadet! 🚀');
+          scoreboard.setMessage('Weapons & Synth BGM online! Vaporize comets, Cadet! 🚀');
         }
       } else {
+        soundEngine.stopBGM();
         if (navFxToggle) navFxToggle.classList.remove('active');
         if (fxWidget) {
           fxWidget.classList.add('hidden');
@@ -954,7 +1189,23 @@
       });
     }
 
-    // 4. Setup Floating FX Preset Switcher
+    // 4. Setup HUD Sound Toggle Button (SFX & Synth BGM)
+    const botSoundBtn = document.getElementById('botSoundBtn');
+    if (botSoundBtn) {
+      botSoundBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        soundEngine.ensureContext();
+        const isMuted = soundEngine.toggleMute();
+        botSoundBtn.innerHTML = isMuted ? '🔇' : '🔊';
+        botSoundBtn.classList.toggle('muted', isMuted);
+        botSoundBtn.setAttribute('title', isMuted ? 'Unmute Game Audio & Music' : 'Mute Game Audio & Music');
+        if (scoreboard) {
+          scoreboard.setMessage(isMuted ? 'Audio muted. Silent stealth mode! 🤫' : 'Audio online! Synth BGM & FX active! 🔊');
+        }
+      });
+    }
+
+    // 5. Setup Floating FX Preset Switcher
     if (fxToggleBtn && fxPanel) {
       fxToggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();

@@ -682,14 +682,22 @@ body {
   transition: color 0.2s ease;
 }
 
-.bot-minimize-btn {
+.bot-actions-top {
   position: absolute;
   top: 8px;
   right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 5;
+}
+
+.bot-sound-btn,
+.bot-minimize-btn {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-muted);
-  font-size: 0.95rem;
+  font-size: 0.76rem;
   font-weight: 700;
   cursor: pointer;
   width: 22px;
@@ -701,15 +709,20 @@ body {
   line-height: 1;
   border-radius: 6px;
   transition: all 0.15s ease;
-  z-index: 5;
 }
 
+.bot-sound-btn:hover,
 .bot-minimize-btn:hover {
   color: #ffffff;
   background: rgba(0, 242, 254, 0.2);
   border-color: var(--accent-cyan);
   box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
   transform: scale(1.1);
+}
+
+.bot-sound-btn.muted {
+  opacity: 0.5;
+  filter: grayscale(1);
 }
 
 /* Floating Shatter Popups near Cursor/Hit */
