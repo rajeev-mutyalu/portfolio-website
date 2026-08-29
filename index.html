@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=63" />
+  <link rel="stylesheet" href="style.css?v=64" />
 </head>
 
 <body>
@@ -46,8 +46,8 @@
       </a>
 
       <nav class="nav-links">
-        <a href="#ai-assistant" class="nav-link" style="color: var(--accent-cyan); font-weight: 600;">Charlie (AI)</a>
         <a href="#initiatives" class="nav-link">Arsenal</a>
+        <a href="#ai-assistant" class="nav-link" style="color: var(--accent-cyan); font-weight: 600;">Charlie (AI)</a>
         <a href="#architecture" class="nav-link">Architecture</a>
         <a href="#conform" class="nav-link">Turnover &amp; Conform</a>
         <a href="#films" class="nav-link">Credits</a>
@@ -116,8 +116,8 @@
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-content">
         <a href="cv.html" class="mobile-nav-link" style="color: var(--accent-cyan); font-weight: 700;">📄 View Curriculum Vitae (CV)</a>
+        <a href="#initiatives" class="mobile-nav-link">🚀 Technical Arsenal &amp; AI Stack</a>
         <a href="#ai-assistant" class="mobile-nav-link" style="color: #38bdf8; font-weight: 600;">🤖 Charlie (AI Assistant)</a>
-        <a href="#initiatives" class="mobile-nav-link">🚀 Core Focus &amp; Arsenal</a>
         <a href="#architecture" class="mobile-nav-link">🎬 Architecture Flow</a>
         <a href="#conform" class="mobile-nav-link">📦 Conform Ingest</a>
         <a href="#films" class="mobile-nav-link">🏆 Credits &amp; Filmography</a>
@@ -191,140 +191,6 @@
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================================================
-       🤖 Interactive AI Assistant & Knowledge Base (Charlie)
-       ========================================================================= -->
-  <section class="section-container" id="ai-assistant">
-    <div class="section-header">
-      <div class="tag-label" style="background: rgba(56, 189, 248, 0.12); color: var(--accent-cyan); border-color: rgba(56, 189, 248, 0.35);">Technical Arsenal Knowledge Base</div>
-      <h2 class="section-title">Meet Charlie — Rajeev's AI Assistant</h2>
-      <p class="section-desc">Interact with Charlie, my AI assistant. Ask in-depth questions about every skill, tool, and standard in my Technical Arsenal: <strong>What it is</strong>, <strong>Where it is used</strong>, <strong>Why it is used</strong>, and <strong>How it helps production</strong>.</p>
-    </div>
-
-    <!-- AI Terminal Window -->
-    <div class="ai-bot-terminal glass-card">
-      <div class="ai-bot-header">
-        <div class="ai-bot-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-          <span>charlie-ai --session=assistant-console [LOCAL-KB]</span>
-        </div>
-        <div class="ai-bot-status-pill">
-          <span class="ai-status-pulse"></span>
-          <span>LOCAL KB READY</span>
-        </div>
-      </div>
-
-      <!-- Main 2-Column Split: 1/4th Left Sidebar + 3/4th Right Chat Viewport -->
-      <div class="ai-bot-body-split">
-        
-        <!-- Left Sidebar (1/4th): Technical Arsenal Knowledge Topics -->
-        <aside class="ai-bot-sidebar">
-          <div class="ai-sidebar-header">
-            <span class="ai-sidebar-title">⚡ ARSENAL TOPICS</span>
-            <span class="ai-sidebar-count">12 Skills</span>
-          </div>
-          <div class="ai-sidebar-nav">
-            <button type="button" class="ai-sidebar-btn" data-query="What is Model Context Protocol (MCP) and how is it used?">
-              <span class="ai-btn-icon">🔌</span>
-              <span class="ai-btn-text">Model Context Protocol</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="What is vibe coding and how do you use agentic systems?">
-              <span class="ai-btn-icon">⚡</span>
-              <span class="ai-btn-text">Vibe Coding &amp; Agents</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="Explain your OpenUSD VFX pipeline architecture">
-              <span class="ai-btn-icon">🎬</span>
-              <span class="ai-btn-text">OpenUSD Architecture</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO)">
-              <span class="ai-btn-icon">📦</span>
-              <span class="ai-btn-text">OTIO &amp; OCIO / ACES</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="How does your Conform Ingest and turnover pipeline work?">
-              <span class="ai-btn-icon">📦</span>
-              <span class="ai-btn-text">Conform Ingest &amp; DI</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="How do you deploy On-Premise LLMs and quantization in studios?">
-              <span class="ai-btn-icon">🔒</span>
-              <span class="ai-btn-text">On-Prem LLMs &amp; GGUF</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="How does n8n zero-touch automation orchestrate the pipeline?">
-              <span class="ai-btn-icon">⚡</span>
-              <span class="ai-btn-text">n8n Studio Automation</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="How do you use Conversational Voice AI like Retell and Vapi?">
-              <span class="ai-btn-icon">🎙️</span>
-              <span class="ai-btn-text">Voice AI (Retell / Vapi)</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="Tell me about your GenAI video pipelines with Veo and Kling">
-              <span class="ai-btn-icon">🎥</span>
-              <span class="ai-btn-text">GenAI Video (Veo/Kling)</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="Tell me about Python and PySide UI systems in VFX">
-              <span class="ai-btn-icon">🐍</span>
-              <span class="ai-btn-text">Python &amp; PySide UI</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="What is OpenClaw and what is the roadmap for online real-time Charlie?">
-              <span class="ai-btn-icon">🐾</span>
-              <span class="ai-btn-text">OpenClaw Agent Roadmap</span>
-            </button>
-            <button type="button" class="ai-sidebar-btn" data-query="What is your 20-year career background and contact info?">
-              <span class="ai-btn-icon">🏆</span>
-              <span class="ai-btn-text">Career &amp; Contact</span>
-            </button>
-          </div>
-        </aside>
-
-        <!-- Right Main Viewport (3/4th): Live Stream & Input Form -->
-        <main class="ai-bot-main">
-          <!-- Conversation Stream -->
-          <div class="ai-chat-stream" id="aiChatStream">
-            <!-- Initial Welcome Message from Bot -->
-            <div class="ai-message ai-bot-msg">
-              <div class="ai-msg-avatar">CH</div>
-              <div class="ai-msg-body">
-                <div class="ai-msg-author">Charlie <span>Rajeev's AI Assistant</span></div>
-                <div class="ai-msg-content">
-                  Hi! I'm <strong>Charlie</strong>, Rajeev's AI Assistant. Ask me anything about Rajeev's <strong>Technical Arsenal</strong> with structured 4-pillar deep dives: <strong>What it is</strong>, <strong>Where it is used</strong>, <strong>Why it is used</strong>, and <strong>How it helps production</strong>.<br/><br/>
-                  <em>Click any topic on the left panel or type your question below!</em>
-                </div>
-                <div class="ai-followup-container">
-                  <span class="ai-followup-label">Try Asking:</span>
-                  <div class="ai-followup-chips">
-                    <button type="button" class="ai-followup-btn" data-query="What is Model Context Protocol (MCP) and how is it used?">🔌 Model Context Protocol</button>
-                    <button type="button" class="ai-followup-btn" data-query="What is vibe coding and how do you use agentic systems?">⚡ Vibe Coding &amp; Agents</button>
-                    <button type="button" class="ai-followup-btn" data-query="Explain your OpenUSD VFX pipeline architecture">🎬 OpenUSD Architecture</button>
-                    <button type="button" class="ai-followup-btn" data-query="How does your Conform Ingest and turnover pipeline work?">📦 Conform Ingest &amp; DI</button>
-                    <button type="button" class="ai-followup-btn" data-query="How do you deploy On-Premise LLMs and quantization in studios?">🔒 On-Prem LLMs &amp; GGUF</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Input Bar -->
-          <form class="ai-chat-input-bar" id="aiChatForm">
-            <div class="ai-input-wrapper">
-              <span class="ai-input-prefix">&gt;</span>
-              <input type="text" class="ai-input-field" id="aiInputField" placeholder="Ask about Vibe Coding, OpenUSD, Conform Ingest, MCP, On-Prem LLMs, n8n..." autocomplete="off" spellcheck="false" />
-            </div>
-            <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send Technical Query">
-              <span>Send</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </form>
-        </main>
       </div>
     </div>
   </section>
@@ -425,14 +291,14 @@
         <div class="ai-stack-col">
           <div class="ai-stack-category">
             <span class="ai-cat-icon">🔒</span>
-            <h4>On-Premise Private LLMs</h4>
+            <h4>On-Premise LLMs &amp; Agents</h4>
           </div>
           <div class="ai-pill-group">
             <span class="pill pill-amber">Ollama &amp; Local LLMs</span>
             <span class="pill pill-amber">MSTY Studio</span>
             <span class="pill pill-amber">LM Studio</span>
-            <span class="pill">Nous Hermes</span>
-            <span class="pill">OpenClaw</span>
+            <span class="pill pill-cyan">OpenClaw Agent Framework</span>
+            <span class="pill pill-amber">Nous Hermes (Local LLM)</span>
             <span class="pill">Quantization (GGUF)</span>
           </div>
         </div>
@@ -580,6 +446,140 @@
           <span class="pill">Latent Consistency &amp; Identity Lock</span>
           <span class="pill">ACES Studio Conform</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       🤖 Interactive AI Assistant & Knowledge Base (Charlie)
+       ========================================================================= -->
+  <section class="section-container" id="ai-assistant">
+    <div class="section-header">
+      <div class="tag-label" style="background: rgba(56, 189, 248, 0.12); color: var(--accent-cyan); border-color: rgba(56, 189, 248, 0.35);">Technical Arsenal Knowledge Base</div>
+      <h2 class="section-title">Meet Charlie — Rajeev's AI Assistant</h2>
+      <p class="section-desc">Interact with Charlie, my AI assistant. Ask in-depth questions about every skill, tool, and standard in my Technical Arsenal: <strong>What it is</strong>, <strong>Where it is used</strong>, <strong>Why it is used</strong>, and <strong>How it helps production</strong>.</p>
+    </div>
+
+    <!-- AI Terminal Window -->
+    <div class="ai-bot-terminal glass-card">
+      <div class="ai-bot-header">
+        <div class="ai-bot-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <span>charlie-ai --session=assistant-console [LOCAL-KB]</span>
+        </div>
+        <div class="ai-bot-status-pill">
+          <span class="ai-status-pulse"></span>
+          <span>LOCAL KB READY</span>
+        </div>
+      </div>
+
+      <!-- Main 2-Column Split: 1/4th Left Sidebar + 3/4th Right Chat Viewport -->
+      <div class="ai-bot-body-split">
+        
+        <!-- Left Sidebar (1/4th): Technical Arsenal Knowledge Topics -->
+        <aside class="ai-bot-sidebar">
+          <div class="ai-sidebar-header">
+            <span class="ai-sidebar-title">⚡ ARSENAL TOPICS</span>
+            <span class="ai-sidebar-count">12 Skills</span>
+          </div>
+          <div class="ai-sidebar-nav">
+            <button type="button" class="ai-sidebar-btn" data-query="What is Model Context Protocol (MCP) and how is it used?">
+              <span class="ai-btn-icon">🔌</span>
+              <span class="ai-btn-text">Model Context Protocol</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="What is vibe coding and how do you use agentic systems?">
+              <span class="ai-btn-icon">⚡</span>
+              <span class="ai-btn-text">Vibe Coding &amp; Agents</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="Explain your OpenUSD VFX pipeline architecture">
+              <span class="ai-btn-icon">🎬</span>
+              <span class="ai-btn-text">OpenUSD Architecture</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO)">
+              <span class="ai-btn-icon">📦</span>
+              <span class="ai-btn-text">OTIO &amp; OCIO / ACES</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="How does your Conform Ingest and turnover pipeline work?">
+              <span class="ai-btn-icon">📦</span>
+              <span class="ai-btn-text">Conform Ingest &amp; DI</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="How do you deploy On-Premise LLMs and quantization in studios?">
+              <span class="ai-btn-icon">🔒</span>
+              <span class="ai-btn-text">On-Prem LLMs &amp; GGUF</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="How does n8n zero-touch automation orchestrate the pipeline?">
+              <span class="ai-btn-icon">⚡</span>
+              <span class="ai-btn-text">n8n Studio Automation</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="How do you use Conversational Voice AI like Retell and Vapi?">
+              <span class="ai-btn-icon">🎙️</span>
+              <span class="ai-btn-text">Voice AI (Retell / Vapi)</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="Tell me about your GenAI video pipelines with Veo and Kling">
+              <span class="ai-btn-icon">🎥</span>
+              <span class="ai-btn-text">GenAI Video (Veo/Kling)</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="Tell me about Python and PySide UI systems in VFX">
+              <span class="ai-btn-icon">🐍</span>
+              <span class="ai-btn-text">Python &amp; PySide UI</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="What is OpenClaw and what is the roadmap for online real-time Charlie?">
+              <span class="ai-btn-icon">🐾</span>
+              <span class="ai-btn-text">OpenClaw Agent Roadmap</span>
+            </button>
+            <button type="button" class="ai-sidebar-btn" data-query="What is your 20-year career background and contact info?">
+              <span class="ai-btn-icon">🏆</span>
+              <span class="ai-btn-text">Career &amp; Contact</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Right Main Viewport (3/4th): Live Stream & Input Form -->
+        <main class="ai-bot-main">
+          <!-- Conversation Stream -->
+          <div class="ai-chat-stream" id="aiChatStream">
+            <!-- Initial Welcome Message from Bot -->
+            <div class="ai-message ai-bot-msg">
+              <div class="ai-msg-avatar">CH</div>
+              <div class="ai-msg-body">
+                <div class="ai-msg-author">Charlie <span>Rajeev's AI Assistant</span></div>
+                <div class="ai-msg-content">
+                  Hi! I'm <strong>Charlie</strong>, Rajeev's AI Assistant. Ask me anything about Rajeev's <strong>Technical Arsenal</strong> with structured 4-pillar deep dives: <strong>What it is</strong>, <strong>Where it is used</strong>, <strong>Why it is used</strong>, and <strong>How it helps production</strong>.<br/><br/>
+                  <em>Click any topic on the left panel or type your question below!</em>
+                </div>
+                <div class="ai-followup-container">
+                  <span class="ai-followup-label">Try Asking:</span>
+                  <div class="ai-followup-chips">
+                    <button type="button" class="ai-followup-btn" data-query="What is Model Context Protocol (MCP) and how is it used?">🔌 Model Context Protocol</button>
+                    <button type="button" class="ai-followup-btn" data-query="What is vibe coding and how do you use agentic systems?">⚡ Vibe Coding &amp; Agents</button>
+                    <button type="button" class="ai-followup-btn" data-query="Explain your OpenUSD VFX pipeline architecture">🎬 OpenUSD Architecture</button>
+                    <button type="button" class="ai-followup-btn" data-query="How does your Conform Ingest and turnover pipeline work?">📦 Conform Ingest &amp; DI</button>
+                    <button type="button" class="ai-followup-btn" data-query="How do you deploy On-Premise LLMs and quantization in studios?">🔒 On-Prem LLMs &amp; GGUF</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Bar -->
+          <form class="ai-chat-input-bar" id="aiChatForm">
+            <div class="ai-input-wrapper">
+              <span class="ai-input-prefix">&gt;</span>
+              <input type="text" class="ai-input-field" id="aiInputField" placeholder="Ask about Vibe Coding, OpenUSD, Conform Ingest, MCP, On-Prem LLMs, n8n..." autocomplete="off" spellcheck="false" />
+            </div>
+            <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send Technical Query">
+              <span>Send</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </form>
+        </main>
       </div>
     </div>
   </section>
@@ -1247,7 +1247,7 @@
     <button type="button" class="mission-toast-close" id="desktopNoticeToastClose" title="Dismiss">&times;</button>
   </div>
 
-  <script src="app.js?v=63"></script>
+  <script src="app.js?v=64"></script>
 </body>
 
 </html>
