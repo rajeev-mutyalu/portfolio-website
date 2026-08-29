@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=44" />
+  <link rel="stylesheet" href="style.css?v=45" />
 </head>
 
 <body class="cv-body">
@@ -38,7 +38,8 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
-        <span>Back to Interactive Portfolio</span>
+        <span class="btn-text-full">Back to Interactive Portfolio</span>
+        <span class="btn-text-short">← Portfolio</span>
       </a>
 
       <div class="cv-topbar-actions">
@@ -51,7 +52,7 @@
             <line x1="3" y1="9" x2="21" y2="9"></line>
             <line x1="9" y1="21" x2="9" y2="9"></line>
           </svg>
-          <span id="cvThemeText">📄 Plain B&amp;W Mode</span>
+          <span id="cvThemeText"><span class="btn-text-full">📄 Plain B&amp;W Mode</span><span class="btn-text-short">📄 B&amp;W</span></span>
         </button>
 
         <button type="button" class="btn btn-ghost btn-sm" id="copyContactBtn" title="Copy Contact Details">
@@ -59,7 +60,7 @@
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
           </svg>
-          <span id="copyBtnText">Copy Email</span>
+          <span id="copyBtnText"><span class="btn-text-full">Copy Email</span><span class="btn-text-short">Email</span></span>
         </button>
 
         <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" rel="noopener"
@@ -68,7 +69,7 @@
             <path
               d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.2a1.66 1.66 0 0 0-1.66 1.66c0 .92.74 1.66 1.66 1.66.92 0 1.66-.74 1.66-1.66 0-.92-.74-1.66-1.66-1.66Z" />
           </svg>
-          <span>LinkedIn</span>
+          <span class="btn-text-full">LinkedIn</span>
         </a>
 
         <button type="button" class="btn btn-primary btn-sm" onclick="window.print()" title="Print CV or Save to PDF">
@@ -77,7 +78,8 @@
             <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
             <rect x="6" y="14" width="12" height="8"></rect>
           </svg>
-          <span>Print / Save PDF</span>
+          <span class="btn-text-full">Print / Save PDF</span>
+          <span class="btn-text-short">PDF / Print</span>
         </button>
       </div>
     </div>
@@ -308,9 +310,9 @@
       <hr class="cv-divider" />
 
       <!-- =====================================================================
-           4. PROFESSIONAL EXPERIENCE
+           4. PROFESSIONAL EXPERIENCE (Page 2 Start in Print)
            ===================================================================== -->
-      <section class="cv-section">
+      <section class="cv-section cv-page-break-before">
         <h2 class="cv-section-title">
           <span class="cv-sec-icon">💼</span> Professional Experience
         </h2>
@@ -405,8 +407,8 @@
             </div>
           </div>
 
-          <!-- Role 5: Technicolor R&D / Technology -->
-          <div class="cv-timeline-item">
+          <!-- Role 5: Technicolor R&D / Technology (Page 3 Start in Print) -->
+          <div class="cv-timeline-item cv-page-break-before">
             <div class="cv-timeline-marker"></div>
             <div class="cv-job">
               <div class="cv-job-header">
@@ -582,13 +584,13 @@
       if (theme === 'light') {
         body.classList.add('cv-theme-light');
         body.classList.remove('cv-theme-dark');
-        if (themeText) themeText.innerHTML = '🌈 Colorful Dark Mode';
+        if (themeText) themeText.innerHTML = '<span class="btn-text-full">🌈 Colorful Dark Mode</span><span class="btn-text-short">🌈 Dark</span>';
         if (themeBtn) themeBtn.title = 'Switch to Colorful Dark Glassmorphism Mode';
         localStorage.setItem('cv_theme_pref', 'light');
       } else {
         body.classList.remove('cv-theme-light');
         body.classList.add('cv-theme-dark');
-        if (themeText) themeText.innerHTML = '📄 Plain B&amp;W Mode';
+        if (themeText) themeText.innerHTML = '<span class="btn-text-full">📄 Plain B&amp;W Mode</span><span class="btn-text-short">📄 B&amp;W</span>';
         if (themeBtn) themeBtn.title = 'Switch to Plain White & Black Minimal Mode';
         localStorage.setItem('cv_theme_pref', 'dark');
       }
