@@ -1666,7 +1666,7 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
 
       // 1. Append User Message
       const userMsgDiv = document.createElement('div');
-      userMsgDiv.className = 'ai-message user-message';
+      userMsgDiv.className = 'ai-message ai-user-msg user-message';
       userMsgDiv.innerHTML = `
         <div class="ai-msg-avatar">YOU</div>
         <div class="ai-msg-body">
@@ -1679,7 +1679,7 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
 
       // 2. Append Typing Indicator Bubble
       const typingDiv = document.createElement('div');
-      typingDiv.className = 'ai-message bot-message ai-typing-indicator';
+      typingDiv.className = 'ai-message ai-bot-msg bot-message ai-typing-indicator';
       typingDiv.innerHTML = `
         <div class="ai-msg-avatar">CH</div>
         <div class="ai-msg-body">
@@ -1703,7 +1703,7 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
         }
 
         const botMsgDiv = document.createElement('div');
-        botMsgDiv.className = 'ai-message bot-message';
+        botMsgDiv.className = 'ai-message ai-bot-msg bot-message';
 
         let followupsHtml = '';
         if (match.followups && match.followups.length) {
