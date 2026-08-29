@@ -2676,14 +2676,15 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .cv-topbar {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 100;
-  background: rgba(3, 5, 10, 0.92);
+  z-index: 1000;
+  background: rgba(6, 8, 14, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -3442,9 +3443,10 @@ body.cv-theme-light .ambient-glow {
 
 /* Persistent Dark Studio Topbar for CV (Never changes color when toggling mode) */
 .cv-topbar {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   background: rgba(6, 8, 14, 0.94) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -3886,17 +3888,24 @@ body.cv-theme-light .cv-edu-year {
   }
 
   html, body.cv-body {
-    overflow-x: hidden !important;
+    overflow-x: clip !important;
     max-width: 100vw !important;
     box-sizing: border-box !important;
   }
 
   .cv-topbar {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
     padding: 8px 12px !important;
     width: 100% !important;
     max-width: 100vw !important;
     box-sizing: border-box !important;
-    overflow: hidden !important;
+    background: rgba(6, 8, 14, 0.96) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   }
 
   .cv-topbar-container {
