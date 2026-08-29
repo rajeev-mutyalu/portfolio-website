@@ -91,10 +91,9 @@
     }
 
     init() {
-      // Disable completely on mobile screens
+      if (this.canvas) this.canvas.classList.add('fx-disabled');
       if (window.innerWidth <= 768) {
         this.isEnabled = false;
-        if (this.canvas) this.canvas.classList.add('fx-disabled');
       } else {
         this.resize();
       }
@@ -1212,6 +1211,12 @@
         if (missionToast) missionToast.classList.add('hidden');
       }
     }
+
+    // Ensure Game Mode and FX widget are strictly OFF on load and back-navigation
+    toggleFunMode(false);
+    window.addEventListener('pageshow', () => {
+      toggleFunMode(false);
+    });
 
     if (fxSwitchWrapper) {
       fxSwitchWrapper.addEventListener('click', (e) => {
