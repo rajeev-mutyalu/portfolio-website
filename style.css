@@ -4281,12 +4281,16 @@ body.cv-theme-light .cv-edu-year {
   .cv-edu-card {
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
     padding: 6px 10px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     break-inside: avoid-page !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    overflow: visible !important;
+    resize: none !important;
+    position: static !important;
   }
 
   .cv-edu-details h3 {
@@ -4327,5 +4331,30 @@ body.cv-theme-light .cv-edu-year {
   .cv-author-title {
     font-size: 6.4pt !important;
     color: #64748b !important;
+  }
+
+  /* Prevent any residual markers, scrollbar arrows, resizers, or dividers */
+  ::marker,
+  ::-webkit-resizer,
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-button,
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-track {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  .cv-divider,
+  hr {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
 }
