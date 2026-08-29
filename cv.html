@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=52" />
+  <link rel="stylesheet" href="style.css?v=53" />
 </head>
 
 <body class="cv-body">
@@ -580,24 +580,29 @@
     const themeText = document.getElementById('cvThemeText');
     const body = document.body;
 
+    // Clear legacy localStorage light-mode overrides so Color Mode is always the pristine default
+    try { localStorage.removeItem('cv_theme_pref'); } catch (e) {}
+
     function applyTheme(theme) {
       if (theme === 'light') {
         body.classList.add('cv-theme-light');
         body.classList.remove('cv-theme-dark');
-        if (themeText) themeText.innerHTML = '<span class="btn-text-full">🌈 Colorful Dark Mode</span><span class="btn-text-short">🌈 Dark</span>';
+        if (themeText) themeText.innerHTML = '<span class="btn-text-full">🌈 Colorful Mode</span><span class="btn-text-short">🌈 Color</span>';
         if (themeBtn) themeBtn.title = 'Switch to Colorful Dark Glassmorphism Mode';
-        localStorage.setItem('cv_theme_pref', 'light');
+        try { sessionStorage.setItem('cv_theme_pref', 'light'); } catch (e) {}
       } else {
         body.classList.remove('cv-theme-light');
         body.classList.add('cv-theme-dark');
         if (themeText) themeText.innerHTML = '<span class="btn-text-full">📄 Plain B&amp;W Mode</span><span class="btn-text-short">📄 B&amp;W</span>';
         if (themeBtn) themeBtn.title = 'Switch to Plain White & Black Minimal Mode';
-        localStorage.setItem('cv_theme_pref', 'dark');
+        try { sessionStorage.setItem('cv_theme_pref', 'dark'); } catch (e) {}
       }
     }
 
-    // Load saved preference (default to dark)
-    const savedTheme = localStorage.getItem('cv_theme_pref') || 'dark';
+    // Default to Colorful Dark Mode on load
+    const savedTheme = (function() {
+      try { return sessionStorage.getItem('cv_theme_pref') || 'dark'; } catch(e) { return 'dark'; }
+    })();
     applyTheme(savedTheme);
 
     if (themeBtn) {
