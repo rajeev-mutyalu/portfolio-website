@@ -1649,26 +1649,59 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    function renderBotResponse(query) {
+    function scrollStreamToBottom() {
       if (!aiChatStream) return;
+      aiChatStream.scrollTop = aiChatStream.scrollHeight;
+      const lastChild = aiChatStream.lastElementChild;
+      if (lastChild && typeof lastChild.scrollIntoView === 'function') {
+        lastChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
 
-      // 1. Append user message
+    function renderBotResponse(query) {
+      if (!aiChatStream || !query) return;
+
+      const trimmedQuery = query.trim();
+      if (!trimmedQuery) return;
+
+      // 1. Append User Message
       const userMsgDiv = document.createElement('div');
       userMsgDiv.className = 'ai-message user-message';
       userMsgDiv.innerHTML = `
         <div class="ai-msg-avatar">YOU</div>
         <div class="ai-msg-body">
           <div class="ai-msg-author">You</div>
-          <div class="ai-msg-content">${escapeHtml(query)}</div>
+          <div class="ai-msg-content">${escapeHtml(trimmedQuery)}</div>
         </div>
       `;
       aiChatStream.appendChild(userMsgDiv);
-      aiChatStream.scrollTop = aiChatStream.scrollHeight;
+      scrollStreamToBottom();
 
-      // 2. Bot Response
-      const match = matchQueryToKnowledge(query);
+      // 2. Append Typing Indicator Bubble
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'ai-message bot-message ai-typing-indicator';
+      typingDiv.innerHTML = `
+        <div class="ai-msg-avatar">CH</div>
+        <div class="ai-msg-body">
+          <div class="ai-msg-author">Charlie <span>thinking...</span></div>
+          <div class="ai-msg-content ai-typing-bubble">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+        </div>
+      `;
+      aiChatStream.appendChild(typingDiv);
+      scrollStreamToBottom();
+
+      // 3. Match knowledge & Render after 220ms
+      const match = matchQueryToKnowledge(trimmedQuery);
 
       setTimeout(() => {
+        if (typingDiv && typingDiv.parentNode) {
+          typingDiv.parentNode.removeChild(typingDiv);
+        }
+
         const botMsgDiv = document.createElement('div');
         botMsgDiv.className = 'ai-message bot-message';
 
@@ -1694,42 +1727,25 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
         `;
 
         aiChatStream.appendChild(botMsgDiv);
-        aiChatStream.scrollTop = aiChatStream.scrollHeight;
-
-        botMsgDiv.querySelectorAll('.ai-followup-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const nextQuery = btn.getAttribute('data-query');
-            if (nextQuery) {
-              renderBotResponse(nextQuery);
-            }
-          });
-        });
-      }, 200);
+        scrollStreamToBottom();
+      }, 220);
     }
 
-    if (aiChatStream) {
-      aiChatStream.querySelectorAll('.ai-followup-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const query = btn.getAttribute('data-query');
-          if (query) renderBotResponse(query);
-        });
-      });
-    }
-
-    if (aiSidebarBtns.length) {
-      aiSidebarBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const query = btn.getAttribute('data-query');
-          if (query) {
-            aiSidebarBtns.forEach(b => b.classList.remove('active'));
-            if (btn.classList.contains('ai-sidebar-btn')) {
-              btn.classList.add('active');
-            }
-            renderBotResponse(query);
+    // Delegated Click Listener for All Charlie Topic & Follow-up Buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.ai-sidebar-btn, .ai-topic-pill, .ai-followup-btn');
+      if (btn) {
+        e.preventDefault();
+        const query = btn.getAttribute('data-query') || btn.textContent.replace(/^[\s→•🔌⚡🎬📦🔒🎙️🎥🐍🐾🏆]+\s*/g, '').trim();
+        if (query) {
+          document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
+          if (btn.classList.contains('ai-sidebar-btn')) {
+            btn.classList.add('active');
           }
-        });
-      });
-    }
+          renderBotResponse(query);
+        }
+      }
+    });
 
     if (aiChatForm && aiInputField) {
       aiChatForm.addEventListener('submit', (e) => {
@@ -1737,7 +1753,7 @@ Hi, I'm <strong>Charlie</strong>! I have deep technical architecture knowledge a
         const q = aiInputField.value.trim();
         if (!q) return;
         aiInputField.value = '';
-        aiSidebarBtns.forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
         renderBotResponse(q);
       });
     }
