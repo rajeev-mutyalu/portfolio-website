@@ -3826,7 +3826,10 @@ body.cv-theme-light .cv-edu-year {
    ========================================================================== */
 @media print {
   @page {
-    margin: 10mm 12mm;
+    margin-top: 10mm;
+    margin-bottom: 0mm;
+    margin-left: 12mm;
+    margin-right: 12mm;
     size: A4 portrait;
   }
 
@@ -3845,22 +3848,21 @@ body.cv-theme-light .cv-edu-year {
     font-size: 9.5pt !important;
     line-height: 1.45 !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 0 0 10mm 0 !important;
     width: 100% !important;
+    border: none !important;
   }
 
-  .cv-page-wrapper {
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-  }
-
-  .cv-card {
+  .cv-page-wrapper,
+  .cv-card,
+  body.cv-theme-light .cv-card,
+  body.cv-theme-dark .cv-card {
     background: #ffffff !important;
     border: none !important;
+    outline: none !important;
     box-shadow: none !important;
     padding: 0 !important;
+    margin: 0 !important;
     width: 100% !important;
   }
 
