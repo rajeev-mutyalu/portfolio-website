@@ -3874,7 +3874,7 @@ body.cv-theme-light .cv-edu-year {
   .cv-header-identity {
     display: flex !important;
     flex-direction: row !important;
-    align-items: stretch !important;
+    align-items: flex-start !important;
     justify-content: flex-start !important;
     text-align: left !important;
     gap: 18px !important;
@@ -3884,12 +3884,12 @@ body.cv-theme-light .cv-edu-year {
   .cv-avatar-wrap {
     flex-shrink: 0 !important;
     margin: 0 !important;
-    display: flex !important;
+    align-self: flex-start !important;
   }
 
   .cv-avatar-img {
-    width: 125px !important;
-    height: 155px !important;
+    width: 138px !important;
+    height: 172px !important;
     border-radius: 10px !important;
     border: 1.5px solid #cbd5e1 !important;
     object-fit: cover !important;
