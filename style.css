@@ -3826,10 +3826,7 @@ body.cv-theme-light .cv-edu-year {
    ========================================================================== */
 @media print {
   @page {
-    margin-top: 10mm;
-    margin-bottom: 0mm;
-    margin-left: 12mm;
-    margin-right: 12mm;
+    margin: 12mm 15mm 10mm 15mm;
     size: A4 portrait;
   }
 
@@ -3842,15 +3839,18 @@ body.cv-theme-light .cv-edu-year {
     display: none !important;
   }
 
-  html, body {
+  html, body, .cv-body, body.cv-theme-dark, body.cv-theme-light {
     background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
     color: #0f172a !important;
     font-size: 9.5pt !important;
     line-height: 1.45 !important;
     margin: 0 !important;
-    padding: 0 0 10mm 0 !important;
+    padding: 0 !important;
     width: 100% !important;
     border: none !important;
+    box-shadow: none !important;
   }
 
   .cv-page-wrapper,
@@ -3858,6 +3858,8 @@ body.cv-theme-light .cv-edu-year {
   body.cv-theme-light .cv-card,
   body.cv-theme-dark .cv-card {
     background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
