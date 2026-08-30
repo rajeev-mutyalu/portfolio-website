@@ -2590,6 +2590,60 @@ body {
   transform: translateY(-1px);
 }
 
+/* Charlie Telemetry & Section Links */
+.ai-section-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px 12px;
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  border-radius: 6px;
+  color: var(--accent-cyan, #00f2fe);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 242, 254, 0.1);
+}
+
+.ai-section-link:hover {
+  background: rgba(0, 242, 254, 0.18);
+  border-color: var(--accent-cyan, #00f2fe);
+  color: #ffffff;
+  transform: translateX(3px);
+  box-shadow: 0 4px 14px rgba(0, 242, 254, 0.25);
+}
+
+.ai-fallback-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  margin-bottom: 10px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 4px;
+  color: #fbbf24;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.pulse-thinking {
+  background: #f59e0b !important;
+  box-shadow: 0 0 10px #f59e0b !important;
+  animation: pulseAmber 0.8s infinite alternate !important;
+}
+
+@keyframes pulseAmber {
+  from { opacity: 0.4; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1.25); }
+}
+
 /* Mobile Responsiveness for AI Terminal Side Panel Split */
 @media (max-width: 860px) {
   .ai-bot-body-split {
