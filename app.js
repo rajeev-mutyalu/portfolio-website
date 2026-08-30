@@ -1248,6 +1248,41 @@
       });
     }
 
+    function syncCharlieGameModeChips(isGameOn) {
+      const welcomeChips = document.getElementById('aiWelcomeChips');
+      const welcomeLabel = document.getElementById('aiWelcomeLabel');
+      if (!welcomeChips) return;
+
+      const isMuted = soundEngine && soundEngine.isMuted;
+      const muteLabel = isMuted ? '🔊 Unmute Sound' : '🔇 Mute Sound';
+      const muteQuery = isMuted ? 'unmute sound' : 'mute sound';
+
+      if (isGameOn) {
+        if (welcomeLabel) welcomeLabel.innerText = '🎮 Cosmic Game Mode Active Controls:';
+        welcomeChips.innerHTML = `
+          <button type="button" class="ai-followup-btn" data-query="turn off game mode">🛑 Turn Off Game Mode</button>
+          <button type="button" class="ai-followup-btn" data-query="${muteQuery}">${muteLabel}</button>
+          <button type="button" class="ai-followup-btn" data-query="switch fx to solar">⚡ Preset: Solar Flare</button>
+          <button type="button" class="ai-followup-btn" data-query="switch fx to aurora">🌌 Preset: Aurora Borealis</button>
+          <button type="button" class="ai-followup-btn" data-query="switch fx to diamond">💎 Preset: Hyper Diamond</button>
+          <button type="button" class="ai-followup-btn" data-query="switch fx to comet">☄️ Preset: Comet Cascade</button>
+          <button type="button" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?">🌟 Why Hire Rajeev?</button>
+        `;
+      } else {
+        if (welcomeLabel) welcomeLabel.innerText = 'Executive Quick Links:';
+        welcomeChips.innerHTML = `
+          <button type="button" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?">🌟 Why Hire Rajeev?</button>
+          <button type="button" class="ai-followup-btn" data-query="What is Rajeev's nickname and trivia?">🎨 Nickname &amp; Trivia</button>
+          <button type="button" class="ai-followup-btn" data-query="turn on game mode">🎮 Turn On Game Mode</button>
+          <button type="button" class="ai-followup-btn" data-query="What is Model Context Protocol (MCP) and how is it used in production?">🔌 Model Context Protocol</button>
+          <button type="button" class="ai-followup-btn" data-query="How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?">🔒 On-Prem LLMs &amp; OpenClaw</button>
+          <button type="button" class="ai-followup-btn" data-query="Explain your OpenUSD VFX pipeline architecture">🎬 OpenUSD Architecture</button>
+          <button type="button" class="ai-followup-btn" data-query="How does zero-touch n8n studio automation orchestrate pipelines?">⚡ n8n Automation</button>
+        `;
+      }
+    }
+    window.syncCharlieGameModeChips = syncCharlieGameModeChips;
+
     function toggleFunMode(forceState) {
       if (window.innerWidth <= 768) {
         if (forceState === false) {
@@ -1261,6 +1296,7 @@
         if (fxWidget) fxWidget.classList.add('hidden');
         if (botHud) botHud.classList.add('hidden');
         if (missionToast) missionToast.classList.add('hidden');
+        syncCharlieGameModeChips(false);
         return;
       }
 
@@ -1274,6 +1310,7 @@
         if (fxWidget) fxWidget.classList.remove('hidden');
         if (botHud) botHud.classList.remove('hidden');
         showMissionToast();
+        syncCharlieGameModeChips(true);
         if (scoreboard) {
           scoreboard.setFace('[★_★]', 1800);
           scoreboard.setMessage('Weapons & Synth BGM online! Vaporize comets, Cadet! 🚀');
@@ -1287,6 +1324,7 @@
         }
         if (botHud) botHud.classList.add('hidden');
         if (missionToast) missionToast.classList.add('hidden');
+        syncCharlieGameModeChips(false);
       }
     }
     window.togglePortfolioGameMode = toggleFunMode;
@@ -1329,6 +1367,7 @@
       if (scoreboard) {
         scoreboard.setMessage(isMuted ? 'Audio muted. Silent stealth mode! 🤫' : 'Audio online! Synth BGM & FX active! 🔊');
       }
+      syncCharlieGameModeChips(engine ? engine.isEnabled : false);
       return isMuted;
     }
     window.setPortfolioAudioMute = setPortfolioAudioMute;
