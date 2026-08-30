@@ -2160,22 +2160,6 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
     const charlieSection = document.getElementById('charlie');
 
     if (floatingCharlieBtn && charlieSection) {
-      function updateFloatingCharlieVisibility() {
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-        const rect = charlieSection.getBoundingClientRect();
-        const isInCharlieView = rect.top <= window.innerHeight * 0.75 && rect.bottom >= window.innerHeight * 0.25;
-
-        // Show launcher when scrolled down past 250px and NOT actively viewing the Charlie section
-        if (scrollY > 250 && !isInCharlieView) {
-          floatingCharlieBtn.classList.remove('hidden');
-        } else {
-          floatingCharlieBtn.classList.add('hidden');
-        }
-      }
-
-      window.addEventListener('scroll', updateFloatingCharlieVisibility, { passive: true });
-      updateFloatingCharlieVisibility();
-
       floatingCharlieBtn.addEventListener('click', (e) => {
         e.preventDefault();
         charlieSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
