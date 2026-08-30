@@ -1272,7 +1272,7 @@
         if (welcomeLabel) welcomeLabel.innerText = 'Executive Quick Links:';
         welcomeChips.innerHTML = `
           <button type="button" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?">🌟 Why Hire Rajeev?</button>
-          <button type="button" class="ai-followup-btn" data-query="What is Rajeev's nickname and trivia?">🎨 Nickname &amp; Trivia</button>
+          <button type="button" class="ai-followup-btn" data-query="Tell me about your 20-year engineering leadership and mentorship background">🏆 Leadership &amp; Filmography</button>
           <button type="button" class="ai-followup-btn" data-query="turn on game mode">🎮 Turn On Game Mode</button>
           <button type="button" class="ai-followup-btn" data-query="What is Model Context Protocol (MCP) and how is it used in production?">🔌 Model Context Protocol</button>
           <button type="button" class="ai-followup-btn" data-query="How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?">🔒 On-Prem LLMs &amp; OpenClaw</button>
@@ -1577,7 +1577,7 @@
         responses: [
           `<strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &amp; Creative Technologist with 20+ years of proven R&amp;D leadership across MPC, DNEG, and Technicolor on Oscar-winning blockbuster productions (<em>1917, Blade Runner 2049, Tenet, Life of Pi, The Lion King</em>).<br/>
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
-• <strong>🎨 Personal Nickname &amp; Trivia:</strong> Known affectionately as <strong>"Bansi"</strong> to close friends and long-time studio collaborators!<br/>
+• <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London and Bangalore.<br/>
 • <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bangalore under strict Hollywood delivery deadlines.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
@@ -1589,7 +1589,7 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 • <strong>🏗️ Traditional Heavyweight Foundation:</strong> 20+ years building Linux render clusters, low-level Python/C++ OpenUSD composition arcs, ShotGrid databases, and automated DI conform engines across MPC, Technicolor, and DNEG.<br/>
 • <strong>⚡ Applied AI Frontier Leadership:</strong> Early pioneer in production MCP (Model Context Protocol) tool servers, autonomous Claude Code/Devin swarms, and air-gapped private LLM deployments (Nous Hermes, Ollama 4-bit GGUF).<br/>
 • <strong>🎬 Oscar-Winning Deliverables:</strong> Key pipeline architect behind Academy Award winners <em>1917</em>, <em>Tenet</em>, <em>The Lion King</em>, and <em>RRR</em>.<br/>
-• <strong>🎨 Studio Culture:</strong> Affectionately known as <strong>"Bansi"</strong> across the international visual effects and engineering community.<br/><br/>
+• <strong>🏆 Production Heritage:</strong> Trusted technical leader on landmark VFX and animation sequences for Disney, Warner Bros, Universal, and Netflix.<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Review Full Career Timeline &amp; Credits &rarr;</a>
 <a href="#initiatives" class="ai-section-link">🚀 Inspect Technical Arsenal &rarr;</a>`,
 
@@ -1610,7 +1610,6 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
         ],
         followupPool: [
-          'What is Rajeev\'s nickname and trivia?',
           'Tell me about your 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'Explain your OpenUSD VFX pipeline architecture',
@@ -1620,32 +1619,32 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
         ]
       },
       {
-        id: 'trivia_nickname',
-        keywords: ['bansi', 'nickname', 'nick name', 'fun fact', 'fun facts', 'trivia', 'who is bansi', 'what is rajeev nickname', 'what is rajeev\'s nickname', 'hobbies', 'personal', 'hobby'],
-        title: 'Rajeev\'s Nickname & Trivia',
+        id: 'creative_technologist_vision',
+        keywords: ['creative technologist', 'philosophy', 'vision', 'engineering mindset', 'craftsman', 'technologist', 'architecture philosophy'],
+        title: 'Creative Technologist & Engineering Philosophy',
         intros: [
-          '🌟 <strong>PERSONAL TRIVIA &amp; STUDIO CULTURE</strong>',
-          '🎨 <strong>BEHIND THE CODE // RAJEEV "BANSI" MUTYALU</strong>',
-          '💎 <strong>STUDIO TRIVIA &amp; 20-YEAR EVOLUTION</strong>'
+          '🌟 <strong>ENGINEERING PHILOSOPHY &amp; CREATIVE CRAFTSMANSHIP</strong>',
+          '💎 <strong>SYSTEM ARCHITECTURE VISION // RAJEEV MUTYALU</strong>',
+          '🚀 <strong>HIGH-LEVERAGE ENGINEERING MINDSET</strong>'
         ],
         responses: [
-          `• <strong>🎨 Affectionate Nickname:</strong> Rajeev is affectionately known as <strong>"Bansi"</strong> to close friends, family, and long-time studio colleagues across MPC, Technicolor, and Astra!<br/>
+          `• <strong>🎨 Creative Technologist at Heart:</strong> Rajeev combines the sharp aesthetic eye of a seasoned visual effects artist with the rigorous mathematical foundations of a software systems architect.<br/>
 • <strong>🎬 20-Year Evolution:</strong> Started in the early 2000s mastering traditional computer graphics, 3D modeling, and editorial plate conform, evolving into a Lead Architect across Oscar-winning tentpole films (<em>1917, The Lion King, Tenet, RRR</em>).<br/>
 • <strong>💎 The Dual-Threat Moat:</strong> Equally at home debugging low-level C++/Python OpenUSD composition arcs on Linux render clusters as he is designing cutting-edge agentic workflows, MCP servers, and local quantized LLMs.<br/>
-• <strong>⌨️ Studio Fuel:</strong> Passionate about mechanical keyboards, ultra-clean monospace telemetry, and optimizing studio pipelines down to the millisecond.<br/><br/>
+• <strong>⌨️ Studio Craftsmanship:</strong> Passionate about clean code, ultra-responsive developer tooling, sub-second terminal latency, and optimizing studio pipelines down to the millisecond.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Bio &rarr;</a>`,
 
-          `• <strong>👑 The Story of "Bansi":</strong> If you work closely with Rajeev on production dailies or pipeline sprint planning, you will quickly hear colleagues refer to him as <strong>"Bansi"</strong> — a cherished nickname representing his warm, approachable, and collaborative leadership style.<br/>
-• <strong>🛠️ Engineering Purist:</strong> Obsessed with clean, robust code architecture, sub-second terminal latency, and zero-defect deployments.<br/>
+          `• <strong>🛠️ Engineering Purist:</strong> Obsessed with clean, robust code architecture, sub-second terminal latency, and zero-defect deployments.<br/>
 • <strong>🎞️ Blockbuster Pedigree:</strong> Contributed technical leadership to Academy Award-winning sequences in <em>1917</em> and groundbreaking CG in <em>The Lion King</em>.<br/>
-• <strong>🚀 Modern Frontier:</strong> Leading the adoption of local private AI models and autonomous agent swarms in visual effects.<br/><br/>
+• <strong>🚀 Modern Frontier:</strong> Leading the adoption of local private AI models, Model Context Protocol (MCP), and autonomous agent swarms in visual effects.<br/>
+• <strong>🤝 Leadership Rigor:</strong> Champions test-driven development, automated code review gates, and non-blocking architectural patterns across multi-site studios.<br/><br/>
 <a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Get in Touch &rarr;</a>`,
 
-          `• <strong>🎨 Creative Technologist at Heart:</strong> Nicknamed <strong>"Bansi"</strong>, Rajeev combines the sharp eye of a visual artist with the mathematical rigor of a systems architect.<br/>
-• <strong>🕹️ Arcade &amp; Physics Hobby:</strong> Built the custom <em>Comet Cascade</em> 60 FPS particle canvas engine and Web Audio synthesizer right inside this portfolio to showcase real-time interactive physics!<br/>
-• <strong>🌐 Global Citizen:</strong> Lived and led technical teams across India and the United Kingdom, fostering inclusive and highly motivated engineering environments.<br/><br/>
+          `• <strong>🌐 Global Engineering Bridge:</strong> Lived and led technical teams across India and the United Kingdom, fostering inclusive, highly collaborative, and agile engineering environments.<br/>
+• <strong>🕹️ Real-Time Systems Passion:</strong> Built the custom <em>Comet Cascade</em> 60 FPS particle canvas engine and Web Audio synthesizer right inside this portfolio to demonstrate real-time interactive mathematics and event-driven architecture.<br/>
+• <strong>📦 Open Standards Leadership:</strong> Deep proponent of open standards including OpenUSD, OpenTimelineIO (OTIO), and OpenColorIO (OCIO / ACEScg).<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Open Full CV &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>`
         ],
@@ -2058,7 +2057,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
         ],
         followupPool: [
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'What is Rajeev\'s nickname and trivia?',
+          'Tell me about your 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'Explain your OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?'
@@ -2213,7 +2212,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
 💻 <em>Please open <strong>rajeev-mutyalu.github.io/portfolio-website</strong> on a desktop or laptop to vaporize comets, build multi-stage combos, and unlock Sentinel-X ranks!</em>`,
             followups: getDynamicFollowups([
               'Who is Rajeev Mutyalu and why should we hire him?',
-              'What is Rajeev\'s nickname and trivia?',
+              'Tell me about your 20-year engineering leadership and mentorship background',
               'What is Model Context Protocol (MCP) and how is it used in production?',
               'Explain your OpenUSD VFX pipeline architecture'
             ], 4)
@@ -2275,7 +2274,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
           followups: getDynamicFollowups([
             '🎮 Turn On Game Mode',
             'Who is Rajeev Mutyalu and why should we hire him?',
-            'What is Rajeev\'s nickname and trivia?',
+            'Tell me about your 20-year engineering leadership and mentorship background',
             'Explain your OpenUSD VFX pipeline architecture',
             'What is Model Context Protocol (MCP) and how is it used in production?'
           ], 4)
@@ -2289,7 +2288,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
             response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Solar Flare!</em>`,
-            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'What is Rajeev\'s nickname and trivia?']
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about your 20-year engineering leadership and mentorship background']
           };
         }
         if (typeof window.togglePortfolioGameMode === 'function') {
@@ -2321,7 +2320,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
             response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Aurora Borealis!</em>`,
-            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'What is Rajeev\'s nickname and trivia?']
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about your 20-year engineering leadership and mentorship background']
           };
         }
         if (typeof window.togglePortfolioGameMode === 'function') {
@@ -2353,7 +2352,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
             response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Hyper Diamond!</em>`,
-            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'What is Rajeev\'s nickname and trivia?']
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about your 20-year engineering leadership and mentorship background']
           };
         }
         if (typeof window.togglePortfolioGameMode === 'function') {
@@ -2385,7 +2384,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
             response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Comet Cascade!</em>`,
-            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'What is Rajeev\'s nickname and trivia?']
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about your 20-year engineering leadership and mentorship background']
           };
         }
         if (typeof window.togglePortfolioGameMode === 'function') {
@@ -2466,7 +2465,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
 I am operating as a high-speed <strong>offline local knowledge engine</strong> dedicated exclusively to <strong>Rajeev Mutyalu's Technical Arsenal, VFX Pipeline Architecture, and GenAI Portfolio</strong>.<br/><br/>
 <em>Live open-domain web exploration will unlock in the upcoming <strong>OpenClaw Real-Time Agent runtime</strong>. In the meantime, ask me in-depth technical questions about:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
-• <strong>🎨 Trivia &amp; Nickname:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="What is Rajeev's nickname and trivia?" style="display:inline-block; margin-top:2px;">What is Rajeev's Nickname?</a><br/>
+• <strong>🏆 Leadership &amp; Film Credits:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about your 20-year engineering leadership and mentorship background" style="display:inline-block; margin-top:2px;">Leadership &amp; Tenures</a><br/>
 • <strong>🎮 Interactive Game:</strong> Type <code>turn on game mode</code> or <code>turn off game mode</code><br/>
 • <strong>🔌 Model Context Protocol (MCP):</strong> Custom JSON-RPC tool binding for DCCs<br/>
 • <strong>🧠 Agentic AI &amp; Vibe Coding:</strong> Claude Code, Google Antigravity &amp; subagent swarms<br/>
@@ -2477,7 +2476,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 <a href="#initiatives" class="ai-section-link">🚀 Explore Full Technical Arsenal &rarr;</a>`,
         followups: getDynamicFollowups([
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'What is Rajeev\'s nickname and trivia?',
+          'Tell me about your 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'Explain your OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
