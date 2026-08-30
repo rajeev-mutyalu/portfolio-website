@@ -1120,6 +1120,7 @@
         fxToggleBtn.querySelector('span').innerText = `FX: ${themeName.replace(/[⚡🔥🌌💎]/g, '').trim()}`;
       }
     }
+    window.setPortfolioThemeUI = updateThemeUI;
 
     scoreboard.onThemeChange = (themeKey) => {
       updateThemeUI(themeKey);
@@ -1233,17 +1234,36 @@
 
     // 4. Setup HUD Sound Toggle Button (SFX & Synth BGM)
     const botSoundBtn = document.getElementById('botSoundBtn');
-    if (botSoundBtn) {
-      botSoundBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        soundEngine.ensureContext();
-        const isMuted = soundEngine.toggleMute();
+
+    function setPortfolioAudioMute(forceMute) {
+      if (!soundEngine) return false;
+      soundEngine.ensureContext();
+      let isMuted;
+      if (typeof forceMute === 'boolean') {
+        if (soundEngine.isMuted !== forceMute) {
+          isMuted = soundEngine.toggleMute();
+        } else {
+          isMuted = soundEngine.isMuted;
+        }
+      } else {
+        isMuted = soundEngine.toggleMute();
+      }
+      if (botSoundBtn) {
         botSoundBtn.innerHTML = isMuted ? '🔇' : '🔊';
         botSoundBtn.classList.toggle('muted', isMuted);
         botSoundBtn.setAttribute('title', isMuted ? 'Unmute Game Audio & Music' : 'Mute Game Audio & Music');
-        if (scoreboard) {
-          scoreboard.setMessage(isMuted ? 'Audio muted. Silent stealth mode! 🤫' : 'Audio online! Synth BGM & FX active! 🔊');
-        }
+      }
+      if (scoreboard) {
+        scoreboard.setMessage(isMuted ? 'Audio muted. Silent stealth mode! 🤫' : 'Audio online! Synth BGM & FX active! 🔊');
+      }
+      return isMuted;
+    }
+    window.setPortfolioAudioMute = setPortfolioAudioMute;
+
+    if (botSoundBtn) {
+      botSoundBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setPortfolioAudioMute();
       });
     }
 
@@ -1667,11 +1687,76 @@
     function matchQueryToKnowledge(query) {
       const q = query.toLowerCase().trim();
 
-      // 1. Live Game Mode Interactive Control
+      // 1. Audio Mute / Unmute Interactive Control
+      const isMute = /\b(mute(\s+sound|\s+audio|\s+music|\s+bgm)?|silence|turn\s+off\s+sound|turn\s+off\s+audio|disable\s+sound|stop\s+audio|sound\s+off|audio\s+off)\b/i.test(q);
+      const isUnmute = /\b(unmute(\s+sound|\s+audio|\s+music|\s+bgm)?|enable\s+sound|turn\s+on\s+sound|turn\s+on\s+audio|start\s+audio|sound\s+on|audio\s+on)\b/i.test(q);
+
+      if (isMute) {
+        if (typeof window.setPortfolioAudioMute === 'function') {
+          window.setPortfolioAudioMute(true);
+        }
+        return {
+          id: 'audio_muted',
+          title: 'Game Audio Muted',
+          response: `🔇 <strong>GAME AUDIO MUTED</strong><br/><br/>
+• Ambient synth BGM and laser sfx have been silenced.<br/>
+• Sentinel-X HUD is running in stealth mode.<br/><br/>
+<em>Type <code>unmute sound</code> or <code>sound on</code> anytime to bring back the audio!</em>`,
+          followups: [
+            '🔊 Unmute Sound',
+            '⚡ Preset: Solar Flare',
+            '🌌 Preset: Aurora Borealis',
+            '💎 Preset: Hyper Diamond',
+            '🛑 Turn Off Game Mode'
+          ]
+        };
+      }
+
+      if (isUnmute) {
+        if (typeof window.setPortfolioAudioMute === 'function') {
+          window.setPortfolioAudioMute(false);
+        }
+        return {
+          id: 'audio_unmuted',
+          title: 'Game Audio Active',
+          response: `🔊 <strong>GAME AUDIO UNMUTED</strong><br/><br/>
+• Ambient synthwave BGM and interactive collision sfx are now live.<br/>
+• Sentinel-X audio cues active.<br/><br/>
+<em>Type <code>mute sound</code> anytime for silent play!</em>`,
+          followups: [
+            '🔇 Mute Sound',
+            '⚡ Preset: Solar Flare',
+            '🌌 Preset: Aurora Borealis',
+            '💎 Preset: Hyper Diamond',
+            '🛑 Turn Off Game Mode'
+          ]
+        };
+      }
+
+      // 2. Live Game Mode Interactive Control
       const isGameModeOn = /\b(turn\s+on\s+game|game\s+mode\s+on|enable\s+game|start\s+game|play\s+game|activate\s+game|game\s+on|play\s+cosmic)\b/i.test(q) || q === 'game mode' || q === 'game' || q === 'on';
       const isGameModeOff = /\b(turn\s+off\s+game|game\s+mode\s+off|disable\s+game|stop\s+game|exit\s+game|deactivate\s+game|game\s+off)\b/i.test(q) || q === 'off';
 
       if (isGameModeOn) {
+        if (window.innerWidth <= 768) {
+          if (typeof window.togglePortfolioGameMode === 'function') {
+            window.togglePortfolioGameMode(true); // Triggers the top toast
+          }
+          return {
+            id: 'game_mobile_notice',
+            title: 'Desktop & Laptop Precision Required for Cosmic Game Mode',
+            response: `📱 <strong>DESKTOP &amp; LAPTOP PRECISION REQUIRED:</strong><br/><br/>
+The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X Scoreboard</strong> are engineered specifically for precision mouse/trackpad pointer physics, raycasted particle collision, and real-time Web Audio synthesis.<br/><br/>
+💻 <em>Please open <strong>rajeev-mutyalu.github.io/portfolio-website</strong> on a desktop or laptop to vaporize comets, build multi-stage combos, and unlock Sentinel-X ranks!</em>`,
+            followups: [
+              'Who is Rajeev Mutyalu and why should we hire him?',
+              'What is Rajeev\'s nickname and trivia?',
+              'What is Model Context Protocol (MCP) and how is it used in production?',
+              'Explain your OpenUSD VFX pipeline architecture'
+            ]
+          };
+        }
+
         if (typeof window.togglePortfolioGameMode === 'function') {
           window.togglePortfolioGameMode(true);
         }
@@ -1680,14 +1765,17 @@
           title: 'Cosmic Game Mode Activated',
           response: `🎮 <strong>COSMIC GAME MODE ACTIVATED!</strong><br/><br/>
 • <strong>Comet Cascade Canvas:</strong> Online &amp; responsive to mouse/trackpad physics.<br/>
-• <strong>Sentinel-X HUD:</strong> Tracking your combos and scores in the bottom-right corner.<br/>
+• <strong>Sentinel-X HUD:</strong> Tracking combos, rank, and score in the bottom-right corner.<br/>
 • <strong>Audio Synthesizer:</strong> Ambient BGM and laser sfx unlocked.<br/>
-• <strong>How to Play:</strong> Hover or click on falling comets to vaporize them and build multi-stage combos!<br/><br/>
-<em>Type <code>turn off game mode</code> or <code>game off</code> anytime to return to standard reading mode.</em>`,
+• <strong>Controls:</strong> Hover or click on falling comets to vaporize them and build combos!<br/><br/>
+<em>Switch visual presets, mute audio, or turn off below:</em>`,
           followups: [
-            'Who is Rajeev Mutyalu and why should we hire him?',
-            'What is Rajeev\'s nickname and trivia?',
-            'turn off game mode'
+            '🛑 Turn Off Game Mode',
+            '🔇 Mute Sound',
+            '⚡ Preset: Solar Flare',
+            '🌌 Preset: Aurora Borealis',
+            '💎 Preset: Hyper Diamond',
+            '☄️ Preset: Comet Cascade'
           ]
         };
       }
@@ -1704,14 +1792,139 @@
 • Audio synthesis halted.<br/><br/>
 <em>Type <code>turn on game mode</code> or click the Cosmic Switch in the top navbar anytime to jump back in!</em>`,
           followups: [
+            '🎮 Turn On Game Mode',
             'Who is Rajeev Mutyalu and why should we hire him?',
-            'What is Rajeev\'s nickname and trivia?',
-            'turn on game mode'
+            'What is Rajeev\'s nickname and trivia?'
           ]
         };
       }
 
-      // 2. Trivia & Nickname ('Bansi', fun facts, trivia)
+      // 2. Comet FX Preset Live Switching
+      if (/\b(solar\s*flare|preset:\s*solar|switch\s*fx\s*to\s*solar)\b/i.test(q) || q === 'solar') {
+        if (window.innerWidth <= 768) {
+          return {
+            id: 'fx_mobile_notice',
+            title: 'FX Presets on Desktop',
+            response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Solar Flare!</em>`,
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'What is Rajeev\'s nickname and trivia?']
+          };
+        }
+        if (typeof window.togglePortfolioGameMode === 'function') {
+          window.togglePortfolioGameMode(true);
+        }
+        if (typeof window.setPortfolioThemeUI === 'function') {
+          window.setPortfolioThemeUI('solar');
+        }
+        return {
+          id: 'fx_solar',
+          title: 'Solar Flare FX Active',
+          response: `🔥 <strong>FX PRESET ACTIVATED: SOLAR FLARE</strong><br/><br/>
+• <strong>Palette:</strong> High-energy Solar Amber, Golden Photons &amp; Orange Plasma.<br/>
+• <strong>Particle Dynamics:</strong> Increased thermal speed with fiery impact shards.<br/><br/>
+<em>Switch to another preset or turn off anytime below:</em>`,
+          followups: [
+            '🌌 Preset: Aurora Borealis',
+            '💎 Preset: Hyper Diamond',
+            '☄️ Preset: Comet Cascade',
+            '🛑 Turn Off Game Mode'
+          ]
+        };
+      }
+
+      if (/\b(aurora\s*borealis|preset:\s*aurora|switch\s*fx\s*to\s*aurora)\b/i.test(q) || q === 'aurora') {
+        if (window.innerWidth <= 768) {
+          return {
+            id: 'fx_mobile_notice',
+            title: 'FX Presets on Desktop',
+            response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Aurora Borealis!</em>`,
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'What is Rajeev\'s nickname and trivia?']
+          };
+        }
+        if (typeof window.togglePortfolioGameMode === 'function') {
+          window.togglePortfolioGameMode(true);
+        }
+        if (typeof window.setPortfolioThemeUI === 'function') {
+          window.setPortfolioThemeUI('aurora');
+        }
+        return {
+          id: 'fx_aurora',
+          title: 'Aurora Borealis FX Active',
+          response: `🌌 <strong>FX PRESET ACTIVATED: AURORA BOREALIS</strong><br/><br/>
+• <strong>Palette:</strong> Bioluminescent Emerald, Cyan Waves &amp; Deep Forest Glow.<br/>
+• <strong>Particle Dynamics:</strong> Smooth atmospheric flow with emerald nebular dust.<br/><br/>
+<em>Switch to another preset or turn off anytime below:</em>`,
+          followups: [
+            '⚡ Preset: Solar Flare',
+            '💎 Preset: Hyper Diamond',
+            '☄️ Preset: Comet Cascade',
+            '🛑 Turn Off Game Mode'
+          ]
+        };
+      }
+
+      if (/\b(hyper\s*diamond|preset:\s*diamond|switch\s*fx\s*to\s*diamond)\b/i.test(q) || q === 'diamond') {
+        if (window.innerWidth <= 768) {
+          return {
+            id: 'fx_mobile_notice',
+            title: 'FX Presets on Desktop',
+            response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Hyper Diamond!</em>`,
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'What is Rajeev\'s nickname and trivia?']
+          };
+        }
+        if (typeof window.togglePortfolioGameMode === 'function') {
+          window.togglePortfolioGameMode(true);
+        }
+        if (typeof window.setPortfolioThemeUI === 'function') {
+          window.setPortfolioThemeUI('diamond');
+        }
+        return {
+          id: 'fx_diamond',
+          title: 'Hyper Diamond FX Active',
+          response: `💎 <strong>FX PRESET ACTIVATED: HYPER DIAMOND</strong><br/><br/>
+• <strong>Palette:</strong> Crystalline Pure White, Prismatic Silver &amp; Platinum Highlights.<br/>
+• <strong>Particle Dynamics:</strong> Maximum velocity stardust with sharp refractive shatter.<br/><br/>
+<em>Switch to another preset or turn off anytime below:</em>`,
+          followups: [
+            '⚡ Preset: Solar Flare',
+            '🌌 Preset: Aurora Borealis',
+            '☄️ Preset: Comet Cascade',
+            '🛑 Turn Off Game Mode'
+          ]
+        };
+      }
+
+      if (/\b(comet\s*cascade|preset:\s*comet|switch\s*fx\s*to\s*comet)\b/i.test(q) || q === 'comet') {
+        if (window.innerWidth <= 768) {
+          return {
+            id: 'fx_mobile_notice',
+            title: 'FX Presets on Desktop',
+            response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Comet Cascade!</em>`,
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'What is Rajeev\'s nickname and trivia?']
+          };
+        }
+        if (typeof window.togglePortfolioGameMode === 'function') {
+          window.togglePortfolioGameMode(true);
+        }
+        if (typeof window.setPortfolioThemeUI === 'function') {
+          window.setPortfolioThemeUI('comet');
+        }
+        return {
+          id: 'fx_comet',
+          title: 'Comet Cascade FX Active',
+          response: `☄️ <strong>FX PRESET ACTIVATED: COMET CASCADE (DEFAULT)</strong><br/><br/>
+• <strong>Palette:</strong> Cyber Cyan, Deep Cobalt &amp; Neon Electric Blue.<br/>
+• <strong>Particle Dynamics:</strong> Classic directional comet rain with cyan shatter bursts.<br/><br/>
+<em>Switch to another preset or turn off anytime below:</em>`,
+          followups: [
+            '⚡ Preset: Solar Flare',
+            '🌌 Preset: Aurora Borealis',
+            '💎 Preset: Hyper Diamond',
+            '🛑 Turn Off Game Mode'
+          ]
+        };
+      }
+
+      // 3. Trivia & Nickname ('Bansi', fun facts, trivia)
       if (/\b(bansi|nickname|nick\s*name|fun\s*fact|fun\s*facts|trivia|hobby|hobbies)\b/i.test(q)) {
         return {
           id: 'trivia_nickname',
@@ -1731,13 +1944,13 @@
         };
       }
 
-      // 3. Resilient "Who is Rajeev / Why hire him" Check (handles typos like "who si rajeev", "rajeev", "why hire", etc.)
+      // 4. Resilient "Who is Rajeev / Why hire him" Check (handles typos like "who si rajeev", "rajeev", "why hire", etc.)
       if (/\b(rajeev|muthyalu|mutyalu|who\s+(is|si)\s+rajeev|who\s+(is|si)|why\s+hire|hire\s+him|hire\s+rajeev|about\s+rajeev)\b/i.test(q) || q === 'rajeev' || q === 'why hire') {
         const whyHireItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'why_hire_rajeev');
         if (whyHireItem) return whyHireItem;
       }
 
-      // 4. Standard Weighted Knowledge Base Search
+      // 5. Standard Weighted Knowledge Base Search
       let bestMatch = null;
       let maxScore = 0;
 
@@ -1874,7 +2087,18 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
             <div class="ai-followup-container">
               <span class="ai-followup-label">Explore Next:</span>
               <div class="ai-followup-chips">
-                ${match.followups.map(f => `<button type="button" class="ai-followup-btn" data-query="${escapeHtml(f)}">&rarr; ${escapeHtml(f)}</button>`).join('')}
+                ${match.followups.map(f => {
+                  let queryText = f;
+                  if (f.startsWith('🛑')) queryText = 'turn off game mode';
+                  else if (f.startsWith('🔇')) queryText = 'mute sound';
+                  else if (f.startsWith('🔊')) queryText = 'unmute sound';
+                  else if (f.startsWith('⚡')) queryText = 'switch fx to solar';
+                  else if (f.startsWith('🌌')) queryText = 'switch fx to aurora';
+                  else if (f.startsWith('💎')) queryText = 'switch fx to diamond';
+                  else if (f.startsWith('☄️')) queryText = 'switch fx to comet';
+                  else if (f.startsWith('🎮')) queryText = 'turn on game mode';
+                  return `<button type="button" class="ai-followup-btn" data-query="${escapeHtml(queryText)}">${escapeHtml(f)}</button>`;
+                }).join('')}
               </div>
             </div>
           `;
@@ -1909,7 +2133,7 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
       const btn = e.target.closest('.ai-sidebar-btn, .ai-topic-pill, .ai-followup-btn');
       if (btn) {
         e.preventDefault();
-        const query = btn.getAttribute('data-query') || btn.textContent.replace(/^[\s→•🔌⚡🎬📦🔒🎙️🎥🐍🐾🏆🌟]+\s*/g, '').trim();
+        const query = btn.getAttribute('data-query') || btn.textContent.replace(/^[\s→•🔌⚡🎬📦🔒🎙️🎥🐍🐾🏆🌟🛑🌌💎☄️🎮🔇🔊]+\s*/g, '').trim();
         if (query) {
           document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
           if (btn.classList.contains('ai-sidebar-btn')) {
