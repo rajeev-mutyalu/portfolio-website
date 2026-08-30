@@ -772,7 +772,7 @@
         "USD stage composition running at 100%! ⚡",
         "USD sublayers resolved: 0 layer conflicts! 💎",
         "Hydra render delegate compiling shaders! ✨",
-        "Overclocking USD schema parser! 🤖",
+        "Overclocking USD schema parser! ⚡",
         "Payload unloaded, framerate locked @ 60 FPS! 🚀",
         "USD prim composition validated across shots! 📐",
         "Enterprise USD pipeline nominal! 🎬",
@@ -808,11 +808,11 @@
         "Move mouse or click comets to vaporize! ☄️",
         "Radar detecting incoming comets! Take aim! 🎯",
         "USD stage ready... waiting for your laser cursor! 🚀",
-        "Conform queue idle. Fire at will, Cadet! 🤖"
+        "Conform queue idle. Fire at will, Cadet! 🛰️"
       ];
 
       this.pokeQuotes = [
-        "Bleep bloop! Keep blasting comets! 🤖",
+        "Bleep bloop! Keep blasting comets! 🛰️",
         "USD sublayer cache is running at 100%! ⚡",
         "Zero-touch automation online! 🚀",
         "Hey! Stop poking my antenna! (>_<)",
@@ -822,7 +822,7 @@
 
       this.milestones = [
         { count: 1, rank: 'CADET', msg: 'Target locked! Pew pew! 🎯' },
-        { count: 10, rank: 'SCOUT', msg: 'Pipeline anomaly eradicated! 🤖' },
+        { count: 10, rank: 'SCOUT', msg: 'Pipeline anomaly eradicated! 🛰️' },
         { count: 25, rank: 'SENTINEL', msg: 'Render farm running hot! ⚡' },
         { count: 50, rank: 'VFX SPECIALIST', msg: 'USD Sublayer cleared! You are a pro! 🚀' },
         { count: 100, rank: 'PHOTON DESTROYER', msg: 'Overclocking GPUs to 9000%! 🔥' },
@@ -1509,7 +1509,7 @@
         id: 'vibe_coding',
         keywords: ['vibe coding', 'vibe code', 'vibe', 'agentic', 'agents', 'agent', 'claude code', 'antigravity', 'devin', 'swarms', 'autonomous coding', 'claude cowork', 'claude design', 'subagent'],
         title: 'Agentic AI & Vibe Coding',
-        response: `<strong>🤖 Agentic AI &amp; Frontier Vibe Coding:</strong><br/><br/>
+        response: `<strong>🧠 Agentic AI &amp; Frontier Vibe Coding:</strong><br/><br/>
 • <strong>📌 What is it?</strong> A high-leverage engineering paradigm where software architects steer autonomous AI agents (Claude Code CLI, Google Antigravity, Devin) using natural language directives, architectural contracts, and automated verification loops.<br/>
 • <strong>🎯 Where is it used?</strong> Full-stack pipeline engineering, UI development, API refactoring, test suite synthesis, and automated CI/CD workflows.<br/>
 • <strong>💡 Why is it used?</strong> Eliminates repetitive manual boilerplate typing, allowing the Lead Architect to focus 100% on high-level system topology, data schemas, security boundaries, and edge cases.<br/>
@@ -1610,7 +1610,7 @@
 • <strong>🎯 Where is it used?</strong> Previsualization, concept ideation, multi-model prompt routing (Google Veo, Kling AI, Higgsfield), and web asset extraction via FireCrawl.<br/>
 • <strong>💡 Why is it used?</strong> Out-of-the-box video models produce inconsistent character faces, unstable wardrobe details, and non-standard color spaces.<br/>
 • <strong>🚀 How it helps production:</strong> Enforces character latent identity consistency across video shots, automates prompt generation from screenplays, and conformed outputs directly into OCIO/ACEScg for Nuke compositing.<br/><br/>
-<a href="#architecture" data-arch-tab="genai" class="ai-section-link">🤖 View GenAI Flow in Pipeline Visualizer &rarr;</a>`,
+<a href="#architecture" data-arch-tab="genai" class="ai-section-link">✨ View GenAI Flow in Pipeline Visualizer &rarr;</a>`,
         followups: [
           'Explain your OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
@@ -1981,7 +1981,7 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
 • <strong>🎨 Trivia &amp; Nickname:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="What is Rajeev's nickname and trivia?" style="display:inline-block; margin-top:2px;">What is Rajeev's Nickname?</a><br/>
 • <strong>🎮 Interactive Game:</strong> Type <code>turn on game mode</code> or <code>turn off game mode</code><br/>
 • <strong>🔌 Model Context Protocol (MCP):</strong> Custom JSON-RPC tool binding for DCCs<br/>
-• <strong>🤖 Agentic AI &amp; Vibe Coding:</strong> Claude Code, Google Antigravity &amp; subagent swarms<br/>
+• <strong>🧠 Agentic AI &amp; Vibe Coding:</strong> Claude Code, Google Antigravity &amp; subagent swarms<br/>
 • <strong>🔒 On-Premise LLMs &amp; OpenClaw:</strong> Nous Hermes, Ollama, and 4-bit GGUF/AWQ quantization<br/>
 • <strong>🎬 OpenUSD Pipeline:</strong> Non-destructive 2-tier sublayer composition<br/>
 • <strong>📦 Conform Ingest &amp; VFX I/O:</strong> Editorial turnovers, DI discrepancy reporting &amp; OTIO<br/>
@@ -2054,7 +2054,7 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
       const typingDiv = document.createElement('div');
       typingDiv.className = 'ai-message ai-bot-msg bot-message ai-typing-indicator';
       typingDiv.innerHTML = `
-        <div class="ai-msg-avatar">CH</div>
+        <div class="ai-msg-avatar" title="Charlie (AI Assistant)">🤖</div>
         <div class="ai-msg-body">
           <div class="ai-msg-author">Charlie <span>retrieving local weights...</span></div>
           <div class="ai-msg-content ai-typing-bubble">
@@ -2105,7 +2105,7 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
         }
 
         botMsgDiv.innerHTML = `
-          <div class="ai-msg-avatar">CH</div>
+          <div class="ai-msg-avatar" title="Charlie (AI Assistant)">🤖</div>
           <div class="ai-msg-body">
             <div class="ai-msg-author">Charlie <span>Rajeev's AI Assistant</span></div>
             <div class="ai-msg-content">${match.response}</div>
@@ -2164,7 +2164,7 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
         e.stopPropagation();
         const targetSection = document.getElementById('charlie') || document.getElementById('ai-assistant');
         if (targetSection) {
-          const navOffset = 75;
+          const navOffset = 115; // Generous space on top so "Technical Arsenal Knowledge Base" tag label & title are fully visible
           const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset - navOffset;
           window.scrollTo({
             top: Math.max(0, sectionTop),

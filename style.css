@@ -2290,6 +2290,11 @@ body {
 /* ==========================================================================
    🤖 Interactive AI Assistant & Technical Knowledge Base (Charlie)
    ========================================================================== */
+#charlie,
+#ai-assistant {
+  scroll-margin-top: 115px;
+}
+
 .ai-bot-terminal {
   max-width: 1040px;
   margin: 1.5rem auto 0 auto;
@@ -2540,16 +2545,18 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #00f2fe 0%, #2563eb 100%);
-  color: #050811;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(56, 189, 248, 0.35) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  color: #ffffff;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.76rem;
+  font-size: 1.08rem;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 242, 254, 0.35);
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
+  line-height: 1;
 }
 
 .ai-message.ai-user-msg .ai-msg-avatar,
