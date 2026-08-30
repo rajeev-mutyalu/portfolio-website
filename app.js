@@ -2154,6 +2154,40 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
         renderBotResponse(q);
       });
     }
+
+    // 3. Setup Floating Quick-Launcher for Charlie (AI)
+    const floatingCharlieBtn = document.getElementById('floatingCharlieBtn');
+    const charlieSection = document.getElementById('charlie');
+
+    if (floatingCharlieBtn && charlieSection) {
+      function updateFloatingCharlieVisibility() {
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const rect = charlieSection.getBoundingClientRect();
+        const isInCharlieView = rect.top <= window.innerHeight * 0.75 && rect.bottom >= window.innerHeight * 0.25;
+
+        // Show launcher when scrolled down past 250px and NOT actively viewing the Charlie section
+        if (scrollY > 250 && !isInCharlieView) {
+          floatingCharlieBtn.classList.remove('hidden');
+        } else {
+          floatingCharlieBtn.classList.add('hidden');
+        }
+      }
+
+      window.addEventListener('scroll', updateFloatingCharlieVisibility, { passive: true });
+      updateFloatingCharlieVisibility();
+
+      floatingCharlieBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        charlieSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+          if (aiInputField) {
+            aiInputField.focus();
+            aiInputField.classList.add('input-pulse-highlight');
+            setTimeout(() => aiInputField.classList.remove('input-pulse-highlight'), 1200);
+          }
+        }, 450);
+      });
+    }
   }
 
   if (document.readyState === 'loading') {

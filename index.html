@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=70" />
+  <link rel="stylesheet" href="style.css?v=71" />
 </head>
 
 <body>
@@ -1227,6 +1227,17 @@
     </div>
   </div>
 
+  <!-- 🤖 Floating Quick-Access Charlie (AI) Launcher -->
+  <button type="button" class="floating-charlie-btn hidden" id="floatingCharlieBtn" title="Jump to Charlie (AI Assistant)" aria-label="Chat with Charlie AI">
+    <span class="floating-charlie-pulse"></span>
+    <span class="floating-charlie-avatar">🤖</span>
+    <span class="floating-charlie-text">Ask Charlie (AI)</span>
+    <svg class="floating-charlie-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <polyline points="19 12 12 19 5 12"></polyline>
+    </svg>
+  </button>
+
   <!-- 🚀 Mission Announcement Toast / Banner -->
   <div class="mission-toast hidden" id="missionToast">
     <div class="mission-toast-icon">⚡</div>
@@ -1249,7 +1260,7 @@
     <button type="button" class="mission-toast-close" id="desktopNoticeToastClose" title="Dismiss">&times;</button>
   </div>
 
-  <script src="app.js?v=70"></script>
+  <script src="app.js?v=71"></script>
 </body>
 
 </html>
