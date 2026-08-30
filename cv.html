@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=77" />
+  <link rel="stylesheet" href="style.css?v=78" />
 </head>
 
 <body class="cv-body">
@@ -43,6 +43,16 @@
       </a>
 
       <div class="cv-topbar-actions">
+        <!-- 📋 1-Click Copy ATS-Clean Resume Text -->
+        <button type="button" class="btn btn-secondary btn-sm" id="copyAtsBtn"
+          title="Copy ATS-Clean Plain Text Resume to Clipboard">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          <span id="copyAtsText"><span class="btn-text-full">📋 Copy ATS Text</span><span class="btn-text-short">📋 ATS Text</span></span>
+        </button>
+
         <!-- Theme Mode Toggle (Plain B&W / Colorful Dark) -->
         <button type="button" class="btn btn-secondary btn-sm" id="cvThemeToggle"
           title="Switch to Plain White &amp; Black Mode">
@@ -119,6 +129,13 @@
                 UK Work Authorised (Valid Visa Held &bull; CoS Transfer Ready &bull; Immediate Notice)
               </span>
             </div>
+            <div class="cv-quick-metrics">
+              <span class="cv-metric-tag">⏱️ 3-Min Executive Read</span>
+              <span class="cv-metric-divider">&bull;</span>
+              <span class="cv-metric-tag">🎯 Lead Pipeline Architect | AI Systems Director | Senior VFX TD</span>
+              <span class="cv-metric-divider">&bull;</span>
+              <span class="cv-metric-tag">📍 London, United Kingdom</span>
+            </div>
           </div>
         </div>
 
@@ -178,14 +195,28 @@
       <!-- =====================================================================
            3. TECHNICAL ARSENAL & CORE COMPETENCIES
            ===================================================================== -->
-      <section class="cv-section">
+      <section class="cv-section" id="cvSkillsSection">
         <h2 class="cv-section-title">
           <span class="cv-sec-icon">⚡</span> Technical Arsenal &amp; Core Competencies
         </h2>
+
+        <!-- Interactive Domain Spotlight Filter (Screen Only) -->
+        <div class="cv-filter-bar screen-only" id="cvSkillFilterBar">
+          <span class="cv-filter-label">🔍 Spotlight Focus:</span>
+          <div class="cv-filter-pills">
+            <button type="button" class="cv-filter-btn active" data-filter="all">🌐 All Domains</button>
+            <button type="button" class="cv-filter-btn" data-filter="usd">🎬 OpenUSD &amp; VFX Pipelines</button>
+            <button type="button" class="cv-filter-btn" data-filter="ai">🧠 Agentic AI, MCP &amp; LLMs</button>
+            <button type="button" class="cv-filter-btn" data-filter="conform">📦 Ingest, Conform &amp; OTIO</button>
+            <button type="button" class="cv-filter-btn" data-filter="automation">⚡ Automation &amp; n8n Hub</button>
+            <button type="button" class="cv-filter-btn" data-filter="lead">👥 Engineering Leadership</button>
+          </div>
+        </div>
+
         <div class="cv-skills-grid">
           
           <!-- 1. Core Software & UI Systems -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="automation lead usd">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-cyan">Core Systems</span>
               <h3>🐍 Core Software &amp; UI Systems</h3>
@@ -197,7 +228,7 @@
           </div>
 
           <!-- 2. Open Standards & VFX APIs -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="usd conform">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-emerald">VFX Standards</span>
               <h3>📦 Open Standards &amp; VFX APIs</h3>
@@ -209,7 +240,7 @@
           </div>
 
           <!-- 3. Agentic AI & Coding -->
-          <div class="cv-skill-box cv-highlight-box">
+          <div class="cv-skill-box cv-highlight-box" data-category="ai">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-violet">Frontier AI</span>
               <h3>🧠 Agentic AI &amp; Coding</h3>
@@ -221,7 +252,7 @@
           </div>
 
           <!-- 4. Model Context Protocol (MCP) -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="ai automation">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-pink">MCP Protocol</span>
               <h3>🔌 Model Context Protocol (MCP)</h3>
@@ -233,7 +264,7 @@
           </div>
 
           <!-- 5. Zero-Touch Studio Automation -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="automation conform">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-lime">Automation</span>
               <h3>⚡ Zero-Touch Studio Automation</h3>
@@ -245,7 +276,7 @@
           </div>
 
           <!-- 6. On-Premise Private LLMs -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="ai">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-amber">Private AI</span>
               <h3>🔒 On-Premise Private LLMs</h3>
@@ -257,7 +288,7 @@
           </div>
 
           <!-- 7. Conversational Voice AI -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="ai">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-coral">Voice AI</span>
               <h3>🎙️ Conversational Voice AI</h3>
@@ -269,7 +300,7 @@
           </div>
 
           <!-- 8. Generative Video & Web Ingest -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="ai usd">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-blue">Video GenAI</span>
               <h3>🎬 Generative Video &amp; Web Ingest</h3>
@@ -281,7 +312,7 @@
           </div>
 
           <!-- 9. VFX Pipeline & Production -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="usd conform lead">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-teal">Pipeline Architecture</span>
               <h3>🎥 VFX Pipeline &amp; Production</h3>
@@ -293,7 +324,7 @@
           </div>
 
           <!-- 10. Engineering Leadership & Mentorship -->
-          <div class="cv-skill-box">
+          <div class="cv-skill-box" data-category="lead">
             <div class="cv-skill-header">
               <span class="cv-skill-badge badge-orange">Executive Leadership</span>
               <h3>👥 Engineering Leadership</h3>
@@ -319,7 +350,7 @@
         <div class="cv-timeline-rail">
 
           <!-- Role 1: Astra Studios -->
-          <div class="cv-timeline-item">
+          <div class="cv-timeline-item" data-category="usd ai conform automation lead">
             <div class="cv-timeline-marker marker-current"></div>
             <div class="cv-job cv-job-highlight">
               <div class="cv-job-header">
@@ -342,7 +373,7 @@
           </div>
 
           <!-- Role 2: Technicolor Group (London) -->
-          <div class="cv-timeline-item">
+          <div class="cv-timeline-item" data-category="lead usd conform automation">
             <div class="cv-timeline-marker"></div>
             <div class="cv-job">
               <div class="cv-job-header">
@@ -365,7 +396,7 @@
           </div>
 
           <!-- Role 3: Technicolor Group (Bangalore) -->
-          <div class="cv-timeline-item">
+          <div class="cv-timeline-item" data-category="lead automation">
             <div class="cv-timeline-marker"></div>
             <div class="cv-job">
               <div class="cv-job-header">
@@ -386,7 +417,7 @@
           </div>
 
           <!-- Role 4: MPC Film -->
-          <div class="cv-timeline-item">
+          <div class="cv-timeline-item" data-category="usd conform automation lead">
             <div class="cv-timeline-marker"></div>
             <div class="cv-job">
               <div class="cv-job-header">
@@ -408,7 +439,7 @@
           </div>
 
           <!-- Role 5: Technicolor R&D / Technology -->
-          <div class="cv-timeline-item">
+          <div class="cv-timeline-item" data-category="lead automation">
             <div class="cv-timeline-marker"></div>
             <div class="cv-job">
               <div class="cv-job-header">
@@ -429,7 +460,7 @@
           </div>
 
           <!-- Role 6: Technicolor International Collaboration -->
-          <div class="cv-timeline-item">
+          <div class="cv-timeline-item" data-category="lead automation">
             <div class="cv-timeline-marker"></div>
             <div class="cv-job">
               <div class="cv-job-header">
@@ -450,7 +481,7 @@
           </div>
 
           <!-- Role 7: e4e & Dhruva Interactive -->
-          <div class="cv-timeline-item">
+          <div class="cv-timeline-item" data-category="lead">
             <div class="cv-timeline-marker"></div>
             <div class="cv-job">
               <div class="cv-job-header">
@@ -610,6 +641,147 @@
       });
     }
 
+    // Helper: Toast Notification
+    function showCvToast(msg, icon = '✅') {
+      const existingToast = document.querySelector('.cv-toast');
+      if (existingToast) existingToast.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'cv-toast';
+      toast.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(12px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 320);
+      }, 3000);
+    }
+
+    // 📋 1-Click Copy ATS-Clean Resume Text
+    const copyAtsBtn = document.getElementById('copyAtsBtn');
+    const copyAtsText = document.getElementById('copyAtsText');
+
+    const ATS_RESUME_TEXT = `RAJEEV MUTYALU
+Lead Software Architect & Creative Technologist
+Location: London, United Kingdom | Phone: +44 7827 498399 | Email: mutyalu.rajeev@gmail.com
+Portfolio: https://rajeev-mutyalu.github.io/portfolio-website/
+LinkedIn: https://www.linkedin.com/in/rajeevmuthyalu/ | GitHub: https://github.com/rajeev-mutyalu
+UK Work Authorization: Valid Visa Held, Immediate CoS Transfer Ready
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+Visionary Lead Software Architect, R&D Supervisor, and Creative Technologist with 20+ years of distinguished leadership across visual effects pipeline architecture, zero-touch studio automation, and frontier Generative AI platform engineering (Astra Studios, Technicolor Group, MPC Film). Bridges production-grade OpenUSD modular pipelines and Editorial Turnover & Conform workflows with cutting-edge autonomous agentic AI ecosystems, custom Model Context Protocol (MCP) tool servers, event-driven n8n studio automation hubs, on-premise private LLMs, and frontier video generation platforms.
+
+Spearheaded global rollout of VFX review systems (ReviewTool) caching 4K+ media in real-time. Engineered robust Editorial Turnover, Conform & I/O pipelines with automated DI discrepancy reporting and ShotGrid synchronization across Academy Award-winning productions (1917, RRR, Mufasa: The Lion King). Associate Member of Technicolor Fellowship Network Committee with 9+ leadership excellence awards.
+
+================================================================================
+CORE COMPETENCIES & TECHNICAL ARSENAL
+================================================================================
+• Core Software & Systems: Python 3.x (Expert), PyQt / PySide (UI/UX), C++, Java, Objective-C, Cocoa, Shell Scripting, Docker, Linux/Unix, REST APIs, FastAPI, Git, Tractor Render Farm.
+• Open Standards & VFX: OpenUSD (USD API, Composition Arcs, Layer Stacking, Edit Targets), OpenTimelineIO (OTIO), OpenColorIO (OCIO), ACES Color Pipeline, Hiero / Nuke Studio Python API, ShotGrid API.
+• Frontier Agentic AI: Claude Code (Terminal CLI), Claude Cowork/Design, Google Antigravity, Subagent Orchestration, Task Decomposition, Autonomous Code Generation & Refactoring.
+• Model Context Protocol (MCP): Custom MCP Server Architecture, JSON-RPC 2.0 Protocol, Tool & Resource Schemas, Production API Tool Binding.
+• Studio Automation: n8n Workflow Automation Hub, Inbound & Reverse Webhooks, Async Event Routing, Automated Show Onboarding, Smart Plate Validation.
+• On-Premise Private LLMs: Ollama, MSTY Studio, LM Studio, Nous Hermes, OpenClaw, Local GGUF/AWQ Quantization, Air-Gapped Private AI Deployments.
+• Editorial Turnover & Conform: Package Inspection, DI Discrepancy Reporting, Regex Pattern Generation, Multi-Track Hiero Conform, CDL/LUT Processing, USD Plate Sublayering.
+• Engineering Leadership: Leading R&D Software Engineering Teams across London, Montreal, Bangalore; Agile / Scrum Sprint Execution, Cross-Site Technical Alignment.
+
+================================================================================
+PROFESSIONAL EXPERIENCE
+================================================================================
+ASTRA STUDIOS — London, UK
+Lead Software Architect | Sep 2025 – Present
+• OpenUSD Pipeline: Architected an end-to-end OpenUSD pipeline from modeling to compositing for full-CG and live-action VFX.
+• Editorial Turnover & Conform I/O: Engineered the studio's Editorial Turnover, Conform & I/O pipeline from scratch, integrating turnover package inspection, automated DI discrepancy reporting, regex pattern generation, multi-track Hiero conform, CDL grades, shot LUTs, and USD plate sublayering.
+• Zero-Touch Studio Automation: Orchestrated zero-touch n8n studio automation hubs using inbound and reverse webhooks for automated show onboarding, smart plate validation, and ShotGrid metadata injection.
+• Studio.AI GenAI Platform: Engineered the Studio.AI GenAI platform, integrating prompt-to-video engines (Google Veo, Kling AI, Higgsfield, Seedance) with character identity locks and ACES color conforming.
+
+TECHNICOLOR GROUP — London, UK
+R&D Supervisor | Mar 2023 – Feb 2025
+• Global R&D Leadership: Led globally distributed R&D software engineering teams across London, Montreal, and Bangalore supporting Compositing, Roto, Paint Prep, Camera Tracking, and Rotoanim departments.
+• ReviewTool Studio Architecture: Spearheaded design and global architecture of the VFX Review System (ReviewTool) with real-time 4K+ media caching, multi-facility synchronization, and seamless RV integration.
+• ProNuke Modular Ecosystem: Engineered ProNuke modular shot assembly with Gather UI for automated shot builds, Release UI for sequence-level publishing, and Batch Manager bulk render automation.
+• Meshroom Photogrammetry: Integrated Meshroom into matchmove workflows, cutting camera extraction time from days to hours with fast switching between Meshroom, Maya, and 3D Equalizer.
+• Conform Ingest Automation: Supervised Conform Ingest workflows using Hiero and Nuke Studio, automated CDL and LUT grade processing, and ShotGrid frame range validation.
+
+TECHNICOLOR GROUP — Bengaluru, India
+R&D Supervisor | Jan 2022 – Feb 2023
+• 2D Software Engineering: Headed 2D software engineering and pipeline development across Bangalore and Montreal hubs.
+• Review Platform Prototyping: Architected core compositing automation tools and early prototypes of the studio VFX review platform (ReviewTool).
+• Agile Execution: Mentored engineers, established Agile and Scrum sprint frameworks, and aligned dev priorities with production executives.
+
+MPC FILM — Bengaluru, India
+Lead Pipeline Software Developer | Jul 2017 – Dec 2021
+• Oscar-Winning Pipeline: Led core 2D pipeline solutions across Academy Award-winning films and global tentpole productions (1917, RRR, The Lion King).
+• RPM Unification: Spearheaded the RPM Unification project across MPC, MR.X, and The Mill, standardizing software toolsets and UI/UX across compositing and tracking departments.
+• Nuke Bridge Hub: Developed Nuke Bridge integrating Tessa (AMS), ShotGrid (PMS), and Tractor (Render Farm), establishing a version-controlled, high-throughput pipeline.
+• Render Dispatcher: Engineered the Nuke Render Dispatcher with automated render order traversal and Reserve & Commit dispatch mechanics.
+
+TECHNICOLOR — Bengaluru, India
+Team Lead – Technology & R&D Production | Jul 2012 – Jun 2017
+• Media Engines: Architected macOS AVFoundation and QuickTime media processing engines (Channel Mapper, Frame Rate Converter, Compliance Edit Lists).
+• Team Management: Managed an engineering team of 7 developers across C++, Objective-C, Cocoa, and Java, optimizing production compression and authoring pipelines.
+• Hardware Compliance: Primary technical contact for player manufacturers, resolving Blu-ray authoring framework and playback compatibility issues.
+
+TECHNICOLOR — Bengaluru, India / Los Angeles, USA / Hannover, Germany
+Senior Software Engineer – Technology | May 2008 – Jun 2012
+• Disney Collaboration (Los Angeles): Collaborated on-site with Disney engineering in Los Angeles to architect Fast Menu Load (FML) template and integrate Generation 2 Bootloaders (G2B).
+• World First 3D Blu-ray (Hannover): Engineered core 3D capabilities into BD-J Authoring framework at Technicolor R&I in Hannover, Germany, for the world's first released 3D Blu-ray disc.
+• Founding Engineer: Founding software engineer at Technicolor India, building runtime alignment engines ('Graphics Adjuster') and studio authoring templates.
+
+E4E & DHRUVA INTERACTIVE — Bengaluru, India
+Application Engineer & Game Programmer | Sep 2006 – Apr 2008
+• Ported mobile game titles to Nokia, Motorola, Samsung, and Sony Ericsson devices for T-Mobile and Verizon; engineered touchscreen interfaces for early mobile OS platforms.
+
+================================================================================
+MAJOR FILM & TENTPOLE CREDITS
+================================================================================
+• 1917 (2019) — Academy Award Winner: Best Visual Effects
+• RRR (2022) — Academy Award Winner & Global Phenomenon
+• Mufasa: The Lion King (2024) — Disney Live-Action Tentpole
+• Back in Action (2025) — Netflix Feature Production
+• Spaceman (2024) — Sci-Fi Feature Production
+• Prehistoric Planet (2022–2023) — Apple TV+ Natural History Landmark Series
+
+================================================================================
+HONORS & AWARDS
+================================================================================
+• Technicolor Fellowship Network: Associate Member, Technology & Innovation Network Committee (2020 – 2025)
+• MPC & Technicolor Excellence: 9+ Studio Excellence & Leadership Awards for architectural innovation and global production delivery.
+
+================================================================================
+EDUCATION
+================================================================================
+Bachelor of Technology (B.Tech) in Computer Science & Engineering (2002 – 2006)
+Jawaharlal Nehru Technological University (JNTU) / SVCET
+`;
+
+    if (copyAtsBtn) {
+      copyAtsBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(ATS_RESUME_TEXT).then(() => {
+          if (copyAtsText) {
+            copyAtsText.innerHTML = '<span class="btn-text-full">✅ Copied!</span><span class="btn-text-short">✅ Copied!</span>';
+          }
+          copyAtsBtn.style.borderColor = 'var(--accent-emerald)';
+          copyAtsBtn.style.color = 'var(--accent-emerald)';
+          showCvToast('ATS-Clean Plaintext Resume copied to clipboard! Ready to paste into job portals.');
+
+          setTimeout(() => {
+            if (copyAtsText) {
+              copyAtsText.innerHTML = '<span class="btn-text-full">📋 Copy ATS Text</span><span class="btn-text-short">📋 ATS Text</span>';
+            }
+            copyAtsBtn.style.borderColor = '';
+            copyAtsBtn.style.color = '';
+          }, 2500);
+        }).catch(err => {
+          showCvToast('Failed to copy: ' + err, '⚠️');
+        });
+      });
+    }
+
     // Copy Email Handler
     const copyBtn = document.getElementById('copyContactBtn');
     const copyText = document.getElementById('copyBtnText');
@@ -621,6 +793,7 @@
           }
           copyBtn.style.borderColor = 'var(--accent-emerald)';
           copyBtn.style.color = 'var(--accent-emerald)';
+          showCvToast('Contact details copied to clipboard!');
           setTimeout(() => {
             if (copyText) {
               copyText.innerHTML = '<span class="btn-text-full">Copy Email</span><span class="btn-text-short">Email</span>';
@@ -628,6 +801,55 @@
             copyBtn.style.borderColor = '';
             copyBtn.style.color = '';
           }, 2500);
+        });
+      });
+    }
+
+    // 🔍 Interactive Domain Spotlight Filter Handler
+    const filterBar = document.getElementById('cvSkillFilterBar');
+    if (filterBar) {
+      const filterBtns = filterBar.querySelectorAll('.cv-filter-btn');
+      const skillBoxes = document.querySelectorAll('.cv-skill-box');
+      const timelineItems = document.querySelectorAll('.cv-timeline-item');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-filter');
+
+          // Update active button state
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          if (filter === 'all') {
+            skillBoxes.forEach(box => {
+              box.classList.remove('cv-dimmed', 'cv-spotlight');
+            });
+            timelineItems.forEach(item => {
+              item.classList.remove('cv-dimmed', 'cv-spotlight');
+            });
+          } else {
+            skillBoxes.forEach(box => {
+              const cats = (box.getAttribute('data-category') || '').split(' ');
+              if (cats.includes(filter)) {
+                box.classList.add('cv-spotlight');
+                box.classList.remove('cv-dimmed');
+              } else {
+                box.classList.add('cv-dimmed');
+                box.classList.remove('cv-spotlight');
+              }
+            });
+
+            timelineItems.forEach(item => {
+              const cats = (item.getAttribute('data-category') || '').split(' ');
+              if (cats.includes(filter)) {
+                item.classList.add('cv-spotlight');
+                item.classList.remove('cv-dimmed');
+              } else {
+                item.classList.add('cv-dimmed');
+                item.classList.remove('cv-spotlight');
+              }
+            });
+          }
         });
       });
     }

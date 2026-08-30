@@ -4284,6 +4284,180 @@ body.cv-theme-light .ambient-glow {
   transform: translateY(0) translateZ(0) !important;
 }
 
+/* Copy ATS Button in Topbar */
+#copyAtsBtn {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+  color: #c084fc !important;
+}
+
+#copyAtsBtn:hover {
+  background: rgba(168, 85, 247, 0.15) !important;
+  border-color: #c084fc !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3) !important;
+}
+
+/* Executive Quick Scan Metrics */
+.cv-quick-metrics {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.cv-metric-tag {
+  color: #38bdf8;
+  font-weight: 600;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+body.cv-theme-light .cv-metric-tag {
+  color: #0369a1 !important;
+  background: #f0f9ff !important;
+  border-color: #bae6fd !important;
+}
+
+.cv-metric-divider {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* Interactive Skill Focus Filter Bar */
+.cv-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  background: rgba(10, 15, 28, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+}
+
+.cv-filter-label {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.cv-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cv-filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-family: var(--font-mono);
+  font-size: 0.70rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.cv-filter-btn:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #ffffff;
+}
+
+.cv-filter-btn.active {
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(59, 130, 246, 0.25));
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+/* Dimmed & Spotlight Transition states */
+.cv-skill-box,
+.cv-timeline-item,
+.cv-job {
+  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.cv-dimmed {
+  opacity: 0.22 !important;
+  filter: grayscale(0.7) blur(0.2px) !important;
+  transform: scale(0.985);
+  pointer-events: none;
+}
+
+.cv-spotlight {
+  opacity: 1.0 !important;
+  filter: none !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.25) !important;
+}
+
+body.cv-theme-light .cv-filter-bar {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.cv-theme-light .cv-filter-label {
+  color: #0369a1 !important;
+}
+
+body.cv-theme-light .cv-filter-btn {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+body.cv-theme-light .cv-filter-btn.active {
+  background: #0284c7 !important;
+  border-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+/* Floating Toast for ATS Copy and Actions */
+.cv-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(10, 16, 32, 0.95);
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  padding: 12px 18px;
+  color: #f8fafc;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(16, 185, 129, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  animation: toastSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 body.cv-theme-light .cv-card {
   background: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
@@ -4794,13 +4968,22 @@ body.cv-theme-light .cv-edu-year {
     size: A4 portrait;
   }
 
-  /* Hide interactive elements, canvas, topbars, and glow effects */
+  /* Hide interactive elements, canvas, topbars, filter bars, toasts, and glow effects */
   .cv-topbar,
+  .screen-only,
+  .cv-filter-bar,
+  .cv-toast,
   #cometCanvas,
   .ambient-glow,
   .mobile-nav-toggle,
   .mobile-nav-drawer {
     display: none !important;
+  }
+
+  .cv-dimmed {
+    opacity: 1.0 !important;
+    filter: none !important;
+    transform: none !important;
   }
 
   html, body, .cv-body, body.cv-theme-dark, body.cv-theme-light {

@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="shortcut icon" href="favicon.ico" />
 
-  <link rel="stylesheet" href="style.css?v=77" />
+  <link rel="stylesheet" href="style.css?v=78" />
 
   <style>
     /* Dedicated Cover Letter Layout */
@@ -521,6 +521,23 @@
       });
     }
 
+    function showCvToast(msg, icon = '✅') {
+      const existingToast = document.querySelector('.cv-toast');
+      if (existingToast) existingToast.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'cv-toast';
+      toast.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(12px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 320);
+      }, 3000);
+    }
+
     // Copy Letter Text
     const copyBtn = document.getElementById('copyLetterBtn');
     const copyText = document.getElementById('copyLetterText');
@@ -531,6 +548,7 @@
         
         navigator.clipboard.writeText(fullContent).then(() => {
           copyText.textContent = 'Copied!';
+          showCvToast('Executive Cover Letter text copied to clipboard!');
           setTimeout(() => {
             copyText.textContent = 'Copy Letter';
           }, 2000);
