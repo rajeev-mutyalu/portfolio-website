@@ -1575,9 +1575,9 @@
           '🚀 <strong>HIGH-LEVERAGE CAPABILITY BRIEF // RAJEEV MUTYALU</strong>'
         ],
         responses: [
-          `<strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &amp; Creative Technologist with 20+ years of proven R&amp;D leadership across MPC, DNEG, and Technicolor on Oscar-winning blockbuster productions (<em>1917, Blade Runner 2049, Tenet, Life of Pi, The Lion King</em>).<br/>
+          `<strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &amp; Creative Technologist with 20+ years of proven R&amp;D leadership across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning blockbuster productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
-• <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London and Bangalore.<br/>
+• <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London, Montreal, and Bangalore.<br/>
 • <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bangalore under strict Hollywood delivery deadlines.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
@@ -1586,9 +1586,9 @@
 
           `<strong>💎 The Rare "Dual-Threat" Engineering Moat:</strong><br/>
 Most senior leaders either manage people or write code; Rajeev bridges high-level architectural strategy with deep, daily code execution.<br/>
-• <strong>🏗️ Traditional Heavyweight Foundation:</strong> 20+ years building Linux render clusters, low-level Python/C++ OpenUSD composition arcs, ShotGrid databases, and automated DI conform engines across MPC, Technicolor, and DNEG.<br/>
+• <strong>🏗️ Traditional Heavyweight Foundation:</strong> 20+ years building Linux render clusters, low-level Python/C++ OpenUSD composition arcs, ShotGrid databases, and automated DI conform engines across Astra Studios, Technicolor Group, and MPC Film.<br/>
 • <strong>⚡ Applied AI Frontier Leadership:</strong> Early pioneer in production MCP (Model Context Protocol) tool servers, autonomous Claude Code/Devin swarms, and air-gapped private LLM deployments (Nous Hermes, Ollama 4-bit GGUF).<br/>
-• <strong>🎬 Oscar-Winning Deliverables:</strong> Key pipeline architect behind Academy Award winners <em>1917</em>, <em>Tenet</em>, <em>The Lion King</em>, and <em>RRR</em>.<br/>
+• <strong>🎬 Oscar-Winning &amp; Landmark Deliverables:</strong> Key pipeline architect across Academy Award-winning productions and global tentpoles (<em>1917</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>, <em>Back in Action</em>, <em>Spaceman</em>, <em>Prehistoric Planet</em>).<br/>
 • <strong>🏆 Production Heritage:</strong> Trusted technical leader on landmark VFX and animation sequences for Disney, Warner Bros, Universal, and Netflix.<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Review Full Career Timeline &amp; Credits &rarr;</a>
 <a href="#initiatives" class="ai-section-link">🚀 Inspect Technical Arsenal &rarr;</a>`,
@@ -1605,7 +1605,7 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 • <strong>🤝 London–Bangalore Engineering Bridge:</strong> Successfully aligned multi-site teams of 40+ software developers and pipeline TDs, delivering high-throughput 24/7 studio follow-the-sun workflows.<br/>
 • <strong>📦 Open Standards Champion:</strong> Proven expert in OpenUSD 2-tier composition, OpenTimelineIO (OTIO) cut conforms, and OpenColorIO (OCIO / ACEScg) color science.<br/>
 • <strong>🧠 Frontier AI Integration:</strong> Architect of <em>Scene Weaver (Studio.AI)</em>, integrating Google Veo, Kling, and Seedance into conformed VFX studio pipelines.<br/>
-• <strong>🏆 Production Proof:</strong> Credits on <em>1917, Cruella, The Lion King, Life of Pi, Mufasa</em>.<br/><br/>
+• <strong>🏆 Production Proof:</strong> Credits on <em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>.<br/><br/>
 <a href="#architecture" class="ai-section-link">🎬 Launch Interactive Pipeline Visualizer &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
         ],
@@ -1629,14 +1629,14 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
         ],
         responses: [
           `• <strong>🎨 Creative Technologist at Heart:</strong> Rajeev combines the sharp aesthetic eye of a seasoned visual effects artist with the rigorous mathematical foundations of a software systems architect.<br/>
-• <strong>🎬 20-Year Evolution:</strong> Started in the early 2000s mastering traditional computer graphics, 3D modeling, and editorial plate conform, evolving into a Lead Architect across Oscar-winning tentpole films (<em>1917, The Lion King, Tenet, RRR</em>).<br/>
+• <strong>🎬 20-Year Evolution:</strong> Started in the early 2000s mastering traditional computer graphics, 3D modeling, and editorial plate conform, evolving into a Lead Architect across Oscar-winning tentpole films and landmark productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
 • <strong>💎 The Dual-Threat Moat:</strong> Equally at home debugging low-level C++/Python OpenUSD composition arcs on Linux render clusters as he is designing cutting-edge agentic workflows, MCP servers, and local quantized LLMs.<br/>
 • <strong>⌨️ Studio Craftsmanship:</strong> Passionate about clean code, ultra-responsive developer tooling, sub-second terminal latency, and optimizing studio pipelines down to the millisecond.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Bio &rarr;</a>`,
 
           `• <strong>🛠️ Engineering Purist:</strong> Obsessed with clean, robust code architecture, sub-second terminal latency, and zero-defect deployments.<br/>
-• <strong>🎞️ Blockbuster Pedigree:</strong> Contributed technical leadership to Academy Award-winning sequences in <em>1917</em> and groundbreaking CG in <em>The Lion King</em>.<br/>
+• <strong>🎞️ Blockbuster Pedigree:</strong> Contributed technical leadership to Academy Award-winning sequences in <em>1917</em>, <em>RRR</em>, and landmark Disney production <em>Mufasa: The Lion King</em>.<br/>
 • <strong>🚀 Modern Frontier:</strong> Leading the adoption of local private AI models, Model Context Protocol (MCP), and autonomous agent swarms in visual effects.<br/>
 • <strong>🤝 Leadership Rigor:</strong> Champions test-driven development, automated code review gates, and non-blocking architectural patterns across multi-site studios.<br/><br/>
 <a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
@@ -2012,7 +2012,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
           `• <strong>📦 VFX Plate Ingest &amp; Proxy Automation:</strong><br/>
 • <strong>🎞️ Automated Blade/Farm Dispatch:</strong> Ingests raw camera footage, generates half-res QuickTime proxies, extracts audio stems, and publishes ShotGrid versions with zero manual clicks.<br/>
 • <strong>🔄 OTIO Synchronization:</strong> Transcribes cut changes into OpenTimelineIO tracks for Nuke Studio conform.<br/>
-• <strong>💎 Proven on Blockbusters:</strong> Battle-tested across <em>1917, Tenet, The Lion King, RRR</em>.<br/><br/>
+• <strong>💎 Proven on Blockbusters:</strong> Battle-tested across <em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>.<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 Launch Pipeline Visualizer &rarr;</a>`
         ],
@@ -2025,7 +2025,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
       },
       {
         id: 'leadership_career',
-        keywords: ['career', 'experience', 'timeline', 'background', 'credits', 'films', '1917', 'lion king', 'tenet', 'blade runner', 'leadership', 'mentorship', 'r&d', 'management', 'agile', 'scrum', 'technicolor', 'mpc', 'dneg', 'astra'],
+        keywords: ['career', 'experience', 'timeline', 'background', 'credits', 'films', 'filmography', '1917', 'rrr', 'lion king', 'mufasa', 'back in action', 'spaceman', 'prehistoric planet', 'leadership', 'mentorship', 'r&d', 'management', 'agile', 'scrum', 'technicolor', 'mpc', 'astra'],
         title: 'Engineering Leadership & 20-Year Milestones',
         intros: [
           '👥 <strong>20-YEAR ENGINEERING LEADERSHIP // FILM CREDITS &amp; TENURES</strong>',
@@ -2034,23 +2034,37 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
         ],
         responses: [
           `• <strong>📌 Leadership Background:</strong> Lead Software Architect &amp; Creative Technologist based in London, UK (British Citizen) with <strong>20+ years of Tier-1 leadership</strong> across global visual effects studios.<br/>
-• <strong>🎯 Studio Tenures:</strong> Astra Studios (2024–Pres.), Technicolor London (2021–2024), Technicolor Bangalore (2017–2021), MPC Film (2014–2017).<br/>
-• <strong>💡 Tentpole Film Credits:</strong> <em>1917</em> (Academy Award Winner), <em>The Lion King</em>, <em>Cruella</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>, <em>Life of Pi</em>.<br/>
-• <strong>🚀 Mentorship &amp; Agile:</strong> Scaled and mentored multi-site engineering teams, establishing rigorous sprint delivery, automated code review gates, and cross-site technical alignment.<br/><br/>
+• <strong>🎯 Verified Studio Tenures:</strong><br/>
+&nbsp;&nbsp;• <strong>Astra Studios</strong> (London, UK) &mdash; Lead Software Architect (Sep 2025 &ndash; Present)<br/>
+&nbsp;&nbsp;• <strong>Technicolor Group</strong> (London, UK) &mdash; R&amp;D Supervisor (Mar 2023 &ndash; Feb 2025)<br/>
+&nbsp;&nbsp;• <strong>Technicolor Group</strong> (Bengaluru, India) &mdash; R&amp;D Supervisor (Jan 2022 &ndash; Feb 2023)<br/>
+&nbsp;&nbsp;• <strong>MPC Film</strong> (Bengaluru, India) &mdash; Lead Pipeline Software Developer (Jul 2017 &ndash; Dec 2021)<br/>
+&nbsp;&nbsp;• <strong>Technicolor</strong> (Bengaluru, India) &mdash; Team Lead &ndash; Technology &amp; R&amp;D Production (Jul 2012 &ndash; Jun 2017)<br/>
+&nbsp;&nbsp;• <strong>Technicolor</strong> (Bengaluru / Los Angeles / Hannover) &mdash; Senior Software Engineer (May 2008 &ndash; Jun 2012)<br/>
+&nbsp;&nbsp;• <strong>e4e &amp; Dhruva Interactive</strong> (Bengaluru, India) &mdash; Application Engineer &amp; Game Programmer (Sep 2006 &ndash; Apr 2008)<br/>
+• <strong>💡 Major Film &amp; Tentpole Credits:</strong><br/>
+&nbsp;&nbsp;• <strong>1917 (2019)</strong> &mdash; 🏆 Academy Award Winner: Best Visual Effects (MPC Film)<br/>
+&nbsp;&nbsp;• <strong>RRR (2022)</strong> &mdash; 🏆 Academy Award Winner &amp; Global Phenomenon<br/>
+&nbsp;&nbsp;• <strong>Mufasa: The Lion King (2024)</strong> &mdash; Disney Live-Action Feature<br/>
+&nbsp;&nbsp;• <strong>Back in Action (2025)</strong> &mdash; Netflix Feature Production<br/>
+&nbsp;&nbsp;• <strong>Spaceman (2024)</strong> &mdash; Sci-Fi Feature Production<br/>
+&nbsp;&nbsp;• <strong>Prehistoric Planet (2022&ndash;2023)</strong> &mdash; Apple TV+ Natural History Landmark Series<br/><br/>
 <a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &amp; Credits &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Timeline &rarr;</a>`,
 
-          `• <strong>🏆 Academy Award &amp; Tentpole Filmography:</strong><br/>
-• <strong>1917 (2019):</strong> Academy Award for Best Visual Effects — engineered core pipeline infrastructure enabling seamless continuous-shot assembly.<br/>
-• <strong>The Lion King (2019):</strong> Groundbreaking virtual production and photorealistic asset composition at scale.<br/>
-• <strong>RRR (2022) &amp; Cruella (2021):</strong> High-throughput conform ingest and complex simulation caching pipelines.<br/>
-• <strong>Tenet &amp; Blade Runner 2049:</strong> Core technical TD contributions across heavy FX and comp sequences.<br/><br/>
+          `• <strong>🏆 Verified Filmography &amp; Production Pedigree:</strong><br/>
+• <strong>1917 (2019):</strong> 🏆 Academy Award for Best Visual Effects &mdash; engineered core 2D Nuke pipeline and review architecture at MPC Film enabling seamless continuous-take shot assembly.<br/>
+• <strong>RRR (2022):</strong> 🏆 Academy Award Winner &mdash; high-throughput visual effects execution, creature dynamics, and multi-facility shot delivery.<br/>
+• <strong>Mufasa: The Lion King (2024):</strong> Disney Live-Action Feature &mdash; photorealistic digital cinematography, massive environments, and advanced review/comp toolsets.<br/>
+• <strong>Back in Action (2025):</strong> Netflix Feature &mdash; high-energy VFX execution, plate ingestion conform, and automated review workflows.<br/>
+• <strong>Spaceman (2024):</strong> Sci-Fi Drama &mdash; photorealistic creature integration and atmospheric cosmic environment pipelines.<br/>
+• <strong>Prehistoric Planet (2022&ndash;2023):</strong> Apple TV+ Landmark Series &mdash; natural history VFX pipeline, live-action plate integration, and high-resolution review frameworks.<br/><br/>
 <a href="#films" class="ai-section-link">🏆 View Filmography Gallery &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`,
 
           `• <strong>👥 Mentorship, High-Trust Culture &amp; Agile Engineering:</strong><br/>
 • <strong>Sprint Excellence:</strong> Led multi-disciplinary teams through high-stakes delivery cycles with predictable sprint velocity and zero production crunch.<br/>
-• <strong>Cross-Continental Bridge:</strong> Successfully aligned London and Bangalore engineering hubs to operate as a unified, collaborative development engine.<br/>
+• <strong>Cross-Continental Bridge:</strong> Successfully aligned London, Montreal, and Bangalore engineering hubs to operate as a unified, collaborative development engine.<br/>
 • <strong>Architectural Evolution:</strong> Led studio modernization from monolithic legacy scripts to modular OpenUSD, MCP tooling, and automated CI/CD.<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`
