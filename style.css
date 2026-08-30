@@ -1477,6 +1477,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2.75rem 1.5rem 2rem;
+  scroll-margin-top: 76px;
 }
 
 .section-header {
@@ -2350,9 +2351,10 @@ body {
 /* ==========================================================================
    🤖 Interactive AI Assistant & Technical Knowledge Base (Charlie)
    ========================================================================== */
+#ai-assistant,
 #charlie,
 .ai-bot-terminal {
-  scroll-margin-top: 72px;
+  scroll-margin-top: 76px;
 }
 
 .ai-bot-terminal {

@@ -2652,10 +2652,10 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       floatingCharlieBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const targetTerminal = document.getElementById('charlie') || document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
-        if (targetTerminal) {
-          const navOffset = 72; // Scroll directly to the top of the AI Terminal so full chat & input are visible on all screens
-          const sectionTop = targetTerminal.getBoundingClientRect().top + window.pageYOffset - navOffset;
+        const targetSection = document.getElementById('ai-assistant') || document.getElementById('charlie') || document.querySelector('.ai-bot-terminal');
+        if (targetSection) {
+          const navOffset = 76; // Clean scroll clearance so "Meet Charlie — Rajeev's AI Assistant" header is fully visible
+          const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset - navOffset;
           window.scrollTo({
             top: Math.max(0, sectionTop),
             behavior: 'smooth'
