@@ -2291,8 +2291,8 @@ body {
    🤖 Interactive AI Assistant & Technical Knowledge Base (Charlie)
    ========================================================================== */
 #charlie,
-#ai-assistant {
-  scroll-margin-top: 115px;
+.ai-bot-terminal {
+  scroll-margin-top: 72px;
 }
 
 .ai-bot-terminal {

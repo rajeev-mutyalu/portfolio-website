@@ -2162,10 +2162,10 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
       floatingCharlieBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const targetSection = document.getElementById('charlie') || document.getElementById('ai-assistant');
-        if (targetSection) {
-          const navOffset = 115; // Generous space on top so "Technical Arsenal Knowledge Base" tag label & title are fully visible
-          const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset - navOffset;
+        const targetTerminal = document.getElementById('charlie') || document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
+        if (targetTerminal) {
+          const navOffset = 72; // Scroll directly to the top of the AI Terminal so full chat & input are visible on all screens
+          const sectionTop = targetTerminal.getBoundingClientRect().top + window.pageYOffset - navOffset;
           window.scrollTo({
             top: Math.max(0, sectionTop),
             behavior: 'smooth'
@@ -2178,7 +2178,7 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
             input.classList.add('input-pulse-highlight');
             setTimeout(() => input.classList.remove('input-pulse-highlight'), 1200);
           }
-        }, 450);
+        }, 350);
       });
     }
   }
