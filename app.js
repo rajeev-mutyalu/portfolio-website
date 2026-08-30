@@ -2157,17 +2157,26 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
 
     // 3. Setup Floating Quick-Launcher for Charlie (AI)
     const floatingCharlieBtn = document.getElementById('floatingCharlieBtn');
-    const charlieSection = document.getElementById('charlie');
 
-    if (floatingCharlieBtn && charlieSection) {
+    if (floatingCharlieBtn) {
       floatingCharlieBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        charlieSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        e.stopPropagation();
+        const targetSection = document.getElementById('charlie') || document.getElementById('ai-assistant');
+        if (targetSection) {
+          const navOffset = 75;
+          const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset - navOffset;
+          window.scrollTo({
+            top: Math.max(0, sectionTop),
+            behavior: 'smooth'
+          });
+        }
         setTimeout(() => {
-          if (aiInputField) {
-            aiInputField.focus();
-            aiInputField.classList.add('input-pulse-highlight');
-            setTimeout(() => aiInputField.classList.remove('input-pulse-highlight'), 1200);
+          const input = document.getElementById('aiInputField');
+          if (input) {
+            input.focus();
+            input.classList.add('input-pulse-highlight');
+            setTimeout(() => input.classList.remove('input-pulse-highlight'), 1200);
           }
         }, 450);
       });
