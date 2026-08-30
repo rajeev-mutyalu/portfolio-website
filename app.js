@@ -1568,68 +1568,167 @@
         id: 'why_hire_rajeev',
         keywords: ['why hire', 'why should we hire', 'hire rajeev', 'who is rajeev', 'who si rajeev', 'who is', 'who si', 'pitch', 'recruit', 'recruiting', 'strengths', 'why choose', 'value proposition', 'summary', 'unique', 'role', 'senior', 'lead', 'architect', 'about rajeev', 'why hire him', 'rajeev mutyalu', 'rajeev', 'muthyalu', 'mutyalu'],
         title: 'Who is Rajeev Mutyalu & Why Hire Him? (Executive Pitch)',
-        response: `<strong>🌟 Executive Summary: Who is Rajeev Mutyalu &amp; Why Hire Him?</strong><br/><br/>
-• <strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &amp; Creative Technologist with 20+ years of proven R&amp;D leadership across MPC, DNEG, and Technicolor on Oscar-winning blockbuster productions (<em>1917, Blade Runner 2049, Tenet, Life of Pi, The Lion King</em>).<br/>
+        intros: [
+          '🌟 <strong>EXECUTIVE OVERVIEW // LEAD ARCHITECT &amp; SYSTEMS DIRECTOR</strong>',
+          '🎯 <strong>STRATEGIC VALUE PROPOSITION // RAJEEV MUTYALU</strong>',
+          '💎 <strong>CORE LEADERSHIP PROFILE // 20-YEAR STUDIO PEDIGREE</strong>',
+          '🚀 <strong>HIGH-LEVERAGE CAPABILITY BRIEF // RAJEEV MUTYALU</strong>'
+        ],
+        responses: [
+          `<strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &amp; Creative Technologist with 20+ years of proven R&amp;D leadership across MPC, DNEG, and Technicolor on Oscar-winning blockbuster productions (<em>1917, Blade Runner 2049, Tenet, Life of Pi, The Lion King</em>).<br/>
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
-• <strong>🎨 Personal Nickname &amp; Trivia:</strong> Known affectionately as <strong>"Bansi"</strong> to close friends and long-time collaborators!<br/>
+• <strong>🎨 Personal Nickname &amp; Trivia:</strong> Known affectionately as <strong>"Bansi"</strong> to close friends and long-time studio collaborators!<br/>
 • <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bangalore under strict Hollywood delivery deadlines.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`,
-        followups: [
+
+          `<strong>💎 The Rare "Dual-Threat" Engineering Moat:</strong><br/>
+Most senior leaders either manage people or write code; Rajeev bridges high-level architectural strategy with deep, daily code execution.<br/>
+• <strong>🏗️ Traditional Heavyweight Foundation:</strong> 20+ years building Linux render clusters, low-level Python/C++ OpenUSD composition arcs, ShotGrid databases, and automated DI conform engines across MPC, Technicolor, and DNEG.<br/>
+• <strong>⚡ Applied AI Frontier Leadership:</strong> Early pioneer in production MCP (Model Context Protocol) tool servers, autonomous Claude Code/Devin swarms, and air-gapped private LLM deployments (Nous Hermes, Ollama 4-bit GGUF).<br/>
+• <strong>🎬 Oscar-Winning Deliverables:</strong> Key pipeline architect behind Academy Award winners <em>1917</em>, <em>Tenet</em>, <em>The Lion King</em>, and <em>RRR</em>.<br/>
+• <strong>🎨 Studio Culture:</strong> Affectionately known as <strong>"Bansi"</strong> across the international visual effects and engineering community.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Review Full Career Timeline &amp; Credits &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Inspect Technical Arsenal &rarr;</a>`,
+
+          `<strong>🚀 Immediate Production ROI &amp; Engineering Velocity:</strong><br/>
+• <strong>⚡ 5x–10x Delivery Acceleration:</strong> Replaces manual studio friction with zero-touch event-driven automation (n8n webhooks, automated QC verification loops, and agentic workflows).<br/>
+• <strong>🎯 Zero Ramp-Up Time:</strong> Having architected pipelines for top-tier studios across London and Bangalore, Rajeev steps into any enterprise VFX, animation, or AI pipeline and delivers immediate impact on Day 1.<br/>
+• <strong>👥 Cross-Continental Leadership:</strong> Mentored over 50+ TDs and engineers, establishing high-trust engineering cultures, automated code-review gates, and strict sprint cadences.<br/>
+• <strong>📍 Location &amp; Status:</strong> Based in London, UK (British Citizen) with full global remote/onsite mobility.<br/><br/>
+<a href="#contact" class="ai-section-link">📬 Connect with Rajeev Directly &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 View 1-Click ATS Resume &rarr;</a>`,
+
+          `<strong>🌐 Global Team Builder &amp; Technical Visionary:</strong><br/>
+• <strong>🤝 London–Bangalore Engineering Bridge:</strong> Successfully aligned multi-site teams of 40+ software developers and pipeline TDs, delivering high-throughput 24/7 studio follow-the-sun workflows.<br/>
+• <strong>📦 Open Standards Champion:</strong> Proven expert in OpenUSD 2-tier composition, OpenTimelineIO (OTIO) cut conforms, and OpenColorIO (OCIO / ACEScg) color science.<br/>
+• <strong>🧠 Frontier AI Integration:</strong> Architect of <em>Scene Weaver (Studio.AI)</em>, integrating Google Veo, Kling, and Seedance into conformed VFX studio pipelines.<br/>
+• <strong>🏆 Production Proof:</strong> Credits on <em>1917, Cruella, The Lion King, Life of Pi, Mufasa</em>.<br/><br/>
+<a href="#architecture" class="ai-section-link">🎬 Launch Interactive Pipeline Visualizer &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
+        ],
+        followupPool: [
           'What is Rajeev\'s nickname and trivia?',
+          'Tell me about your 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'Explain your OpenUSD VFX pipeline architecture',
-          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?'
+          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
+          'How does zero-touch n8n studio automation orchestrate pipelines?',
+          'Tell me about GenAI video pipelines with Veo, Kling, and Studio.AI'
         ]
       },
       {
         id: 'trivia_nickname',
         keywords: ['bansi', 'nickname', 'nick name', 'fun fact', 'fun facts', 'trivia', 'who is bansi', 'what is rajeev nickname', 'what is rajeev\'s nickname', 'hobbies', 'personal', 'hobby'],
         title: 'Rajeev\'s Nickname & Trivia',
-        response: `<strong>🌟 Trivia &amp; Fun Facts about Rajeev Mutyalu:</strong><br/><br/>
-• <strong>🎨 Affectionate Nickname:</strong> Rajeev is affectionately known as <strong>"Bansi"</strong> to close friends, family, and long-time studio colleagues!<br/>
+        intros: [
+          '🌟 <strong>PERSONAL TRIVIA &amp; STUDIO CULTURE</strong>',
+          '🎨 <strong>BEHIND THE CODE // RAJEEV "BANSI" MUTYALU</strong>',
+          '💎 <strong>STUDIO TRIVIA &amp; 20-YEAR EVOLUTION</strong>'
+        ],
+        responses: [
+          `• <strong>🎨 Affectionate Nickname:</strong> Rajeev is affectionately known as <strong>"Bansi"</strong> to close friends, family, and long-time studio colleagues across MPC, Technicolor, and Astra!<br/>
 • <strong>🎬 20-Year Evolution:</strong> Started in the early 2000s mastering traditional computer graphics, 3D modeling, and editorial plate conform, evolving into a Lead Architect across Oscar-winning tentpole films (<em>1917, The Lion King, Tenet, RRR</em>).<br/>
 • <strong>💎 The Dual-Threat Moat:</strong> Equally at home debugging low-level C++/Python OpenUSD composition arcs on Linux render clusters as he is designing cutting-edge agentic workflows, MCP servers, and local quantized LLMs.<br/>
 • <strong>⌨️ Studio Fuel:</strong> Passionate about mechanical keyboards, ultra-clean monospace telemetry, and optimizing studio pipelines down to the millisecond.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Bio &rarr;</a>`,
-        followups: [
+
+          `• <strong>👑 The Story of "Bansi":</strong> If you work closely with Rajeev on production dailies or pipeline sprint planning, you will quickly hear colleagues refer to him as <strong>"Bansi"</strong> — a cherished nickname representing his warm, approachable, and collaborative leadership style.<br/>
+• <strong>🛠️ Engineering Purist:</strong> Obsessed with clean, robust code architecture, sub-second terminal latency, and zero-defect deployments.<br/>
+• <strong>🎞️ Blockbuster Pedigree:</strong> Contributed technical leadership to Academy Award-winning sequences in <em>1917</em> and groundbreaking CG in <em>The Lion King</em>.<br/>
+• <strong>🚀 Modern Frontier:</strong> Leading the adoption of local private AI models and autonomous agent swarms in visual effects.<br/><br/>
+<a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Get in Touch &rarr;</a>`,
+
+          `• <strong>🎨 Creative Technologist at Heart:</strong> Nicknamed <strong>"Bansi"</strong>, Rajeev combines the sharp eye of a visual artist with the mathematical rigor of a systems architect.<br/>
+• <strong>🕹️ Arcade &amp; Physics Hobby:</strong> Built the custom <em>Comet Cascade</em> 60 FPS particle canvas engine and Web Audio synthesizer right inside this portfolio to showcase real-time interactive physics!<br/>
+• <strong>🌐 Global Citizen:</strong> Lived and led technical teams across India and the United Kingdom, fostering inclusive and highly motivated engineering environments.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Full CV &rarr;</a>
+<a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>`
+        ],
+        followupPool: [
           'Who is Rajeev Mutyalu and why should we hire him?',
+          'Tell me about your 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain your OpenUSD VFX pipeline architecture'
+          'Explain your OpenUSD VFX pipeline architecture',
+          'What is vibe coding and how do you use agentic AI systems?'
         ]
       },
       {
         id: 'mcp',
         keywords: ['mcp', 'model context protocol', 'mcp server', 'tooling', 'json-rpc', 'context bridges', 'api tool binding', 'anthropic mcp', 'tool schemas', 'custom mcp'],
         title: 'Model Context Protocol (MCP)',
-        response: `<strong>🔌 Model Context Protocol (MCP) in Studio Automation:</strong><br/><br/>
-• <strong>📌 What is it?</strong> An open, standardized JSON-RPC protocol created by Anthropic that allows AI models to dynamically discover, read, and invoke tools/resources from external studio applications.<br/>
-• <strong>🎯 Where is it used?</strong> Connected directly to DCC applications (Maya, Houdini, Nuke), ShotGrid/Flow Production databases, file systems, and render farm queues.<br/>
+        intros: [
+          '🔌 <strong>MODEL CONTEXT PROTOCOL (MCP) // ARCHITECTURE SPEC</strong>',
+          '⚡ <strong>ENTERPRISE AI TOOLING // MCP PROTOCOL BRIDGE</strong>',
+          '🛠️ <strong>DCC &amp; DATABASE INTEGRATION // MCP SPECIFICATION</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> An open, standardized JSON-RPC protocol created by Anthropic that allows AI models to dynamically discover, read, and invoke tools/resources from external studio applications.<br/>
+• <strong>🎯 Where is it used?</strong> Connected directly to DCC applications (Maya, Houdini Solaris, Nuke), ShotGrid/Flow Production databases, file systems, and render farm queues.<br/>
 • <strong>💡 Why is it used?</strong> LLMs inherently lack direct access to proprietary studio databases and internal file systems. MCP creates a secure, sandboxed bridge without writing custom API glue code for every new AI model.<br/>
 • <strong>🚀 How it helps production:</strong> Enables AI agents to query live shot statuses, check asset dependencies, inspect USD stage composition arcs, and validate frames directly from natural language prompts with strict read-only security gates.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 View MCP in Technical Arsenal &rarr;</a>`,
-        followups: [
+
+          `• <strong>🛡️ Sandboxed Security &amp; Air-Gapped Tool Binding:</strong><br/>
+In visual effects, allowing cloud AI direct write access to storage is a critical security risk. Rajeev's MCP architecture enforces strict token-based read-only gates and schema validation.<br/>
+• <strong>📦 JSON-RPC Contract:</strong> Exposes structured endpoints for asset queries, cut turnover validation, and render node health checks.<br/>
+• <strong>🔌 DCC Connectors:</strong> AI agents can inspect active Houdini Solaris stage hierarchies or Nuke read nodes via localhost sockets without exposing file paths to public networks.<br/>
+• <strong>⏱️ Zero Glue-Code Overhead:</strong> As new foundation models emerge, studio tools remain unchanged because MCP standardizes the communication layer.<br/><br/>
+<a href="#initiatives" class="ai-section-link">🚀 Inspect MCP Server Stack &rarr;</a>`,
+
+          `• <strong>🤖 Autonomous Agent Tool Execution:</strong><br/>
+MCP acts as the nervous system connecting autonomous coding agents (Claude Code, Devin, custom subagents) to internal studio pipelines.<br/>
+• <strong>🔍 Dynamic Tool Discovery:</strong> Agents automatically introspect available pipeline capabilities (e.g. <code>get_shot_status(shot_id)</code>, <code>inspect_usd_stage(stage_path)</code>, <code>query_transcode_queue()</code>).<br/>
+• <strong>⚡ 10x Operational Speed:</strong> Technical Directors query complex multi-shot dependency trees in natural language and receive verified JSON-RPC responses in milliseconds.<br/><br/>
+<a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
+        ],
+        followupPool: [
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
           'What is vibe coding and how do you use agentic AI systems?',
-          'Explain your OpenUSD VFX pipeline architecture'
+          'Explain your OpenUSD VFX pipeline architecture',
+          'How does zero-touch n8n studio automation orchestrate pipelines?',
+          'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
       {
         id: 'vibe_coding',
         keywords: ['vibe coding', 'vibe code', 'vibe', 'agentic', 'agents', 'agent', 'claude code', 'antigravity', 'devin', 'swarms', 'autonomous coding', 'claude cowork', 'claude design', 'subagent'],
         title: 'Agentic AI & Vibe Coding',
-        response: `<strong>🧠 Agentic AI &amp; Frontier Vibe Coding:</strong><br/><br/>
-• <strong>📌 What is it?</strong> A high-leverage engineering paradigm where software architects steer autonomous AI agents (Claude Code CLI, Google Antigravity, Devin) using natural language directives, architectural contracts, and automated verification loops.<br/>
+        intros: [
+          '🧠 <strong>AGENTIC AI &amp; FRONTIER VIBE CODING // SYSTEM SPEC</strong>',
+          '⚡ <strong>HIGH-LEVERAGE SOFTWARE ENGINEERING // AGENTIC PARADIGM</strong>',
+          '🚀 <strong>AUTONOMOUS CODE GENERATION &amp; VERIFICATION LOOPS</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> A high-leverage engineering paradigm where software architects steer autonomous AI agents (Claude Code CLI, Google Antigravity, Devin) using natural language directives, architectural contracts, and automated verification loops.<br/>
 • <strong>🎯 Where is it used?</strong> Full-stack pipeline engineering, UI development, API refactoring, test suite synthesis, and automated CI/CD workflows.<br/>
 • <strong>💡 Why is it used?</strong> Eliminates repetitive manual boilerplate typing, allowing the Lead Architect to focus 100% on high-level system topology, data schemas, security boundaries, and edge cases.<br/>
 • <strong>🚀 How it helps production:</strong> Accelerates feature delivery, tool prototyping, and bug remediation by <strong>5x–10x</strong> while enforcing enterprise code quality through automated test gates and human-in-the-loop architectural supervision.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Agentic Stack in Arsenal &rarr;</a>`,
-        followups: [
+
+          `• <strong>🏗️ Architectural Supervision vs. Boilerplate Typing:</strong><br/>
+Vibe coding in enterprise engineering is not haphazard guessing — it is the disciplined orchestration of AI subagent swarms against rigorous engineering specifications.<br/>
+• <strong>🔒 Quality Control Loops:</strong> Every agentic output is backed by automated static analysis, lint verification, and unit test suites before merging.<br/>
+• <strong>⚡ 10x Feature Velocity:</strong> Complex PyQt/PySide GUIs, FastAPI microservices, and database connectors that previously took weeks are scaffolded, refined, and hardened in hours.<br/>
+• <strong>💎 Strategic Moat:</strong> Frees senior architects to solve deep mathematical and scalability challenges while agents handle mechanical implementation details.<br/><br/>
+<a href="#initiatives" class="ai-section-link">🚀 View Agentic Workflows in Arsenal &rarr;</a>`,
+
+          `• <strong>🤖 Subagent Swarms &amp; Antigravity Tooling:</strong><br/>
+Rajeev utilizes state-of-the-art agentic tools including Google Antigravity, Claude Code, and custom subagent orchestration pipelines.<br/>
+• <strong>📋 Contextual Architecture Prompts:</strong> Guides agents with strict type hints, dependency constraints, and enterprise security boundaries.<br/>
+• <strong>🧪 Continuous Automated Verification:</strong> Incorporates headless browser testing and automated regression checks to guarantee bulletproof reliability.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Schedule a Technical Consultation &rarr;</a>`
+        ],
+        followupPool: [
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
+          'Explain your OpenUSD VFX pipeline architecture',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
@@ -1637,15 +1736,36 @@
         id: 'on_prem_llms',
         keywords: ['on-prem', 'on prem', 'quantization', 'local llm', 'ollama', 'vllm', 'gguf', 'awq', 'msty', 'lm studio', 'nous hermes', 'openclaw', 'security', 'privacy', 'open claw'],
         title: 'On-Premise LLMs & OpenClaw Agent Framework',
-        response: `<strong>🔒 On-Premise Private LLMs &amp; OpenClaw Agent Framework:</strong><br/><br/>
-• <strong>📌 What is it?</strong> Localized deployment of frontier open-weight models (Nous Hermes, Llama 3) inside air-gapped studio networks using 4-bit/8-bit quantization (GGUF, AWQ), orchestrated by Rajeev's upcoming <strong>OpenClaw</strong> agent framework.<br/>
+        intros: [
+          '🔒 <strong>ON-PREMISE PRIVATE LLMS &amp; OPENCLAW // SECURITY SPEC</strong>',
+          '🛡️ <strong>AIR-GAPPED STUDIO AI ARCHITECTURE // LOCAL INFERENCE</strong>',
+          '⚡ <strong>QUANTIZED EDGE MODELS &amp; OPENCLAW RUNTIME</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> Localized deployment of frontier open-weight models (Nous Hermes, Llama 3) inside air-gapped studio networks using 4-bit/8-bit quantization (GGUF, AWQ), orchestrated by Rajeev's upcoming <strong>OpenClaw</strong> agent framework.<br/>
 • <strong>🎯 Where is it used?</strong> Private studio GPU compute nodes, local artist workstations, Ollama, and high-throughput vLLM inference clusters.<br/>
 • <strong>💡 Why is it used?</strong> Movie studios have strict non-disclosure security requirements prohibiting proprietary scripts, prompts, and unreleased assets from reaching public cloud APIs.<br/>
 • <strong>🚀 How it helps production:</strong> Reduces model GPU memory footprint by <strong>60%–75%</strong> while maintaining 98%+ reasoning precision. Delivers sub-50ms token generation locally with <strong>zero cloud data leakage</strong>.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🔒 View On-Premise LLMs in Arsenal &rarr;</a>`,
-        followups: [
+
+          `• <strong>🛡️ Strict Studio Non-Disclosure Compliance:</strong><br/>
+Hollywood MPAA and TPN (Trusted Partner Network) security standards mandate that confidential pre-release content must never leave studio perimeter firewalls.<br/>
+• <strong>⚡ 4-Bit/8-Bit Quantization:</strong> Models like Nous Hermes 70B and Llama 3 are quantized to GGUF and AWQ formats, allowing dense reasoning to run smoothly on standard studio workstations without expensive cloud subscriptions.<br/>
+• <strong>🚀 vLLM High-Throughput Cluster:</strong> Batched inference pipelines delivering parallel token streaming across hundreds of artists simultaneously.<br/>
+• <strong>🐾 OpenClaw Orchestration:</strong> Rajeev's custom agent runtime for sandboxed tool execution and local semantic retrieval.<br/><br/>
+<a href="#initiatives" class="ai-section-link">🔒 Explore Private AI Architecture &rarr;</a>`,
+
+          `• <strong>🐾 OpenClaw: The Air-Gapped Agent Framework:</strong><br/>
+Engineered specifically for visual effects and gaming studios that require autonomous AI capabilities within completely disconnected local networks.<br/>
+• <strong>💾 Local Embeddings &amp; Vector Search:</strong> Ingests internal studio documentation, Python codebase indices, and shot logs locally using ChromaDB/FAISS.<br/>
+• <strong>⏱️ Zero Latency Bottlenecks:</strong> Sub-50ms token generation provides instant artist feedback for code generation, DCC script debugging, and metadata validation.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Skills &rarr;</a>
+<a href="#architecture" class="ai-section-link">🎬 Launch Architecture Visualizer &rarr;</a>`
+        ],
+        followupPool: [
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
+          'Explain your OpenUSD VFX pipeline architecture',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
@@ -1653,63 +1773,146 @@
         id: 'openusd',
         keywords: ['usd', 'openusd', 'composition', 'solaris', 'hydra', 'sublayer', 'payload', 'stage', 'asset layering', 'shot composition', 'karma', 'materialx', 'astra vfx usd'],
         title: 'OpenUSD VFX Production Pipeline Architecture',
-        response: `<strong>🎬 OpenUSD (Universal Scene Description) Pipeline Architecture:</strong><br/><br/>
-• <strong>📌 What is it?</strong> Pixar's open-source high-performance 3D scene description framework, file format, and composition engine for interchange across visual effects and animation.<br/>
+        intros: [
+          '🎬 <strong>OPENUSD (UNIVERSAL SCENE DESCRIPTION) // PIPELINE SPEC</strong>',
+          '🏗️ <strong>NON-DESTRUCTIVE 3D ARCHITECTURE // OPENUSD ENGINE</strong>',
+          '📦 <strong>2-TIER ASSET &amp; SHOT COMPOSITION // USD STANDARD</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> Pixar's open-source high-performance 3D scene description framework, file format, and composition engine for interchange across visual effects and animation.<br/>
 • <strong>🎯 Where is it used?</strong> Core studio 3D pipeline across Maya, Houdini Solaris, Unreal Engine, and Hydra renderers (Karma, Arnold, RenderMan).<br/>
 • <strong>💡 Why is it used?</strong> Monolithic scene files create multi-department bottlenecks. OpenUSD allows dozens of artists across Modeling, Groom, LookDev, Animation, and Lighting to collaborate simultaneously without overwriting data.<br/>
 • <strong>🚀 How it helps production:</strong> Rajeev's <strong>2-Tier Architecture</strong> separates modular Asset Publishing from non-destructive Shot Sublayering (SH0010). Geometry is referenced via payloads with zero file bloat and sub-second shot load times.<br/><br/>
 <a href="#architecture" data-arch-tab="usd" class="ai-section-link">🎬 Launch Interactive USD Architecture Visualizer &rarr;</a>`,
-        followups: [
+
+          `• <strong>🏗️ Rajeev's 2-Tier Modular USD Architecture:</strong><br/>
+• <strong>Tier 1 — Asset Publishing:</strong> Departmental isolation across Modeling, Groom, LookDev, and Rigging with LOD variants, published into unified, renderable USD packages.<br/>
+• <strong>Tier 2 — Shot Composition:</strong> Non-destructive sublayer stack (Layout &rarr; Animation &rarr; Simulation &rarr; FX &rarr; Lighting) authoring scoped opinions into master shot compositions (SH0010).<br/>
+• <strong>⚡ Payload Referencing:</strong> Heavy geometry and volumetrics remain un-loaded until render time, keeping artist interactive viewport frame rates at 60 FPS.<br/>
+• <strong>📦 Ingest &amp; Plate Sublayers:</strong> Manifest-driven plate architecture composed cleanly under Ayon backend integration.<br/><br/>
+<a href="#architecture" data-arch-tab="usd" class="ai-section-link">🎬 Inspect USD Pipeline Node Graph &rarr;</a>`,
+
+          `• <strong>🎬 Multi-Department Concurrency &amp; Hydra Viewports:</strong><br/>
+Traditional studio pipelines suffer from massive file merge locks when multiple departments touch the same shot. OpenUSD resolves this through strength-ordered composition arcs.<br/>
+• <strong>🎨 Houdini Solaris &amp; MaterialX:</strong> Live interactive look-development with real-time Karma and Arnold Hydra delegates.<br/>
+• <strong>🐍 Python 3.x USD API:</strong> Custom Python stage authoring scripts to programmatically construct master sequences, override prim attributes, and validate stage integrity before dispatch.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Full CV &amp; USD Projects &rarr;</a>
+<a href="#conform" class="ai-section-link">📦 View Conform Ingest Pipeline &rarr;</a>`
+        ],
+        followupPool: [
           'How does your Conform Ingest and editorial turnover pipeline work?',
           'Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO) standards',
-          'How does zero-touch n8n studio automation orchestrate pipelines?'
+          'How does zero-touch n8n studio automation orchestrate pipelines?',
+          'What is Model Context Protocol (MCP) and how is it used in production?',
+          'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
       {
         id: 'otio_ocio',
         keywords: ['otio', 'opentimelineio', 'ocio', 'opencolorio', 'aces', 'acescg', 'color pipeline', 'editorial standards', 'lut', 'cdl'],
         title: 'OpenTimelineIO & OpenColorIO (ACES)',
-        response: `<strong>📦 Open Standards: OpenTimelineIO (OTIO) &amp; OpenColorIO (OCIO / ACES):</strong><br/><br/>
-• <strong>📌 What is it?</strong> Industry-standard open-source interchange formats for editorial timelines (OTIO) and scientific color management (OCIO / ACEScg).<br/>
+        intros: [
+          '📦 <strong>OPEN STANDARDS // OTIO TIMELINE &amp; OCIO/ACES COLOR</strong>',
+          '🎞️ <strong>EDITORIAL SYNCHRONIZATION // OPEN COLOR SCIENCE</strong>',
+          '🎨 <strong>STUDIO CONFORM &amp; COLOR PIPELINE SPECIFICATION</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> Industry-standard open-source interchange formats for editorial timelines (OTIO) and scientific color management (OCIO / ACEScg).<br/>
 • <strong>🎯 Where is it used?</strong> Editorial cut turnovers, dailies review systems, Nuke studio compositing, and DI grade color transforms.<br/>
 • <strong>💡 Why is it used?</strong> Proprietary EDLs, XMLs, and custom LUTs cause cut mismatches, missing audio/video tracks, and color shifts between editorial and VFX.<br/>
 • <strong>🚀 How it helps production:</strong> Guarantees 100% frame-accurate cut synchronization across Hiero/Nuke Studio, tracks VFX plate metadata at the track level, and ensures strict ACEScg color fidelity from camera raw to final theatrical master.<br/><br/>
 <a href="#conform" class="ai-section-link">📦 Jump to Conform Ingest &amp; Editorial Turnover &rarr;</a>`,
-        followups: [
+
+          `• <strong>🎨 Mathematically Rigorous Color Science (ACEScg &amp; OCIO v2):</strong><br/>
+• <strong>🌈 Wide Gamut Integrity:</strong> Standardizes on ACEScg for rendering and compositing, preserving dynamic range and spectral color information across camera packages (ARRI RAW, RED, Sony Venice).<br/>
+• <strong>🔍 Track-Level Metadata:</strong> Embeds CDL (Color Decision List) offsets, camera color spaces, and shot frame ranges directly inside OpenTimelineIO schemas.<br/>
+• <strong>⚡ Automated Nuke Configs:</strong> Ingest pipelines parse OTIO tracks and auto-generate Nuke scripts with pre-configured OCIO color nodes, saving hundreds of artist hours.<br/><br/>
+<a href="#conform" class="ai-section-link">📦 Open Editorial Conform Pipeline &rarr;</a>`,
+
+          `• <strong>🎞️ Modern Editorial Interchange vs. Fragile EDLs:</strong><br/>
+Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. OTIO stores rich Python-accessible schemas for every cut transition, retime, and effect.<br/>
+• <strong>🔄 Bidirectional Cut Conform:</strong> Instantly compares client turnover XMLs with studio databases to flag slipped cuts, resized plates, or head/tail frame discrepancies.<br/>
+• <strong>🚀 99.4% Automated Conform Rate:</strong> Implemented across major blockbuster productions to ensure DI master conformity.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
+<a href="#architecture" class="ai-section-link">🎬 Launch Pipeline Visualizer &rarr;</a>`
+        ],
+        followupPool: [
           'How does your Conform Ingest and editorial turnover pipeline work?',
           'Explain your OpenUSD VFX pipeline architecture',
-          'How does zero-touch n8n studio automation orchestrate pipelines?'
+          'How does zero-touch n8n studio automation orchestrate pipelines?',
+          'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
       {
         id: 'n8n_automation',
         keywords: ['n8n', 'automation', 'webhook', 'webhooks', 'reverse webhook', 'event-driven', 'event routing', 'dispatch', 'zero-touch', 'reverse webhooks'],
         title: 'Zero-Touch n8n Studio Automation',
-        response: `<strong>⚡ Zero-Touch Studio Automation with n8n:</strong><br/><br/>
-• <strong>📌 What is it?</strong> An event-driven, visual workflow automation hub utilizing bidirectional inbound webhooks and reverse webhooks to connect studio tools.<br/>
+        intros: [
+          '⚡ <strong>ZERO-TOUCH STUDIO AUTOMATION // N8N WORKFLOW HUB</strong>',
+          '🔄 <strong>EVENT-DRIVEN DISPATCH &amp; REVERSE WEBHOOKS</strong>',
+          '🚀 <strong>ENTERPRISE PIPELINE ORCHESTRATION // N8N CORE</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> An event-driven, visual workflow automation hub utilizing bidirectional inbound webhooks and reverse webhooks to connect studio tools.<br/>
 • <strong>🎯 Where is it used?</strong> Automated project onboarding, editorial plate ingest, render farm dispatch, and team messaging sync (Slack/Teams).<br/>
 • <strong>💡 Why is it used?</strong> Traditional cron polling scripts poll databases every few minutes, creating massive database load and delayed notifications.<br/>
 • <strong>🚀 How it helps production:</strong> Reacts instantaneously to studio events (e.g. editorial file drops or ShotGrid approvals), validates file integrity, initiates background farm jobs, and pushes real-time status alerts without human intervention.<br/><br/>
 <a href="#architecture" data-arch-tab="automation" class="ai-section-link">⚡ View n8n Flow in Pipeline Visualizer &rarr;</a>`,
-        followups: [
+
+          `• <strong>🔄 Bidirectional Webhook Architecture:</strong><br/>
+• <strong>Inbound Webhooks:</strong> Listens for editorial turnovers, ShotGrid version status changes, or artist publish events.<br/>
+• <strong>Logic &amp; Branching Engine:</strong> Executes Python validation scripts, checks disk quotas, verifies color metadata, and constructs render farm job manifests.<br/>
+• <strong>Reverse Webhooks:</strong> Sends callbacks back to studio dashboards, Slack channels, and production databases with verified delivery receipts.<br/>
+• <strong>⏱️ Sub-Second Response:</strong> Eliminates human waiting time and manual file shuffling entirely.<br/><br/>
+<a href="#architecture" data-arch-tab="automation" class="ai-section-link">⚡ Inspect n8n Node Topology &rarr;</a>`,
+
+          `• <strong>🚀 Zero-Touch Pipeline Onboarding &amp; QC:</strong><br/>
+• <strong>📁 Automated Project Scaffolding:</strong> Automatically sets up directory structures, permission groups, and initial shot hierarchies upon project creation.<br/>
+• <strong>🔍 Automated Plate QC:</strong> Validates frame padding, aspect ratios, and EXR compression headers before artists even open their DCCs.<br/>
+• <strong>📊 Production ROI:</strong> Reduces shot turnover turnaround time from hours to under 60 seconds.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>`
+        ],
+        followupPool: [
           'How does your Conform Ingest and editorial turnover pipeline work?',
           'Tell me about GenAI video pipelines with Veo, Kling, and Studio.AI',
-          'What is Model Context Protocol (MCP) and how is it used in production?'
+          'What is Model Context Protocol (MCP) and how is it used in production?',
+          'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
       {
         id: 'voice_ai',
         keywords: ['voice', 'retell', 'vapi', 'cal.ai', 'telephony', 'speech', 'conversational voice', 'voice ai', 'voice agent'],
         title: 'Conversational Voice AI (Retell AI & Vapi)',
-        response: `<strong>🎙️ Conversational Voice AI (Retell AI &amp; Vapi):</strong><br/><br/>
-• <strong>📌 What is it?</strong> Ultra-low-latency real-time voice synthesis and conversational AI pipelines with bidirectional live speech recognition.<br/>
+        intros: [
+          '🎙️ <strong>CONVERSATIONAL VOICE AI // TELEPHONY &amp; SPEECH SPECS</strong>',
+          '🔊 <strong>REAL-TIME VOICE AGENT PIPELINE // RETELL &amp; VAPI</strong>',
+          '⚡ <strong>LOW-LATENCY VOICE INTERFACES FOR PRODUCTION</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> Ultra-low-latency real-time voice synthesis and conversational AI pipelines with bidirectional live speech recognition.<br/>
 • <strong>🎯 Where is it used?</strong> Hands-free studio supervisor voice interfaces, mobile review calls, and automated review session booking with Cal.ai.<br/>
 • <strong>💡 Why is it used?</strong> Supervisors and executives reviewing shots on calibrated monitors need fast pipeline information without having to switch windows or type on keyboards.<br/>
 • <strong>🚀 How it helps production:</strong> Delivers sub-400ms voice round-trip response times, dynamically injecting live production schedules and shot metadata so leads can query asset statuses and schedule dailies via natural voice.<br/><br/>
 <a href="#contact" class="ai-section-link">📬 Connect for a Live Voice AI Demo &rarr;</a>`,
-        followups: [
+
+          `• <strong>🎙️ Sub-400ms Real-Time Voice Pipelines:</strong><br/>
+• <strong>⚡ WebRTC Streaming:</strong> Full-duplex bidirectional audio streaming engineered with Retell AI and Vapi for zero perceptible latency.<br/>
+• <strong>📅 Cal.ai Automated Scheduling:</strong> Voice agents automatically query production calendar availabilities and book supervisory review sessions directly.<br/>
+• <strong>🎯 Hands-Free Studio Workflow:</strong> VFX Supervisors can query shot delivery ETAs, farm render bottlenecks, and artist allocations entirely through voice during dailies sessions.<br/><br/>
+<a href="#initiatives" class="ai-section-link">🚀 View Voice AI in Arsenal &rarr;</a>`,
+
+          `• <strong>🔊 Conversational Telephony &amp; Studio Assistants:</strong><br/>
+• <strong>🧠 Dynamic Tool Ingestion:</strong> Connects voice LLMs to live studio APIs (ShotGrid, render farm queues) via function calling.<br/>
+• <strong>🔒 Voice Security &amp; Gatekeeping:</strong> Restricts sensitive asset inspection to verified production leads.<br/>
+• <strong>🚀 Applied Production Innovation:</strong> Demonstrating how cutting-edge voice models remove friction from modern creative workflows.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Contact Rajeev Directly &rarr;</a>`
+        ],
+        followupPool: [
           'What is vibe coding and how do you use agentic AI systems?',
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
+          'Tell me about GenAI video pipelines with Veo, Kling, and Studio.AI',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
@@ -1717,84 +1920,216 @@
         id: 'genai_video',
         keywords: ['video', 'veo', 'google veo', 'kling', 'higgsfield', 'seedance', 'scene weaver', 'studio.ai', 'genai video', 'latent', 'firecrawl', 'generative video'],
         title: 'GenAI Video Production & Studio.AI (Scene Weaver)',
-        response: `<strong>🎥 Studio.AI (Scene Weaver) &amp; Generative Video Pipelines:</strong><br/><br/>
-• <strong>📌 What is it?</strong> An enterprise multi-model generative AI platform for feature film storyboarding, visual development, and shot synthesis.<br/>
+        intros: [
+          '🎥 <strong>STUDIO.AI (SCENE WEAVER) // PROMPT-TO-VIDEO PLATFORM</strong>',
+          '🎬 <strong>GENERATIVE VIDEO PRODUCTION // MULTI-MODEL ROUTING</strong>',
+          '✨ <strong>LATENT CONSISTENCY &amp; STUDIO INGEST ENGINE</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> An enterprise multi-model generative AI platform for feature film storyboarding, visual development, and shot synthesis.<br/>
 • <strong>🎯 Where is it used?</strong> Previsualization, concept ideation, multi-model prompt routing (Google Veo, Kling AI, Higgsfield), and web asset extraction via FireCrawl.<br/>
 • <strong>💡 Why is it used?</strong> Out-of-the-box video models produce inconsistent character faces, unstable wardrobe details, and non-standard color spaces.<br/>
 • <strong>🚀 How it helps production:</strong> Enforces character latent identity consistency across video shots, automates prompt generation from screenplays, and conformed outputs directly into OCIO/ACEScg for Nuke compositing.<br/><br/>
 <a href="#architecture" data-arch-tab="genai" class="ai-section-link">✨ View GenAI Flow in Pipeline Visualizer &rarr;</a>`,
-        followups: [
+
+          `• <strong>🎥 Scene Weaver: Solving Character Visual DNA Consistency:</strong><br/>
+• <strong>🧬 Persistent Latent Identity:</strong> Uses specialized reference vectors and LoRA embeddings so characters and environments remain identical across sequential camera shots.<br/>
+• <strong>🔄 Multi-Model Prompt Router:</strong> Automatically routes prompts to Google Veo for cinematic lighting, Kling for complex human dynamics, and Seedance for atmospheric FX.<br/>
+• <strong>📦 Automated Color Conform:</strong> Transcodes 8-bit sRGB AI video generations into 16-bit float ACEScg EXRs with matching frame rates and editorial handles.<br/><br/>
+<a href="#architecture" data-arch-tab="genai" class="ai-section-link">✨ Inspect Scene Weaver Architecture &rarr;</a>`,
+
+          `• <strong>🎬 Script-to-Screenplay Automated Ideation:</strong><br/>
+• <strong>📜 Script Ingest:</strong> Ingests screenplays and storyboards, breaking text down into camera lens directives, lighting keys, and character blocking instructions.<br/>
+• <strong>🕷️ FireCrawl Ingest:</strong> Scrapes reference imagery and visual moodboards to establish stylistic DNA.<br/>
+• <strong>🚀 Seamless Nuke &amp; Editorial Turnover:</strong> Outputs conform cleanly into OTIO timelines for instant editorial review.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>`
+        ],
+        followupPool: [
           'Explain your OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
-          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?'
+          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
+          'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
       {
         id: 'core_python_ui',
         keywords: ['python', 'pyqt', 'pyside', 'docker', 'containers', 'linux', 'shell', 'fastapi', 'rest', 'git', 'ui systems', 'software engineering', 'pyside6', 'qt'],
         title: 'Core Software, Python & PySide UI Systems',
-        response: `<strong>🐍 Core Python, PySide UI &amp; Systems Engineering:</strong><br/><br/>
-• <strong>📌 What is it?</strong> Foundational software engineering stack: Python 3.x, Qt/PySide desktop GUIs, FastAPI microservices, Docker containers, and Linux cluster dispatch.<br/>
+        intros: [
+          '🐍 <strong>CORE SOFTWARE ENGINEERING // PYTHON &amp; PYSIDE UI</strong>',
+          '💻 <strong>DESKTOP TOOLING &amp; CLUSTER INFRASTRUCTURE</strong>',
+          '🛠️ <strong>PRODUCTION SOFTWARE ARCHITECTURE // PYTHON 3.X</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> Foundational software engineering stack: Python 3.x, Qt/PySide desktop GUIs, FastAPI microservices, Docker containers, and Linux cluster dispatch.<br/>
 • <strong>🎯 Where is it used?</strong> In-DCC artist tools (Maya, Houdini, Nuke), standalone desktop review applications, and studio backend microservices.<br/>
 • <strong>💡 Why is it used?</strong> Artists require responsive, multi-threaded desktop user interfaces that handle large datasets without freezing or crashing DCC viewports.<br/>
 • <strong>🚀 How it helps production:</strong> 20+ years of architecting scalable, rock-solid desktop tools and modular Python libraries supporting hundreds of active studio artists across London and Bangalore with zero downtime.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🐍 View Core Systems in Arsenal &rarr;</a>`,
-        followups: [
+
+          `• <strong>💻 High-Performance PySide Desktop Tools:</strong><br/>
+• <strong>🧵 Multi-Threaded Architecture:</strong> Offloads heavy I/O, hash computations, and thumbnail rendering to background QThread workers to ensure zero UI freeze.<br/>
+• <strong>📦 Modular Python Packages:</strong> Architected centralized Python packages distributed via Rez/Venv across global studio facilities.<br/>
+• <strong>🐳 Microservices &amp; Containers:</strong> Deploys FastAPI services inside lightweight Docker containers on Linux for asset validation and transcode dispatch.<br/><br/>
+<a href="#initiatives" class="ai-section-link">🐍 Inspect Python Systems in Arsenal &rarr;</a>`,
+
+          `• <strong>🚀 20 Years of Mission-Critical Code Reliability:</strong><br/>
+• <strong>🧪 Rigorous Automated Testing:</strong> Pytest suites, continuous integration, and strict PEP 8 / type annotation standards.<br/>
+• <strong>🐧 Linux Cluster Native:</strong> Deep familiarity with POSIX file systems, NFS caching, permissions, and headless batch processing.<br/>
+• <strong>👥 Mentorship:</strong> Trained dozens of junior and mid-level TDs in modern object-oriented Python, Qt design patterns, and asynchronous I/O.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Get in Touch &rarr;</a>`
+        ],
+        followupPool: [
           'Explain your OpenUSD VFX pipeline architecture',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Tell me about your 20-year engineering leadership and mentorship background'
+          'Tell me about your 20-year engineering leadership and mentorship background',
+          'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
       {
         id: 'conform_ingest',
         keywords: ['conform', 'ingest', 'turnover', 'editorial', 'di', 'discrepancy', 'plate', 'regex', 'hiero', 'nuke studio', 'shotgrid', 'turnover inspection', 'vfx io', 'i/o'],
         title: 'Editorial Turnover, Conform & Ingest Systems',
-        response: `<strong>📦 Editorial Turnover, Conform &amp; VFX Plate Ingest:</strong><br/><br/>
-• <strong>📌 What is it?</strong> Automated systems that ingest editorial turnover packages (AAF, XML, EDL, QuickTimes, raw plates) and validate them against studio databases.<br/>
+        intros: [
+          '📦 <strong>EDITORIAL CONFORM &amp; INGEST // SYSTEM SPECIFICATION</strong>',
+          '🎞️ <strong>VFX PLATE I/O &amp; DI DISCREPANCY REPORTING</strong>',
+          '🔍 <strong>AUTOMATED TURNOVER PACKAGE INSPECTION ENGINE</strong>'
+        ],
+        responses: [
+          `• <strong>📌 What is it?</strong> Automated systems that ingest editorial turnover packages (AAF, XML, EDL, QuickTimes, raw plates) and validate them against studio databases.<br/>
 • <strong>🎯 Where is it used?</strong> Ingest departments, editorial turnover stations, automated transcoding render farms, and ShotGrid synchronization.<br/>
 • <strong>💡 Why is it used?</strong> High-budget tentpole films receive thousands of cut changes. Manual ingest is extremely slow and prone to costly frame discrepancies during final DI conform.<br/>
 • <strong>🚀 How it helps production:</strong> Performs automated turnover package inspection, instant DI discrepancy reporting back to client editorial, dynamic regex camera metadata extraction, and automatic proxy creation with a <strong>99.4% automated pass rate</strong>.<br/><br/>
 <a href="#conform" class="ai-section-link">📦 Launch Conform Ingest &amp; Editorial Turnover Pipeline &rarr;</a>`,
-        followups: [
+
+          `• <strong>🔍 Automated Turnover Inspection &amp; DI Discrepancy Reporting:</strong><br/>
+• <strong>📋 Instant Discrepancy Reports:</strong> Automatically parses client XML/EDL cuts against raw EXR timecodes to flag missing frames, slipped cuts, or non-standard frame rates before assets reach artist disks.<br/>
+• <strong>🧩 Dynamic Regex Parser:</strong> Extracts reel names, camera roll, shoot date, and shot codes from complex multi-vendor naming conventions.<br/>
+• <strong>⚡ 99.4% Pass Rate:</strong> Eliminates human error on tentpole feature deliveries.<br/><br/>
+<a href="#conform" class="ai-section-link">📦 Launch Conform Pipeline View &rarr;</a>`,
+
+          `• <strong>📦 VFX Plate Ingest &amp; Proxy Automation:</strong><br/>
+• <strong>🎞️ Automated Blade/Farm Dispatch:</strong> Ingests raw camera footage, generates half-res QuickTime proxies, extracts audio stems, and publishes ShotGrid versions with zero manual clicks.<br/>
+• <strong>🔄 OTIO Synchronization:</strong> Transcribes cut changes into OpenTimelineIO tracks for Nuke Studio conform.<br/>
+• <strong>💎 Proven on Blockbusters:</strong> Battle-tested across <em>1917, Tenet, The Lion King, RRR</em>.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &rarr;</a>
+<a href="#architecture" class="ai-section-link">🎬 Launch Pipeline Visualizer &rarr;</a>`
+        ],
+        followupPool: [
           'How does zero-touch n8n studio automation orchestrate pipelines?',
           'Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO) standards',
-          'Explain your OpenUSD VFX pipeline architecture'
+          'Explain your OpenUSD VFX pipeline architecture',
+          'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
       {
         id: 'leadership_career',
         keywords: ['career', 'experience', 'timeline', 'background', 'credits', 'films', '1917', 'lion king', 'tenet', 'blade runner', 'leadership', 'mentorship', 'r&d', 'management', 'agile', 'scrum', 'technicolor', 'mpc', 'dneg', 'astra'],
         title: 'Engineering Leadership & 20-Year Milestones',
-        response: `<strong>👥 20-Year Engineering Leadership, Filmography &amp; Mentorship:</strong><br/><br/>
-• <strong>📌 Leadership Background:</strong> Lead Software Architect &amp; Creative Technologist based in London, UK (British Citizen) with <strong>20+ years of Tier-1 leadership</strong> across global visual effects studios.<br/>
+        intros: [
+          '👥 <strong>20-YEAR ENGINEERING LEADERSHIP // FILM CREDITS &amp; TENURES</strong>',
+          '🏆 <strong>OSCAR-WINNING FILMOGRAPHY &amp; LEADERSHIP TRACK RECORD</strong>',
+          '🌐 <strong>GLOBAL R&amp;D LEADERSHIP // LONDON &amp; BANGALORE</strong>'
+        ],
+        responses: [
+          `• <strong>📌 Leadership Background:</strong> Lead Software Architect &amp; Creative Technologist based in London, UK (British Citizen) with <strong>20+ years of Tier-1 leadership</strong> across global visual effects studios.<br/>
 • <strong>🎯 Studio Tenures:</strong> Astra Studios (2024–Pres.), Technicolor London (2021–2024), Technicolor Bangalore (2017–2021), MPC Film (2014–2017).<br/>
 • <strong>💡 Tentpole Film Credits:</strong> <em>1917</em> (Academy Award Winner), <em>The Lion King</em>, <em>Cruella</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>, <em>Life of Pi</em>.<br/>
 • <strong>🚀 Mentorship &amp; Agile:</strong> Scaled and mentored multi-site engineering teams, establishing rigorous sprint delivery, automated code review gates, and cross-site technical alignment.<br/><br/>
 <a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &amp; Credits &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Timeline &rarr;</a>`,
-        followups: [
+
+          `• <strong>🏆 Academy Award &amp; Tentpole Filmography:</strong><br/>
+• <strong>1917 (2019):</strong> Academy Award for Best Visual Effects — engineered core pipeline infrastructure enabling seamless continuous-shot assembly.<br/>
+• <strong>The Lion King (2019):</strong> Groundbreaking virtual production and photorealistic asset composition at scale.<br/>
+• <strong>RRR (2022) &amp; Cruella (2021):</strong> High-throughput conform ingest and complex simulation caching pipelines.<br/>
+• <strong>Tenet &amp; Blade Runner 2049:</strong> Core technical TD contributions across heavy FX and comp sequences.<br/><br/>
+<a href="#films" class="ai-section-link">🏆 View Filmography Gallery &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`,
+
+          `• <strong>👥 Mentorship, High-Trust Culture &amp; Agile Engineering:</strong><br/>
+• <strong>Sprint Excellence:</strong> Led multi-disciplinary teams through high-stakes delivery cycles with predictable sprint velocity and zero production crunch.<br/>
+• <strong>Cross-Continental Bridge:</strong> Successfully aligned London and Bangalore engineering hubs to operate as a unified, collaborative development engine.<br/>
+• <strong>Architectural Evolution:</strong> Led studio modernization from monolithic legacy scripts to modular OpenUSD, MCP tooling, and automated CI/CD.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`
+        ],
+        followupPool: [
           'Who is Rajeev Mutyalu and why should we hire him?',
+          'What is Rajeev\'s nickname and trivia?',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain your OpenUSD VFX pipeline architecture'
+          'Explain your OpenUSD VFX pipeline architecture',
+          'How does zero-touch n8n studio automation orchestrate pipelines?'
         ]
       },
       {
         id: 'contact_info',
         keywords: ['contact', 'email', 'phone', 'linkedin', 'reach', 'message', 'hire contact', 'call', 'location', 'london'],
         title: 'Direct Contact Matrix',
-        response: `<strong>📬 Get in Touch with Rajeev Mutyalu:</strong><br/><br/>
-• <strong>📍 Location:</strong> London, United Kingdom (British Citizen)<br/>
+        intros: [
+          '📬 <strong>DIRECT CONTACT MATRIX // RAJEEV MUTYALU</strong>',
+          '🤝 <strong>GET IN TOUCH // LONDON, UNITED KINGDOM</strong>',
+          '💼 <strong>EXECUTIVE CONSULTATION &amp; RECRUITING MATRIX</strong>'
+        ],
+        responses: [
+          `• <strong>📍 Location:</strong> London, United Kingdom (British Citizen)<br/>
 • <strong>📧 Email:</strong> <a href="mailto:mutyalu.rajeev@gmail.com" style="color:#38bdf8; font-weight:700;">mutyalu.rajeev@gmail.com</a><br/>
 • <strong>📱 Phone:</strong> <a href="tel:+447827498399" style="color:#38bdf8; font-weight:700;">+44 7827 498399</a><br/>
 • <strong>💼 LinkedIn:</strong> <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" style="color:#38bdf8; text-decoration:underline;">linkedin.com/in/rajeevmuthyalu</a><br/><br/>
 <a href="#contact" class="ai-section-link">📬 Open Direct Contact Matrix &rarr;</a>`,
-        followups: [
+
+          `• <strong>🚀 Available for Lead Architecture &amp; Director Roles:</strong><br/>
+• <strong>📍 Base:</strong> London, UK (Available for London onsite, hybrid, and global executive remote opportunities)<br/>
+• <strong>📧 Direct Inbox:</strong> <a href="mailto:mutyalu.rajeev@gmail.com" style="color:#38bdf8; font-weight:700;">mutyalu.rajeev@gmail.com</a><br/>
+• <strong>📱 Direct Line:</strong> <a href="tel:+447827498399" style="color:#38bdf8; font-weight:700;">+44 7827 498399</a><br/>
+• <strong>💼 Professional Network:</strong> <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" style="color:#38bdf8; text-decoration:underline;">Connect on LinkedIn &rarr;</a><br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open 1-Click ATS Resume &rarr;</a>`,
+
+          `• <strong>💬 Fast-Track Communication:</strong><br/>
+Feel free to email or message Rajeev directly regarding Lead Pipeline Architecture, Applied AI Systems, OpenUSD implementations, or executive technical advisory.<br/>
+• <strong>📧 Email:</strong> <a href="mailto:mutyalu.rajeev@gmail.com" style="color:#38bdf8; font-weight:700;">mutyalu.rajeev@gmail.com</a><br/>
+• <strong>📱 Mobile:</strong> <a href="tel:+447827498399" style="color:#38bdf8; font-weight:700;">+44 7827 498399</a> (UK)<br/>
+• <strong>📄 Plaintext ATS Resume:</strong> Available for instant 1-click clipboard export on the CV page.<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>`
+        ],
+        followupPool: [
           'Who is Rajeev Mutyalu and why should we hire him?',
           'Tell me about your 20-year engineering leadership and mentorship background',
-          'What is Model Context Protocol (MCP) and how is it used in production?'
+          'What is Model Context Protocol (MCP) and how is it used in production?',
+          'Explain your OpenUSD VFX pipeline architecture'
         ]
       }
     ];
+
+    function getRandomItem(arr) {
+      if (!arr || !arr.length) return '';
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function getDynamicFollowups(pool, count = 4) {
+      if (!pool || !pool.length) return [];
+      const shuffled = [...pool].sort(() => 0.5 - Math.random());
+      let selected = shuffled.slice(0, count);
+
+      // If Cosmic Game Mode is active, inject a contextual game chip dynamically
+      if (typeof window.isPortfolioGameModeActive === 'function' && window.isPortfolioGameModeActive()) {
+        const gameChips = [
+          '⚡ Preset: Solar Flare',
+          '🌌 Preset: Aurora Borealis',
+          '💎 Preset: Hyper Diamond',
+          '☄️ Preset: Comet Cascade',
+          '🔇 Mute Sound',
+          '🛑 Turn Off Game Mode'
+        ];
+        const randomGameChip = gameChips[Math.floor(Math.random() * gameChips.length)];
+        if (!selected.includes(randomGameChip) && selected.length > 0) {
+          selected[selected.length - 1] = randomGameChip;
+        }
+      }
+      return selected;
+    }
 
     function matchQueryToKnowledge(query) {
       const q = query.toLowerCase().trim();
@@ -1807,20 +2142,28 @@
         if (typeof window.setPortfolioAudioMute === 'function') {
           window.setPortfolioAudioMute(true);
         }
-        return {
-          id: 'audio_muted',
-          title: 'Game Audio Muted',
-          response: `🔇 <strong>GAME AUDIO MUTED</strong><br/><br/>
+        const muteResponses = [
+          `🔇 <strong>GAME AUDIO MUTED</strong><br/><br/>
 • Ambient synth BGM and laser sfx have been silenced.<br/>
 • Sentinel-X HUD is running in stealth mode.<br/><br/>
 <em>Type <code>unmute sound</code> or <code>sound on</code> anytime to bring back the audio!</em>`,
-          followups: [
+          `🔇 <strong>STEALTH MODE ENGAGED // AUDIO OFF</strong><br/><br/>
+• Audio synthesizer silenced for focus.<br/>
+• Particle physics and combo scoring continue uninterrupted.<br/><br/>
+<em>Type <code>unmute sound</code> whenever you want to restore the synth BGM!</em>`
+        ];
+        return {
+          id: 'audio_muted',
+          title: 'Game Audio Muted',
+          response: getRandomItem(muteResponses),
+          followups: getDynamicFollowups([
             '🔊 Unmute Sound',
             '⚡ Preset: Solar Flare',
             '🌌 Preset: Aurora Borealis',
             '💎 Preset: Hyper Diamond',
-            '🛑 Turn Off Game Mode'
-          ]
+            '🛑 Turn Off Game Mode',
+            'Who is Rajeev Mutyalu and why should we hire him?'
+          ], 4)
         };
       }
 
@@ -1828,20 +2171,28 @@
         if (typeof window.setPortfolioAudioMute === 'function') {
           window.setPortfolioAudioMute(false);
         }
-        return {
-          id: 'audio_unmuted',
-          title: 'Game Audio Active',
-          response: `🔊 <strong>GAME AUDIO UNMUTED</strong><br/><br/>
+        const unmuteResponses = [
+          `🔊 <strong>GAME AUDIO UNMUTED</strong><br/><br/>
 • Ambient synthwave BGM and interactive collision sfx are now live.<br/>
 • Sentinel-X audio cues active.<br/><br/>
 <em>Type <code>mute sound</code> anytime for silent play!</em>`,
-          followups: [
+          `🔊 <strong>SYNTH AUDIO ONLINE // 44.1kHz WEB AUDIO ACTIVE</strong><br/><br/>
+• Dynamic pentatonic laser sfx and ambient pads engaged.<br/>
+• Combos trigger ascending tonal chimes.<br/><br/>
+<em>Type <code>mute sound</code> anytime to toggle silence!</em>`
+        ];
+        return {
+          id: 'audio_unmuted',
+          title: 'Game Audio Active',
+          response: getRandomItem(unmuteResponses),
+          followups: getDynamicFollowups([
             '🔇 Mute Sound',
             '⚡ Preset: Solar Flare',
             '🌌 Preset: Aurora Borealis',
             '💎 Preset: Hyper Diamond',
-            '🛑 Turn Off Game Mode'
-          ]
+            '🛑 Turn Off Game Mode',
+            'Explain your OpenUSD VFX pipeline architecture'
+          ], 4)
         };
       }
 
@@ -1852,43 +2203,53 @@
       if (isGameModeOn) {
         if (window.innerWidth <= 768) {
           if (typeof window.togglePortfolioGameMode === 'function') {
-            window.togglePortfolioGameMode(true); // Triggers the top toast
+            window.togglePortfolioGameMode(true);
           }
           return {
             id: 'game_mobile_notice',
-            title: 'Desktop & Laptop Precision Required for Cosmic Game Mode',
+            title: 'Desktop Precision Required for Cosmic Game Mode',
             response: `📱 <strong>DESKTOP &amp; LAPTOP PRECISION REQUIRED:</strong><br/><br/>
 The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X Scoreboard</strong> are engineered specifically for precision mouse/trackpad pointer physics, raycasted particle collision, and real-time Web Audio synthesis.<br/><br/>
 💻 <em>Please open <strong>rajeev-mutyalu.github.io/portfolio-website</strong> on a desktop or laptop to vaporize comets, build multi-stage combos, and unlock Sentinel-X ranks!</em>`,
-            followups: [
+            followups: getDynamicFollowups([
               'Who is Rajeev Mutyalu and why should we hire him?',
               'What is Rajeev\'s nickname and trivia?',
               'What is Model Context Protocol (MCP) and how is it used in production?',
               'Explain your OpenUSD VFX pipeline architecture'
-            ]
+            ], 4)
           };
         }
 
         if (typeof window.togglePortfolioGameMode === 'function') {
           window.togglePortfolioGameMode(true);
         }
-        return {
-          id: 'game_on',
-          title: 'Cosmic Game Mode Activated',
-          response: `🎮 <strong>COSMIC GAME MODE ACTIVATED!</strong><br/><br/>
+        const gameOnResponses = [
+          `🎮 <strong>COSMIC GAME MODE ACTIVATED!</strong><br/><br/>
 • <strong>Comet Cascade Canvas:</strong> Online &amp; responsive to mouse/trackpad physics.<br/>
 • <strong>Sentinel-X HUD:</strong> Tracking combos, rank, and score in the bottom-right corner.<br/>
 • <strong>Audio Synthesizer:</strong> Ambient BGM and laser sfx unlocked.<br/>
 • <strong>Controls:</strong> Hover or click on falling comets to vaporize them and build combos!<br/><br/>
 <em>Switch visual presets, mute audio, or turn off below:</em>`,
-          followups: [
+
+          `🚀 <strong>SENTINEL-X COMET DEFENSE ONLINE!</strong><br/><br/>
+• Dual shockwave physics and raycasted particle collisions active.<br/>
+• Chain comet hits within 1.5 seconds to trigger multi-stage combo multipliers (<code>+5 COMBO x3! 🔥</code>).<br/>
+• Web Audio synthesizer reactive to hit velocity.<br/><br/>
+<em>Select an FX preset or explore technical topics below:</em>`
+        ];
+        return {
+          id: 'game_on',
+          title: 'Cosmic Game Mode Activated',
+          response: getRandomItem(gameOnResponses),
+          followups: getDynamicFollowups([
             '🛑 Turn Off Game Mode',
             '🔇 Mute Sound',
             '⚡ Preset: Solar Flare',
             '🌌 Preset: Aurora Borealis',
             '💎 Preset: Hyper Diamond',
-            '☄️ Preset: Comet Cascade'
-          ]
+            '☄️ Preset: Comet Cascade',
+            'Who is Rajeev Mutyalu and why should we hire him?'
+          ], 4)
         };
       }
 
@@ -1896,22 +2257,32 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
         if (typeof window.togglePortfolioGameMode === 'function') {
           window.togglePortfolioGameMode(false);
         }
-        return {
-          id: 'game_off',
-          title: 'Cosmic Game Mode Deactivated',
-          response: `🌌 <strong>COSMIC GAME MODE DEACTIVATED.</strong><br/><br/>
+        const gameOffResponses = [
+          `🌌 <strong>COSMIC GAME MODE DEACTIVATED.</strong><br/><br/>
 • The comet canvas and Sentinel-X HUD have returned to standby mode.<br/>
 • Audio synthesis halted.<br/><br/>
 <em>Type <code>turn on game mode</code> or click the Cosmic Switch in the top navbar anytime to jump back in!</em>`,
-          followups: [
+
+          `🛑 <strong>SENTINEL-X STANDBY // GAME MODE OFF</strong><br/><br/>
+• Interactive particle arcade disengaged.<br/>
+• High-contrast reading mode restored.<br/><br/>
+<em>Type <code>turn on game mode</code> anytime to play again!</em>`
+        ];
+        return {
+          id: 'game_off',
+          title: 'Cosmic Game Mode Deactivated',
+          response: getRandomItem(gameOffResponses),
+          followups: getDynamicFollowups([
             '🎮 Turn On Game Mode',
             'Who is Rajeev Mutyalu and why should we hire him?',
-            'What is Rajeev\'s nickname and trivia?'
-          ]
+            'What is Rajeev\'s nickname and trivia?',
+            'Explain your OpenUSD VFX pipeline architecture',
+            'What is Model Context Protocol (MCP) and how is it used in production?'
+          ], 4)
         };
       }
 
-      // 2. Comet FX Preset Live Switching
+      // 3. Comet FX Preset Live Switching
       if (/\b(solar\s*flare|preset:\s*solar|switch\s*fx\s*to\s*solar)\b/i.test(q) || q === 'solar') {
         if (window.innerWidth <= 768) {
           return {
@@ -1934,12 +2305,13 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
 • <strong>Palette:</strong> High-energy Solar Amber, Golden Photons &amp; Orange Plasma.<br/>
 • <strong>Particle Dynamics:</strong> Increased thermal speed with fiery impact shards.<br/><br/>
 <em>Switch to another preset or turn off anytime below:</em>`,
-          followups: [
+          followups: getDynamicFollowups([
             '🌌 Preset: Aurora Borealis',
             '💎 Preset: Hyper Diamond',
             '☄️ Preset: Comet Cascade',
-            '🛑 Turn Off Game Mode'
-          ]
+            '🛑 Turn Off Game Mode',
+            'Who is Rajeev Mutyalu and why should we hire him?'
+          ], 4)
         };
       }
 
@@ -1965,12 +2337,13 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
 • <strong>Palette:</strong> Bioluminescent Emerald, Cyan Waves &amp; Deep Forest Glow.<br/>
 • <strong>Particle Dynamics:</strong> Smooth atmospheric flow with emerald nebular dust.<br/><br/>
 <em>Switch to another preset or turn off anytime below:</em>`,
-          followups: [
+          followups: getDynamicFollowups([
             '⚡ Preset: Solar Flare',
             '💎 Preset: Hyper Diamond',
             '☄️ Preset: Comet Cascade',
-            '🛑 Turn Off Game Mode'
-          ]
+            '🛑 Turn Off Game Mode',
+            'Explain your OpenUSD VFX pipeline architecture'
+          ], 4)
         };
       }
 
@@ -1996,12 +2369,13 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
 • <strong>Palette:</strong> Crystalline Pure White, Prismatic Silver &amp; Platinum Highlights.<br/>
 • <strong>Particle Dynamics:</strong> Maximum velocity stardust with sharp refractive shatter.<br/><br/>
 <em>Switch to another preset or turn off anytime below:</em>`,
-          followups: [
+          followups: getDynamicFollowups([
             '⚡ Preset: Solar Flare',
             '🌌 Preset: Aurora Borealis',
             '☄️ Preset: Comet Cascade',
-            '🛑 Turn Off Game Mode'
-          ]
+            '🛑 Turn Off Game Mode',
+            'What is Model Context Protocol (MCP) and how is it used in production?'
+          ], 4)
         };
       }
 
@@ -2027,42 +2401,32 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
 • <strong>Palette:</strong> Cyber Cyan, Deep Cobalt &amp; Neon Electric Blue.<br/>
 • <strong>Particle Dynamics:</strong> Classic directional comet rain with cyan shatter bursts.<br/><br/>
 <em>Switch to another preset or turn off anytime below:</em>`,
-          followups: [
+          followups: getDynamicFollowups([
             '⚡ Preset: Solar Flare',
             '🌌 Preset: Aurora Borealis',
             '💎 Preset: Hyper Diamond',
-            '🛑 Turn Off Game Mode'
-          ]
+            '🛑 Turn Off Game Mode',
+            'Who is Rajeev Mutyalu and why should we hire him?'
+          ], 4)
         };
       }
 
-      // 3. Trivia & Nickname ('Bansi', fun facts, trivia)
-      if (/\b(bansi|nickname|nick\s*name|fun\s*fact|fun\s*facts|trivia|hobby|hobbies)\b/i.test(q)) {
-        return {
-          id: 'trivia_nickname',
-          title: 'Rajeev\'s Nickname & Trivia',
-          response: `🌟 <strong>Trivia &amp; Fun Facts about Rajeev Mutyalu:</strong><br/><br/>
-• <strong>🎨 Affectionate Nickname:</strong> Rajeev is affectionately known as <strong>"Bansi"</strong> to close friends, family, and long-time studio colleagues!<br/>
-• <strong>🎬 20-Year Evolution:</strong> Started in the early 2000s mastering traditional computer graphics, 3D modeling, and editorial plate conform, evolving into a Lead Architect across Oscar-winning tentpole films (<em>1917, The Lion King, Tenet, RRR</em>).<br/>
-• <strong>💎 The Dual-Threat Moat:</strong> Equally at home debugging low-level C++/Python OpenUSD composition arcs on Linux render clusters as he is designing cutting-edge agentic workflows, MCP servers, and local quantized LLMs.<br/>
-• <strong>⌨️ Studio Fuel:</strong> Passionate about mechanical keyboards, ultra-clean monospace telemetry, and optimizing studio pipelines down to the millisecond.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
-<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Bio &rarr;</a>`,
-          followups: [
-            'Who is Rajeev Mutyalu and why should we hire him?',
-            'What is Model Context Protocol (MCP) and how is it used in production?',
-            'Explain your OpenUSD VFX pipeline architecture'
-          ]
-        };
-      }
-
-      // 4. Resilient "Who is Rajeev / Why hire him" Check (handles typos like "who si rajeev", "rajeev", "why hire", etc.)
+      // 4. Resilient "Who is Rajeev / Why hire him" Check
       if (/\b(rajeev|muthyalu|mutyalu|who\s+(is|si)\s+rajeev|who\s+(is|si)|why\s+hire|hire\s+him|hire\s+rajeev|about\s+rajeev)\b/i.test(q) || q === 'rajeev' || q === 'why hire') {
         const whyHireItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'why_hire_rajeev');
-        if (whyHireItem) return whyHireItem;
+        if (whyHireItem) {
+          const chosenIntro = getRandomItem(whyHireItem.intros);
+          const chosenResponse = getRandomItem(whyHireItem.responses);
+          return {
+            id: whyHireItem.id,
+            title: whyHireItem.title,
+            response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+            followups: getDynamicFollowups(whyHireItem.followupPool, 4)
+          };
+        }
       }
 
-      // 5. Standard Weighted Knowledge Base Search
+      // 5. Standard Weighted Knowledge Base Search with Dynamic Variation Selector
       let bestMatch = null;
       let maxScore = 0;
 
@@ -2080,15 +2444,27 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
       }
 
       if (maxScore > 0 && bestMatch) {
-        return bestMatch;
+        const chosenIntro = getRandomItem(bestMatch.intros);
+        const chosenResponse = getRandomItem(bestMatch.responses);
+        return {
+          id: bestMatch.id,
+          title: bestMatch.title,
+          response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+          followups: getDynamicFollowups(bestMatch.followupPool, 4)
+        };
       }
 
+      // Fallback with Dynamic Suggestions
+      const fallbackIntros = [
+        '<div class="ai-fallback-badge">🔒 TELEMETRY NOTICE // OFFLINE LOCAL-KB [v1.0.5]</div>',
+        '<div class="ai-fallback-badge">⚡ LOCAL ENGINE READY // SEMANTIC ROUTING [v1.0.5]</div>'
+      ];
       return {
         id: 'fallback',
-        title: 'Telemetry Notice: Offline Local-KB Scope [v1.0.4]',
-        response: `<div class="ai-fallback-badge">🔒 TELEMETRY NOTICE // OFFLINE LOCAL-KB [v1.0.4]</div>
-I am currently operating as an <strong>offline local knowledge base</strong> dedicated exclusively to <strong>Rajeev Mutyalu's Technical Arsenal, VFX Pipeline Architecture, and GenAI Portfolio</strong>.<br/><br/>
-<em>Live open-domain reasoning and web exploration will unlock in my upcoming <strong>OpenClaw Real-Time Agent runtime</strong>. In the meantime, ask me in-depth technical questions about:</em><br/><br/>
+        title: 'Telemetry Notice: Offline Local-KB Scope [v1.0.5]',
+        response: `${getRandomItem(fallbackIntros)}
+I am operating as a high-speed <strong>offline local knowledge engine</strong> dedicated exclusively to <strong>Rajeev Mutyalu's Technical Arsenal, VFX Pipeline Architecture, and GenAI Portfolio</strong>.<br/><br/>
+<em>Live open-domain web exploration will unlock in the upcoming <strong>OpenClaw Real-Time Agent runtime</strong>. In the meantime, ask me in-depth technical questions about:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
 • <strong>🎨 Trivia &amp; Nickname:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="What is Rajeev's nickname and trivia?" style="display:inline-block; margin-top:2px;">What is Rajeev's Nickname?</a><br/>
 • <strong>🎮 Interactive Game:</strong> Type <code>turn on game mode</code> or <code>turn off game mode</code><br/>
@@ -2099,12 +2475,14 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
 • <strong>📦 Conform Ingest &amp; VFX I/O:</strong> Editorial turnovers, DI discrepancy reporting &amp; OTIO<br/>
 • <strong>⚡ Zero-Touch n8n Automation:</strong> Inbound &amp; reverse webhooks for render dispatch<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Full Technical Arsenal &rarr;</a>`,
-        followups: [
+        followups: getDynamicFollowups([
           'Who is Rajeev Mutyalu and why should we hire him?',
           'What is Rajeev\'s nickname and trivia?',
-          'turn on game mode',
-          'What is Model Context Protocol (MCP) and how is it used in production?'
-        ]
+          'What is Model Context Protocol (MCP) and how is it used in production?',
+          'Explain your OpenUSD VFX pipeline architecture',
+          'How does zero-touch n8n studio automation orchestrate pipelines?',
+          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?'
+        ], 4)
       };
     }
 
