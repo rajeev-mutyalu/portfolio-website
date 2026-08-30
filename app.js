@@ -227,29 +227,42 @@
     }
 
     triggerShatterBurst(x, y, count = 8, isExtra = false) {
-      const finalCount = isExtra ? 14 : count;
+      const finalCount = isExtra ? 16 : count;
       for (let i = 0; i < finalCount; i++) {
         const pAngle = Math.random() * Math.PI * 2;
-        const pSpeed = (1.5 + Math.random() * 3.8) * (isExtra ? 1.35 : 1.0);
+        const pSpeed = (1.6 + Math.random() * 4.2) * (isExtra ? 1.4 : 1.0);
         this.shards.push({
           x: x,
           y: y,
           vx: Math.cos(pAngle) * pSpeed,
           vy: Math.sin(pAngle) * pSpeed,
-          radius: 1.0 + Math.random() * (isExtra ? 2.2 : 1.6),
+          radius: 1.0 + Math.random() * (isExtra ? 2.4 : 1.6),
           alpha: 1.0,
-          decay: 0.025 + Math.random() * 0.03
+          decay: 0.022 + Math.random() * 0.028
         });
       }
 
+      // Dual concentric shockwave rings
       this.ripples.push({
         x: x,
         y: y,
         radius: 2,
-        maxRadius: isExtra ? 36 : 28,
-        alpha: 0.85,
-        speed: isExtra ? 1.8 : 1.4
+        maxRadius: isExtra ? 48 : 34,
+        alpha: 1.0,
+        speed: isExtra ? 2.4 : 1.8,
+        lineWidth: isExtra ? 2.4 : 1.6
       });
+      if (isExtra) {
+        this.ripples.push({
+          x: x,
+          y: y,
+          radius: 1,
+          maxRadius: 26,
+          alpha: 0.8,
+          speed: 1.3,
+          lineWidth: 1.2
+        });
+      }
     }
 
     update() {
@@ -328,14 +341,17 @@
       if (!this.isEnabled) return;
       this.ctx.clearRect(0, 0, this.width, this.height);
 
-      // 1. Draw Ripples
+      // 1. Draw Shockwave Ripples with Neon Glow
       this.ripples.forEach(r => {
         this.ctx.beginPath();
         this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
         this.ctx.strokeStyle = this.theme.midBright;
-        this.ctx.lineWidth = 1.2;
+        this.ctx.lineWidth = r.lineWidth || 1.4;
         this.ctx.globalAlpha = r.alpha;
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowColor = this.theme.highlight;
         this.ctx.stroke();
+        this.ctx.shadowBlur = 0;
       });
 
       // 2. Draw Particles (Streaks & Orbs)
@@ -558,7 +574,7 @@
       return this.isMuted;
     }
 
-    // 1. Mouse Comet Collision & Shatter Sound Effect (Crystal Star Burst Chime)
+    // 1. Mouse Comet Collision & Shatter Sound Effect (Crystal Star Burst Chime & Spatial Combo Chords)
     playHit(combo = 1) {
       if (this.isMuted) return;
       this.ensureContext();
@@ -576,15 +592,23 @@
       const scaleIndex = Math.min(pentatonicScales.length - 1, (combo - 1) % pentatonicScales.length);
       const freq = pentatonicScales[scaleIndex];
 
+      // Spatial Stereo Pan (alternates across left/right channels on combo streaks)
+      const panVal = Math.max(-0.65, Math.min(0.65, ((combo % 6) - 2.5) * 0.26));
+      let panner = null;
+      if (typeof this.ctx.createStereoPanner === 'function') {
+        panner = this.ctx.createStereoPanner();
+        panner.pan.setValueAtTime(panVal, now);
+      }
+
       // Primary Crystal Bell Tone (Pure Sine)
       const osc1 = this.ctx.createOscillator();
       const gain1 = this.ctx.createGain();
       osc1.type = 'sine';
       osc1.frequency.setValueAtTime(freq, now);
-      osc1.frequency.exponentialRampToValueAtTime(freq * 0.98, now + 0.14);
+      osc1.frequency.exponentialRampToValueAtTime(freq * 0.98, now + 0.15);
 
       gain1.gain.setValueAtTime(0.38, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
 
       // Shimmering High Harmonic (Glass Sparkle at 2.76x)
       const osc2 = this.ctx.createOscillator();
@@ -592,24 +616,58 @@
       osc2.type = 'triangle';
       osc2.frequency.setValueAtTime(freq * 2.76, now);
 
-      gain2.gain.setValueAtTime(0.16, now);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+      gain2.gain.setValueAtTime(0.18, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
       // Soft lowpass filter to keep sound warm and melodic
       const filter = this.ctx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(3600, now);
+      filter.frequency.setValueAtTime(3800, now);
 
       osc1.connect(gain1);
       osc2.connect(gain2);
       gain1.connect(filter);
       gain2.connect(filter);
-      filter.connect(this.sfxGain);
+
+      // Combo >= 4: Add Sub-Octave Fundamental Bass Resonance
+      if (combo >= 4) {
+        const subOsc = this.ctx.createOscillator();
+        const subGain = this.ctx.createGain();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(freq * 0.5, now);
+        subGain.gain.setValueAtTime(0.25, now);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        subOsc.connect(subGain);
+        subGain.connect(filter);
+        subOsc.start(now);
+        subOsc.stop(now + 0.25);
+      }
+
+      // Combo >= 8: Add 3rd Harmonic Power Chord Overdrive
+      if (combo >= 8) {
+        const chordOsc = this.ctx.createOscillator();
+        const chordGain = this.ctx.createGain();
+        chordOsc.type = 'triangle';
+        chordOsc.frequency.setValueAtTime(freq * 1.5, now);
+        chordGain.gain.setValueAtTime(0.20, now);
+        chordGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        chordOsc.connect(chordGain);
+        chordGain.connect(filter);
+        chordOsc.start(now);
+        chordOsc.stop(now + 0.20);
+      }
+
+      if (panner) {
+        filter.connect(panner);
+        panner.connect(this.sfxGain);
+      } else {
+        filter.connect(this.sfxGain);
+      }
 
       osc1.start(now);
       osc2.start(now);
-      osc1.stop(now + 0.15);
-      osc2.stop(now + 0.07);
+      osc1.stop(now + 0.16);
+      osc2.stop(now + 0.09);
     }
 
     // 2. Triumphant Level Up / Rank Advancement Fanfare
@@ -957,7 +1015,13 @@
       }
 
       // Spawn floating visual score popup
-      this.spawnPopup(x, y, this.combo >= 4 ? `+${count} COMBO!` : `+${count}💥`);
+      if (this.combo >= 8) {
+        this.spawnPopup(x, y, `CRIT +${count * 10}! ⚡`, 'crit');
+      } else if (this.combo >= 3) {
+        this.spawnPopup(x, y, `+${count * 5} COMBO x${this.combo}! 🔥`, 'combo');
+      } else {
+        this.spawnPopup(x, y, `+${count} ✨`, 'normal');
+      }
 
       // Check milestones first
       this.checkMilestones();
@@ -1020,6 +1084,7 @@
         const newTheme = this.themesCycle[targetThemeIndex];
         if (this.onThemeChange) this.onThemeChange(newTheme);
         if (this.soundEngine) this.soundEngine.playLevelUp();
+        this.triggerScreenFlash();
 
         const shiftAnnouncements = {
           solar: { face: '[🔥_🔥]', msg: 'HYPERDRIVE: Solar Flare Stage 2 active! 🔥' },
@@ -1045,6 +1110,7 @@
           if (this.rankEl && this.rankEl.innerText !== m.rank) {
             this.rankEl.innerText = m.rank;
             if (this.soundEngine) this.soundEngine.playLevelUp();
+            this.triggerScreenFlash();
           }
           if (this.score === m.count || this.score === m.count + 1) {
             this.setMessage(m.msg);
@@ -1059,15 +1125,22 @@
       }
     }
 
-    spawnPopup(x, y, text) {
+    spawnPopup(x, y, text, type = 'normal') {
       if (!x || !y) return;
       const el = document.createElement('div');
-      el.className = 'shatter-popup';
+      el.className = `shatter-popup ${type === 'crit' ? 'crit-popup' : (type === 'combo' ? 'combo-popup' : '')}`.trim();
       el.innerText = text;
       el.style.left = `${x}px`;
       el.style.top = `${y}px`;
       document.body.appendChild(el);
-      setTimeout(() => el.remove(), 700);
+      setTimeout(() => el.remove(), 850);
+    }
+
+    triggerScreenFlash() {
+      const flash = document.createElement('div');
+      flash.className = 'screen-milestone-flash';
+      document.body.appendChild(flash);
+      setTimeout(() => flash.remove(), 750);
     }
   }
 
