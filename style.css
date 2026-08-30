@@ -2348,9 +2348,16 @@ body {
   color: var(--text-primary);
 }
 
-/* ==========================================================================
-   🤖 Interactive AI Assistant & Technical Knowledge Base (Charlie)
-   ========================================================================== */
+#ai-assistant.section-container {
+  padding-top: 1.5rem;
+  padding-bottom: 1.75rem;
+  scroll-margin-top: 76px;
+}
+
+#ai-assistant .section-header {
+  margin: 0 auto 1rem;
+}
+
 #ai-assistant,
 #charlie,
 .ai-bot-terminal {
@@ -2359,7 +2366,7 @@ body {
 
 .ai-bot-terminal {
   max-width: 1040px;
-  margin: 1.5rem auto 0 auto;
+  margin: 1rem auto 0 auto;
   background: rgba(5, 8, 17, 0.95);
   border: 1px solid rgba(56, 189, 248, 0.3);
   border-radius: var(--radius-lg, 12px);
@@ -2381,7 +2388,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 18px;
+  padding: 10px 16px;
   background: rgba(10, 15, 30, 0.98);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -2446,7 +2453,8 @@ body {
 .ai-bot-body-split {
   display: grid;
   grid-template-columns: 270px 1fr;
-  min-height: 520px;
+  min-height: 380px;
+  max-height: min(60vh, 500px);
   background: rgba(5, 8, 17, 0.7);
 }
 
@@ -2454,11 +2462,11 @@ body {
 .ai-bot-sidebar {
   background: rgba(8, 13, 26, 0.96);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 14px 10px;
+  padding: 12px 10px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  max-height: 560px;
+  max-height: min(60vh, 500px);
   scrollbar-width: thin;
 }
 
@@ -2557,13 +2565,13 @@ body {
 }
 
 .ai-chat-stream {
-  padding: 20px 22px;
-  min-height: 400px;
-  max-height: 480px;
+  padding: 16px 20px;
+  min-height: 250px;
+  max-height: min(48vh, 420px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   scroll-behavior: smooth;
   flex: 1;
 }
