@@ -2664,7 +2664,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         setTimeout(() => {
           const input = document.getElementById('aiInputField');
           if (input) {
-            input.focus();
+            input.focus({ preventScroll: true });
             input.classList.add('input-pulse-highlight');
             setTimeout(() => input.classList.remove('input-pulse-highlight'), 1200);
           }
