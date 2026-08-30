@@ -1215,6 +1215,7 @@
         if (missionToast) missionToast.classList.add('hidden');
       }
     }
+    window.togglePortfolioGameMode = toggleFunMode;
 
     // Ensure Game Mode and FX widget are strictly OFF on load and back-navigation
     toggleFunMode(false);
@@ -1433,21 +1434,39 @@
     const AI_KNOWLEDGE_BASE = [
       {
         id: 'why_hire_rajeev',
-        keywords: ['why hire', 'why should we hire', 'hire rajeev', 'who is rajeev', 'pitch', 'recruit', 'recruiting', 'strengths', 'why choose', 'value proposition', 'summary', 'unique', 'role', 'senior', 'lead', 'architect', 'about rajeev', 'why hire him'],
-        title: 'Why Hire Rajeev Mutyalu? (Executive Pitch)',
-        response: `<strong>🌟 Executive Pitch: Why Hire Rajeev Mutyalu?</strong><br/><br/>
+        keywords: ['why hire', 'why should we hire', 'hire rajeev', 'who is rajeev', 'who si rajeev', 'who is', 'who si', 'pitch', 'recruit', 'recruiting', 'strengths', 'why choose', 'value proposition', 'summary', 'unique', 'role', 'senior', 'lead', 'architect', 'about rajeev', 'why hire him', 'rajeev mutyalu', 'rajeev', 'muthyalu', 'mutyalu'],
+        title: 'Who is Rajeev Mutyalu & Why Hire Him? (Executive Pitch)',
+        response: `<strong>🌟 Executive Summary: Who is Rajeev Mutyalu &amp; Why Hire Him?</strong><br/><br/>
 • <strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &amp; Creative Technologist with 20+ years of proven R&amp;D leadership across MPC, DNEG, and Technicolor on Oscar-winning blockbuster productions (<em>1917, Blade Runner 2049, Tenet, Life of Pi, The Lion King</em>).<br/>
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
+• <strong>🎨 Personal Nickname &amp; Trivia:</strong> Known affectionately as <strong>"Bansi"</strong> to close friends and long-time collaborators!<br/>
 • <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bangalore under strict Hollywood delivery deadlines.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`,
         followups: [
+          'What is Rajeev\'s nickname and trivia?',
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'Explain your OpenUSD VFX pipeline architecture',
-          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
-          'Tell me about your 20-year engineering leadership and mentorship background'
+          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?'
+        ]
+      },
+      {
+        id: 'trivia_nickname',
+        keywords: ['bansi', 'nickname', 'nick name', 'fun fact', 'fun facts', 'trivia', 'who is bansi', 'what is rajeev nickname', 'what is rajeev\'s nickname', 'hobbies', 'personal', 'hobby'],
+        title: 'Rajeev\'s Nickname & Trivia',
+        response: `<strong>🌟 Trivia &amp; Fun Facts about Rajeev Mutyalu:</strong><br/><br/>
+• <strong>🎨 Affectionate Nickname:</strong> Rajeev is affectionately known as <strong>"Bansi"</strong> to close friends, family, and long-time studio colleagues!<br/>
+• <strong>🎬 20-Year Evolution:</strong> Started in the early 2000s mastering traditional computer graphics, 3D modeling, and editorial plate conform, evolving into a Lead Architect across Oscar-winning tentpole films (<em>1917, The Lion King, Tenet, RRR</em>).<br/>
+• <strong>💎 The Dual-Threat Moat:</strong> Equally at home debugging low-level C++/Python OpenUSD composition arcs on Linux render clusters as he is designing cutting-edge agentic workflows, MCP servers, and local quantized LLMs.<br/>
+• <strong>⌨️ Studio Fuel:</strong> Passionate about mechanical keyboards, ultra-clean monospace telemetry, and optimizing studio pipelines down to the millisecond.<br/><br/>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Bio &rarr;</a>`,
+        followups: [
+          'Who is Rajeev Mutyalu and why should we hire him?',
+          'What is Model Context Protocol (MCP) and how is it used in production?',
+          'Explain your OpenUSD VFX pipeline architecture'
         ]
       },
       {
@@ -1647,6 +1666,78 @@
 
     function matchQueryToKnowledge(query) {
       const q = query.toLowerCase().trim();
+
+      // 1. Live Game Mode Interactive Control
+      const isGameModeOn = /\b(turn\s+on\s+game|game\s+mode\s+on|enable\s+game|start\s+game|play\s+game|activate\s+game|game\s+on|play\s+cosmic)\b/i.test(q) || q === 'game mode' || q === 'game' || q === 'on';
+      const isGameModeOff = /\b(turn\s+off\s+game|game\s+mode\s+off|disable\s+game|stop\s+game|exit\s+game|deactivate\s+game|game\s+off)\b/i.test(q) || q === 'off';
+
+      if (isGameModeOn) {
+        if (typeof window.togglePortfolioGameMode === 'function') {
+          window.togglePortfolioGameMode(true);
+        }
+        return {
+          id: 'game_on',
+          title: 'Cosmic Game Mode Activated',
+          response: `🎮 <strong>COSMIC GAME MODE ACTIVATED!</strong><br/><br/>
+• <strong>Comet Cascade Canvas:</strong> Online &amp; responsive to mouse/trackpad physics.<br/>
+• <strong>Sentinel-X HUD:</strong> Tracking your combos and scores in the bottom-right corner.<br/>
+• <strong>Audio Synthesizer:</strong> Ambient BGM and laser sfx unlocked.<br/>
+• <strong>How to Play:</strong> Hover or click on falling comets to vaporize them and build multi-stage combos!<br/><br/>
+<em>Type <code>turn off game mode</code> or <code>game off</code> anytime to return to standard reading mode.</em>`,
+          followups: [
+            'Who is Rajeev Mutyalu and why should we hire him?',
+            'What is Rajeev\'s nickname and trivia?',
+            'turn off game mode'
+          ]
+        };
+      }
+
+      if (isGameModeOff) {
+        if (typeof window.togglePortfolioGameMode === 'function') {
+          window.togglePortfolioGameMode(false);
+        }
+        return {
+          id: 'game_off',
+          title: 'Cosmic Game Mode Deactivated',
+          response: `🌌 <strong>COSMIC GAME MODE DEACTIVATED.</strong><br/><br/>
+• The comet canvas and Sentinel-X HUD have returned to standby mode.<br/>
+• Audio synthesis halted.<br/><br/>
+<em>Type <code>turn on game mode</code> or click the Cosmic Switch in the top navbar anytime to jump back in!</em>`,
+          followups: [
+            'Who is Rajeev Mutyalu and why should we hire him?',
+            'What is Rajeev\'s nickname and trivia?',
+            'turn on game mode'
+          ]
+        };
+      }
+
+      // 2. Trivia & Nickname ('Bansi', fun facts, trivia)
+      if (/\b(bansi|nickname|nick\s*name|fun\s*fact|fun\s*facts|trivia|hobby|hobbies)\b/i.test(q)) {
+        return {
+          id: 'trivia_nickname',
+          title: 'Rajeev\'s Nickname & Trivia',
+          response: `🌟 <strong>Trivia &amp; Fun Facts about Rajeev Mutyalu:</strong><br/><br/>
+• <strong>🎨 Affectionate Nickname:</strong> Rajeev is affectionately known as <strong>"Bansi"</strong> to close friends, family, and long-time studio colleagues!<br/>
+• <strong>🎬 20-Year Evolution:</strong> Started in the early 2000s mastering traditional computer graphics, 3D modeling, and editorial plate conform, evolving into a Lead Architect across Oscar-winning tentpole films (<em>1917, The Lion King, Tenet, RRR</em>).<br/>
+• <strong>💎 The Dual-Threat Moat:</strong> Equally at home debugging low-level C++/Python OpenUSD composition arcs on Linux render clusters as he is designing cutting-edge agentic workflows, MCP servers, and local quantized LLMs.<br/>
+• <strong>⌨️ Studio Fuel:</strong> Passionate about mechanical keyboards, ultra-clean monospace telemetry, and optimizing studio pipelines down to the millisecond.<br/><br/>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Bio &rarr;</a>`,
+          followups: [
+            'Who is Rajeev Mutyalu and why should we hire him?',
+            'What is Model Context Protocol (MCP) and how is it used in production?',
+            'Explain your OpenUSD VFX pipeline architecture'
+          ]
+        };
+      }
+
+      // 3. Resilient "Who is Rajeev / Why hire him" Check (handles typos like "who si rajeev", "rajeev", "why hire", etc.)
+      if (/\b(rajeev|muthyalu|mutyalu|who\s+(is|si)\s+rajeev|who\s+(is|si)|why\s+hire|hire\s+him|hire\s+rajeev|about\s+rajeev)\b/i.test(q) || q === 'rajeev' || q === 'why hire') {
+        const whyHireItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'why_hire_rajeev');
+        if (whyHireItem) return whyHireItem;
+      }
+
+      // 4. Standard Weighted Knowledge Base Search
       let bestMatch = null;
       let maxScore = 0;
 
@@ -1674,6 +1765,8 @@
 I am currently operating as an <strong>offline local knowledge base</strong> dedicated exclusively to <strong>Rajeev Mutyalu's Technical Arsenal, VFX Pipeline Architecture, and GenAI Portfolio</strong>.<br/><br/>
 <em>Live open-domain reasoning and web exploration will unlock in my upcoming <strong>OpenClaw Real-Time Agent runtime</strong>. In the meantime, ask me in-depth technical questions about:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
+• <strong>🎨 Trivia &amp; Nickname:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="What is Rajeev's nickname and trivia?" style="display:inline-block; margin-top:2px;">What is Rajeev's Nickname?</a><br/>
+• <strong>🎮 Interactive Game:</strong> Type <code>turn on game mode</code> or <code>turn off game mode</code><br/>
 • <strong>🔌 Model Context Protocol (MCP):</strong> Custom JSON-RPC tool binding for DCCs<br/>
 • <strong>🤖 Agentic AI &amp; Vibe Coding:</strong> Claude Code, Google Antigravity &amp; subagent swarms<br/>
 • <strong>🔒 On-Premise LLMs &amp; OpenClaw:</strong> Nous Hermes, Ollama, and 4-bit GGUF/AWQ quantization<br/>
@@ -1683,9 +1776,9 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
 <a href="#initiatives" class="ai-section-link">🚀 Explore Full Technical Arsenal &rarr;</a>`,
         followups: [
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain your OpenUSD VFX pipeline architecture',
-          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?'
+          'What is Rajeev\'s nickname and trivia?',
+          'turn on game mode',
+          'What is Model Context Protocol (MCP) and how is it used in production?'
         ]
       };
     }
