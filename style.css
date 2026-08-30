@@ -863,13 +863,76 @@ body {
   text-decoration: none;
   font-size: 0.82rem;
   font-weight: 500;
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   white-space: nowrap;
 }
 
-.nav-link:hover,
-.nav-link.active {
+.nav-link:hover {
+  color: #ffffff;
+}
+
+.nav-link.active:not(.nav-ai-link) {
   color: var(--accent-cyan);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+/* Dedicated Special Capsule for Charlie AI in Navbar */
+.nav-link.nav-ai-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: #c4b5fd;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.80rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link.nav-ai-link:hover {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: #a78bfa;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+  transform: translateY(-1px);
+}
+
+.nav-link.nav-ai-link.active {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(0, 242, 254, 0.25)) !important;
+  border-color: var(--accent-cyan) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.45);
+}
+
+.nav-ai-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a78bfa;
+  box-shadow: 0 0 6px #a78bfa;
+  animation: dotPulse 1.6s infinite;
+}
+
+.nav-link.nav-ai-link.active .nav-ai-dot {
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+/* Mobile Nav Charlie Pill */
+.mobile-nav-link.mobile-nav-ai {
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: #c4b5fd;
+}
+
+.mobile-nav-link.mobile-nav-ai:hover,
+.mobile-nav-link.mobile-nav-ai:active {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: var(--accent-cyan);
+  color: #ffffff;
 }
 
 .nav-actions {
