@@ -1347,14 +1347,27 @@
       archDetails.innerHTML = flow.description;
     }
 
+    function switchArchitectureTab(flowKey) {
+      if (!flowKey || !FLOWS[flowKey]) return;
+      if (archButtons && archButtons.length) {
+        archButtons.forEach(b => {
+          if (b.getAttribute('data-flow') === flowKey) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+      }
+      renderArchitectureFlow(flowKey);
+    }
+    window.switchArchitectureTab = switchArchitectureTab;
+
     if (archButtons.length && archCanvas && archDetails) {
       renderArchitectureFlow('usd');
       archButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-          archButtons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
           const flowKey = btn.getAttribute('data-flow');
-          renderArchitectureFlow(flowKey);
+          switchArchitectureTab(flowKey);
         });
       });
     }
@@ -1494,7 +1507,7 @@
 • <strong>🎯 Where is it used?</strong> Core studio 3D pipeline across Maya, Houdini Solaris, Unreal Engine, and Hydra renderers (Karma, Arnold, RenderMan).<br/>
 • <strong>💡 Why is it used?</strong> Monolithic scene files create multi-department bottlenecks. OpenUSD allows dozens of artists across Modeling, Groom, LookDev, Animation, and Lighting to collaborate simultaneously without overwriting data.<br/>
 • <strong>🚀 How it helps production:</strong> Rajeev's <strong>2-Tier Architecture</strong> separates modular Asset Publishing from non-destructive Shot Sublayering (SH0010). Geometry is referenced via payloads with zero file bloat and sub-second shot load times.<br/><br/>
-<a href="#architecture" class="ai-section-link">🎬 Launch Interactive USD Architecture Visualizer &rarr;</a>`,
+<a href="#architecture" data-arch-tab="usd" class="ai-section-link">🎬 Launch Interactive USD Architecture Visualizer &rarr;</a>`,
         followups: [
           'How does your Conform Ingest and editorial turnover pipeline work?',
           'Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO) standards',
@@ -1526,7 +1539,7 @@
 • <strong>🎯 Where is it used?</strong> Automated project onboarding, editorial plate ingest, render farm dispatch, and team messaging sync (Slack/Teams).<br/>
 • <strong>💡 Why is it used?</strong> Traditional cron polling scripts poll databases every few minutes, creating massive database load and delayed notifications.<br/>
 • <strong>🚀 How it helps production:</strong> Reacts instantaneously to studio events (e.g. editorial file drops or ShotGrid approvals), validates file integrity, initiates background farm jobs, and pushes real-time status alerts without human intervention.<br/><br/>
-<a href="#architecture" class="ai-section-link">⚡ View n8n Flow in Pipeline Visualizer &rarr;</a>`,
+<a href="#architecture" data-arch-tab="automation" class="ai-section-link">⚡ View n8n Flow in Pipeline Visualizer &rarr;</a>`,
         followups: [
           'How does your Conform Ingest and editorial turnover pipeline work?',
           'Tell me about GenAI video pipelines with Veo, Kling, and Studio.AI',
@@ -1558,7 +1571,7 @@
 • <strong>🎯 Where is it used?</strong> Previsualization, concept ideation, multi-model prompt routing (Google Veo, Kling AI, Higgsfield), and web asset extraction via FireCrawl.<br/>
 • <strong>💡 Why is it used?</strong> Out-of-the-box video models produce inconsistent character faces, unstable wardrobe details, and non-standard color spaces.<br/>
 • <strong>🚀 How it helps production:</strong> Enforces character latent identity consistency across video shots, automates prompt generation from screenplays, and conformed outputs directly into OCIO/ACEScg for Nuke compositing.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🎥 Explore Studio.AI Platform Case Study &rarr;</a>`,
+<a href="#architecture" data-arch-tab="genai" class="ai-section-link">🤖 View GenAI Flow in Pipeline Visualizer &rarr;</a>`,
         followups: [
           'Explain your OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
@@ -1710,13 +1723,18 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
       const trimmedQuery = query.trim();
       if (!trimmedQuery) return;
 
-      // 1. Append User Message
+      // 1. Append User Message (Theme-Aligned Sleek Terminal User Prompt)
       const userMsgDiv = document.createElement('div');
       userMsgDiv.className = 'ai-message ai-user-msg user-message';
       userMsgDiv.innerHTML = `
-        <div class="ai-msg-avatar">YOU</div>
+        <div class="ai-msg-avatar ai-user-avatar" title="Visitor / Technical Recruiter">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
         <div class="ai-msg-body">
-          <div class="ai-msg-author">You</div>
+          <div class="ai-msg-author ai-user-author">You <span>[Terminal Prompt]</span></div>
           <div class="ai-msg-content">${escapeHtml(trimmedQuery)}</div>
         </div>
       `;
@@ -1785,6 +1803,16 @@ I am currently operating as an <strong>offline local knowledge base</strong> ded
 
     // Delegated Click Listener for All Charlie Topic, Follow-up & Deep Link Buttons
     document.addEventListener('click', (e) => {
+      // 1. Auto-switch architecture visualizer tab if link has data-arch-tab
+      const archLink = e.target.closest('a[data-arch-tab]');
+      if (archLink) {
+        const tab = archLink.getAttribute('data-arch-tab');
+        if (typeof window.switchArchitectureTab === 'function') {
+          window.switchArchitectureTab(tab);
+        }
+      }
+
+      // 2. Charlie sidebar / chip triggers
       const btn = e.target.closest('.ai-sidebar-btn, .ai-topic-pill, .ai-followup-btn');
       if (btn) {
         e.preventDefault();
