@@ -2290,20 +2290,6 @@ body {
   transform: translateY(-2px);
 }
 
-.btn-download-photo {
-  background: rgba(139, 92, 246, 0.15);
-  color: #c084fc;
-  border: 1px solid rgba(139, 92, 246, 0.35);
-}
-
-.btn-download-photo:hover {
-  background: rgba(139, 92, 246, 0.3);
-  color: #ffffff;
-  border-color: #a855f7;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35);
-}
-
 /* Architecture Flow Visualizer */
 .arch-box {
   padding: 2rem;
@@ -3631,41 +3617,26 @@ body {
   border-color: var(--accent-cyan);
 }
 
-.cv-avatar-download-badge {
-  margin-top: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.28);
-  border-radius: 6px;
-  padding: 3px 9px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+.cv-avatar-link {
+  display: block;
   text-decoration: none;
-  transition: all 0.2s ease;
   cursor: pointer;
-  white-space: nowrap;
+  border-radius: 18px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.cv-avatar-download-badge:hover {
-  background: rgba(56, 189, 248, 0.24);
-  color: #ffffff;
-  border-color: #38bdf8;
-  transform: translateY(-1px);
+.cv-avatar-link:hover .cv-avatar-img {
+  transform: scale(1.025);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 16px 40px rgba(0, 242, 254, 0.35), 0 0 25px rgba(0, 242, 254, 0.2);
 }
 
-body.cv-theme-light .cv-avatar-download-badge {
-  color: #0369a1 !important;
-  background: #f0f9ff !important;
-  border-color: #bae6fd !important;
-}
-
-body.cv-theme-light .cv-avatar-download-badge:hover {
-  background: #e0f2fe !important;
-  color: #0284c7 !important;
+@media print {
+  .cv-avatar-link {
+    text-decoration: none;
+    border: none;
+    box-shadow: none;
+  }
 }
 
 .cv-identity-text {
