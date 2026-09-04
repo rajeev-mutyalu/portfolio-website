@@ -1583,6 +1583,18 @@ body {
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
+.icon-violet {
+  background: rgba(139, 92, 246, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.icon-emerald {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
 .feature-card h3 {
   font-family: var(--font-display);
   font-size: 1.15rem;
@@ -4734,6 +4746,20 @@ body.cv-theme-light .awards-card.studio-theme {
   background: #ffffff !important;
 }
 
+body.cv-theme-light .awards-card.ai-cert-theme {
+  border-color: #cbd5e1 !important;
+  border-top: 3.5px solid #7c3aed !important;
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.08) !important;
+}
+
+body.cv-theme-light .awards-card.hackathon-theme {
+  border-color: #cbd5e1 !important;
+  border-top: 3.5px solid #059669 !important;
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.08) !important;
+}
+
 body.cv-theme-light .awards-card-title-group h3 {
   color: #0f172a !important;
   font-weight: 800 !important;
@@ -4749,6 +4775,16 @@ body.cv-theme-light .studio-theme .awards-card-subtitle {
   font-weight: 600 !important;
 }
 
+body.cv-theme-light .ai-cert-theme .awards-card-subtitle {
+  color: #6d28d9 !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .hackathon-theme .awards-card-subtitle {
+  color: #047857 !important;
+  font-weight: 700 !important;
+}
+
 body.cv-theme-light .card-icon.icon-cyan {
   background: #f0f9ff !important;
   border: 1px solid #bae6fd !important;
@@ -4759,6 +4795,18 @@ body.cv-theme-light .card-icon.icon-amber {
   background: #fffbeb !important;
   border: 1px solid #fde68a !important;
   color: #d97706 !important;
+}
+
+body.cv-theme-light .card-icon.icon-violet {
+  background: #f5f3ff !important;
+  border: 1px solid #ddd6fe !important;
+  color: #6d28d9 !important;
+}
+
+body.cv-theme-light .card-icon.icon-emerald {
+  background: #ecfdf5 !important;
+  border: 1px solid #a7f3d0 !important;
+  color: #047857 !important;
 }
 
 body.cv-theme-light .award-badge-pill.pill-cyan {
@@ -4773,6 +4821,32 @@ body.cv-theme-light .award-badge-pill.pill-amber {
   color: #b45309 !important;
   border: 1px solid #fde68a !important;
   font-weight: 700 !important;
+}
+
+body.cv-theme-light .award-badge-pill.pill-violet {
+  background: #f5f3ff !important;
+  color: #5b21b6 !important;
+  border: 1.5px solid #c4b5fd !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .award-badge-pill.pill-violet:hover {
+  background: #ede9fe !important;
+  color: #4c1d95 !important;
+  border-color: #8b5cf6 !important;
+}
+
+body.cv-theme-light .award-badge-pill.pill-emerald {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border: 1.5px solid #6ee7b7 !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .award-badge-pill.pill-emerald:hover {
+  background: #d1fae5 !important;
+  color: #064e3b !important;
+  border-color: #10b981 !important;
 }
 
 body.cv-theme-light .awards-quote-box {
@@ -4790,11 +4864,77 @@ body.cv-theme-light .awards-quote-author {
   margin-top: 6px !important;
 }
 
+body.cv-theme-light .ai-cert-theme .awards-quote-box {
+  background: #faf5ff !important;
+  border: 1px solid #ede9fe !important;
+  border-left: 3.5px solid #7c3aed !important;
+  color: #1e293b !important;
+}
+
+body.cv-theme-light .ai-cert-theme .awards-quote-author {
+  color: #6d28d9 !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .hackathon-theme .awards-quote-box {
+  background: #f0fdf4 !important;
+  border: 1px solid #dcfce7 !important;
+  border-left: 3.5px solid #059669 !important;
+  color: #1e293b !important;
+}
+
+body.cv-theme-light .hackathon-theme .awards-quote-author {
+  color: #047857 !important;
+  font-weight: 700 !important;
+}
+
 body.cv-theme-light .pill {
   background: #f1f5f9 !important;
   color: #334155 !important;
   border: 1px solid #cbd5e1 !important;
   font-weight: 600 !important;
+}
+
+body.cv-theme-light .pill.pill-violet {
+  background: #f5f3ff !important;
+  color: #5b21b6 !important;
+  border: 1px solid #ddd6fe !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .pill.pill-emerald {
+  background: #ecfdf5 !important;
+  color: #047857 !important;
+  border: 1px solid #a7f3d0 !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .pill.pill-cyan {
+  background: #f0f9ff !important;
+  color: #0369a1 !important;
+  border: 1px solid #bae6fd !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .pill.pill-coral {
+  background: #fff1f2 !important;
+  color: #be123c !important;
+  border: 1px solid #fecdd3 !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .pill.pill-amber {
+  background: #fffbeb !important;
+  color: #b45309 !important;
+  border: 1px solid #fde68a !important;
+  font-weight: 700 !important;
+}
+
+body.cv-theme-light .pill.pill-blue {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+  font-weight: 700 !important;
 }
 
 body.cv-theme-light .awards-mini-item {
@@ -5412,9 +5552,31 @@ body.cv-theme-light .cv-edu-year {
     font-size: 6.8pt !important;
   }
 
+  .ai-cert-theme .awards-card-subtitle {
+    color: #6d28d9 !important;
+    font-weight: 700 !important;
+  }
+
+  .hackathon-theme .awards-card-subtitle {
+    color: #047857 !important;
+    font-weight: 700 !important;
+  }
+
   .award-badge-pill {
     font-size: 6.4pt !important;
     padding: 1px 4px !important;
+  }
+
+  .award-badge-pill.pill-violet {
+    color: #5b21b6 !important;
+    border-color: #c4b5fd !important;
+    background: #f5f3ff !important;
+  }
+
+  .award-badge-pill.pill-emerald {
+    color: #065f46 !important;
+    border-color: #6ee7b7 !important;
+    background: #ecfdf5 !important;
   }
 
   .awards-quote-box {
@@ -5425,6 +5587,16 @@ body.cv-theme-light .cv-edu-year {
     border-left: 2px solid #0284c7 !important;
     color: #334155 !important;
     margin: 3px 0 !important;
+  }
+
+  .ai-cert-theme .awards-quote-box {
+    border-left: 2px solid #7c3aed !important;
+    background: #faf5ff !important;
+  }
+
+  .hackathon-theme .awards-quote-box {
+    border-left: 2px solid #059669 !important;
+    background: #f0fdf4 !important;
   }
 
   .awards-mini-item {
