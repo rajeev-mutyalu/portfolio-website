@@ -2150,6 +2150,55 @@ Feel free to email or message Rajeev directly regarding Lead Pipeline Architectu
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'Explain your OpenUSD VFX pipeline architecture'
         ]
+      },
+      {
+        id: 'profile_photo_download',
+        keywords: [
+          'photo', 'picture', 'pic', 'portrait', 'headshot', 'profile pic', 'profile photo',
+          'download photo', 'download pic', 'download portrait', 'download headshot', 'profile picture',
+          'image', 'face', 'avatar', 'high res photo', 'hd photo', 'hi res', 'high resolution'
+        ],
+        title: 'High-Resolution Studio Portrait (Downloadable HD)',
+        intros: [
+          '📸 <strong>EXECUTIVE STUDIO PORTRAIT // 1024x1024 HIGH-RES</strong>',
+          '🖼️ <strong>OFFICIAL STUDIO HEADSHOT // DIRECT ASSET DOWNLOAD</strong>',
+          '💎 <strong>OFFICIAL BIOMETRIC PROFILE // HIGH-RESOLUTION PORTRAIT</strong>'
+        ],
+        responses: [
+          `• <strong>Asset:</strong> Official Executive Studio Portrait of Rajeev Mutyalu (1024&times;1024 Master JPG).<br/>
+• <strong>Format &amp; Quality:</strong> Full studio portraiture with soft cinematic key lighting and dark tailored styling.<br/>
+• <strong>Production Uses:</strong> Media kits, keynote introductions, press releases, festival panel bios, and recruiter packages.<br/><br/>
+<a href="profile.jpg" download="Rajeev-Mutyalu-Executive-Portrait.jpg" class="ai-section-link" style="display:inline-flex; align-items:center; gap:6px;">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
+  📥 Download High-Resolution Portrait (1024x1024 JPG) &rarr;
+</a><br/><br/>
+<a href="profile.jpg" target="_blank" class="ai-section-link">🔍 Open Full-Resolution Image in New Tab &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`,
+
+          `• <strong>Official Speaker &amp; Leadership Headshot:</strong><br/>
+You can download Rajeev's authentic executive portrait directly for event lineups, media press kits, or executive candidate dossiers.<br/>
+• <strong>Resolution:</strong> 1024 &times; 1024 master studio file.<br/>
+• <strong>Direct Download Link:</strong><br/><br/>
+<a href="profile.jpg" download="Rajeev-Mutyalu-Executive-Portrait.jpg" class="ai-section-link" style="display:inline-flex; align-items:center; gap:6px;">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
+  📥 Download HD Studio Portrait (1024x1024 JPG) &rarr;
+</a><br/><br/>
+<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`
+        ],
+        followupPool: [
+          'Who is Rajeev Mutyalu and why should we hire him?',
+          'Tell me about your AI certifications, accelerator credentials, and hackathons',
+          'Tell me about your 20-year engineering leadership and mentorship background',
+          'What is Model Context Protocol (MCP) and how is it used in production?'
+        ]
       }
     ];
 
@@ -2491,6 +2540,21 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
         }
       }
 
+      // 4c. Resilient Profile Photo / Portrait Download Check
+      if (/\b(photo|picture|pic|headshot|portrait|profile\s*(pic|photo|picture|image|avatar)|download\s*(pic|photo|image|headshot|portrait|profile))\b/i.test(q) || q.includes('profile_photo') || q === 'photo' || q === 'portrait' || q === 'pic') {
+        const photoItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'profile_photo_download');
+        if (photoItem) {
+          const chosenIntro = getRandomItem(photoItem.intros);
+          const chosenResponse = getRandomItem(photoItem.responses);
+          return {
+            id: photoItem.id,
+            title: photoItem.title,
+            response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+            followups: getDynamicFollowups(photoItem.followupPool, 4)
+          };
+        }
+      }
+
       // 5. Standard Weighted Knowledge Base Search with Dynamic Variation Selector
       let bestMatch = null;
       let maxScore = 0;
@@ -2531,6 +2595,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
 I am operating as a high-speed <strong>offline local knowledge engine</strong> dedicated exclusively to <strong>Rajeev Mutyalu's Technical Arsenal, VFX Pipeline Architecture, and GenAI Portfolio</strong>.<br/><br/>
 <em>Live open-domain web exploration will unlock in the upcoming <strong>OpenClaw Real-Time Agent runtime</strong>. In the meantime, ask me in-depth technical questions about:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
+• <strong>📸 High-Res Portrait:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Download Rajeev high resolution profile photo" style="display:inline-block; margin-top:2px;">Download HD Photo</a><br/>
 • <strong>📜 AI Certifications &amp; Credentials:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about your AI certifications, accelerator credentials, and hackathons" style="display:inline-block; margin-top:2px;">AI Generalist &amp; Hackathon</a><br/>
 • <strong>🏆 Leadership &amp; Film Credits:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about your 20-year engineering leadership and mentorship background" style="display:inline-block; margin-top:2px;">Leadership &amp; Tenures</a><br/>
 • <strong>🎮 Interactive Game:</strong> Type <code>turn on game mode</code> or <code>turn off game mode</code><br/>
@@ -2542,6 +2607,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 • <strong>⚡ Zero-Touch n8n Automation:</strong> Inbound &amp; reverse webhooks for render dispatch<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Full Technical Arsenal &rarr;</a>`,
         followups: getDynamicFollowups([
+          'Download Rajeev high resolution profile photo',
           'Tell me about your AI certifications, accelerator credentials, and hackathons',
           'Who is Rajeev Mutyalu and why should we hire him?',
           'Tell me about your 20-year engineering leadership and mentorship background',
