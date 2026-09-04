@@ -1266,12 +1266,14 @@
           <button type="button" class="ai-followup-btn" data-query="switch fx to aurora">🌌 Preset: Aurora Borealis</button>
           <button type="button" class="ai-followup-btn" data-query="switch fx to diamond">💎 Preset: Hyper Diamond</button>
           <button type="button" class="ai-followup-btn" data-query="switch fx to comet">☄️ Preset: Comet Cascade</button>
+          <button type="button" class="ai-followup-btn" data-query="Tell me about your AI certifications, accelerator credentials, and hackathons">📜 AI Certifications</button>
           <button type="button" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?">🌟 Why Hire Rajeev?</button>
         `;
       } else {
         if (welcomeLabel) welcomeLabel.innerText = 'Executive Quick Links:';
         welcomeChips.innerHTML = `
           <button type="button" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?">🌟 Why Hire Rajeev?</button>
+          <button type="button" class="ai-followup-btn" data-query="Tell me about your AI certifications, accelerator credentials, and hackathons">📜 AI Certifications &amp; Hackathon</button>
           <button type="button" class="ai-followup-btn" data-query="Tell me about your 20-year engineering leadership and mentorship background">🏆 Leadership &amp; Filmography</button>
           <button type="button" class="ai-followup-btn" data-query="turn on game mode">🎮 Turn On Game Mode</button>
           <button type="button" class="ai-followup-btn" data-query="What is Model Context Protocol (MCP) and how is it used in production?">🔌 Model Context Protocol</button>
@@ -1610,6 +1612,7 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
         ],
         followupPool: [
+          'Tell me about your AI certifications, accelerator credentials, and hackathons',
           'Tell me about your 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'Explain your OpenUSD VFX pipeline architecture',
@@ -2079,7 +2082,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
       },
       {
         id: 'certifications_credentials',
-        keywords: ['certificate', 'certificates', 'certification', 'certifications', 'credentials', 'outskill', 'ai generalist', 'hackathon', 'accelerator', 'upskilling', 'training', 'fellowship'],
+        keywords: ['certificate', 'certificates', 'certification', 'certifications', 'credential', 'credentials', 'certifications_credentials', 'outskill', 'ai generalist', 'hackathon', 'hackathons', 'accelerator', 'upskilling', 'training', 'fellowship', 'awards', 'qualification', 'qualifications'],
         title: 'Frontier AI Certifications & Industry Fellowships',
         intros: [
           '📜 <strong>VERIFIED CERTIFICATIONS &amp; ACCELERATOR CREDENTIALS</strong>',
@@ -2473,6 +2476,21 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
         }
       }
 
+      // 4b. Resilient AI Certifications & Credentials Check
+      if (/\b(certificat(e|es|ion|ions)|credential(s)?|hackathon(s)?|outskill|accelerator|fellowship)\b/i.test(q) || q.includes('certifications_credentials') || q === 'certifications' || q === 'certificates') {
+        const certItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'certifications_credentials');
+        if (certItem) {
+          const chosenIntro = getRandomItem(certItem.intros);
+          const chosenResponse = getRandomItem(certItem.responses);
+          return {
+            id: certItem.id,
+            title: certItem.title,
+            response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+            followups: getDynamicFollowups(certItem.followupPool, 4)
+          };
+        }
+      }
+
       // 5. Standard Weighted Knowledge Base Search with Dynamic Variation Selector
       let bestMatch = null;
       let maxScore = 0;
@@ -2513,6 +2531,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
 I am operating as a high-speed <strong>offline local knowledge engine</strong> dedicated exclusively to <strong>Rajeev Mutyalu's Technical Arsenal, VFX Pipeline Architecture, and GenAI Portfolio</strong>.<br/><br/>
 <em>Live open-domain web exploration will unlock in the upcoming <strong>OpenClaw Real-Time Agent runtime</strong>. In the meantime, ask me in-depth technical questions about:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
+• <strong>📜 AI Certifications &amp; Credentials:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about your AI certifications, accelerator credentials, and hackathons" style="display:inline-block; margin-top:2px;">AI Generalist &amp; Hackathon</a><br/>
 • <strong>🏆 Leadership &amp; Film Credits:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about your 20-year engineering leadership and mentorship background" style="display:inline-block; margin-top:2px;">Leadership &amp; Tenures</a><br/>
 • <strong>🎮 Interactive Game:</strong> Type <code>turn on game mode</code> or <code>turn off game mode</code><br/>
 • <strong>🔌 Model Context Protocol (MCP):</strong> Custom JSON-RPC tool binding for DCCs<br/>
@@ -2523,6 +2542,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 • <strong>⚡ Zero-Touch n8n Automation:</strong> Inbound &amp; reverse webhooks for render dispatch<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Full Technical Arsenal &rarr;</a>`,
         followups: getDynamicFollowups([
+          'Tell me about your AI certifications, accelerator credentials, and hackathons',
           'Who is Rajeev Mutyalu and why should we hire him?',
           'Tell me about your 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
