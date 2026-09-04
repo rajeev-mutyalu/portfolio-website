@@ -2078,6 +2078,40 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
         ]
       },
       {
+        id: 'certifications_credentials',
+        keywords: ['certificate', 'certificates', 'certification', 'certifications', 'credentials', 'outskill', 'ai generalist', 'hackathon', 'accelerator', 'upskilling', 'training', 'fellowship'],
+        title: 'Frontier AI Certifications & Industry Fellowships',
+        intros: [
+          '📜 <strong>VERIFIED CERTIFICATIONS &amp; ACCELERATOR CREDENTIALS</strong>',
+          '🎓 <strong>FRONTIER AI ACCELERATOR &amp; HACKATHON RECOGNITION</strong>',
+          '🏆 <strong>INDUSTRY CREDENTIALS &amp; CONTINUOUS UPSKILLING</strong>'
+        ],
+        responses: [
+          `• <strong>🎓 AI Generalist Accelerator Program (Outskill &bull; Aug 2026):</strong><br/>
+14-Day Intensive Generative AI Accelerator mastering practical automation, MCP server tool deployment, AI agent systems, and no-code product development.<br/>
+&nbsp;&nbsp;• <strong>Validated Competencies:</strong> Prompt Engineering, Workflow Automation using n8n, MCP Integration &amp; Deployment, Voice Agent Orchestration (Retell/Vapi), Multimodal AI &amp; Cloning, No-Code Product Development.<br/>
+&nbsp;&nbsp;• <a href="docs/Rajeev-Mutyalu-AI-Generalist-certificate.pdf" target="_blank" class="ai-section-link">📄 Open Verified AI Generalist Certificate (PDF) &rarr;</a><br/><br/>
+• <strong>⚡ Outskill AI Accelerator C13 Hackathon 2026 (2-Day Innovation Challenge):</strong><br/>
+Awarded for rapid prototyping, creativity, and deployment of functional generative AI application architectures.<br/>
+&nbsp;&nbsp;• <a href="docs/Rajeev-Mutyalu-hackathon-certificate.pdf" target="_blank" class="ai-section-link">⚡ Open Verified Hackathon Award (PDF) &rarr;</a><br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Credentials &rarr;</a>
+<a href="#awards" class="ai-section-link">🏆 View Honors &amp; Awards Matrix &rarr;</a>`,
+
+          `• <strong>📜 Verified Modern AI Credentials &amp; Fellowships:</strong><br/>
+• <strong>AI Generalist Accelerator (Outskill):</strong> Certified in hands-on MCP integration, n8n webhook automation, voice agent orchestration, and multimodal generative AI platforms.<br/>
+• <strong>AI Hackathon 2026 Award:</strong> Recognized for rapid prototyping and live deployment under 48-hour challenge conditions.<br/>
+• <strong>Technicolor Fellowship Network (2015&ndash;2025):</strong> Elected Associate Member for technical innovation, production leadership, and cross-site R&amp;D stewardship.<br/><br/>
+<a href="docs/Rajeev-Mutyalu-AI-Generalist-certificate.pdf" target="_blank" class="ai-section-link">📄 View AI Generalist Certificate &rarr;</a>
+<a href="docs/Rajeev-Mutyalu-hackathon-certificate.pdf" target="_blank" class="ai-section-link">⚡ View Hackathon Award &rarr;</a>`
+        ],
+        followupPool: [
+          'Who is Rajeev Mutyalu and why should we hire him?',
+          'What is Model Context Protocol (MCP) and how is it used in production?',
+          'How does zero-touch n8n studio automation orchestrate pipelines?',
+          'Tell me about your 20-year engineering leadership and mentorship background'
+        ]
+      },
+      {
         id: 'contact_info',
         keywords: ['contact', 'email', 'phone', 'linkedin', 'reach', 'message', 'hire contact', 'call', 'location', 'london'],
         title: 'Direct Contact Matrix',

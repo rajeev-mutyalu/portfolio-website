@@ -1892,6 +1892,18 @@ body {
   box-shadow: 0 4px 20px rgba(245, 158, 11, 0.08);
 }
 
+.awards-card.ai-cert-theme {
+  border-color: rgba(168, 85, 247, 0.32);
+  background: linear-gradient(145deg, rgba(168, 85, 247, 0.06) 0%, rgba(13, 17, 23, 0.95) 100%);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.08);
+}
+
+.awards-card.hackathon-theme {
+  border-color: rgba(16, 185, 129, 0.32);
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.06) 0%, rgba(13, 17, 23, 0.95) 100%);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.08);
+}
+
 .awards-card-header {
   display: flex;
   justify-content: space-between;
@@ -1926,6 +1938,14 @@ body {
 
 .studio-theme .awards-card-subtitle {
   color: #fbbf24;
+}
+
+.ai-cert-theme .awards-card-subtitle {
+  color: #c084fc;
+}
+
+.hackathon-theme .awards-card-subtitle {
+  color: #34d399;
 }
 
 .award-badge-pill {
