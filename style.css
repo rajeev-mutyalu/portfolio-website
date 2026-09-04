@@ -2087,20 +2087,124 @@ body {
 }
 
 .timeline-marker {
-  width: 14px;
-  height: 14px;
-  border-radius: var(--radius-full);
-  background: var(--accent-cyan);
-  box-shadow: 0 0 12px var(--accent-cyan);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #06080e;
+  border: 3px solid var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.7);
   margin-top: 1.5rem;
-  margin-left: 14px;
+  margin-left: 11px;
   flex-shrink: 0;
   position: relative;
   z-index: 2;
+  transition: all 0.3s ease;
+}
+
+/* Active / Current Role Marker in Career Timeline (Exact CV Match + Pulse) */
+.timeline-marker.marker-current {
+  background: var(--accent-cyan);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 16px #00f2fe, 0 0 30px rgba(0, 242, 254, 0.6);
+  z-index: 3;
+}
+
+.timeline-marker.marker-current::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--accent-cyan);
+  animation: markerHaloPulse 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes markerHaloPulse {
+  0% {
+    width: 100%;
+    height: 100%;
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  60% {
+    width: 260%;
+    height: 260%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    width: 280%;
+    height: 280%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 .timeline-content {
   flex: 1;
+}
+
+/* Current Leadership Role Card Highlight */
+.timeline-card-highlight {
+  border: 1.5px solid rgba(0, 242, 254, 0.45) !important;
+  background: linear-gradient(145deg, rgba(0, 242, 254, 0.05) 0%, rgba(6, 10, 18, 0.88) 100%) !important;
+  box-shadow: 0 8px 32px rgba(0, 242, 254, 0.12), inset 0 0 24px rgba(0, 242, 254, 0.03) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-card-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), #ffffff, var(--accent-cyan), transparent);
+}
+
+.timeline-featured-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.15);
+}
+
+.timeline-featured-pill .pulse-beacon {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: beaconPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes beaconPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 8px #10b981;
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.85);
+    box-shadow: 0 0 2px #10b981;
+  }
 }
 
 .timeline-head {
@@ -2131,6 +2235,14 @@ body {
   background: rgba(255, 255, 255, 0.05);
   padding: 0.2rem 0.55rem;
   border-radius: var(--radius-sm);
+}
+
+.role-period-current {
+  color: var(--accent-cyan) !important;
+  font-weight: 600 !important;
+  background: rgba(0, 242, 254, 0.1) !important;
+  border: 1px solid rgba(0, 242, 254, 0.3) !important;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.12) !important;
 }
 
 .role-desc {
@@ -3518,26 +3630,32 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(6, 8, 14, 0.94);
+  background: rgba(6, 8, 14, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 12px 24px;
+  padding: 12px 0;
+  width: 100%;
 }
 
 .cv-topbar-container {
   max-width: 1100px;
   margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  width: 100%;
 }
 
 .cv-topbar-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
 }
 
 .cv-page-wrapper {
@@ -3972,6 +4090,20 @@ body.cv-theme-light .cv-timeline-rail::before {
   box-shadow: 0 0 16px #00f2fe;
 }
 
+.cv-timeline-marker.marker-current::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--accent-cyan);
+  animation: markerHaloPulse 2.2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
 body.cv-theme-light .cv-timeline-marker {
   background: #ffffff !important;
   border-color: #0284c7 !important;
@@ -4306,34 +4438,105 @@ body.cv-theme-light .ambient-glow {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(6, 8, 14, 0.94) !important;
+  background: rgba(6, 8, 14, 0.95) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  padding: 12px 24px;
+  padding: 12px 0 !important;
 }
 
-.cv-topbar .btn-ghost {
+.cv-topbar-container > a.btn {
+  height: 34px !important;
+  padding: 0 13px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.82rem !important;
+  margin: 0 !important;
   color: #e2e8f0 !important;
 }
 
-.cv-topbar .btn-ghost:hover {
+.cv-topbar-container > a.btn:hover {
   background: rgba(255, 255, 255, 0.08) !important;
   color: #ffffff !important;
 }
 
+/* Consistent Topbar Action Buttons: Uniform Height, Padding, and Gaps */
+.cv-topbar-actions .btn {
+  height: 34px !important;
+  padding: 0 12px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-sm) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* 1. Copy ATS Button */
+#copyAtsBtn {
+  background: rgba(168, 85, 247, 0.08) !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+  color: #c084fc !important;
+}
+
+#copyAtsBtn:hover {
+  background: rgba(168, 85, 247, 0.18) !important;
+  border-color: #c084fc !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+/* 2. Theme Mode Toggle */
 .cv-topbar #cvThemeToggle {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+  border: 1px solid rgba(56, 189, 248, 0.28) !important;
   color: #38bdf8 !important;
 }
 
 .cv-topbar #cvThemeToggle:hover {
-  background: rgba(56, 189, 248, 0.12) !important;
-  border-color: rgba(56, 189, 248, 0.4) !important;
+  background: rgba(56, 189, 248, 0.18) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25) !important;
+  transform: translateY(-1px);
 }
 
-/* Print / Save PDF Button in CV Topbar (Permanent Glowing Cyan/Blue on iPad & Desktop) */
+/* 3. Copy Email Button (Consistent Glass Pill) */
+.cv-topbar #copyContactBtn {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #e2e8f0 !important;
+}
+
+.cv-topbar #copyContactBtn:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* 4. LinkedIn Button (Consistent Glass Pill) */
+.cv-topbar a[href*="linkedin.com"] {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #e2e8f0 !important;
+}
+
+.cv-topbar a[href*="linkedin.com"]:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* 5. Print / Save PDF Button */
 #printCvBtn,
 .cv-topbar .btn-primary {
   -webkit-appearance: none !important;
@@ -4367,20 +4570,6 @@ body.cv-theme-light .ambient-glow {
   color: #050811 !important;
   outline: none !important;
   transform: translateY(0) translateZ(0) !important;
-}
-
-/* Copy ATS Button in Topbar */
-#copyAtsBtn {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(168, 85, 247, 0.35) !important;
-  color: #c084fc !important;
-}
-
-#copyAtsBtn:hover {
-  background: rgba(168, 85, 247, 0.15) !important;
-  border-color: #c084fc !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3) !important;
 }
 
 /* Executive Quick Scan Metrics */
