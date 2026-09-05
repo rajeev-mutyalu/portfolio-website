@@ -2686,6 +2686,15 @@
 
     const charlie = new CyberCharlie();
 
+    // Holographic Chat Delivery Bubble on Stage Canvas
+    let labChatDelivery = {
+      active: false,
+      text: '',
+      x: 0,
+      y: 0,
+      showPointer: false
+    };
+
     /* =========================================================================
        Main Render Loop
        ========================================================================= */
@@ -2782,6 +2791,53 @@
       // 4c. Draw Supersonic Lightning & Speed Ghosts
       charlie.drawLightningArcs(ctx);
       charlie.drawAfterimages(ctx);
+
+      // 4d. Draw Holographic Delivered Response Card during Chat Simulation
+      if (labChatDelivery.active) {
+        ctx.save();
+        const bubbleX = labChatDelivery.x;
+        const bubbleY = labChatDelivery.y;
+        const bubbleW = Math.min(440, canvas.clientWidth - 30);
+        const bubbleH = 46;
+
+        // Glowing Glassmorphic Card Background & Cyber Border
+        ctx.fillStyle = 'rgba(6, 11, 24, 0.94)';
+        ctx.strokeStyle = '#00f2fe';
+        ctx.shadowColor = '#00f2fe';
+        ctx.shadowBlur = 12 * glowMult;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.roundRect(bubbleX - bubbleW / 2, bubbleY - bubbleH / 2, bubbleW, bubbleH, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        // Neon Top Tag
+        ctx.fillStyle = '#00f2fe';
+        ctx.shadowBlur = 0;
+        ctx.font = 'bold 9px monospace';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillText('⚡ CHARLIE [LOCAL AI AGENT] • DELIVERED ANS', bubbleX - bubbleW / 2 + 10, bubbleY - bubbleH / 2 + 6);
+
+        // Content snippet
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = '10px monospace';
+        const snippet = labChatDelivery.text.length > 56 ? (labChatDelivery.text.substring(0, 54) + '...') : labChatDelivery.text;
+        ctx.fillText(snippet, bubbleX - bubbleW / 2 + 10, bubbleY - bubbleH / 2 + 22);
+
+        // Attachment Pointer arrow down to Charlie if attached
+        if (labChatDelivery.showPointer) {
+          ctx.fillStyle = 'rgba(6, 11, 24, 0.94)';
+          ctx.beginPath();
+          ctx.moveTo(bubbleX - 6, bubbleY + bubbleH / 2);
+          ctx.lineTo(bubbleX, bubbleY + bubbleH / 2 + 7);
+          ctx.lineTo(bubbleX + 6, bubbleY + bubbleH / 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
 
       // 5. Update & Draw Charlie
       charlie.update();
@@ -2894,14 +2950,24 @@
             hudMode.textContent = '⚡ POINT B: WRITING AT CYBER SPEED!';
             telState.textContent = 'WRITING';
 
+            labChatDelivery.active = true;
+            labChatDelivery.text = '';
+            labChatDelivery.x = bottomX;
+            labChatDelivery.y = bottomY - 55;
+            labChatDelivery.showPointer = false;
+
             const responseFull = '⚡ CYBER CHARLIE WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"';
             let charIdx = 0;
             
             chatTypeInterval = setInterval(() => {
               if (charIdx < responseFull.length) {
+                const curText = responseFull.substring(0, charIdx + 1);
                 if (chatStatusText) {
-                  chatStatusText.innerHTML = `✍️ <span style="color:#00f2fe;">${responseFull.substring(0, charIdx + 1)}</span><span style="color:#fff;">|</span>`;
+                  chatStatusText.innerHTML = `✍️ <span style="color:#00f2fe;">${curText}</span><span style="color:#fff;">|</span>`;
                 }
+                labChatDelivery.text = curText;
+                labChatDelivery.x = bottomX;
+                labChatDelivery.y = bottomY - 55;
                 charIdx += 2; // fast 2 chars per tick!
 
                 // AT POINT B: Charlie stays locked at bottom-center until writing is 100% complete!
@@ -2919,35 +2985,76 @@
                 chatTypeInterval = null;
 
                 // Writing at Point B is 100% COMPLETE!
-                // Now Charlie and the text smoothly ascend together from Point B to Point C (center)!
-                hudMode.textContent = '🚀 ASCENDING WITH DELIVERED TEXT TO CENTER!';
-                telState.textContent = 'ASCENDING';
+                // Now the text & background card start moving up FIRST towards Point C!
+                // Charlie WAITS at Point B until the text moves 20%, then ATTACHES and ascends together!
+                hudMode.textContent = '⏳ TEXT ASCENDING (CHARLIE WAITING 20%)...';
+                telState.textContent = 'WAITING 20%';
                 if (chatStatusText) {
-                  chatStatusText.innerHTML = `🚀 <span style="color:#38bdf8;">ASCENDING WITH DELIVERED TEXT...</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                  chatStatusText.style.willChange = 'transform';
+                  chatStatusText.style.transform = 'translateY(35px)';
+                  chatStatusText.innerHTML = `⏳ <span style="color:#f59e0b;">TEXT ASCENDING FIRST (CHARLIE WAITING 20%)...</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
                 }
 
-                const ascentDuration = 480;
+                const ascentDuration = 650;
                 const ascentStart = performance.now();
+                const startBubbleY = bottomY - 55;
+                const endBubbleY = centerY - 55;
 
                 function stepAscent(now) {
                   const elapsed = now - ascentStart;
-                  const progress = Math.min(1.0, elapsed / ascentDuration);
-                  const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+                  const textProgress = Math.min(1.0, elapsed / ascentDuration);
+                  const textEase = 1 - Math.pow(1 - textProgress, 3); // easeOutCubic
 
-                  charlie.x = bottomX + (centerX - bottomX) * ease;
-                  charlie.y = bottomY + (centerY - bottomY) * ease;
+                  // 1. Text & Background bubble continuously moves up from Point B to Point C!
+                  labChatDelivery.y = startBubbleY + (endBubbleY - startBubbleY) * textEase;
+                  labChatDelivery.x = centerX;
 
-                  if (Math.random() > 0.3) {
-                    addSparks(charlie.x, charlie.y + 14 * charlieScale, '#00f2fe', 2);
+                  if (chatStatusText) {
+                    chatStatusText.style.transform = 'translateY(' + ((1 - textEase) * 35).toFixed(2) + 'px)';
                   }
 
-                  if (progress < 1.0) {
+                  // 2. Charlie Sync: wait at Point B until text has moved 20%, then attach!
+                  if (textProgress < 0.20) {
+                    charlie.x = bottomX;
+                    charlie.y = bottomY;
+                    labChatDelivery.showPointer = false; // Not attached yet!
+
+                    if (Math.random() > 0.35) {
+                      addSparks(bottomX, bottomY + 14 * charlieScale, '#00f2fe', 2);
+                    }
+
+                    hudMode.textContent = '⏳ TEXT ASCENDING FIRST (CHARLIE WAITING 20%)...';
+                    telState.textContent = 'WAITING 20%';
+                  } else {
+                    // textProgress >= 0.20: Charlie is ATTACHED to the ascending text!
+                    labChatDelivery.showPointer = true; // Attached!
+                    const charlieNorm = (textProgress - 0.20) / 0.80;
+                    const charlieEase = 1 - Math.pow(1 - charlieNorm, 3);
+
+                    charlie.x = bottomX + (centerX - bottomX) * charlieEase;
+                    charlie.y = bottomY + (centerY - bottomY) * charlieEase;
+
+                    if (Math.random() > 0.3) {
+                      addSparks(charlie.x, charlie.y + 14 * charlieScale, '#00f2fe', 2);
+                    }
+
+                    hudMode.textContent = '🚀 CHARLIE ATTACHED & ASCENDING WITH TEXT!';
+                    telState.textContent = 'ATTACHED ASCENT';
+                    if (chatStatusText) {
+                      chatStatusText.innerHTML = `🚀 <span style="color:#38bdf8;">CHARLIE ATTACHED & ASCENDING WITH TEXT...</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                    }
+                  }
+
+                  if (textProgress < 1.0) {
                     requestAnimationFrame(stepAscent);
                   } else {
                     // Arrived at Point C (Center): Trigger Victory Celebration!
                     charlie.x = centerX;
                     charlie.y = centerY;
+                    labChatDelivery.y = endBubbleY;
                     if (chatStatusText) {
+                      chatStatusText.style.transform = 'translateY(0px)';
+                      chatStatusText.style.willChange = 'auto';
                       chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
                     }
                     hudMode.textContent = '🌟 VICTORY CELEBRATION!';
@@ -2956,6 +3063,7 @@
 
                     setTimeout(() => {
                       // Supersonic return dash to mascot anchor (completing the triangle)!
+                      labChatDelivery.active = false;
                       charlie.triggerReturnDashDemo();
                     }, 1200);
                   }

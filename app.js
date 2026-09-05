@@ -5201,6 +5201,14 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
           </div>
         `;
 
+        // Physical Delivery Synchronization:
+        // Position botMsgDiv lower down at Point B where Charlie is typing
+        const textTravelY = Math.max(65, Math.min(130, Math.round(bottomCenter.y - writeCenter.y)));
+        botMsgDiv.style.animation = 'none';
+        botMsgDiv.style.opacity = '1';
+        botMsgDiv.style.willChange = 'transform';
+        botMsgDiv.style.transform = `translateY(${textTravelY}px)`;
+
         aiChatStream.appendChild(botMsgDiv);
         scrollStreamToBottom();
 
@@ -5253,24 +5261,18 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
             if (charIndex >= fullResponse.length) {
               clearInterval(typeInterval);
               contentEl.innerHTML = fullResponse;
-
-              if (followupsHtml) {
-                const followContainer = document.createElement('div');
-                followContainer.innerHTML = followupsHtml;
-                botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
-              }
-
               scrollStreamToBottom();
 
               if (aiBotStatusPill) {
                 const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                if (text) text.textContent = 'CHARLIE DELIVERING ANS [ASCENDING]...';
+                if (text) text.textContent = 'TEXT ASCENDING [CHARLIE WAITING 20%]...';
               }
 
               // Writing at Point B is 100% COMPLETE!
-              // Now Charlie and the text smoothly ascend together from Point B (bottomCenter) to Point C (writeCenter)!
+              // Now text & background bubble start moving up first towards Point C.
+              // Charlie WAITS at Point B until text moves 20%, then ATTACHES and ascends in lockstep!
               if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-                const ascentDuration = 480;
+                const ascentDuration = 650;
                 const ascentStart = performance.now();
                 const startX = bottomCenter.x;
                 const startY = bottomCenter.y;
@@ -5279,29 +5281,72 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
                 const stepAscent = (now) => {
                   const elapsed = now - ascentStart;
-                  const progress = Math.min(1.0, elapsed / ascentDuration);
-                  const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+                  const textProgress = Math.min(1.0, elapsed / ascentDuration);
+                  const textEase = 1 - Math.pow(1 - textProgress, 3); // easeOutCubic
 
-                  const curX = startX + (endX - startX) * ease;
-                  const curY = startY + (endY - startY) * ease;
+                  // 1. Text & Background bubble continuously moves up from Point B to Point C
+                  const curTranslateY = (1 - textEase) * textTravelY;
+                  botMsgDiv.style.transform = `translateY(${curTranslateY.toFixed(2)}px)`;
 
-                  if (window.portfolioCharlie && window.portfolioCharlie.state === 'writing') {
-                    window.portfolioCharlie.x = curX;
-                    window.portfolioCharlie.y = curY;
-                    window.portfolioCharlie.targetX = curX;
-                    window.portfolioCharlie.targetY = curY;
+                  // 2. Charlie Sync: wait at Point B until text has moved 20%, then attach!
+                  if (textProgress < 0.20) {
+                    // Charlie WAITS at Point B, warming thrusters and emitting sparks
+                    if (window.portfolioCharlie && window.portfolioCharlie.state === 'writing') {
+                      window.portfolioCharlie.x = startX;
+                      window.portfolioCharlie.y = startY;
+                      window.portfolioCharlie.targetX = startX;
+                      window.portfolioCharlie.targetY = startY;
 
-                    if (Math.random() > 0.3) {
-                      window.portfolioCharlie.addSparks(curX, curY + 14 * window.portfolioCharlie.scale, '#00f2fe', 2);
+                      if (Math.random() > 0.35) {
+                        window.portfolioCharlie.addSparks(startX, startY + 14 * window.portfolioCharlie.scale, '#00f2fe', 2);
+                      }
+                    }
+                    if (aiBotStatusPill) {
+                      const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+                      if (text) text.textContent = 'TEXT ASCENDING [CHARLIE ATTACHING]...';
+                    }
+                  } else {
+                    // textProgress >= 0.20: Charlie is ATTACHED to the ascending text!
+                    const charlieNorm = (textProgress - 0.20) / 0.80;
+                    const charlieEase = 1 - Math.pow(1 - charlieNorm, 3);
+                    const curX = startX + (endX - startX) * charlieEase;
+                    const curY = startY + (endY - startY) * charlieEase;
+
+                    if (window.portfolioCharlie && window.portfolioCharlie.state === 'writing') {
+                      window.portfolioCharlie.x = curX;
+                      window.portfolioCharlie.y = curY;
+                      window.portfolioCharlie.targetX = curX;
+                      window.portfolioCharlie.targetY = curY;
+
+                      if (Math.random() > 0.25) {
+                        window.portfolioCharlie.addSparks(curX, curY + 14 * window.portfolioCharlie.scale, '#00f2fe', 2);
+                      }
+                    }
+                    if (aiBotStatusPill) {
+                      const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+                      if (text) text.textContent = 'CHARLIE & TEXT ASCENDING...';
                     }
                   }
 
                   scrollStreamToBottom();
 
-                  if (progress < 1.0) {
+                  if (textProgress < 1.0) {
                     requestAnimationFrame(stepAscent);
                   } else {
-                    // Arrived at Point C (Screen Center): Trigger Victory Celebration!
+                    // Arrived at Point C (Screen Center): Delivery complete!
+                    botMsgDiv.style.transform = 'translateY(0px)';
+                    botMsgDiv.style.willChange = 'auto';
+
+                    // Append followups smoothly once settled at Point C
+                    if (followupsHtml && !botMsgDiv.querySelector('.ai-followup-container')) {
+                      const followContainer = document.createElement('div');
+                      followContainer.innerHTML = followupsHtml;
+                      followContainer.style.animation = 'msgFadeIn 0.35s ease forwards';
+                      botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
+                      scrollStreamToBottom();
+                    }
+
+                    // Trigger Victory Celebration!
                     if (window.portfolioCharlie) {
                       window.portfolioCharlie.x = endX;
                       window.portfolioCharlie.y = endY;
@@ -5337,6 +5382,12 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
                 requestAnimationFrame(stepAscent);
               } else {
+                botMsgDiv.style.transform = 'translateY(0px)';
+                if (followupsHtml && !botMsgDiv.querySelector('.ai-followup-container')) {
+                  const followContainer = document.createElement('div');
+                  followContainer.innerHTML = followupsHtml;
+                  botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
+                }
                 setCharlieThinkingState(false);
                 if (aiBotStatusPill) {
                   const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
