@@ -831,7 +831,6 @@
         this.bonkTimer = 0;
         this.dizzyTimer = 0;
         this.dizzyAngle = 0;
-        this.activeStreamingText = null;
 
         // Chatbot Lifecycle & Supersonic Dash Mechanics
         this.deployTimer = 0;
@@ -900,11 +899,11 @@
       }
 
       triggerSlash() {
-        this.slashPhase = (this.slashPhase % 3) + 1;
+        this.slashPhase = (this.slashPhase % 4) + 1;
         this.state = 'slash';
         this.slashTimer = 0;
         this.face = 'battle';
-        hudMode.textContent = `COMBO SLASH ${this.slashPhase}/3`;
+        hudMode.textContent = `COMBO SLASH ${this.slashPhase}/4`;
         telState.textContent = `SLASH ${this.slashPhase}`;
 
         // High shoulder-level spark burst
@@ -916,32 +915,40 @@
         // Move 1: High Cleave Slash (Phase 1)
         // Move 2: Overhead Smite Slash (Phase 2)
         // Move 3: 360° Cyclone Spin Slash (Phase 3)
-        // Move 4: Aerial Somersault Flip Slice (Jump flip)
+        // Move 4: Rapid Martial Thrust (Phase 4)
+        // Move 5: Aerial Somersault Flip Slice (Jump flip)
         const roll = Math.random();
         const combatFaces = ['battle', 'sprint', 'wink', 'victory'];
         this.face = combatFaces[Math.floor(Math.random() * combatFaces.length)];
 
-        if (roll < 0.28) {
+        if (roll < 0.22) {
           this.slashPhase = 1;
           this.state = 'slash';
           this.slashTimer = 0;
           hudMode.textContent = '⚔️ RANDOM MOVE: HIGH CLEAVE!';
           telState.textContent = 'CLEAVE';
           addSparks(this.x + this.facing * 32 * charlieScale, this.y - 6 * charlieScale, '#00f2fe', 18);
-        } else if (roll < 0.56) {
+        } else if (roll < 0.44) {
           this.slashPhase = 2;
           this.state = 'slash';
           this.slashTimer = 0;
           hudMode.textContent = '⚡ RANDOM MOVE: OVERHEAD SMITE!';
           telState.textContent = 'SMITE';
           addSparks(this.x + this.facing * 30 * charlieScale, this.y - 20 * charlieScale, '#f59e0b', 18);
-        } else if (roll < 0.80) {
+        } else if (roll < 0.66) {
           this.slashPhase = 3;
           this.state = 'slash';
           this.slashTimer = 0;
           hudMode.textContent = '🌪️ RANDOM MOVE: CYCLONE VORTEX!';
           telState.textContent = 'CYCLONE';
           addSparks(this.x, this.y - 6 * charlieScale, '#38bdf8', 24);
+        } else if (roll < 0.85) {
+          this.slashPhase = 4;
+          this.state = 'slash';
+          this.slashTimer = 0;
+          hudMode.textContent = '🗡️ RANDOM MOVE: RAPID THRUST!';
+          telState.textContent = 'THRUST';
+          addSparks(this.x + this.facing * 34 * charlieScale, this.y - 4 * charlieScale, '#00f2fe', 20);
         } else {
           this.state = 'jump';
           this.jumpTimer = 0;
@@ -1171,7 +1178,7 @@
       }
 
       drawLightningArcs(c) {
-        if (this.state === 'cyber_dash' && this.deployTimer < 1.0) {
+        if (this.state === 'cyber_dash' && this.deployTimer < 1.0 && this.dashType === 'to_cursor') {
           c.save();
           const color = this.dashType === 'to_cursor' ? '#00f2fe' : '#f59e0b';
           c.strokeStyle = color;
@@ -1516,6 +1523,10 @@
               const ang = st * Math.PI * 2;
               tipOffsetX = Math.cos(ang) * 30;
               tipOffsetY = -8 + Math.sin(ang) * 26;
+            } else if (this.slashPhase === 4) {
+              // Rapid martial thrust: sword lunges forward and whips
+              tipOffsetX = 22 + Math.sin(st * Math.PI * 4) * 16;
+              tipOffsetY = -4 + Math.cos(st * Math.PI * 4) * 8;
             }
           } else if (this.state === 'jump') {
             const jt = this.jumpTimer / this.jumpMax;
@@ -1718,6 +1729,9 @@
             // Wind up high overhead, then slice violently downward diagonally across the torso past the hip
             bobY = Math.sin(st * Math.PI) * 3.0;
             leanAngle = 0.28 * Math.sin(st * Math.PI);
+            hipL = 0.22; kneeL = 0.35;
+            hipR = -0.22; kneeR = 0.15;
+            thrusterL = true;
             upperR = -1.6 + (st * 2.8); // sweeps from -1.6 (high overhead) to +1.2 (low follow-through)
             elbowR = -0.3 + Math.sin(st * Math.PI) * 0.5;
             customKnifeAngle = -0.3 + (st * 1.5);
@@ -1727,6 +1741,9 @@
             // Crouch low behind hip and drive blade explosively upward into the sky
             bobY = -Math.sin(st * Math.PI) * 4.5;
             leanAngle = -0.15 + (st * 0.35);
+            hipL = -0.20 + (st * 0.35); kneeL = 0.40;
+            hipR = 0.25 - (st * 0.35); kneeR = 0.30;
+            thrusterR = true;
             upperR = 1.3 - (st * 3.2); // sweeps from +1.3 (low behind hip) to -1.9 (high skyward)
             elbowR = -0.4 - Math.sin(st * Math.PI) * 0.3;
             customKnifeAngle = -0.6 + (st * 1.8);
@@ -1737,11 +1754,25 @@
             const ang = st * Math.PI * 2;
             bobY = -Math.sin(st * Math.PI) * 5.0;
             leanAngle = Math.sin(ang) * 0.25;
+            hipL = Math.sin(ang) * 0.45; kneeL = 0.25;
+            hipR = -Math.sin(ang) * 0.45; kneeR = 0.25;
+            thrusterL = true; thrusterR = true;
             upperR = -0.2 + Math.sin(ang) * 1.7;
             elbowR = -0.5 + Math.cos(ang) * 0.4;
             customKnifeAngle = ang * 2.0;
             upperL = -0.2 - Math.sin(ang) * 1.3;
             elbowL = -0.6;
+          } else if (this.slashPhase === 4) {
+            // Phase 4: High-Velocity Rapid Thrust & Martial Flourish
+            bobY = Math.sin(st * Math.PI * 2) * 2.5;
+            leanAngle = 0.22 + Math.sin(st * Math.PI * 3) * 0.15;
+            hipL = 0.30; kneeL = 0.40;
+            hipR = -0.15; kneeR = 0.15;
+            thrusterR = (Math.random() > 0.4);
+            upperR = 0.10 + Math.sin(st * Math.PI * 4) * 0.9;
+            elbowR = -0.25 - Math.cos(st * Math.PI * 4) * 0.4;
+            customKnifeAngle = 0.8 + Math.sin(st * Math.PI * 4) * 0.6;
+            upperL = 0.70; elbowL = -1.1; // shield held ready
           }
         }
 
@@ -2089,23 +2120,55 @@
 
         c.restore(); // end character root
 
-        // Energy Shield Bubble (during spontaneous bonk / dizzy)
+        // Energy Shield Bubble (during spontaneous bonk / dizzy / manual shield)
         if (this.isShielded || (this.isSpontaneousAction && (this.state === 'bonk' || this.state === 'dizzy'))) {
           c.save();
           const shieldPulse = Math.sin(this.animTimer * 6.0) * 2.5;
-          const shieldGrad = c.createRadialGradient(this.x, this.y, 10, this.x, this.y, 32 * charlieScale + shieldPulse);
+          const shieldCenterX = this.x;
+          const shieldCenterY = this.y - 4 * charlieScale;
+          const radiusX = 38 * charlieScale + shieldPulse;
+          const radiusY = 48 * charlieScale + shieldPulse; // increased height to fully cover Charlie from antenna to boots!
+
+          // 1. Glowing translucent plasma field
+          const shieldGrad = c.createRadialGradient(shieldCenterX, shieldCenterY, 8, shieldCenterX, shieldCenterY, radiusY);
           shieldGrad.addColorStop(0, 'rgba(0, 242, 254, 0.05)');
-          shieldGrad.addColorStop(0.7, 'rgba(0, 242, 254, 0.22)');
-          shieldGrad.addColorStop(1, 'rgba(0, 242, 254, 0.75)');
+          shieldGrad.addColorStop(0.65, 'rgba(0, 242, 254, 0.22)');
+          shieldGrad.addColorStop(0.92, 'rgba(56, 189, 248, 0.48)');
+          shieldGrad.addColorStop(1, 'rgba(0, 242, 254, 0.88)');
           c.strokeStyle = '#00f2fe';
-          c.lineWidth = 1.8;
+          c.lineWidth = 2.0;
           c.shadowColor = '#00f2fe';
-          c.shadowBlur = 14;
+          c.shadowBlur = 18;
           c.fillStyle = shieldGrad;
           c.beginPath();
-          c.arc(this.x, this.y, 30 * charlieScale + shieldPulse, 0, Math.PI * 2);
+          c.ellipse(shieldCenterX, shieldCenterY, radiusX, radiusY, 0, 0, Math.PI * 2);
           c.fill();
           c.stroke();
+
+          // 2. Rotating orbital dashed lattice ring
+          c.save();
+          c.translate(shieldCenterX, shieldCenterY);
+          c.rotate(this.animTimer * 1.8);
+          c.strokeStyle = 'rgba(255, 255, 255, 0.70)';
+          c.lineWidth = 1.2;
+          c.setLineDash([6, 5]);
+          c.beginPath();
+          c.ellipse(0, 0, radiusX + 3, radiusY + 3, 0, 0, Math.PI * 2);
+          c.stroke();
+          c.restore();
+
+          // 3. Counter-rotating inner energy lattice
+          c.save();
+          c.translate(shieldCenterX, shieldCenterY);
+          c.rotate(-this.animTimer * 1.2);
+          c.strokeStyle = 'rgba(0, 242, 254, 0.50)';
+          c.lineWidth = 1.0;
+          c.setLineDash([4, 6]);
+          c.beginPath();
+          c.ellipse(0, 0, radiusX * 0.72, radiusY * 0.72, 0, 0, Math.PI * 2);
+          c.stroke();
+          c.restore();
+
           c.restore();
         }
 
@@ -2618,67 +2681,6 @@
 
         c.restore();
 
-        // 9. Floating Holographic Text Card (Ascending from bottom to center with Charlie!)
-        if (this.activeStreamingText) {
-          c.save();
-          const boxW = Math.min(canvas.clientWidth - 40, 440);
-          const boxH = 68;
-          const boxX = Math.max(20, Math.min(canvas.clientWidth - boxW - 20, this.x - boxW / 2));
-          const boxY = Math.max(16, this.y - 105);
-
-          // Glassmorphic dark panel with cyan neon rim
-          c.fillStyle = 'rgba(6, 12, 28, 0.92)';
-          c.strokeStyle = '#00f2fe';
-          c.lineWidth = 1.6;
-          c.shadowColor = '#00f2fe';
-          c.shadowBlur = 18 * glowMult;
-          c.beginPath();
-          c.roundRect(boxX, boxY, boxW, boxH, 10);
-          c.fill();
-          c.stroke();
-
-          // Technical corner brackets
-          c.fillStyle = '#00f2fe';
-          c.fillRect(boxX + 4, boxY + 4, 6, 2);
-          c.fillRect(boxX + 4, boxY + 4, 2, 6);
-          c.fillRect(boxX + boxW - 10, boxY + 4, 6, 2);
-          c.fillRect(boxX + boxW - 6, boxY + 4, 2, 6);
-
-          // Header badge
-          c.shadowBlur = 0;
-          c.fillStyle = '#38bdf8';
-          c.font = 'bold 10px monospace';
-          c.fillText('🤖 CHARLIE [LIVE KNOWLEDGE STREAM]', boxX + 14, boxY + 18);
-
-          // Pulsing live status indicator
-          c.fillStyle = '#10b981';
-          c.beginPath();
-          c.arc(boxX + boxW - 16, boxY + 15, 3.5, 0, Math.PI * 2);
-          c.fill();
-
-          // Streamed text with high readability
-          c.fillStyle = '#f8fafc';
-          c.font = '12px "Inter", -apple-system, sans-serif';
-          const maxSnippet = 58;
-          const snippet = this.activeStreamingText.length > maxSnippet 
-            ? '...' + this.activeStreamingText.slice(-maxSnippet) 
-            : this.activeStreamingText;
-          c.fillText(snippet, boxX + 14, boxY + 42);
-
-          // Stylus laser data-link connecting Charlie's stylus tip to the moving text card!
-          const stylusTipX = this.x + this.facing * 14 * charlieScale;
-          const stylusTipY = this.y - 2 * charlieScale;
-          c.strokeStyle = 'rgba(0, 242, 254, 0.75)';
-          c.lineWidth = 1.4;
-          c.setLineDash([4, 3]);
-          c.beginPath();
-          c.moveTo(stylusTipX, stylusTipY);
-          c.lineTo(boxX + boxW / 2, boxY + boxH);
-          c.stroke();
-          c.setLineDash([]);
-
-          c.restore();
-        }
       }
     }
 
@@ -2888,7 +2890,6 @@
             charlie.x = bottomX;
             charlie.y = bottomY;
             charlie.facing = 1;
-            charlie.activeStreamingText = '...';
             addSparks(bottomX, bottomY, '#00f2fe', 16);
             hudMode.textContent = '⚡ WRITING & ASCENDING TO CENTER!';
             telState.textContent = 'WRITING';
@@ -2902,7 +2903,6 @@
                   chatStatusText.innerHTML = `✍️ <span style="color:#00f2fe;">${responseFull.substring(0, charIdx + 1)}</span><span style="color:#fff;">|</span>`;
                 }
                 charIdx += 2; // fast 2 chars per tick!
-                charlie.activeStreamingText = responseFull.substring(0, charIdx) + (charIdx < responseFull.length ? ' ⚡' : '');
 
                 // Triangular ascent along with text from Bottom-Center to Center!
                 const progress = charIdx / responseFull.length;
@@ -2920,7 +2920,6 @@
               } else {
                 clearInterval(chatTypeInterval);
                 chatTypeInterval = null;
-                charlie.activeStreamingText = '✨ ' + responseFull;
                 if (chatStatusText) {
                   chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
                 }
@@ -2930,7 +2929,6 @@
                 telState.textContent = 'VICTORY';
                 charlie.triggerVictory();
                 setTimeout(() => {
-                  charlie.activeStreamingText = null;
                   // Supersonic return dash to mascot anchor (completing the triangle)!
                   charlie.triggerReturnDashDemo();
                 }, 1200);
