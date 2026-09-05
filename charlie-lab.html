@@ -204,12 +204,17 @@
       left: 16px;
       right: 16px;
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: flex-start;
       pointer-events: none;
       user-select: none;
       z-index: 10;
+    }
+    .hud-left-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
     }
     .hud-chip {
       font-family: var(--font-mono);
@@ -229,6 +234,17 @@
       border-color: rgba(0, 242, 254, 0.35);
       color: #cbd5e1;
       margin-left: auto;
+      align-self: flex-start;
+    }
+    @media (max-width: 640px) {
+      .stage-hud {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .hud-chip.hud-hint-chip {
+        margin-left: 0;
+        align-self: stretch;
+      }
     }
     .hud-chip strong {
       color: var(--accent-cyan);
@@ -440,7 +456,21 @@
   <header class="lab-topbar">
     <a href="index.html" class="lab-logo" title="Back to Portfolio">
       <span class="lab-badge">CHARLIE LAB v1.0</span>
-      <span class="lab-title">🤖 Cyber Charlie: Character &amp; Motion Lab</span>
+      <span class="lab-title">
+        <svg width="22" height="22" viewBox="0 0 36 36" fill="none" style="vertical-align: -4px; display: inline-block; margin-right: 6px;">
+          <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
+          <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
+          <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
+          <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
+          <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
+          <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+          <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
+          <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+          <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
+          <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+        </svg>Cyber Charlie: Character &amp; Motion Lab
+      </span>
     </a>
 
     <div class="lab-nav-actions">
@@ -462,9 +492,11 @@
     <div class="stage-container">
       <div class="canvas-card">
         <div class="stage-hud">
-          <div class="hud-chip"><span class="hud-dot"></span> CHARLIE CORE: <strong>ACTIVE</strong></div>
-          <div class="hud-chip">MODE: <strong id="hudMode">IDLE BOB</strong></div>
-          <div class="hud-chip">SLICED COMETS: <strong id="hudSlices">0</strong></div>
+          <div class="hud-left-stack">
+            <div class="hud-chip"><span class="hud-dot"></span> CHARLIE CORE: <strong>ACTIVE</strong></div>
+            <div class="hud-chip">MODE: <strong id="hudMode">IDLE BOB</strong></div>
+            <div class="hud-chip">SLICED COMETS: <strong id="hudSlices">0</strong></div>
+          </div>
           <div class="hud-chip hud-hint-chip"><span>💡 Move mouse to direct Charlie &bull; Click to Trigger 3-Hit Blade Slash!</span></div>
         </div>
 
@@ -483,7 +515,21 @@
           <button type="button" class="action-btn" id="btnDizzy">😵 Dizzy</button>
           <button type="button" class="action-btn" id="btnThinking">🤔 Thinking</button>
           <button type="button" class="action-btn" id="btnWriting">✍️ Writing Ans</button>
-          <button type="button" class="action-btn" id="btnWaiting">🤖 Chat Mascot</button>
+          <button type="button" class="action-btn" id="btnWaiting">
+            <svg width="15" height="15" viewBox="0 0 36 36" fill="none" style="vertical-align: -2px; display: inline-block; margin-right: 3px;">
+              <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+              <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
+              <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
+              <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
+              <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
+              <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
+              <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+              <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
+              <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+              <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
+              <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+            </svg>Chat Mascot
+          </button>
           <button type="button" class="action-btn" id="btnVictory">🌟 Victory</button>
         </div>
 
@@ -500,7 +546,23 @@
       
       <!-- AI Assistant & Chatbot Life Cycle Simulator -->
       <div class="control-card" style="border-color: rgba(0, 242, 254, 0.45); background: linear-gradient(180deg, rgba(8, 16, 32, 0.95), rgba(4, 8, 18, 0.95)); box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);">
-        <h3><span>🤖</span> AI Assistant Life Cycle</h3>
+        <h3>
+          <span style="display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; margin-right: 5px;">
+            <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
+              <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+              <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
+              <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
+              <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
+              <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
+              <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
+              <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+              <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
+              <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+              <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
+              <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+            </svg>
+          </span>AI Assistant Life Cycle
+        </h3>
         <p style="font-size: 0.76rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.4;">
           Test Charlie's chatbot life states &amp; the bottom-right dock &harr; game deploy leap:
         </p>
@@ -932,7 +994,7 @@
       triggerWaiting() {
         this.state = 'waiting';
         this.face = 'waiting';
-        hudMode.textContent = 'CHATBOT MASCOT 🤖';
+        hudMode.textContent = 'CHATBOT MASCOT ✨';
         telState.textContent = 'WAITING';
       }
 
@@ -1014,6 +1076,36 @@
         hudMode.textContent = '⚡ FLASH MAN RETURN TO DOCK!';
         telState.textContent = 'FLASH RETURN';
         addSparks(this.x, this.y, '#f59e0b', 20);
+      }
+
+      triggerWriteDashDemo(targetX, targetY) {
+        this.state = 'flash_dash';
+        this.dashType = 'to_write';
+        this.face = 'sprint';
+        this.deployTimer = 0;
+        this.deployStartX = this.x;
+        this.deployStartY = this.y;
+        this.deployTargetX = targetX;
+        this.deployTargetY = targetY;
+        this.facing = this.deployTargetX >= this.x ? 1 : -1;
+        hudMode.textContent = '⚡ FLASH DASH TO CHAT CENTER!';
+        telState.textContent = 'FLASH WRITE DASH';
+        addSparks(this.x, this.y, '#00f2fe', 24);
+      }
+
+      triggerReturnDashDemo() {
+        this.state = 'flash_dash';
+        this.dashType = 'to_mascot';
+        this.face = 'sprint';
+        this.deployTimer = 0;
+        this.deployStartX = this.x;
+        this.deployStartY = this.y;
+        this.deployTargetX = canvas.clientWidth - 80;
+        this.deployTargetY = 80;
+        this.facing = this.deployTargetX >= this.x ? 1 : -1;
+        hudMode.textContent = '⚡ FLASH RETURN TO MASCOT!';
+        telState.textContent = 'FLASH RETURN DASH';
+        addSparks(this.x, this.y, '#38bdf8', 22);
       }
 
       drawAfterimages(c) {
@@ -1252,7 +1344,7 @@
           this.y = this.deployStartY + (this.deployTargetY - this.deployStartY) * ease;
 
           // Speed ghost afterimage trail
-          const ghostColor = this.dashType === 'to_cursor' ? '#00f2fe' : '#f59e0b';
+          const ghostColor = (this.dashType === 'to_cursor' || this.dashType === 'to_write') ? '#00f2fe' : (this.dashType === 'to_mascot' ? '#38bdf8' : '#f59e0b');
           this.afterimages.push({
             x: this.x,
             y: this.y,
@@ -1275,9 +1367,32 @@
               followState.textContent = 'OFF';
               followBtn.classList.remove('active');
               canvas.style.cursor = 'default'; // Normal mouse cursor restored!
-              hudMode.textContent = 'CHATBOT DOCKED 😴 (CURSOR RESTORED)';
+              hudMode.textContent = 'CHATBOT DOCKED ✨ (CURSOR RESTORED)';
               telState.textContent = 'DOCKED';
               addSparks(this.x, this.y, '#00f2fe', 16);
+            } else if (this.dashType === 'to_write') {
+              // Arrived at center of chat / stage!
+              this.state = 'writing';
+              this.face = 'writing';
+              this.writeTimer = 0;
+              this.facing = 1;
+              followCursor = false;
+              followState.textContent = 'WRITING IN CENTER';
+              canvas.style.cursor = 'default';
+              hudMode.textContent = '⚡ WRITING IN CHAT CENTER!';
+              telState.textContent = 'WRITING';
+              addSparks(this.x, this.y, '#00f2fe', 26);
+            } else if (this.dashType === 'to_mascot') {
+              // Arrived back at mascot anchor!
+              this.state = 'waiting';
+              this.face = 'waiting';
+              this.facing = -1;
+              followCursor = false;
+              followState.textContent = 'OFF';
+              canvas.style.cursor = 'default';
+              hudMode.textContent = 'CHATBOT MASCOT ✨';
+              telState.textContent = 'MASCOT';
+              addSparks(this.x, this.y, '#38bdf8', 22);
             } else {
               // Arrived at cursor! Charlie IS the cursor!
               this.state = 'idle';
@@ -2501,7 +2616,7 @@
       ctx.fillStyle = 'rgba(0, 242, 254, 0.65)';
       ctx.font = '8px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('CHAT DOCK 🤖', dockPortX, dockPortY + 34);
+      ctx.fillText('CHAT DOCK ✨', dockPortX, dockPortY + 34);
       ctx.restore();
 
       // 4c. Draw Flash Man Lightning & Speed Ghosts
@@ -2582,7 +2697,11 @@
         charlie.triggerThinking();
 
         setTimeout(() => {
-          charlie.triggerWriting();
+          // Charlie supersonic dashes to center of stage canvas to write!
+          const centerX = canvas.clientWidth / 2;
+          const centerY = canvas.clientHeight * 0.48;
+          charlie.triggerWriteDashDemo(centerX, centerY);
+
           const responseFull = '⚡ FLASH MAN WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"';
           let charIdx = 0;
           
@@ -2606,8 +2725,9 @@
               }
               charlie.triggerVictory();
               setTimeout(() => {
-                charlie.triggerWaiting();
-              }, 2800);
+                // Flash Man supersonic return dash to mascot anchor!
+                charlie.triggerReturnDashDemo();
+              }, 1200);
             }
           }, 18); // 18ms per 2 chars = ~9ms per char (supersonic speed!)
         }, 1200);

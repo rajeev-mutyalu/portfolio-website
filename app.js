@@ -348,6 +348,86 @@
       this.addSparks(this.x, this.y, '#f59e0b', 20);
     }
 
+    triggerWriteDash(startX, startY, targetX, targetY) {
+      if (window.portfolioEngine?.isEnabled) return;
+      if (startX < -200 || startY < -200) {
+        const floatingBtn = document.getElementById('floatingCharlieBtn');
+        const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+        startX = dockRect.left + dockRect.width / 2;
+        startY = dockRect.top + dockRect.height / 2;
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+      }
+
+      this.state = 'flash_dash';
+      this.dashType = 'to_write';
+      this.face = 'sprint';
+      this.isGameModeDeploy = false;
+      this.sectionActive = true;
+      this.deployTimer = 0;
+      this.deployStartX = startX;
+      this.deployStartY = startY;
+      this.deployTargetX = targetX;
+      this.deployTargetY = targetY;
+      this.x = startX;
+      this.y = startY;
+      this.facing = this.deployTargetX >= this.x ? 1 : -1;
+      this.addSparks(this.x, this.y, '#00f2fe', 24);
+      this.setEmote('FLASH WRITE! ⚡', 45);
+      if (window.portfolioSoundEngine) {
+        window.portfolioSoundEngine.playLaserDeflect();
+      }
+    }
+
+    triggerReturnDash(startX, startY, targetX, targetY) {
+      if (window.portfolioEngine?.isEnabled) return;
+      this.state = 'flash_dash';
+      this.dashType = 'to_mascot';
+      this.face = 'sprint';
+      this.isGameModeDeploy = false;
+      this.sectionActive = true;
+      this.deployTimer = 0;
+      this.deployStartX = startX;
+      this.deployStartY = startY;
+      this.deployTargetX = targetX;
+      this.deployTargetY = targetY;
+      this.x = startX;
+      this.y = startY;
+      this.facing = this.deployTargetX >= this.x ? 1 : -1;
+      this.addSparks(this.x, this.y, '#38bdf8', 22);
+      this.setEmote('DELIVERED! ✨', 45);
+      if (window.portfolioSoundEngine) {
+        window.portfolioSoundEngine.playLaserDeflect();
+      }
+    }
+
+    getChatWritingCenter() {
+      const streamEl = document.getElementById('aiChatStream');
+      const terminalEl = document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
+      const navbarEl = document.querySelector('.navbar');
+      const navBottom = (navbarEl ? navbarEl.getBoundingClientRect().bottom : 70);
+
+      if (streamEl) {
+        const sRect = streamEl.getBoundingClientRect();
+        const centerX = sRect.left + sRect.width / 2;
+        const minAllowedY = navBottom + 55;
+        const maxAllowedY = sRect.bottom - 55;
+        const naturalY = sRect.top + sRect.height * 0.48;
+        const centerY = Math.max(minAllowedY, Math.min(maxAllowedY, naturalY));
+        const isVisible = (sRect.bottom > navBottom + 65 && sRect.top < window.innerHeight - 60);
+        return { x: centerX, y: centerY, isVisible };
+      } else if (terminalEl) {
+        const tRect = terminalEl.getBoundingClientRect();
+        const centerX = tRect.left + tRect.width / 2;
+        const minAllowedY = navBottom + 55;
+        const maxAllowedY = tRect.bottom - 55;
+        const naturalY = tRect.top + tRect.height * 0.48;
+        const centerY = Math.max(minAllowedY, Math.min(maxAllowedY, naturalY));
+        const isVisible = (tRect.bottom > navBottom + 65 && tRect.top < window.innerHeight - 60);
+        return { x: centerX, y: centerY, isVisible };
+      }
+      return { x: window.innerWidth / 2, y: window.innerHeight / 2, isVisible: false };
+    }
+
     getChatMascotAnchor() {
       const streamEl = document.getElementById('aiChatStream');
       const terminalEl = document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
@@ -462,7 +542,7 @@
 
       // 1. Terminal Anchor Tracking (When stationed as Meet Charlie section mascot AND Game Mode is strictly OFF)
       if (!window.portfolioEngine?.isEnabled && this.sectionActive && this.state !== 'flash_dash') {
-        const anchor = this.getChatMascotAnchor();
+        const anchor = (this.state === 'writing') ? this.getChatWritingCenter() : this.getChatMascotAnchor();
         if (anchor.isVisible) {
           this.targetX = anchor.x;
           this.targetY = anchor.y;
@@ -471,7 +551,7 @@
           const dy = this.targetY - this.y;
           this.x += dx * 0.22;
           this.y += dy * 0.22;
-          if (Math.abs(dx) > 4) {
+          if (Math.abs(dx) > 4 && this.state !== 'writing') {
             this.facing = dx > 0 ? 1 : -1;
           }
         } else {
@@ -655,7 +735,7 @@
         this.x = this.deployStartX + (this.deployTargetX - this.deployStartX) * ease;
         this.y = this.deployStartY + (this.deployTargetY - this.deployStartY) * ease;
 
-        const ghostColor = this.dashType === 'to_cursor' ? '#00f2fe' : '#f59e0b';
+        const ghostColor = (this.dashType === 'to_cursor' || this.dashType === 'to_write') ? '#00f2fe' : (this.dashType === 'to_mascot' ? '#38bdf8' : '#f59e0b');
         this.afterimages.push({
           x: this.x,
           y: this.y,
@@ -679,6 +759,25 @@
             this.addSparks(this.deployTargetX, this.deployTargetY, '#00f2fe', 16);
             const floatingBtn = document.getElementById('floatingCharlieBtn');
             if (floatingBtn) floatingBtn.classList.remove('hidden');
+          } else if (this.dashType === 'to_write') {
+            this.state = 'writing';
+            this.face = 'writing';
+            this.writeTimer = 0;
+            this.sectionActive = true;
+            this.facing = 1;
+            this.addSparks(this.x, this.y, '#00f2fe', 26);
+            if (window.portfolioSoundEngine) {
+              window.portfolioSoundEngine.playComboDing();
+            }
+          } else if (this.dashType === 'to_mascot') {
+            this.state = 'waiting';
+            this.face = 'waiting';
+            this.sectionActive = true;
+            this.facing = -1;
+            this.addSparks(this.x, this.y, '#38bdf8', 22);
+            if (window.portfolioSoundEngine) {
+              window.portfolioSoundEngine.playComboDing();
+            }
           } else {
             if (this.isGameModeDeploy) {
               this.state = 'idle';
@@ -4710,8 +4809,11 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
           typingDiv.parentNode.removeChild(typingDiv);
         }
 
-        // Charlie enters Writing Mode!
-        if (window.portfolioCharlie) {
+        // Charlie enters Writing Mode! Flash jump straight to center of chat screen!
+        if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+          const writeCenter = window.portfolioCharlie.getChatWritingCenter();
+          window.portfolioCharlie.triggerWriteDash(window.portfolioCharlie.x, window.portfolioCharlie.y, writeCenter.x, writeCenter.y);
+        } else if (window.portfolioCharlie) {
           window.portfolioCharlie.triggerWriting();
         }
         if (window.portfolioDockCharlie) {
@@ -4788,7 +4890,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
               if (text) text.textContent = 'ANS COMPLETE ✨';
             }
 
-            // Charlie celebration!
+            // Charlie celebration at center & fast jump return to mascot anchor!
             if (window.portfolioCharlie) {
               window.portfolioCharlie.triggerVictory();
               if (window.portfolioDockCharlie) {
@@ -4796,7 +4898,8 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
               }
               setTimeout(() => {
                 if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-                  window.portfolioCharlie.triggerWaiting();
+                  const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
+                  window.portfolioCharlie.triggerReturnDash(window.portfolioCharlie.x, window.portfolioCharlie.y, homeAnchor.x, homeAnchor.y);
                 }
                 if (window.portfolioDockCharlie) {
                   window.portfolioDockCharlie.triggerWaiting();
@@ -4805,7 +4908,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                   const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
                   if (text) text.textContent = 'LOCAL KB READY';
                 }
-              }, 2000);
+              }, 950);
             }
             scrollStreamToBottom();
           }
