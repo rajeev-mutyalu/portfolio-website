@@ -549,8 +549,27 @@
     }
 
     drawAfterimages(c) {
-      // Completely removed afterimage box trails (no gold packets)
-      this.afterimages = [];
+      for (let i = this.afterimages.length - 1; i >= 0; i--) {
+        const ghost = this.afterimages[i];
+        ghost.alpha -= 0.045 * this.animSpeed;
+        if (ghost.alpha <= 0) {
+          this.afterimages.splice(i, 1);
+          continue;
+        }
+        c.save();
+        c.translate(ghost.x, ghost.y);
+        c.scale(ghost.facing * this.scale * 0.95, this.scale * 0.95);
+        c.globalAlpha = ghost.alpha * 0.55;
+        c.shadowColor = ghost.color;
+        c.shadowBlur = 14 * this.bladeGlowIntensity;
+        c.fillStyle = ghost.color;
+        c.beginPath();
+        c.roundRect(-14, -26, 28, 38, 7);
+        c.fill();
+        c.fillStyle = '#ffffff';
+        c.fillRect(-10, -14, 20, 4);
+        c.restore();
+      }
     }
 
     drawLightningArcs(c) {
@@ -846,6 +865,14 @@
           this.facing = dx >= 0 ? 1 : -1;
         }
 
+        this.afterimages.push({
+          x: this.x,
+          y: this.y,
+          facing: this.facing,
+          alpha: 0.85,
+          color: '#00f2fe'
+        });
+
         if (Math.random() > 0.3) {
           this.addSparks(this.x, this.y, '#38bdf8', 2);
         }
@@ -883,9 +910,17 @@
         this.x = this.deployStartX + (this.deployTargetX - this.deployStartX) * ease;
         this.y = this.deployStartY + (this.deployTargetY - this.deployStartY) * ease;
 
-        const sparkColor = (this.dashType === 'to_cursor' || this.dashType === 'to_write') ? '#00f2fe' : '#38bdf8';
+        const ghostColor = (this.dashType === 'to_cursor' || this.dashType === 'to_write') ? '#00f2fe' : (this.dashType === 'to_mascot' ? '#38bdf8' : '#f59e0b');
+        this.afterimages.push({
+          x: this.x,
+          y: this.y,
+          facing: this.facing,
+          alpha: 0.85,
+          color: ghostColor
+        });
+
         if (Math.random() > 0.3) {
-          this.addSparks(this.x, this.y, sparkColor, 2);
+          this.addSparks(this.x, this.y, ghostColor, 2);
         }
 
         if (t >= 1.0) {
