@@ -5137,15 +5137,25 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
             const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
             if (text) text.textContent = 'CHARLIE WRITING ANS [CYBER SPEED]...';
           }
+
+          // Compute smooth upward travel shift: message starts at the bottom and glides up with Charlie to center!
+          const streamRect = aiChatStream.getBoundingClientRect();
+          const startShiftY = Math.max(75, Math.min(150, streamRect.height * 0.38));
+          botMsgDiv.style.transform = `translateY(${startShiftY}px)`;
+          botMsgDiv.style.transition = 'none';
+
           if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
             window.portfolioCharlie.state = 'writing';
             window.portfolioCharlie.face = 'writing';
-            window.portfolioCharlie.x = bottomCenter.x;
-            window.portfolioCharlie.y = bottomCenter.y;
-            window.portfolioCharlie.targetX = bottomCenter.x;
-            window.portfolioCharlie.targetY = bottomCenter.y;
+            const initialMsgRect = botMsgDiv.getBoundingClientRect();
+            const initX = Math.max(60, Math.min(window.innerWidth - 60, initialMsgRect.left + initialMsgRect.width / 2));
+            const initY = initialMsgRect.top - 28 * window.portfolioCharlie.scale;
+            window.portfolioCharlie.x = initX;
+            window.portfolioCharlie.y = initY;
+            window.portfolioCharlie.targetX = initX;
+            window.portfolioCharlie.targetY = initY;
             window.portfolioCharlie.facing = 1;
-            window.portfolioCharlie.addSparks(bottomCenter.x, bottomCenter.y, '#00f2fe', 16);
+            window.portfolioCharlie.addSparks(initX, initY, '#00f2fe', 16);
           }
 
           // Supersonic Cyber Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus!
@@ -5156,13 +5166,16 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
           const typeInterval = setInterval(() => {
             charIndex = Math.min(fullResponse.length, charIndex + chunkSize);
             contentEl.innerHTML = fullResponse.substring(0, charIndex) + (charIndex < fullResponse.length ? '<span class="typewriter-cursor">⚡</span>' : '');
-            scrollStreamToBottom();
 
-            // Triangular Motion: Ascend along with the text from Bottom-Center to Screen-Center!
+            // Triangular Motion: Both the text message AND Charlie ascend together from Bottom-Center to Screen-Center!
             const progress = Math.min(1.0, charIndex / fullResponse.length);
+            const currentShiftY = startShiftY * (1 - progress);
+            botMsgDiv.style.transform = `translateY(${currentShiftY}px)`;
+
             if (window.portfolioCharlie && (window.portfolioCharlie.state === 'writing')) {
-              const currentX = bottomCenter.x + (writeCenter.x - bottomCenter.x) * progress;
-              const currentY = bottomCenter.y + (writeCenter.y - bottomCenter.y) * progress;
+              const liveMsgRect = botMsgDiv.getBoundingClientRect();
+              const currentX = Math.max(60, Math.min(window.innerWidth - 60, liveMsgRect.left + liveMsgRect.width / 2));
+              const currentY = liveMsgRect.top - 28 * window.portfolioCharlie.scale;
               window.portfolioCharlie.x = currentX;
               window.portfolioCharlie.y = currentY;
               window.portfolioCharlie.targetX = currentX;
@@ -5178,6 +5191,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
             if (charIndex >= fullResponse.length) {
               clearInterval(typeInterval);
               contentEl.innerHTML = fullResponse;
+              botMsgDiv.style.transform = 'none';
 
               if (followupsHtml) {
                 const followContainer = document.createElement('div');

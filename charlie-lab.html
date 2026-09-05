@@ -831,6 +831,7 @@
         this.bonkTimer = 0;
         this.dizzyTimer = 0;
         this.dizzyAngle = 0;
+        this.activeStreamingText = null;
 
         // Chatbot Lifecycle & Supersonic Dash Mechanics
         this.deployTimer = 0;
@@ -2616,6 +2617,68 @@
         }
 
         c.restore();
+
+        // 9. Floating Holographic Text Card (Ascending from bottom to center with Charlie!)
+        if (this.activeStreamingText) {
+          c.save();
+          const boxW = Math.min(canvas.clientWidth - 40, 440);
+          const boxH = 68;
+          const boxX = Math.max(20, Math.min(canvas.clientWidth - boxW - 20, this.x - boxW / 2));
+          const boxY = Math.max(16, this.y - 105);
+
+          // Glassmorphic dark panel with cyan neon rim
+          c.fillStyle = 'rgba(6, 12, 28, 0.92)';
+          c.strokeStyle = '#00f2fe';
+          c.lineWidth = 1.6;
+          c.shadowColor = '#00f2fe';
+          c.shadowBlur = 18 * glowMult;
+          c.beginPath();
+          c.roundRect(boxX, boxY, boxW, boxH, 10);
+          c.fill();
+          c.stroke();
+
+          // Technical corner brackets
+          c.fillStyle = '#00f2fe';
+          c.fillRect(boxX + 4, boxY + 4, 6, 2);
+          c.fillRect(boxX + 4, boxY + 4, 2, 6);
+          c.fillRect(boxX + boxW - 10, boxY + 4, 6, 2);
+          c.fillRect(boxX + boxW - 6, boxY + 4, 2, 6);
+
+          // Header badge
+          c.shadowBlur = 0;
+          c.fillStyle = '#38bdf8';
+          c.font = 'bold 10px monospace';
+          c.fillText('🤖 CHARLIE [LIVE KNOWLEDGE STREAM]', boxX + 14, boxY + 18);
+
+          // Pulsing live status indicator
+          c.fillStyle = '#10b981';
+          c.beginPath();
+          c.arc(boxX + boxW - 16, boxY + 15, 3.5, 0, Math.PI * 2);
+          c.fill();
+
+          // Streamed text with high readability
+          c.fillStyle = '#f8fafc';
+          c.font = '12px "Inter", -apple-system, sans-serif';
+          const maxSnippet = 58;
+          const snippet = this.activeStreamingText.length > maxSnippet 
+            ? '...' + this.activeStreamingText.slice(-maxSnippet) 
+            : this.activeStreamingText;
+          c.fillText(snippet, boxX + 14, boxY + 42);
+
+          // Stylus laser data-link connecting Charlie's stylus tip to the moving text card!
+          const stylusTipX = this.x + this.facing * 14 * charlieScale;
+          const stylusTipY = this.y - 2 * charlieScale;
+          c.strokeStyle = 'rgba(0, 242, 254, 0.75)';
+          c.lineWidth = 1.4;
+          c.setLineDash([4, 3]);
+          c.beginPath();
+          c.moveTo(stylusTipX, stylusTipY);
+          c.lineTo(boxX + boxW / 2, boxY + boxH);
+          c.stroke();
+          c.setLineDash([]);
+
+          c.restore();
+        }
       }
     }
 
@@ -2825,6 +2888,7 @@
             charlie.x = bottomX;
             charlie.y = bottomY;
             charlie.facing = 1;
+            charlie.activeStreamingText = '...';
             addSparks(bottomX, bottomY, '#00f2fe', 16);
             hudMode.textContent = '⚡ WRITING & ASCENDING TO CENTER!';
             telState.textContent = 'WRITING';
@@ -2838,6 +2902,7 @@
                   chatStatusText.innerHTML = `✍️ <span style="color:#00f2fe;">${responseFull.substring(0, charIdx + 1)}</span><span style="color:#fff;">|</span>`;
                 }
                 charIdx += 2; // fast 2 chars per tick!
+                charlie.activeStreamingText = responseFull.substring(0, charIdx) + (charIdx < responseFull.length ? ' ⚡' : '');
 
                 // Triangular ascent along with text from Bottom-Center to Center!
                 const progress = charIdx / responseFull.length;
@@ -2855,6 +2920,7 @@
               } else {
                 clearInterval(chatTypeInterval);
                 chatTypeInterval = null;
+                charlie.activeStreamingText = '✨ ' + responseFull;
                 if (chatStatusText) {
                   chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
                 }
@@ -2864,6 +2930,7 @@
                 telState.textContent = 'VICTORY';
                 charlie.triggerVictory();
                 setTimeout(() => {
+                  charlie.activeStreamingText = null;
                   // Supersonic return dash to mascot anchor (completing the triangle)!
                   charlie.triggerReturnDashDemo();
                 }, 1200);
