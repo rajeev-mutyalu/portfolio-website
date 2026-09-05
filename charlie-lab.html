@@ -1441,7 +1441,7 @@
         // Runs/rockets back to bottom-right chat dock
         this.state = 'cyber_dash';
         this.dashType = 'to_dock';
-        this.face = 'sprint';
+        this.face = 'battle';
         this.deployTimer = 0;
         this.deployStartX = this.x;
         this.deployStartY = this.y;
@@ -1450,7 +1450,7 @@
         this.facing = this.deployTargetX >= this.x ? 1 : -1;
         hudMode.textContent = '⚡ CYBER RETURN TO DOCK!';
         telState.textContent = 'DOCK RETURN';
-        addSparks(this.x, this.y, '#f59e0b', 20);
+        addSparks(this.x, this.y, '#00f2fe', 24);
       }
 
       triggerWriteDashDemo(targetX, targetY) {
@@ -1475,7 +1475,7 @@
       triggerReturnDashDemo() {
         this.state = 'cyber_dash';
         this.dashType = 'to_mascot';
-        this.face = 'sprint';
+        this.face = 'battle';
         this.deployTimer = 0;
         this.deployStartX = this.x;
         this.deployStartY = this.y;
@@ -1484,7 +1484,7 @@
         this.facing = this.deployTargetX >= this.x ? 1 : -1;
         hudMode.textContent = '⚡ CYBER RETURN TO MASCOT!';
         telState.textContent = 'RETURN DASH';
-        addSparks(this.x, this.y, '#38bdf8', 22);
+        addSparks(this.x, this.y, '#00f2fe', 24);
       }
 
       drawAfterimages(c) {
@@ -1514,9 +1514,9 @@
       }
 
       drawLightningArcs(c) {
-        if (this.state === 'cyber_dash' && this.deployTimer < 1.0 && this.dashType === 'to_cursor') {
+        if (this.state === 'cyber_dash' && this.deployTimer < 1.0) {
           c.save();
-          const color = this.dashType === 'to_cursor' ? '#00f2fe' : '#f59e0b';
+          const color = '#00f2fe';
           c.strokeStyle = color;
           c.shadowColor = color;
           c.shadowBlur = 12 * glowMult;
@@ -1763,7 +1763,7 @@
           this.y = this.deployStartY + (this.deployTargetY - this.deployStartY) * ease;
 
           // Speed ghost afterimage trail
-          const ghostColor = (this.dashType === 'to_cursor' || this.dashType === 'to_write') ? '#00f2fe' : (this.dashType === 'to_mascot' ? '#38bdf8' : '#f59e0b');
+          const ghostColor = '#00f2fe';
           this.afterimages.push({
             x: this.x,
             y: this.y,
@@ -1790,7 +1790,7 @@
               canvas.style.cursor = 'default';
               hudMode.textContent = 'CHATBOT DOCKED ✨ (CURSOR RESTORED)';
               telState.textContent = 'DOCKED';
-              addSparks(this.x, this.y, '#00f2fe', 16);
+              addSparks(this.x, this.y, '#00f2fe', 24);
             } else if (this.dashType === 'to_write') {
               // Arrived at center of chat / stage!
               this.state = 'writing';
@@ -1817,7 +1817,7 @@
               canvas.style.cursor = 'default';
               hudMode.textContent = 'CHATBOT MASCOT ✨';
               telState.textContent = 'MASCOT';
-              addSparks(this.x, this.y, '#38bdf8', 22);
+              addSparks(this.x, this.y, '#00f2fe', 24);
             } else {
               // Arrived at cursor! Charlie IS the cursor!
               this.state = 'idle';
@@ -2348,13 +2348,8 @@
           leftHandMode = 'bare';
           rightHandMode = 'bare';
         } else if (this.state === 'cyber_dash') {
-          if (this.dashType === 'to_cursor') {
-            leftHandMode = 'shield';
-            rightHandMode = 'knife'; // drawn ready for combat!
-          } else {
-            leftHandMode = 'bare';
-            rightHandMode = 'bare'; // disarmed returning to dock
-          }
+          leftHandMode = 'shield';
+          rightHandMode = 'knife'; // drawn ready in supersonic sprint posture!
         }
 
         // 4. Draw Left Arm

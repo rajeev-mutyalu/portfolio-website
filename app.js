@@ -353,7 +353,7 @@
     triggerDock(dockX, dockY) {
       this.state = 'cyber_dash';
       this.dashType = 'to_dock';
-      this.face = 'sprint';
+      this.face = 'battle';
       this.isGameModeDeploy = false;
       this.sectionActive = false;
       this.deployTimer = 0;
@@ -362,7 +362,12 @@
       this.deployTargetX = dockX;
       this.deployTargetY = dockY;
       this.facing = this.deployTargetX >= this.x ? 1 : -1;
-      this.addSparks(this.x, this.y, '#f59e0b', 20);
+      this.addSparks(this.x, this.y, '#00f2fe', 24);
+      try {
+        if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
+          window.portfolioSoundEngine.playLaserDeflect();
+        }
+      } catch (e) {}
     }
 
     triggerSectionEscort(targetEl, sectionName) {
@@ -446,7 +451,7 @@
 
       this.state = 'cyber_dash';
       this.dashType = 'to_mascot';
-      this.face = 'sprint';
+      this.face = 'battle';
       this.isGameModeDeploy = false;
       this.sectionActive = true;
       this.deployTimer = 0;
@@ -457,7 +462,7 @@
       this.x = startX;
       this.y = startY;
       this.facing = this.deployTargetX >= this.x ? 1 : -1;
-      this.addSparks(this.x, this.y, '#38bdf8', 22);
+      this.addSparks(this.x, this.y, '#00f2fe', 24);
       this.setEmote('DELIVERED! ✨', 45);
       try {
         if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
@@ -573,7 +578,7 @@
     }
 
     drawLightningArcs(c) {
-      if (this.state === 'cyber_dash' && this.deployTimer < 1.0 && this.dashType === 'to_cursor') {
+      if (this.state === 'cyber_dash' && this.deployTimer < 1.0) {
         c.save();
         const color = '#00f2fe';
         c.strokeStyle = color;
@@ -910,7 +915,7 @@
         this.x = this.deployStartX + (this.deployTargetX - this.deployStartX) * ease;
         this.y = this.deployStartY + (this.deployTargetY - this.deployStartY) * ease;
 
-        const ghostColor = (this.dashType === 'to_cursor' || this.dashType === 'to_write') ? '#00f2fe' : (this.dashType === 'to_mascot' ? '#38bdf8' : '#f59e0b');
+        const ghostColor = '#00f2fe';
         this.afterimages.push({
           x: this.x,
           y: this.y,
@@ -931,7 +936,7 @@
             this.y = -1000;
             this.sectionActive = false;
             document.body.classList.remove('combat-cursor-active');
-            this.addSparks(this.deployTargetX, this.deployTargetY, '#00f2fe', 16);
+            this.addSparks(this.deployTargetX, this.deployTargetY, '#00f2fe', 24);
             const floatingBtn = document.getElementById('floatingCharlieBtn');
             if (floatingBtn) floatingBtn.classList.remove('hidden');
           } else if (this.dashType === 'to_write') {
@@ -960,7 +965,7 @@
             this.facing = -1;
             this.x = this.deployTargetX;
             this.y = this.deployTargetY;
-            this.addSparks(this.x, this.y, '#38bdf8', 22);
+            this.addSparks(this.x, this.y, '#00f2fe', 24);
             try {
               if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
                 window.portfolioSoundEngine.playComboDing();
@@ -1420,13 +1425,8 @@
         leftHandMode = 'bare';
         rightHandMode = 'bare';
       } else if (this.state === 'cyber_dash') {
-        if (this.dashType === 'to_cursor') {
-          leftHandMode = 'shield';
-          rightHandMode = 'knife';
-        } else {
-          leftHandMode = 'bare';
-          rightHandMode = 'bare';
-        }
+        leftHandMode = 'shield';
+        rightHandMode = 'knife';
       }
 
       // 4. Draw Left Arm
