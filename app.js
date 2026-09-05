@@ -57,6 +57,13 @@
       this.dashType = 'to_cursor'; // 'to_cursor' or 'to_dock'
       this.afterimages = [];
 
+      // Companion Flight Escort States
+      this.isEscorting = false;
+      this.escortTimer = 0;
+      this.escortMaxDuration = 80;
+      this.escortTargetEl = null;
+      this.escortSectionName = '';
+
       // Combat Action Timers & Sequences
       this.slashPhase = 1;
       this.slashTimer = 0;
@@ -358,6 +365,34 @@
       this.addSparks(this.x, this.y, '#f59e0b', 20);
     }
 
+    triggerSectionEscort(targetEl, sectionName) {
+      if (!targetEl) return;
+
+      // If deployed in dock (off-screen), start flight from dock button coordinates
+      if (!isFinite(this.x) || this.x < -200 || !isFinite(this.y) || this.y < -200) {
+        const floatingBtn = document.getElementById('floatingCharlieBtn');
+        const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+        this.x = dockRect.left + dockRect.width / 2;
+        this.y = dockRect.top + dockRect.height / 2;
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+      }
+
+      this.isEscorting = true;
+      this.escortTargetEl = targetEl;
+      this.escortSectionName = sectionName || targetEl.getAttribute('data-section-title') || targetEl.id || 'Portfolio Section';
+      this.state = 'escort';
+      this.face = 'sprint';
+      this.escortTimer = 0;
+      this.escortMaxDuration = 80; // ~1.3s companion flight
+      this.sectionActive = false;
+
+      this.setEmote(`ESCORTING TO ${this.escortSectionName.toUpperCase()}! 🚀`, 110);
+      this.addSparks(this.x, this.y, '#00f2fe', 26);
+      if (typeof window.portfolioSoundEngine?.playJump === 'function' && !window.portfolioSoundEngine.isMuted) {
+        window.portfolioSoundEngine.playJump();
+      }
+    }
+
     triggerWriteDash(startX, startY, targetX, targetY, onComplete) {
       if (window.portfolioEngine?.isEnabled) return;
       if (!isFinite(startX) || !isFinite(startY) || startX < -200 || startY < -200) {
@@ -613,7 +648,7 @@
 
       // 1. Terminal Anchor Tracking (When stationed as Meet Charlie section mascot AND Game Mode is strictly OFF)
       // Note: Writing state trajectory is independently interpolated along the triangular path from bottom-center to screen-center
-      if (!window.portfolioEngine?.isEnabled && this.sectionActive && this.state !== 'cyber_dash' && this.state !== 'writing') {
+      if (!window.portfolioEngine?.isEnabled && this.sectionActive && this.state !== 'cyber_dash' && this.state !== 'writing' && this.state !== 'escort' && !this.isEscorting) {
         const isCenteredMode = (this.state === 'victory');
         const anchor = isCenteredMode ? this.getChatWritingCenter() : this.getChatMascotAnchor();
         if (anchor.isVisible) {
@@ -810,6 +845,62 @@
         }
       }
 
+      // Companion Escort Flight Mode (Accompanies page animation / smooth scroll to specific portfolio section)
+      if (this.state === 'escort') {
+        this.escortTimer += 1.0 * this.animSpeed;
+        const rect = this.escortTargetEl ? this.escortTargetEl.getBoundingClientRect() : null;
+        let destX = window.innerWidth / 2;
+        let destY = window.innerHeight / 2;
+        if (rect) {
+          destX = Math.min(window.innerWidth - 85, Math.max(85, rect.left + rect.width - 130));
+          destY = Math.min(window.innerHeight - 100, Math.max(90, rect.top + 70));
+        }
+
+        const dx = destX - this.x;
+        const dy = destY - this.y;
+        this.x += dx * 0.16;
+        this.y += dy * 0.16;
+        if (Math.abs(dx) > 4) {
+          this.facing = dx >= 0 ? 1 : -1;
+        }
+
+        this.afterimages.push({
+          x: this.x,
+          y: this.y,
+          facing: this.facing,
+          alpha: 0.85,
+          color: '#00f2fe'
+        });
+
+        if (Math.random() > 0.3) {
+          this.addSparks(this.x, this.y, '#38bdf8', 2);
+        }
+
+        const isArrived = (this.escortTimer >= this.escortMaxDuration) || (rect && Math.abs(rect.top - 70) < 25 && this.escortTimer > 25);
+        if (isArrived) {
+          this.state = 'victory';
+          this.victoryTimer = 0;
+          this.twirlAngle = 0;
+          this.face = 'victory';
+          this.setEmote(`ARRIVED AT ${this.escortSectionName.toUpperCase()}! 🌟`, 90);
+          this.addSparks(this.x, this.y, '#f59e0b', 26);
+          this.addSparks(this.x, this.y, '#00f2fe', 20);
+
+          if (typeof window.portfolioSoundEngine?.playFanfare === 'function' && !window.portfolioSoundEngine.isMuted) {
+            window.portfolioSoundEngine.playFanfare();
+          }
+
+          setTimeout(() => {
+            const floatingBtn = document.getElementById('floatingCharlieBtn');
+            const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+            const dockCenterX = dockRect.left + dockRect.width / 2;
+            const dockCenterY = dockRect.top + dockRect.height / 2;
+            this.isEscorting = false;
+            this.triggerDock(dockCenterX, dockCenterY);
+          }, 1150);
+        }
+      }
+
       // Supersonic Cyber Dash
       if (this.state === 'cyber_dash') {
         this.deployTimer += 0.055 * this.animSpeed;
@@ -977,8 +1068,8 @@
         customKnifeAngle = 0.43;
       }
 
-      // SPRINT CYCLE
-      else if (this.state === 'run') {
+      // SPRINT & ESCORT COMPANION FLIGHT CYCLE
+      else if (this.state === 'run' || this.state === 'escort') {
         const r = this.animTimer * 3.6;
         bobY = Math.abs(Math.sin(r)) * 4.0;
         hipL = Math.sin(r) * 0.85;
@@ -2056,6 +2147,7 @@
       this.particleCount = 100;
       this.dpr = Math.min(window.devicePixelRatio || 1, 2);
       this.onShatter = null;
+      this.lastGlitterySpawn = Date.now() - 6000; // First glitter comet ready after brief combat start
 
       // Cyber Charlie Companion & Combat Cursor (Scale: 1.0x, Blade Glow: 2.5x)
       this.charlie = new CyberCharlie();
@@ -2236,9 +2328,51 @@
       }
     }
 
+    hasActiveGlitteryComet() {
+      return this.particles && this.particles.some(p => p && p.isGlittery);
+    }
+
     createParticle(initial = false) {
       const angleVariation = (Math.random() - 0.5) * 0.16;
       const angle = this.globalAngle + angleVariation;
+
+      // Check if this particle should spawn as a rare, celestial Glittery Shimmer Comet!
+      const now = Date.now();
+      const timeSinceLastGlitter = now - (this.lastGlitterySpawn || 0);
+      let isGlittery = false;
+
+      // Only 1 glittery comet active at a time; guaranteed spawn every 15-20s or ~6% chance after 8s cooldown
+      if (!initial && !this.hasActiveGlitteryComet()) {
+        if (timeSinceLastGlitter > 15000 || (timeSinceLastGlitter > 8000 && Math.random() < 0.065)) {
+          isGlittery = true;
+          this.lastGlitterySpawn = now;
+        }
+      }
+
+      if (isGlittery) {
+        const glitterSpeed = 1.35 + Math.random() * 0.65; // Smooth majestic glide speed so Charlie/player can catch it
+        const spawnX = Math.random() * (this.width + 400) - 200;
+        const spawnY = -90 - Math.random() * 80;
+        return {
+          x: spawnX,
+          y: spawnY,
+          vx: Math.cos(angle) * glitterSpeed,
+          vy: Math.sin(angle) * glitterSpeed,
+          baseSpeed: glitterSpeed,
+          angleOffset: angleVariation,
+          isOrb: false,
+          isSuperFast: false,
+          isGlittery: true,
+          glitterAngle: Math.random() * Math.PI * 2,
+          radius: 4.8,
+          length: 75,
+          opacity: 1.0,
+          baseOpacity: 1.0,
+          shadeTier: 3,
+          pulse: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.08
+        };
+      }
 
       // 68% Streak/Comet vs 32% Glowing Circular Orb
       const isOrb = Math.random() < 0.32;
@@ -2270,6 +2404,7 @@
         angleOffset: angleVariation,
         isOrb: isOrb,
         isSuperFast: isSuperFast,
+        isGlittery: false,
         radius: radius,
         length: length,
         opacity: opacity,
@@ -2280,7 +2415,7 @@
       };
     }
 
-    triggerShatterBurst(x, y, count = 8, isExtra = false) {
+    triggerShatterBurst(x, y, count = 8, isExtra = false, customColor = null) {
       const finalCount = isExtra ? 16 : count;
       for (let i = 0; i < finalCount; i++) {
         const pAngle = Math.random() * Math.PI * 2;
@@ -2292,7 +2427,8 @@
           vy: Math.sin(pAngle) * pSpeed,
           radius: 1.0 + Math.random() * (isExtra ? 2.4 : 1.6),
           alpha: 1.0,
-          decay: 0.022 + Math.random() * 0.028
+          decay: 0.022 + Math.random() * 0.028,
+          color: customColor || null
         });
       }
 
@@ -2304,7 +2440,8 @@
         maxRadius: isExtra ? 48 : 34,
         alpha: 1.0,
         speed: isExtra ? 2.4 : 1.8,
-        lineWidth: isExtra ? 2.4 : 1.6
+        lineWidth: isExtra ? 2.4 : 1.6,
+        color: customColor || null
       });
       if (isExtra) {
         this.ripples.push({
@@ -2314,9 +2451,74 @@
           maxRadius: 26,
           alpha: 0.8,
           speed: 1.3,
-          lineWidth: 1.2
+          lineWidth: 1.2,
+          color: customColor || null
         });
       }
+    }
+
+    triggerGlitterCatch(x, y) {
+      if (this.charlie) {
+        this.charlie.isShielded = true;
+        this.charlie.shieldTimer = 330; // 5.5 seconds (at 60fps) of Holo-Shield power-up!
+        this.charlie.setEmote('🛡️ GLITTER SHIELD! (5s)', 100);
+        this.charlie.addSparks(this.charlie.x, this.charlie.y, '#ffd700', 16);
+        this.charlie.addSparks(this.charlie.x, this.charlie.y, '#00f2fe', 16);
+      }
+
+      // 1. Extra dazzling golden & cyan prismatic stardust burst
+      this.triggerShatterBurst(x, y, 22, true, '#ffd700');
+      for (let s = 0; s < 14; s++) {
+        const pAngle = Math.random() * Math.PI * 2;
+        const pSpeed = 2.0 + Math.random() * 4.8;
+        this.shards.push({
+          x: x,
+          y: y,
+          vx: Math.cos(pAngle) * pSpeed,
+          vy: Math.sin(pAngle) * pSpeed,
+          radius: 2.0 + Math.random() * 2.5,
+          alpha: 1.0,
+          decay: 0.016 + Math.random() * 0.018,
+          color: Math.random() > 0.4 ? '#ffd700' : '#00f2fe'
+        });
+      }
+
+      // 2. Wide concentric glowing golden & cyan shockwave ripples
+      this.ripples.push({
+        x: x,
+        y: y,
+        radius: 6,
+        maxRadius: 75,
+        speed: 3.4,
+        alpha: 1.0,
+        lineWidth: 3.0,
+        color: '#ffd700'
+      });
+      this.ripples.push({
+        x: x,
+        y: y,
+        radius: 2,
+        maxRadius: 50,
+        speed: 2.4,
+        alpha: 0.85,
+        lineWidth: 2.0,
+        color: '#00f2fe'
+      });
+
+      // 3. Generous score bonus (+50 points) for catching rare glittery comet
+      if (this.onShatter) {
+        this.onShatter(x, y, 5);
+      }
+
+      // 4. Sound cues: combo ding & laser deflect chime
+      try {
+        if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
+          window.portfolioSoundEngine.playComboDing();
+        }
+        if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
+          window.portfolioSoundEngine.playLaserDeflect();
+        }
+      } catch (e) {}
     }
 
     update() {
@@ -2335,7 +2537,7 @@
       for (let i = this.particles.length - 1; i >= 0; i--) {
         const p = this.particles[i];
 
-        // SHATTER IMPACT ON POINTER TOUCH (No tornado!)
+        // SHATTER IMPACT ON POINTER TOUCH
         if (this.mouse.isHovered) {
           const dx = this.mouse.x - p.x;
           const dy = this.mouse.y - p.y;
@@ -2343,6 +2545,11 @@
 
           // Impact collision radius ~36px
           if (dist < 36) {
+            if (p.isGlittery) {
+              this.triggerGlitterCatch(p.x, p.y);
+              this.particles[i] = this.createParticle(false);
+              continue;
+            }
             this.triggerShatterBurst(p.x, p.y, 6);
             if (this.onShatter) this.onShatter(p.x, p.y, 1);
             // Destroy particle upon hit and respawn at top
@@ -2355,6 +2562,24 @@
         p.x += p.vx;
         p.y += p.vy;
         p.pulse += p.pulseSpeed;
+
+        if (p.isGlittery) {
+          p.glitterAngle = (p.glitterAngle || 0) + 0.09;
+          // Drop micro stardust sparkles in its wake
+          if (Math.random() < 0.28) {
+            const normSpd = Math.hypot(p.vx, p.vy) || 1;
+            this.shards.push({
+              x: p.x - (p.vx / normSpd) * 14 + (Math.random() - 0.5) * 8,
+              y: p.y - (p.vy / normSpd) * 14 + (Math.random() - 0.5) * 8,
+              vx: (Math.random() - 0.5) * 0.9,
+              vy: (Math.random() - 0.5) * 0.9,
+              radius: 1.2 + Math.random() * 1.6,
+              alpha: 0.95,
+              decay: 0.032,
+              color: Math.random() > 0.4 ? '#ffd700' : '#00f2fe'
+            });
+          }
+        }
 
         // Smoothly adjust direction with global tilt
         const desiredAngle = this.globalAngle + p.angleOffset;
@@ -2400,80 +2625,47 @@
 
       // 4. Combat Suite: Holo-Shield Deflection & Plasma Blade Combat
       if (this.charlie) {
-        // A. Reflexive Auto-Shield Deployment in Game Mode
-        // Proactively triggers on fast meteors, close proximity, or comet clusters!
-        if (!this.charlie.isShielded) {
-          let shouldDeployShield = false;
-          let closeCometsCount = 0;
-
-          for (let i = 0; i < this.particles.length; i++) {
-            const p = this.particles[i];
-            const dist = Math.hypot(p.x - this.charlie.x, p.y - this.charlie.y);
-
-            // Fast meteors trigger reflex shield at generous distance
-            if (p.isSuperFast && dist < 92 * this.charlie.scale) {
-              shouldDeployShield = true;
-              break;
-            }
-            // Close comets entering danger zone trigger reflex shield
-            if (dist < 62 * this.charlie.scale) {
-              shouldDeployShield = true;
-              break;
-            }
-            // Cluster detection: 2 or more comets in vicinity
-            if (dist < 110 * this.charlie.scale) {
-              closeCometsCount++;
-              if (closeCometsCount >= 2) {
-                shouldDeployShield = true;
-                break;
-              }
-            }
-          }
-
-          if (shouldDeployShield) {
-            this.charlie.isShielded = true;
-            this.charlie.shieldTimer = 55; // Visible for ~0.9s
-            this.charlie.setEmote('🛡️ REFLEX SHIELD!', 55);
-            try {
-              if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
-                window.portfolioSoundEngine.playLaserDeflect();
-              }
-            } catch (e) {}
-          }
-        }
-
-        // B. Active Holo-Shield Bubble Deflection Field
+        // A. Active Holo-Shield Bubble Deflection Field
+        // NOTE: Auto-reflex proximity shield spam has been removed as requested!
+        // Shield now triggers for 5.5s when Charlie or player catches the rare Glittery Comet (or manual hold).
         if (this.charlie.isShielded) {
-          const deflectRadius = 60 * this.charlie.scale;
+          const deflectRadius = 65 * this.charlie.scale;
           for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
             const dist = Math.hypot(p.x - this.charlie.x, p.y - this.charlie.y);
             if (dist < deflectRadius) {
-              this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 18 : 14, true);
-              this.particles[i] = this.createParticle(false);
-              this.ripples.push({
-                x: p.x,
-                y: p.y,
-                radius: 6,
-                maxRadius: 48,
-                speed: 3.8,
-                alpha: 1.0,
-                lineWidth: 2.5
-              });
-              this.charlie.addSparks(p.x, p.y, '#00f2fe', 12);
-              if (this.onShatter) {
-                this.onShatter(p.x, p.y, 2); // Double score for shield deflection!
-              }
-              try {
-                if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
-                  window.portfolioSoundEngine.playLaserDeflect();
+              if (p.isGlittery) {
+                // Catching glitter comet with shield refreshes duration
+                this.triggerGlitterCatch(p.x, p.y);
+                this.particles[i] = this.createParticle(false);
+              } else {
+                this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 18 : 14, true);
+                this.particles[i] = this.createParticle(false);
+                this.ripples.push({
+                  x: p.x,
+                  y: p.y,
+                  radius: 6,
+                  maxRadius: 48,
+                  speed: 3.8,
+                  alpha: 1.0,
+                  lineWidth: 2.5,
+                  color: '#00f2fe'
+                });
+                this.charlie.addSparks(p.x, p.y, '#00f2fe', 12);
+                if (this.onShatter) {
+                  this.onShatter(p.x, p.y, 2); // Double score for shield deflection!
                 }
-              } catch (e) {}
+                try {
+                  if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
+                    window.portfolioSoundEngine.playLaserDeflect();
+                  }
+                } catch (e) {}
+              }
             }
           }
         }
 
-        // C. Plasma Blade Combat Reach (High-Low Cleave, Uppercut, Cyclone & Thrust)
+        // B. Plasma Blade Combat Reach (High-Low Cleave, Uppercut, Cyclone & Thrust)
         const hasBladeEquipped = (this.charlie.state !== 'thinking' && this.charlie.state !== 'writing' && this.charlie.state !== 'waiting');
         if (hasBladeEquipped) {
           const sliceReach = 85 * this.charlie.scale;
@@ -2482,24 +2674,18 @@
             const p = this.particles[i];
             const dist = Math.hypot(p.x - this.charlie.x, p.y - this.charlie.y);
             if (dist < sliceReach) {
-              this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 18 : 12, p.isSuperFast);
-              this.particles[i] = this.createParticle(false);
-              this.combatShatters = (this.combatShatters || 0) + 1;
-              if (this.onShatter) {
-                this.onShatter(p.x, p.y, 1);
-              }
-              this.charlie.triggerRandomCombatAction();
-
-              // Periodic Tactical Shield Pulse: Every 7 comet slices, Charlie flares tactical shield!
-              if (this.combatShatters % 7 === 0 && !this.charlie.isShielded) {
-                this.charlie.isShielded = true;
-                this.charlie.shieldTimer = 50;
-                this.charlie.setEmote('🛡️ TACTICAL SHIELD!', 50);
-                try {
-                  if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
-                    window.portfolioSoundEngine.playLaserDeflect();
-                  }
-                } catch (e) {}
+              if (p.isGlittery) {
+                // CAUGHT THE GLITTERY COMET! Holo-Shield power-up activated for few seconds!
+                this.triggerGlitterCatch(p.x, p.y);
+                this.particles[i] = this.createParticle(false);
+              } else {
+                this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 18 : 12, p.isSuperFast);
+                this.particles[i] = this.createParticle(false);
+                this.combatShatters = (this.combatShatters || 0) + 1;
+                if (this.onShatter) {
+                  this.onShatter(p.x, p.y, 1);
+                }
+                this.charlie.triggerRandomCombatAction();
               }
             }
           }
@@ -2515,6 +2701,8 @@
       const shouldDrawCharlie = this.charlie && (
         this.isEnabled ||
         this.charlie.state === 'cyber_dash' ||
+        this.charlie.state === 'escort' ||
+        this.charlie.isEscorting ||
         this.charlie.sectionActive ||
         this.charlie.state === 'thinking' ||
         this.charlie.state === 'writing' ||
@@ -2541,20 +2729,90 @@
       this.ripples.forEach(r => {
         this.ctx.beginPath();
         this.ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-        this.ctx.strokeStyle = this.theme.midBright;
+        this.ctx.strokeStyle = r.color || this.theme.midBright;
         this.ctx.lineWidth = r.lineWidth || 1.4;
         this.ctx.globalAlpha = r.alpha;
         this.ctx.shadowBlur = 10;
-        this.ctx.shadowColor = this.theme.highlight;
+        this.ctx.shadowColor = r.color || this.theme.highlight;
         this.ctx.stroke();
         this.ctx.shadowBlur = 0;
       });
 
-      // 2. Draw Particles (Streaks & Orbs)
+      // 2. Draw Particles (Streaks, Orbs & Rare Glittery Celestial Comets)
       this.particles.forEach(p => {
         this.ctx.globalAlpha = p.opacity;
 
-        if (p.isOrb) {
+        if (p.isGlittery) {
+          // GLITTERY SHIMMER COMET (Special rare celestial comet with iridescent gold, cyan & diamond sparkles)
+          const speed = Math.hypot(p.vx, p.vy) || 1;
+          const normVx = p.vx / speed;
+          const normVy = p.vy / speed;
+          const tailX = p.x - normVx * p.length;
+          const tailY = p.y - normVy * p.length;
+
+          // 1. Iridescent Prismatic Tail Gradient (White-Gold -> Amber -> Neon Cyan -> Magenta -> Transparent)
+          const tailGrad = this.ctx.createLinearGradient(p.x, p.y, tailX, tailY);
+          tailGrad.addColorStop(0, '#fffbeb');
+          tailGrad.addColorStop(0.2, '#ffd700');
+          tailGrad.addColorStop(0.55, '#00f2fe');
+          tailGrad.addColorStop(0.85, '#ec4899');
+          tailGrad.addColorStop(1, 'transparent');
+
+          this.ctx.beginPath();
+          this.ctx.moveTo(p.x, p.y);
+          this.ctx.lineTo(tailX, tailY);
+          this.ctx.strokeStyle = tailGrad;
+          this.ctx.lineWidth = 3.8;
+          this.ctx.lineCap = 'round';
+          this.ctx.shadowColor = '#ffd700';
+          this.ctx.shadowBlur = 14;
+          this.ctx.stroke();
+          this.ctx.shadowBlur = 0;
+
+          // 2. Glowing Golden Shimmer Aura
+          const auraPulse = Math.sin(p.pulse * 2.5) * 3;
+          const auraGrad = this.ctx.createRadialGradient(p.x, p.y, 1, p.x, p.y, 16 + auraPulse);
+          auraGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+          auraGrad.addColorStop(0.25, 'rgba(255, 215, 0, 0.85)');
+          auraGrad.addColorStop(0.65, 'rgba(0, 242, 254, 0.45)');
+          auraGrad.addColorStop(1, 'transparent');
+
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, 16 + auraPulse, 0, Math.PI * 2);
+          this.ctx.fillStyle = auraGrad;
+          this.ctx.fill();
+
+          // 3. Solid Brilliant Core
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, 3.2, 0, Math.PI * 2);
+          this.ctx.fillStyle = '#ffffff';
+          this.ctx.shadowColor = '#00f2fe';
+          this.ctx.shadowBlur = 8;
+          this.ctx.fill();
+          this.ctx.shadowBlur = 0;
+
+          // 4. Rotating Diamond Stardust Sparkles (✦)
+          p.glitterAngle = (p.glitterAngle || 0) + 0.08;
+          const sparkleOrbit = 12 + Math.sin(p.pulse * 3) * 3;
+          for (let s = 0; s < 3; s++) {
+            const a = p.glitterAngle + (s * Math.PI * 2 / 3);
+            const sx = p.x + Math.cos(a) * sparkleOrbit;
+            const sy = p.y + Math.sin(a) * sparkleOrbit;
+            const sColor = s === 0 ? '#ffd700' : (s === 1 ? '#00f2fe' : '#ffffff');
+
+            this.ctx.fillStyle = sColor;
+            this.ctx.shadowColor = sColor;
+            this.ctx.shadowBlur = 6;
+            this.ctx.beginPath();
+            this.ctx.moveTo(sx, sy - 4.5);
+            this.ctx.lineTo(sx + 2.5, sy);
+            this.ctx.lineTo(sx, sy + 4.5);
+            this.ctx.lineTo(sx - 2.5, sy);
+            this.ctx.closePath();
+            this.ctx.fill();
+            this.ctx.shadowBlur = 0;
+          }
+        } else if (p.isOrb) {
           // GLOWING CIRCULAR ORB
           const radGrad = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 2.2);
 
@@ -2626,10 +2884,10 @@
       this.shards.forEach(s => {
         this.ctx.beginPath();
         this.ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-        this.ctx.fillStyle = this.theme.spark;
+        this.ctx.fillStyle = s.color || this.theme.spark;
         this.ctx.globalAlpha = s.alpha;
         this.ctx.shadowBlur = 6;
-        this.ctx.shadowColor = this.theme.midBright;
+        this.ctx.shadowColor = s.color || this.theme.midBright;
         this.ctx.fill();
         this.ctx.shadowBlur = 0;
       });
@@ -3788,6 +4046,9 @@
 
     // 4. Setup HUD Sound Toggle Button (SFX & Synth BGM)
     const botSoundBtn = document.getElementById('botSoundBtn');
+    const aiChatSoundToggle = document.getElementById('aiChatSoundToggle');
+    const aiChatSoundIcon = document.getElementById('aiChatSoundIcon');
+    const aiChatSoundText = document.getElementById('aiChatSoundText');
 
     function setPortfolioAudioMute(forceMute) {
       if (!soundEngine) return false;
@@ -3807,6 +4068,16 @@
         botSoundBtn.classList.toggle('muted', isMuted);
         botSoundBtn.setAttribute('title', isMuted ? 'Unmute Game Audio & Music' : 'Mute Game Audio & Music');
       }
+      if (aiChatSoundToggle) {
+        aiChatSoundToggle.classList.toggle('muted', isMuted);
+        aiChatSoundToggle.setAttribute('title', isMuted ? 'Unmute Chat Audio & SFX' : 'Mute Chat Audio & SFX');
+        if (aiChatSoundIcon) aiChatSoundIcon.textContent = isMuted ? '🔇' : '🔊';
+        if (aiChatSoundText) aiChatSoundText.textContent = isMuted ? 'SFX MUTED' : 'SFX ON';
+      }
+      window.isChatAudioMuted = isMuted;
+      try {
+        localStorage.setItem('portfolio_audio_muted', isMuted ? 'true' : 'false');
+      } catch (e) {}
       if (scoreboard) {
         scoreboard.setMessage(isMuted ? 'Audio muted. Silent stealth mode! 🤫' : 'Audio online! Synth BGM & FX active! 🔊');
       }
@@ -3821,6 +4092,21 @@
         setPortfolioAudioMute();
       });
     }
+
+    if (aiChatSoundToggle) {
+      aiChatSoundToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setPortfolioAudioMute();
+      });
+    }
+
+    // Initialize persisted audio preference on startup
+    try {
+      if (localStorage.getItem('portfolio_audio_muted') === 'true') {
+        setPortfolioAudioMute(true);
+      }
+    } catch (e) {}
 
     // 5. Setup Floating FX Preset Switcher
     if (fxToggleBtn && fxPanel) {
@@ -5073,6 +5359,35 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       }
     }
 
+    let isGeneratingResponse = false;
+
+    function setChatGeneratingLock(isLocked) {
+      isGeneratingResponse = !!isLocked;
+      const terminal = document.querySelector('.ai-bot-terminal');
+      if (terminal) {
+        terminal.classList.toggle('chat-generating', isGeneratingResponse);
+      }
+      if (aiInputField) {
+        aiInputField.disabled = isGeneratingResponse;
+        if (isGeneratingResponse) {
+          if (!aiInputField.getAttribute('data-orig-placeholder')) {
+            aiInputField.setAttribute('data-orig-placeholder', aiInputField.placeholder || '');
+          }
+          aiInputField.placeholder = 'Charlie is delivering your answer...';
+        } else {
+          const orig = aiInputField.getAttribute('data-orig-placeholder');
+          if (orig) aiInputField.placeholder = orig;
+        }
+      }
+      if (aiSendBtn) {
+        aiSendBtn.disabled = isGeneratingResponse;
+      }
+      document.querySelectorAll('.ai-sidebar-btn, .ai-followup-btn, .ai-topic-pill').forEach(btn => {
+        btn.disabled = isGeneratingResponse;
+        btn.setAttribute('aria-disabled', isGeneratingResponse ? 'true' : 'false');
+      });
+    }
+
     function setCharlieThinkingState(isThinking) {
       if (!aiBotStatusPill) return;
       const pulse = aiBotStatusPill.querySelector('.ai-status-pulse');
@@ -5089,9 +5404,13 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
     function renderBotResponse(query) {
       if (!aiChatStream || !query) return;
+      if (isGeneratingResponse) return; // Do NOT allow selecting other questions while generation is in progress!
 
       const trimmedQuery = query.trim();
       if (!trimmedQuery) return;
+
+      // Lock all questions, chips, and input fields during active generation & animation
+      setChatGeneratingLock(true);
 
       // 1. Append User Message (Theme-Aligned Sleek Terminal User Prompt)
       const userMsgDiv = document.createElement('div');
@@ -5376,6 +5695,8 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                         const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
                         if (text) text.textContent = 'LOCAL KB READY';
                       }
+                      // Re-enable selecting questions and inputs once return dash completes!
+                      setChatGeneratingLock(false);
                     }, 1100);
                   }
                 };
@@ -5393,6 +5714,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                   const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
                   if (text) text.textContent = 'LOCAL KB READY';
                 }
+                setChatGeneratingLock(false);
               }
             }
           }, tickInterval);
@@ -5412,7 +5734,49 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
     // Delegated Click Listener for All Charlie Topic, Follow-up & Deep Link Buttons
     document.addEventListener('click', (e) => {
-      // 1. Auto-switch architecture visualizer tab if link has data-arch-tab
+      // 1. In-page deep link click listener with Charlie Companion Escort Flight
+      const sectionLink = e.target.closest('.ai-section-link, .ai-chat-stream a[href^="#"], .ai-bot-terminal a[href^="#"]');
+      if (sectionLink) {
+        const href = sectionLink.getAttribute('href');
+        if (href && href.startsWith('#') && href.length > 1) {
+          const targetEl = document.querySelector(href);
+          if (targetEl) {
+            e.preventDefault();
+
+            // Auto-switch architecture tab if data-arch-tab present
+            const archTab = sectionLink.getAttribute('data-arch-tab');
+            if (archTab && typeof window.switchArchitectureTab === 'function') {
+              window.switchArchitectureTab(archTab);
+            }
+
+            // Smooth scroll to target element
+            const headerOffset = 70;
+            const elPos = targetEl.getBoundingClientRect().top;
+            const offsetPos = elPos + window.pageYOffset - headerOffset;
+            window.scrollTo({
+              top: offsetPos,
+              behavior: 'smooth'
+            });
+
+            // Extract clean title
+            let sectionTitle = href.replace('#', '');
+            const heading = targetEl.querySelector('h1, h2, h3, .section-title');
+            if (heading) {
+              sectionTitle = heading.textContent.trim().replace(/^[\s⚡🎬📦🔒🎙️🎥🐍🐾🏆🌟🛑🌌💎☄️🎮🔇🔊•→]+\s*/g, '');
+            }
+
+            // Trigger Charlie Companion Flight & Escort!
+            if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+              window.portfolioCharlie.triggerSectionEscort(targetEl, sectionTitle);
+            } else if (window.portfolioEngine?.charlie) {
+              window.portfolioEngine.charlie.triggerSectionEscort(targetEl, sectionTitle);
+            }
+            return;
+          }
+        }
+      }
+
+      // 2. Auto-switch architecture visualizer tab if link has data-arch-tab
       const archLink = e.target.closest('a[data-arch-tab]');
       if (archLink) {
         const tab = archLink.getAttribute('data-arch-tab');
@@ -5425,6 +5789,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       const btn = e.target.closest('.ai-sidebar-btn, .ai-topic-pill, .ai-followup-btn');
       if (btn) {
         e.preventDefault();
+        if (isGeneratingResponse) return; // Do NOT allow selecting other questions while generation is in progress!
         if (window.portfolioEngine?.isEnabled) return; // Chatbot paused while Game Mode is active
         const query = btn.getAttribute('data-query') || btn.textContent.replace(/^[\s→•🔌⚡🎬📦🔒🎙️🎥🐍🐾🏆🌟🛑🌌💎☄️🎮🔇🔊]+\s*/g, '').trim();
         if (query) {
@@ -5440,6 +5805,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
     if (aiChatForm && aiInputField) {
       aiChatForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        if (isGeneratingResponse) return; // Do NOT allow submitting while generation is in progress!
         if (window.portfolioEngine?.isEnabled) return; // Chatbot paused while Game Mode is active
         const q = aiInputField.value.trim();
         if (!q) return;

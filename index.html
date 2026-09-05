@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=99" />
+  <link rel="stylesheet" href="style.css?v=107" />
 </head>
 
 <body>
@@ -507,6 +507,10 @@
           <span>charlie-ai --session=assistant-console [LOCAL-KB]</span>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="ai-bot-sound-btn" id="aiChatSoundToggle" title="Toggle Chat Audio &amp; SFX" aria-label="Toggle Chat Sound">
+            <span class="ai-sound-icon" id="aiChatSoundIcon">🔊</span>
+            <span class="ai-sound-text" id="aiChatSoundText">SFX ON</span>
+          </button>
           <a href="charlie-lab.html" target="_blank" class="ai-bot-lab-link" title="Open Interactive Cyber Charlie Character &amp; Motion Lab">🧪 Character Lab</a>
           <div class="ai-bot-status-pill" id="aiBotStatusPill">
             <span class="ai-status-pulse"></span>
@@ -1406,6 +1410,6 @@
     <button type="button" class="mission-toast-close" id="desktopNoticeToastClose" title="Dismiss">&times;</button>
   </div>
 
-  <script src="app.js?v=104"></script>
+  <script src="app.js?v=107"></script>
 </body>
 </html>

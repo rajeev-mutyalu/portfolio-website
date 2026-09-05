@@ -2639,6 +2639,46 @@ body.combat-cursor-active * {
   letter-spacing: 0.02em;
 }
 
+.ai-bot-sound-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  padding: 2px 8px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+  user-select: none;
+  line-height: 1.25;
+}
+
+.ai-bot-sound-btn:hover {
+  background: rgba(56, 189, 248, 0.22);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+.ai-bot-sound-btn.muted {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.ai-bot-sound-btn.muted:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+}
+
 .ai-bot-lab-link {
   display: inline-flex;
   align-items: center;
@@ -3079,6 +3119,24 @@ body.combat-cursor-active * {
   background: linear-gradient(135deg, #26f5ff 0%, #3b82f6 100%);
   box-shadow: 0 4px 18px rgba(0, 242, 254, 0.55);
   transform: translateY(-1px);
+}
+
+/* While AI Generation & Upward Delivery is in progress: Lock all question options & inputs */
+.ai-bot-terminal.chat-generating .ai-sidebar-btn,
+.ai-bot-terminal.chat-generating .ai-followup-btn,
+.ai-bot-terminal.chat-generating .ai-topic-pill {
+  opacity: 0.42 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.ai-bot-terminal.chat-generating .ai-chat-input-bar .ai-input-field,
+.ai-bot-terminal.chat-generating .ai-chat-input-bar .ai-send-btn {
+  opacity: 0.42 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease !important;
 }
 
 /* Charlie Telemetry & Section Links */

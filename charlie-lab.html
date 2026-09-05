@@ -482,6 +482,13 @@
       <button type="button" class="btn btn-primary" id="spawnCometBtn">
         <span>☄️ Spawn Test Comet</span>
       </button>
+      <button type="button" class="btn btn-secondary" id="spawnGlitterBtn" style="border-color: #ffd700; color: #ffd700; box-shadow: 0 0 12px rgba(255, 215, 0, 0.25);">
+        <span>✨ Spawn Glitter Comet</span>
+      </button>
+      <button type="button" class="btn btn-secondary" id="btnLabSound" title="Toggle Lab Sound Effects (SFX)">
+        <span id="labSoundIcon">🔊</span>
+        <span>SFX: <strong id="labSoundState">ON</strong></span>
+      </button>
     </div>
   </header>
 
@@ -534,11 +541,15 @@
         </div>
 
         <div class="quick-group">
-          <button type="button" class="action-btn" id="btnShield" title="Toggle Charlie's Tactical Holo-Shield">
-            <span>🛡️ Holo-Shield: <strong id="shieldState" style="color: #f87171;">OFF</strong></span>
-          </button>
+          <div class="action-btn" id="shieldPill" style="cursor: default; pointer-events: none; opacity: 0.95; background: rgba(15, 23, 42, 0.7); border-color: rgba(56, 189, 248, 0.3);" title="Holo-Shield automatically activates for 5.5s when a Glitter Comet is burst or collected!">
+            <span>🛡️ Holo-Shield: <strong id="shieldState" style="color: #94a3b8;">READY (Burst Glitter)</strong></span>
+          </div>
           <button type="button" class="action-btn" id="btnFollowMouse" title="Toggle real-time cursor following">
             <span>🎯 Follow Cursor: <strong id="followState">ON</strong></span>
+          </button>
+          <button type="button" class="action-btn" id="btnLabSoundQuick" title="Toggle Lab Sound Effects (SFX)">
+            <span id="labSoundQuickIcon">🔊</span>
+            <span>Sound: <strong id="labSoundQuickState">ON</strong></span>
           </button>
         </div>
       </div>
@@ -583,6 +594,9 @@
           </div>
           <button type="button" class="action-btn" id="btnSpontaneousTest" style="width: 100%; justify-content: center; font-size: 0.74rem; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
             <span>🎲 Test 1-Min Random Move (Jump/Bonk/Dizzy/Victory)</span>
+          </button>
+          <button type="button" class="action-btn" id="btnTestEscort" style="width: 100%; justify-content: center; font-size: 0.74rem; border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+            <span>🚀 Test Section Escort &rarr; Victory &rarr; Dock Dash</span>
           </button>
         </div>
         <div id="chatStatusText" style="margin-top: 10px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,242,254,0.08); padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); text-align: center;">
@@ -688,6 +702,202 @@
 
   <script>
     /* =========================================================================
+       Cyber Charlie Lab Sound Effects Engine (Procedural Web Audio Synth)
+       ========================================================================= */
+    class LabSoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.isMuted = false;
+        try {
+          this.isMuted = localStorage.getItem('charlie_lab_sfx_muted') === 'true';
+        } catch (e) {}
+      }
+
+      init() {
+        if (this.ctx) return;
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        } catch (e) {
+          console.warn('Web Audio not supported', e);
+        }
+      }
+
+      ensureContext() {
+        this.init();
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume().catch(() => {});
+        }
+      }
+
+      setMuted(muted) {
+        this.isMuted = muted;
+        try {
+          localStorage.setItem('charlie_lab_sfx_muted', muted ? 'true' : 'false');
+        } catch (e) {}
+      }
+
+      toggleMute() {
+        this.setMuted(!this.isMuted);
+        return this.isMuted;
+      }
+
+      playLaserSlice() {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.exponentialRampToValueAtTime(220, now + 0.08);
+          gain.gain.setValueAtTime(0.20, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.10);
+        } catch (e) {}
+      }
+
+      playLaserDeflect() {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(1400, now);
+          osc.frequency.exponentialRampToValueAtTime(380, now + 0.11);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } catch (e) {}
+      }
+
+      playComboDing() {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1046.50, now);
+          osc.frequency.exponentialRampToValueAtTime(1318.51, now + 0.08);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        } catch (e) {}
+      }
+
+      playJump() {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        } catch (e) {}
+      }
+
+      playBonk() {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(140, now + 0.16);
+          gain.gain.setValueAtTime(0.32, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.20);
+        } catch (e) {}
+      }
+
+      playDizzy() {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.linearRampToValueAtTime(420, now + 0.12);
+          osc.frequency.linearRampToValueAtTime(480, now + 0.24);
+          osc.frequency.linearRampToValueAtTime(360, now + 0.38);
+          osc.frequency.linearRampToValueAtTime(260, now + 0.55);
+          gain.gain.setValueAtTime(0.24, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.58);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.60);
+        } catch (e) {}
+      }
+
+      playFanfare() {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const chord = [523.25, 659.25, 783.99, 1046.50];
+          chord.forEach((freq, idx) => {
+            const start = now + (idx * 0.07);
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, start);
+            gain.gain.setValueAtTime(0.001, start);
+            gain.gain.linearRampToValueAtTime(0.26, start + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + (idx === 3 ? 0.45 : 0.15));
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(start);
+            osc.stop(start + 0.50);
+          });
+        } catch (e) {}
+      }
+    }
+
+    const sound = new LabSoundEngine();
+
+    // Global gesture unlock for lab audio
+    ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, () => sound.ensureContext(), { passive: true });
+    });
+
+    /* =========================================================================
        Cyber Charlie Character Engine (Standalone Prototype & Preview)
        ========================================================================= */
     const canvas = document.getElementById('stageCanvas');
@@ -746,29 +956,69 @@
 
     // Test Comets Array
     const comets = [];
+    let sliceCount = 0;
+
     class TestComet {
-      constructor(x, y) {
+      constructor(x, y, isGlittery = false) {
         this.x = x || Math.random() * canvas.clientWidth;
         this.y = y || -40;
+        this.isGlittery = isGlittery;
         this.vx = (Math.random() - 0.5) * 1.5;
-        this.vy = Math.random() * 2.5 + 2.0;
-        this.radius = Math.random() * 8 + 12;
-        this.color = Math.random() > 0.5 ? '#00f2fe' : '#f59e0b';
+        this.vy = isGlittery ? 2.0 : (Math.random() * 2.5 + 2.0);
+        this.radius = isGlittery ? 15 : (Math.random() * 8 + 12);
+        this.color = isGlittery ? '#ffd700' : (Math.random() > 0.5 ? '#00f2fe' : '#f59e0b');
         this.isSliced = false;
         this.sliceAngle = 0;
+        this.glitterAngle = Math.random() * Math.PI * 2;
       }
       update() {
         this.x += this.vx;
         this.y += this.vy;
+        if (this.isGlittery) {
+          this.glitterAngle += 0.08;
+          if (Math.random() < 0.25) {
+            addSparks(this.x, this.y, Math.random() > 0.5 ? '#ffd700' : '#00f2fe', 1);
+          }
+        }
       }
       draw(c) {
         c.save();
-        c.shadowColor = this.color;
-        c.shadowBlur = 16;
-        c.fillStyle = this.color;
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        c.fill();
+        if (this.isGlittery) {
+          // Radiant iridescent gold & cyan celestial aura
+          c.shadowColor = '#ffd700';
+          c.shadowBlur = 20;
+          const radGrad = c.createRadialGradient(this.x, this.y, 2, this.x, this.y, this.radius * 1.5);
+          radGrad.addColorStop(0, '#ffffff');
+          radGrad.addColorStop(0.35, '#ffd700');
+          radGrad.addColorStop(0.7, '#00f2fe');
+          radGrad.addColorStop(1, 'transparent');
+          c.fillStyle = radGrad;
+          c.beginPath();
+          c.arc(this.x, this.y, this.radius * 1.5, 0, Math.PI * 2);
+          c.fill();
+
+          // Rotating diamond stardust sparkles (✦)
+          for (let s = 0; s < 3; s++) {
+            const a = this.glitterAngle + (s * Math.PI * 2 / 3);
+            const sx = this.x + Math.cos(a) * (this.radius + 6);
+            const sy = this.y + Math.sin(a) * (this.radius + 6);
+            c.fillStyle = s === 0 ? '#ffd700' : (s === 1 ? '#00f2fe' : '#ffffff');
+            c.beginPath();
+            c.moveTo(sx, sy - 5);
+            c.lineTo(sx + 3, sy);
+            c.lineTo(sx, sy + 5);
+            c.lineTo(sx - 3, sy);
+            c.closePath();
+            c.fill();
+          }
+        } else {
+          c.shadowColor = this.color;
+          c.shadowBlur = 16;
+          c.fillStyle = this.color;
+          c.beginPath();
+          c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          c.fill();
+        }
         c.restore();
       }
     }
@@ -792,10 +1042,18 @@
 
     // Spawn Comet Button
     document.getElementById('spawnCometBtn').addEventListener('click', () => {
-      comets.push(new TestComet(canvas.clientWidth / 2 + (Math.random() - 0.5) * 200, -20));
+      comets.push(new TestComet(canvas.clientWidth / 2 + (Math.random() - 0.5) * 200, -20, false));
     });
 
-    // Click on canvas to trigger randomized acrobatic combat action
+    // Spawn Glitter Comet Button
+    const spawnGlitterBtn = document.getElementById('spawnGlitterBtn');
+    if (spawnGlitterBtn) {
+      spawnGlitterBtn.addEventListener('click', () => {
+        comets.push(new TestComet(canvas.clientWidth / 2 + (Math.random() - 0.5) * 200, -20, true));
+      });
+    }
+
+    // Click on canvas to trigger combat slice or shatter comets
     canvas.addEventListener('click', (e) => {
       e.preventDefault();
       if (!followCursor) {
@@ -807,6 +1065,34 @@
           charlie.face = 'happy';
         }
       }
+
+      // Check if user directly clicked a falling comet
+      for (let i = comets.length - 1; i >= 0; i--) {
+        const c = comets[i];
+        if (Math.hypot(c.x - mouse.x, c.y - mouse.y) < c.radius + 18) {
+          addSparks(c.x, c.y, c.isGlittery ? '#ffd700' : c.color, 18);
+          if (c.isGlittery) {
+            charlie.isShielded = true;
+            charlie.shieldTimer = 330; // 5.5s Holo-Shield power-up!
+            charlie.setEmote('🛡️ GLITTER SHIELD! (5s)', 100);
+            const shieldEl = document.getElementById('shieldState');
+            if (shieldEl) {
+              shieldEl.textContent = 'ACTIVE (5.5s)';
+              shieldEl.style.color = '#00f2fe';
+            }
+            charlie.triggerVictory();
+            sound.playComboDing();
+            sound.playFanfare();
+          } else {
+            sound.playLaserSlice();
+          }
+          comets.splice(i, 1);
+          sliceCount = (sliceCount || 0) + 1;
+          if (hudSlices) hudSlices.textContent = sliceCount;
+          return;
+        }
+      }
+
       charlie.triggerRandomCombatAction();
     });
 
@@ -1211,15 +1497,21 @@
 
         if (this.emoteTimer > 0) this.emoteTimer--;
 
-        // Holo-Shield Timer countdown for temporary reflex/bonk shields
+        // Holo-Shield Timer countdown for temporary glitter/bonk shields
         if (this.shieldTimer > 0) {
           this.shieldTimer -= 1.0 * animSpeed;
-          if (this.shieldTimer <= 0 && !this.manualShieldActive) {
+          const shieldEl = document.getElementById('shieldState');
+          if (this.shieldTimer <= 0) {
             this.isShielded = false;
-            const shieldEl = document.getElementById('shieldState');
             if (shieldEl) {
-              shieldEl.textContent = 'OFF';
-              shieldEl.style.color = '#f87171';
+              shieldEl.textContent = 'READY (Burst Glitter)';
+              shieldEl.style.color = '#94a3b8';
+            }
+          } else {
+            if (shieldEl && this.isShielded) {
+              const secs = (this.shieldTimer / 60).toFixed(1);
+              shieldEl.textContent = `ACTIVE (${secs}s)`;
+              shieldEl.style.color = '#00f2fe';
             }
           }
         }
@@ -1556,13 +1848,41 @@
           for (let i = comets.length - 1; i >= 0; i--) {
             const comet = comets[i];
             const distToCharlie = Math.hypot(comet.x - this.x, comet.y - this.y);
+
+            // Holo-Shield Deflection: deflects any incoming comets within energy bubble!
+            if (this.isShielded && distToCharlie < comet.radius + 44 * charlieScale) {
+              addSparks(comet.x, comet.y, '#00f2fe', 16);
+              sound.playLaserDeflect();
+              comets.splice(i, 1);
+              slicedCount += 2; // Double points for shield deflection!
+              hudSlices.textContent = slicedCount;
+              continue;
+            }
+
             if (distToCharlie < comet.radius + sliceReach) {
-              // SLICE!
-              addSparks(comet.x, comet.y, comet.color, 18);
+              // SLICE / BURST!
+              addSparks(comet.x, comet.y, comet.isGlittery ? '#ffd700' : comet.color, 20);
+              if (comet.isGlittery) {
+                this.isShielded = true;
+                this.shieldTimer = 330; // 5.5s Holo-Shield power-up!
+                this.setEmote('🛡️ GLITTER SHIELD! (5s)', 100);
+                const shieldEl = document.getElementById('shieldState');
+                if (shieldEl) {
+                  shieldEl.textContent = 'ACTIVE (5.5s)';
+                  shieldEl.style.color = '#00f2fe';
+                }
+                this.triggerVictory();
+                addSparks(comet.x, comet.y, '#ffd700', 28);
+                addSparks(comet.x, comet.y, '#00f2fe', 22);
+                sound.playComboDing();
+                sound.playFanfare();
+              } else {
+                sound.playLaserSlice();
+                this.triggerRandomCombatAction();
+              }
               comets.splice(i, 1);
               slicedCount++;
               hudSlices.textContent = slicedCount;
-              this.triggerRandomCombatAction();
             }
           }
         }
@@ -2876,18 +3196,24 @@
 
           if (item.mode === 'slash') {
             charlie.triggerSlash();
+            sound.playLaserSlice();
           } else if (item.mode === 'jump') {
             charlie.triggerJump();
+            sound.playJump();
           } else if (item.mode === 'victory') {
             charlie.triggerVictory();
+            sound.playFanfare();
           } else if (item.mode === 'bonk') {
             charlie.triggerBonk();
+            sound.playBonk();
           } else if (item.mode === 'dizzy') {
             charlie.triggerDizzy();
+            sound.playDizzy();
           } else if (item.mode === 'thinking') {
             charlie.triggerThinking();
           } else if (item.mode === 'writing') {
             charlie.triggerWriting();
+            sound.playComboDing();
           } else if (item.mode === 'waiting') {
             charlie.triggerWaiting();
           } else {
@@ -2897,23 +3223,40 @@
       }
     });
 
-    // Holo-Shield Manual Toggle Button
-    const btnShield = document.getElementById('btnShield');
-    const shieldState = document.getElementById('shieldState');
-    if (btnShield) {
-      btnShield.addEventListener('click', () => {
-        charlie.manualShieldActive = !charlie.manualShieldActive;
-        charlie.isShielded = charlie.manualShieldActive;
-        if (shieldState) {
-          shieldState.textContent = charlie.isShielded ? 'ON' : 'OFF';
-          shieldState.style.color = charlie.isShielded ? '#00f2fe' : '#f87171';
-        }
-        btnShield.classList.toggle('active', charlie.isShielded);
-        if (charlie.isShielded) {
-          addSparks(charlie.x, charlie.y, '#00f2fe', 16);
-        }
-      });
+    // Sound Effects ON/OFF Toggle Buttons & UI Synchronization
+    const labSoundBtn = document.getElementById('btnLabSound');
+    const labSoundIcon = document.getElementById('labSoundIcon');
+    const labSoundState = document.getElementById('labSoundState');
+    const labSoundQuickBtn = document.getElementById('btnLabSoundQuick');
+    const labSoundQuickIcon = document.getElementById('labSoundQuickIcon');
+    const labSoundQuickState = document.getElementById('labSoundQuickState');
+
+    function syncLabSoundUI(isMuted) {
+      if (labSoundIcon) labSoundIcon.textContent = isMuted ? '🔇' : '🔊';
+      if (labSoundState) {
+        labSoundState.textContent = isMuted ? 'OFF' : 'ON';
+        labSoundState.style.color = isMuted ? '#f87171' : '#00f2fe';
+      }
+      if (labSoundQuickIcon) labSoundQuickIcon.textContent = isMuted ? '🔇' : '🔊';
+      if (labSoundQuickState) {
+        labSoundQuickState.textContent = isMuted ? 'OFF' : 'ON';
+        labSoundQuickState.style.color = isMuted ? '#f87171' : '#00f2fe';
+      }
+      if (labSoundBtn) labSoundBtn.classList.toggle('muted', isMuted);
+      if (labSoundQuickBtn) labSoundQuickBtn.classList.toggle('muted', isMuted);
     }
+    syncLabSoundUI(sound.isMuted);
+
+    function toggleLabSound() {
+      const isMuted = sound.toggleMute();
+      syncLabSoundUI(isMuted);
+      if (!isMuted) {
+        sound.playComboDing();
+      }
+    }
+
+    if (labSoundBtn) labSoundBtn.addEventListener('click', toggleLabSound);
+    if (labSoundQuickBtn) labSoundQuickBtn.addEventListener('click', toggleLabSound);
 
     // AI Chatbot Lifecycle Simulator Listeners
     const chatStatusText = document.getElementById('chatStatusText');
@@ -3095,6 +3438,58 @@
     if (btnSpontaneousTest) {
       btnSpontaneousTest.addEventListener('click', () => {
         charlie.triggerSpontaneousAction();
+      });
+    }
+
+    const btnTestEscort = document.getElementById('btnTestEscort');
+    if (btnTestEscort) {
+      btnTestEscort.addEventListener('click', () => {
+        if (chatStatusText) {
+          chatStatusText.innerHTML = '🚀 <strong>ESCORT FLIGHT!</strong> Charlie escorting user to <em>#Technical-Arsenal</em>...';
+        }
+        sound.playJump();
+        charlie.state = 'run';
+        charlie.face = 'sprint';
+        charlie.setEmote('ESCORTING TO ARSENAL! 🚀', 110);
+        const startX = charlie.x > -200 ? charlie.x : canvas.clientWidth - 70;
+        const startY = charlie.y > -200 ? charlie.y : canvas.clientHeight - 70;
+        const destX = canvas.clientWidth * 0.70;
+        const destY = 85;
+        const flightDuration = 950;
+        const flightStart = performance.now();
+
+        const stepFlight = (now) => {
+          const elapsed = now - flightStart;
+          const progress = Math.min(1.0, elapsed / flightDuration);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          charlie.x = startX + (destX - startX) * ease;
+          charlie.y = startY + (destY - startY) * ease;
+          charlie.facing = destX >= startX ? 1 : -1;
+          charlie.bladeTrails.push({ x: charlie.x + charlie.facing * 18, y: charlie.y, alpha: 0.9 });
+          if (Math.random() > 0.3) addSparks(charlie.x, charlie.y, '#00f2fe', 2);
+
+          if (progress < 1.0) {
+            requestAnimationFrame(stepFlight);
+          } else {
+            charlie.state = 'victory';
+            charlie.face = 'victory';
+            charlie.setEmote('ARRIVED AT ARSENAL! 🌟', 90);
+            addSparks(charlie.x, charlie.y, '#f59e0b', 26);
+            addSparks(charlie.x, charlie.y, '#00f2fe', 20);
+            sound.playFanfare();
+            if (chatStatusText) {
+              chatStatusText.innerHTML = '🌟 <strong>ARRIVED AT SECTION!</strong> Fanfare &amp; victory twirl!';
+            }
+
+            setTimeout(() => {
+              if (chatStatusText) {
+                chatStatusText.innerHTML = '📥 <strong>RETURNING TO DOCK!</strong> Supersonic return dash to dock!';
+              }
+              charlie.triggerDockDemo();
+            }, 1250);
+          }
+        };
+        requestAnimationFrame(stepFlight);
       });
     }
 
