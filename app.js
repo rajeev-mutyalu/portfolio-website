@@ -48,7 +48,7 @@
       this.isGameModeDeploy = false;
       this.combatCooldown = 0;
 
-      // Flash Man Dash Mechanics
+      // Supersonic Cyber Dash Mechanics
       this.deployTimer = 0;
       this.deployStartX = 0;
       this.deployStartY = 0;
@@ -350,12 +350,18 @@
 
     triggerWriteDash(startX, startY, targetX, targetY) {
       if (window.portfolioEngine?.isEnabled) return;
-      if (startX < -200 || startY < -200) {
+      if (!isFinite(startX) || !isFinite(startY) || startX < -200 || startY < -200) {
         const floatingBtn = document.getElementById('floatingCharlieBtn');
         const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
         startX = dockRect.left + dockRect.width / 2;
         startY = dockRect.top + dockRect.height / 2;
         if (floatingBtn) floatingBtn.classList.add('hidden');
+      }
+
+      if (!isFinite(targetX) || !isFinite(targetY) || targetX < 0) {
+        const center = this.getChatWritingCenter();
+        targetX = center.x;
+        targetY = center.y;
       }
 
       this.state = 'flash_dash';
@@ -372,14 +378,26 @@
       this.y = startY;
       this.facing = this.deployTargetX >= this.x ? 1 : -1;
       this.addSparks(this.x, this.y, '#00f2fe', 24);
-      this.setEmote('FLASH WRITE! ⚡', 45);
-      if (window.portfolioSoundEngine) {
-        window.portfolioSoundEngine.playLaserDeflect();
-      }
+      this.setEmote('CYBER WRITE! ⚡', 45);
+      try {
+        if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
+          window.portfolioSoundEngine.playLaserDeflect();
+        }
+      } catch (e) {}
     }
 
     triggerReturnDash(startX, startY, targetX, targetY) {
       if (window.portfolioEngine?.isEnabled) return;
+      if (!isFinite(startX) || !isFinite(startY)) {
+        startX = this.x;
+        startY = this.y;
+      }
+      if (!isFinite(targetX) || !isFinite(targetY)) {
+        const home = this.getChatMascotAnchor();
+        targetX = home.x;
+        targetY = home.y;
+      }
+
       this.state = 'flash_dash';
       this.dashType = 'to_mascot';
       this.face = 'sprint';
@@ -395,9 +413,11 @@
       this.facing = this.deployTargetX >= this.x ? 1 : -1;
       this.addSparks(this.x, this.y, '#38bdf8', 22);
       this.setEmote('DELIVERED! ✨', 45);
-      if (window.portfolioSoundEngine) {
-        window.portfolioSoundEngine.playLaserDeflect();
-      }
+      try {
+        if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
+          window.portfolioSoundEngine.playLaserDeflect();
+        }
+      } catch (e) {}
     }
 
     getChatWritingCenter() {
@@ -406,26 +426,18 @@
       const navbarEl = document.querySelector('.navbar');
       const navBottom = (navbarEl ? navbarEl.getBoundingClientRect().bottom : 70);
 
-      if (streamEl) {
-        const sRect = streamEl.getBoundingClientRect();
-        const centerX = sRect.left + sRect.width / 2;
-        const minAllowedY = navBottom + 55;
-        const maxAllowedY = sRect.bottom - 55;
-        const naturalY = sRect.top + sRect.height * 0.48;
-        const centerY = Math.max(minAllowedY, Math.min(maxAllowedY, naturalY));
-        const isVisible = (sRect.bottom > navBottom + 65 && sRect.top < window.innerHeight - 60);
-        return { x: centerX, y: centerY, isVisible };
-      } else if (terminalEl) {
-        const tRect = terminalEl.getBoundingClientRect();
-        const centerX = tRect.left + tRect.width / 2;
-        const minAllowedY = navBottom + 55;
-        const maxAllowedY = tRect.bottom - 55;
-        const naturalY = tRect.top + tRect.height * 0.48;
-        const centerY = Math.max(minAllowedY, Math.min(maxAllowedY, naturalY));
-        const isVisible = (tRect.bottom > navBottom + 65 && tRect.top < window.innerHeight - 60);
+      const targetEl = (streamEl && streamEl.getBoundingClientRect().height > 80) ? streamEl : terminalEl;
+      if (targetEl) {
+        const sRect = targetEl.getBoundingClientRect();
+        const centerX = Math.max(60, Math.min(window.innerWidth - 60, sRect.left + sRect.width / 2));
+        const topBound = Math.max(sRect.top + 45, navBottom + 45);
+        const bottomBound = Math.max(topBound + 20, sRect.bottom - 45);
+        const naturalY = sRect.top + sRect.height * 0.46;
+        const centerY = Math.max(topBound, Math.min(bottomBound, naturalY));
+        const isVisible = (sRect.bottom > navBottom + 50 && sRect.top < window.innerHeight - 50);
         return { x: centerX, y: centerY, isVisible };
       }
-      return { x: window.innerWidth / 2, y: window.innerHeight / 2, isVisible: false };
+      return { x: window.innerWidth / 2, y: window.innerHeight / 2, isVisible: true };
     }
 
     getChatMascotAnchor() {
@@ -542,7 +554,8 @@
 
       // 1. Terminal Anchor Tracking (When stationed as Meet Charlie section mascot AND Game Mode is strictly OFF)
       if (!window.portfolioEngine?.isEnabled && this.sectionActive && this.state !== 'flash_dash') {
-        const anchor = (this.state === 'writing') ? this.getChatWritingCenter() : this.getChatMascotAnchor();
+        const isCenteredMode = (this.state === 'writing' || this.state === 'victory');
+        const anchor = isCenteredMode ? this.getChatWritingCenter() : this.getChatMascotAnchor();
         if (anchor.isVisible) {
           this.targetX = anchor.x;
           this.targetY = anchor.y;
@@ -554,8 +567,8 @@
           if (Math.abs(dx) > 4 && this.state !== 'writing') {
             this.facing = dx > 0 ? 1 : -1;
           }
-        } else {
-          // Chat window scrolled out of view -> trigger Flash Man return dash to dock
+        } else if (!isCenteredMode) {
+          // Mascot scrolled out of view -> trigger return dash to dock (NEVER dock during writing or celebrating!)
           const floatingBtn = document.getElementById('floatingCharlieBtn');
           const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
           const dockCenterX = dockRect.left + dockRect.width / 2;
@@ -727,7 +740,7 @@
         }
       }
 
-      // Flash Man Supersonic Dash
+      // Supersonic Cyber Dash
       if (this.state === 'flash_dash') {
         this.deployTimer += 0.055 * this.animSpeed;
         const t = Math.min(1.0, this.deployTimer);
@@ -765,19 +778,27 @@
             this.writeTimer = 0;
             this.sectionActive = true;
             this.facing = 1;
+            this.x = this.deployTargetX;
+            this.y = this.deployTargetY;
             this.addSparks(this.x, this.y, '#00f2fe', 26);
-            if (window.portfolioSoundEngine) {
-              window.portfolioSoundEngine.playComboDing();
-            }
+            try {
+              if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
+                window.portfolioSoundEngine.playComboDing();
+              }
+            } catch (e) {}
           } else if (this.dashType === 'to_mascot') {
             this.state = 'waiting';
             this.face = 'waiting';
             this.sectionActive = true;
             this.facing = -1;
+            this.x = this.deployTargetX;
+            this.y = this.deployTargetY;
             this.addSparks(this.x, this.y, '#38bdf8', 22);
-            if (window.portfolioSoundEngine) {
-              window.portfolioSoundEngine.playComboDing();
-            }
+            try {
+              if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
+                window.portfolioSoundEngine.playComboDing();
+              }
+            } catch (e) {}
           } else {
             if (this.isGameModeDeploy) {
               this.state = 'idle';
@@ -1021,7 +1042,7 @@
         customKnifeAngle = 0;
       }
 
-      // WRITING STATE (Rapid Flash Man stylus scribbling, unarmed)
+      // WRITING STATE (Rapid laser stylus scribbling, unarmed)
       else if (this.state === 'writing') {
         bobY = Math.sin(this.animTimer * 8.0) * 1.6;
         leanAngle = 0.14;
@@ -1052,7 +1073,7 @@
         customKnifeAngle = 0;
       }
 
-      // FLASH MAN DASH POSTURE
+      // SUPERSONIC CYBER DASH POSTURE
       else if (this.state === 'flash_dash') {
         bobY = 0;
         leanAngle = this.facing * 0.48;
@@ -2733,6 +2754,46 @@
       });
     }
 
+    playLaserDeflect() {
+      try {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(1400, now);
+        osc.frequency.exponentialRampToValueAtTime(360, now + 0.11);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+        osc.connect(gain);
+        gain.connect(this.sfxGain);
+        osc.start(now);
+        osc.stop(now + 0.13);
+      } catch (e) {}
+    }
+
+    playComboDing() {
+      try {
+        if (this.isMuted) return;
+        this.ensureContext();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1046.50, now);
+        osc.frequency.exponentialRampToValueAtTime(1318.51, now + 0.08);
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.20);
+        osc.connect(gain);
+        gain.connect(this.sfxGain);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      } catch (e) {}
+    }
+
     // 3. Ambient Cosmic Background Music for Comets Falling
     startBGM() {
       if (this.isPlayingBGM) return;
@@ -3335,7 +3396,7 @@
           scoreboard.setMessage('Cyber Charlie deployed! Vaporize comets, Cadet! 🚀');
         }
 
-        // Charlie Flash Man Supersonic Dash: directly to Cursor!
+        // Charlie Supersonic Cyber Dash: directly to Cursor!
         // Game Mode unconditionally overrides everything
         const targetX = (engine.mouse && engine.mouse.x > 0) ? engine.mouse.x : (window.innerWidth / 2);
         const targetY = (engine.mouse && engine.mouse.y > 0) ? engine.mouse.y : (window.innerHeight / 2);
@@ -3403,7 +3464,7 @@
           if (text) text.textContent = 'LOCAL KB READY';
         }
 
-        // Charlie Flash Man Reverse Return Dash: straight back to mascot station or dock!
+        // Charlie Supersonic Reverse Return Dash: straight back to mascot station or dock!
         document.body.classList.remove('combat-cursor-active');
         if (engine && engine.charlie && engine.charlie.x > -200) {
           const anchor = engine.charlie.getChatMascotAnchor();
@@ -4413,13 +4474,13 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
         const gameOnResponses = [
           `🎮 <strong>COSMIC GAME MODE ACTIVATED!</strong><br/><br/>
 • <strong>Comet Cascade Canvas:</strong> Online &amp; responsive to mouse/trackpad physics.<br/>
-• <strong>Cyber Charlie:</strong> Deployed as supersonic Flash Man combat cursor with Astra Plasma Dagger!<br/>
+• <strong>Cyber Charlie:</strong> Deployed as supersonic combat cursor with Astra Plasma Dagger!<br/>
 • <strong>Audio Synthesizer:</strong> Ambient BGM and laser sfx unlocked.<br/>
 • <strong>Controls:</strong> Guide Cyber Charlie to slash comets, trigger random combo flurries, and build multi-stage combos!<br/><br/>
 <em>Switch visual presets, mute audio, or turn off below:</em>`,
 
           `🚀 <strong>CYBER CHARLIE COMET DEFENSE ONLINE!</strong><br/><br/>
-• Supersonic Flash Man locomotion, randomized combat slashes, and raycasted blade collisions active.<br/>
+• Supersonic cyber locomotion, randomized combat slashes, and raycasted blade collisions active.<br/>
 • Chain comet hits within 1.5 seconds to trigger multi-stage combo multipliers (<code>+5 COMBO x3! 🔥</code>).<br/>
 • Web Audio synthesizer reactive to hit velocity.<br/><br/>
 <em>Select an FX preset or explore technical topics below:</em>`
@@ -4864,7 +4925,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         const contentEl = botMsgDiv.querySelector('.ai-msg-content');
         const fullResponse = match.response;
 
-        // Flash Man Fast Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus!
+        // Supersonic Cyber Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus!
         let charIndex = 0;
         const chunkSize = 18;
         const tickInterval = 12;

@@ -795,6 +795,15 @@
     // Click on canvas to trigger randomized acrobatic combat action
     canvas.addEventListener('click', (e) => {
       e.preventDefault();
+      if (!followCursor) {
+        followCursor = true;
+        followState.textContent = 'ON';
+        followBtn.classList.add('active');
+        if (charlie.state === 'waiting') {
+          charlie.state = 'idle';
+          charlie.face = 'happy';
+        }
+      }
       charlie.triggerRandomCombatAction();
     });
 
@@ -820,7 +829,7 @@
         this.dizzyTimer = 0;
         this.dizzyAngle = 0;
 
-        // Chatbot Lifecycle & Flash Man Dash Mechanics
+        // Chatbot Lifecycle & Supersonic Dash Mechanics
         this.deployTimer = 0;
         this.deployStartX = 0;
         this.deployStartY = 0;
@@ -1045,7 +1054,7 @@
       }
 
       triggerDeployDemo() {
-        // Starts at simulated bottom-right chat dock, then dashes like Flash Man straight to cursor!
+        // Starts at simulated bottom-right chat dock, then dashes straight to cursor!
         this.state = 'flash_dash';
         this.dashType = 'to_cursor';
         this.face = 'battle';
@@ -1057,13 +1066,13 @@
         this.x = this.deployStartX;
         this.y = this.deployStartY;
         this.facing = this.deployTargetX >= this.x ? 1 : -1;
-        hudMode.textContent = '⚡ FLASH MAN DASH TO CURSOR!';
-        telState.textContent = 'FLASH DASH';
+        hudMode.textContent = '⚡ CYBER DASH TO CURSOR!';
+        telState.textContent = 'CYBER DASH';
         addSparks(this.x, this.y, '#00f2fe', 24);
       }
 
       triggerDockDemo() {
-        // Runs/rockets back like Flash Man to bottom-right chat dock
+        // Runs/rockets back to bottom-right chat dock
         this.state = 'flash_dash';
         this.dashType = 'to_dock';
         this.face = 'sprint';
@@ -1073,12 +1082,16 @@
         this.deployTargetX = canvas.clientWidth - 55;
         this.deployTargetY = canvas.clientHeight - 55;
         this.facing = this.deployTargetX >= this.x ? 1 : -1;
-        hudMode.textContent = '⚡ FLASH MAN RETURN TO DOCK!';
-        telState.textContent = 'FLASH RETURN';
+        hudMode.textContent = '⚡ CYBER RETURN TO DOCK!';
+        telState.textContent = 'DOCK RETURN';
         addSparks(this.x, this.y, '#f59e0b', 20);
       }
 
       triggerWriteDashDemo(targetX, targetY) {
+        if (!isFinite(targetX) || !isFinite(targetY)) {
+          targetX = canvas.clientWidth / 2;
+          targetY = canvas.clientHeight * 0.48;
+        }
         this.state = 'flash_dash';
         this.dashType = 'to_write';
         this.face = 'sprint';
@@ -1088,8 +1101,8 @@
         this.deployTargetX = targetX;
         this.deployTargetY = targetY;
         this.facing = this.deployTargetX >= this.x ? 1 : -1;
-        hudMode.textContent = '⚡ FLASH DASH TO CHAT CENTER!';
-        telState.textContent = 'FLASH WRITE DASH';
+        hudMode.textContent = '⚡ CYBER DASH TO CHAT CENTER!';
+        telState.textContent = 'WRITE DASH';
         addSparks(this.x, this.y, '#00f2fe', 24);
       }
 
@@ -1103,8 +1116,8 @@
         this.deployTargetX = canvas.clientWidth - 80;
         this.deployTargetY = 80;
         this.facing = this.deployTargetX >= this.x ? 1 : -1;
-        hudMode.textContent = '⚡ FLASH RETURN TO MASCOT!';
-        telState.textContent = 'FLASH RETURN DASH';
+        hudMode.textContent = '⚡ CYBER RETURN TO MASCOT!';
+        telState.textContent = 'RETURN DASH';
         addSparks(this.x, this.y, '#38bdf8', 22);
       }
 
@@ -1335,7 +1348,7 @@
           }
         }
 
-        // --- FLASH MAN SUPERSONIC DASH ---
+        // --- SUPERSONIC CYBER DASH ---
         if (this.state === 'flash_dash') {
           this.deployTimer += 0.055 * animSpeed;
           const t = Math.min(1.0, this.deployTimer);
@@ -1363,10 +1376,12 @@
               // Settled in chatbot dock
               this.state = 'waiting';
               this.face = 'waiting';
+              this.x = this.deployTargetX;
+              this.y = this.deployTargetY;
               followCursor = false;
               followState.textContent = 'OFF';
               followBtn.classList.remove('active');
-              canvas.style.cursor = 'default'; // Normal mouse cursor restored!
+              canvas.style.cursor = 'default';
               hudMode.textContent = 'CHATBOT DOCKED ✨ (CURSOR RESTORED)';
               telState.textContent = 'DOCKED';
               addSparks(this.x, this.y, '#00f2fe', 16);
@@ -1376,6 +1391,8 @@
               this.face = 'writing';
               this.writeTimer = 0;
               this.facing = 1;
+              this.x = this.deployTargetX;
+              this.y = this.deployTargetY;
               followCursor = false;
               followState.textContent = 'WRITING IN CENTER';
               canvas.style.cursor = 'default';
@@ -1387,6 +1404,8 @@
               this.state = 'waiting';
               this.face = 'waiting';
               this.facing = -1;
+              this.x = this.deployTargetX;
+              this.y = this.deployTargetY;
               followCursor = false;
               followState.textContent = 'OFF';
               canvas.style.cursor = 'default';
@@ -1398,11 +1417,13 @@
               this.state = 'idle';
               this.face = 'happy';
               this.facing = 1;
+              this.x = this.deployTargetX;
+              this.y = this.deployTargetY;
               followCursor = true;
-              followState.textContent = 'ON (FLASH MAN)';
+              followState.textContent = 'ON (ACTIVE)';
               followBtn.classList.add('active');
               canvas.style.cursor = 'none'; // Mouse cursor disappears!
-              hudMode.textContent = '⚡ FLASH MAN AT CURSOR (CURSOR HIDDEN)';
+              hudMode.textContent = '⚡ CYBER CHARLIE AT CURSOR (CURSOR HIDDEN)';
               telState.textContent = 'COMBAT READY';
               addSparks(this.x, this.y, '#00f2fe', 26);
             }
@@ -1690,7 +1711,7 @@
           customKnifeAngle = 0;
         }
 
-        // --- WRITING STATE (Rapid Flash Man scribbling on holographic datapad) ---
+        // --- WRITING STATE (Rapid laser stylus scribbling on holographic datapad) ---
         else if (this.state === 'writing') {
           bobY = Math.sin(this.animTimer * 8.0) * 1.6;
           leanAngle = 0.14;
@@ -1699,7 +1720,7 @@
           // Left arm holds holographic tablet steadily
           upperL = 0.55;
           elbowL = -1.25;
-          // Right arm rapidly scribbling like Flash Man at 32Hz
+          // Right arm rapidly scribbling with laser stylus at 32Hz
           const scrib = Math.sin(this.animTimer * 32.0);
           upperR = 0.35 + scrib * 0.18;
           elbowR = -1.1 + scrib * 0.22;
@@ -1719,7 +1740,7 @@
           customKnifeAngle = 0.4;
         }
 
-        // --- FLASH MAN DASH POSTURE ---
+        // --- SUPERSONIC CYBER DASH POSTURE ---
         else if (this.state === 'flash_dash') {
           bobY = 0;
           leanAngle = this.facing * 0.48; // aerodynamic supersonic forward tilt!
@@ -2619,7 +2640,7 @@
       ctx.fillText('CHAT DOCK ✨', dockPortX, dockPortY + 34);
       ctx.restore();
 
-      // 4c. Draw Flash Man Lightning & Speed Ghosts
+      // 4c. Draw Supersonic Lightning & Speed Ghosts
       charlie.drawLightningArcs(ctx);
       charlie.drawAfterimages(ctx);
 
@@ -2702,7 +2723,7 @@
           const centerY = canvas.clientHeight * 0.48;
           charlie.triggerWriteDashDemo(centerX, centerY);
 
-          const responseFull = '⚡ FLASH MAN WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"';
+          const responseFull = '⚡ CYBER CHARLIE WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"';
           let charIdx = 0;
           
           chatTypeInterval = setInterval(() => {
@@ -2710,7 +2731,7 @@
               if (chatStatusText) {
                 chatStatusText.innerHTML = `✍️ <span style="color:#00f2fe;">${responseFull.substring(0, charIdx + 1)}</span><span style="color:#fff;">|</span>`;
               }
-              charIdx += 2; // hyper fast 2 chars per tick!
+              charIdx += 2; // fast 2 chars per tick!
               // Stylus burst sparks
               if (Math.random() > 0.3) {
                 const stylusTipX = charlie.x + charlie.facing * 14 * charlieScale;
@@ -2721,15 +2742,15 @@
               clearInterval(chatTypeInterval);
               chatTypeInterval = null;
               if (chatStatusText) {
-                chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT FLASH SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
               }
               charlie.triggerVictory();
               setTimeout(() => {
-                // Flash Man supersonic return dash to mascot anchor!
+                // Supersonic return dash to mascot anchor!
                 charlie.triggerReturnDashDemo();
               }, 1200);
             }
-          }, 18); // 18ms per 2 chars = ~9ms per char (supersonic speed!)
+          }, 18); // 18ms per 2 chars = ~9ms per char
         }, 1200);
       });
     }
@@ -2737,14 +2758,14 @@
     if (btnDeployGame) {
       btnDeployGame.addEventListener('click', () => {
         charlie.triggerDeployDemo();
-        if (chatStatusText) chatStatusText.innerHTML = '⚡ <strong>FLASH MAN DEPLOY!</strong> Vanished from dock &rarr; dashed to cursor &rarr; cursor hidden!';
+        if (chatStatusText) chatStatusText.innerHTML = '⚡ <strong>CYBER DEPLOY!</strong> Dashed to cursor &rarr; combat ready!';
       });
     }
 
     if (btnRecallDock) {
       btnRecallDock.addEventListener('click', () => {
         charlie.triggerDockDemo();
-        if (chatStatusText) chatStatusText.innerHTML = '📥 <strong>FLASH RETURN!</strong> Dashed to dock &rarr; cursor restored &rarr; Charlie waiting peacefully.';
+        if (chatStatusText) chatStatusText.innerHTML = '📥 <strong>CYBER DOCK!</strong> Dashed to dock &rarr; cursor restored &rarr; Charlie waiting peacefully.';
       });
     }
 
