@@ -3418,6 +3418,223 @@
   }
 
   // ==========================================================================
+  // 3b. Charlie AI Speech Synthesis Engine (Natural Spoken Summaries)
+  // ==========================================================================
+  class CharlieVoiceEngine {
+    constructor() {
+      this.synth = (typeof window !== 'undefined' && 'speechSynthesis' in window) ? window.speechSynthesis : null;
+      this.isVoiceEnabled = false;
+      this.currentUtterance = null;
+      this.activeButton = null;
+      this.activeAvatar = null;
+      this.selectedVoice = null;
+      this.voices = [];
+
+      try {
+        this.isVoiceEnabled = localStorage.getItem('charlie_voice_enabled') === 'true';
+      } catch (e) {}
+
+      if (this.synth) {
+        this.initVoice();
+        if (typeof this.synth.onvoiceschanged !== 'undefined') {
+          this.synth.onvoiceschanged = () => this.initVoice();
+        }
+      }
+    }
+
+    initVoice() {
+      if (!this.synth) return;
+      try {
+        this.voices = this.synth.getVoices() || [];
+        if (!this.voices.length) return;
+
+        // Priority for natural, articulate British or English AI voice:
+        const preferred = this.voices.find(v => (v.name.includes('Ryan') || v.name.includes('Guy')) && v.lang.startsWith('en'))
+          || this.voices.find(v => v.name.includes('Google UK English Male'))
+          || this.voices.find(v => v.name.includes('Google UK English Female'))
+          || this.voices.find(v => (v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Oliver')) && v.lang.startsWith('en'))
+          || this.voices.find(v => v.lang === 'en-GB')
+          || this.voices.find(v => v.name.includes('Natural') && v.lang.startsWith('en'))
+          || this.voices.find(v => v.lang.startsWith('en'));
+
+        this.selectedVoice = preferred || this.voices[0];
+      } catch (e) {}
+    }
+
+    ensureVoice() {
+      if (!this.selectedVoice || !this.voices.length) {
+        this.initVoice();
+      }
+    }
+
+    toggleVoice() {
+      this.isVoiceEnabled = !this.isVoiceEnabled;
+      try {
+        localStorage.setItem('charlie_voice_enabled', this.isVoiceEnabled ? 'true' : 'false');
+      } catch (e) {}
+      if (!this.isVoiceEnabled) {
+        this.stop();
+      }
+      return this.isVoiceEnabled;
+    }
+
+    cleanTextForSpeech(rawHtml) {
+      if (!rawHtml) return '';
+      const tmp = document.createElement('div');
+      tmp.innerHTML = rawHtml;
+
+      // Remove navigation links, followup chips, action buttons from spoken text
+      tmp.querySelectorAll('.ai-section-link, .ai-followup-container, .ai-msg-actions, a, button').forEach(el => el.remove());
+
+      let text = tmp.innerText || tmp.textContent || '';
+
+      // CRITICAL: Explicitly sanitize studio references - NEVER utter Astra in voice!
+      text = text.replace(/\bAstra\s+Studios\b/gi, 'enterprise VFX studios');
+      text = text.replace(/\bAstra\s+VFX\b/gi, 'production VFX');
+      text = text.replace(/\bAstra\s+USD\b/gi, 'Open USD');
+      text = text.replace(/\bAstra\s+Plasma\b/gi, 'plasma');
+      text = text.replace(/\bAstra\b/gi, 'studio');
+
+      // Expand common abbreviations for fluent pronunciation
+      text = text.replace(/\bOpenUSD\b/g, 'Open USD');
+      text = text.replace(/\bn8n\b/g, 'N 8 N');
+      text = text.replace(/\bACEScg\b/g, 'ACES c g');
+      text = text.replace(/\bOTIO\b/g, 'O T I O');
+      text = text.replace(/\bMCP\b/g, 'M C P');
+      text = text.replace(/\bLLMs\b/g, 'L L M s');
+      text = text.replace(/\bLLM\b/g, 'L L M');
+      text = text.replace(/\bDCC\b/g, 'D C C');
+      text = text.replace(/\bVFX\b/g, 'V F X');
+      text = text.replace(/\bAI\b/g, 'A I');
+
+      // Strip emojis
+      text = text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}]/gu, '');
+
+      // Strip markdown symbols (*, _, #, ~, `)
+      text = text.replace(/[*_~`#]+/g, ' ');
+
+      // Replace bullets and arrows with commas for natural pauses
+      text = text.replace(/[•→\-\–\—]/g, ', ');
+
+      // Normalize whitespace
+      return text.replace(/\s+/g, ' ').trim();
+    }
+
+    extractExecutiveSummary(rawHtml) {
+      const fullClean = this.cleanTextForSpeech(rawHtml);
+      if (!fullClean) return '';
+
+      // Match first 1-2 full sentences
+      const sentenceMatches = fullClean.match(/[^.!?]+[.!?]+/g);
+      let summary = '';
+      if (sentenceMatches && sentenceMatches.length > 0) {
+        summary = sentenceMatches[0].trim();
+        if (summary.length < 110 && sentenceMatches.length > 1) {
+          summary += ' ' + sentenceMatches[1].trim();
+        }
+      } else {
+        summary = fullClean.slice(0, 180) + '...';
+      }
+
+      const signOffs = [
+        "I have detailed the complete architecture and technical breakdown below.",
+        "You can inspect the full production specifications right here in the terminal.",
+        "Check out the breakdown below for all key metrics and workflow details.",
+        "I've laid out the full breakdown and direct links below for you to review."
+      ];
+      const signOff = signOffs[Math.floor(Math.random() * signOffs.length)];
+
+      return `${summary} ${signOff}`;
+    }
+
+    speak(text, buttonEl = null, avatarEl = null, onFinish = null) {
+      if (!this.synth) return;
+      this.stop();
+
+      if (!text) return;
+      this.ensureVoice();
+
+      try {
+        const utterance = new SpeechSynthesisUtterance(text);
+        if (this.selectedVoice) {
+          utterance.voice = this.selectedVoice;
+        }
+        utterance.rate = 1.02; // Modern crisp pacing
+        utterance.pitch = 1.05; // Articulate AI companion tone
+
+        this.currentUtterance = utterance;
+        this.activeButton = buttonEl;
+        this.activeAvatar = avatarEl;
+
+        if (buttonEl) {
+          buttonEl.classList.add('speaking');
+          const label = buttonEl.querySelector('.speech-label');
+          if (label) {
+            buttonEl.dataset.prevLabel = label.textContent;
+            label.textContent = 'Stop Voice';
+          }
+          const icon = buttonEl.querySelector('.speech-icon');
+          if (icon) {
+            buttonEl.dataset.prevIcon = icon.textContent;
+            icon.textContent = '⏹️';
+          }
+        }
+
+        if (avatarEl) {
+          avatarEl.classList.add('ai-speaking-avatar');
+        }
+
+        if (window.portfolioCharlie) {
+          window.portfolioCharlie.face = 'happy';
+        }
+
+        utterance.onend = () => {
+          this.cleanup();
+          if (typeof onFinish === 'function') onFinish();
+        };
+
+        utterance.onerror = () => {
+          this.cleanup();
+        };
+
+        this.synth.speak(utterance);
+      } catch (e) {
+        console.warn('Speech synthesis error:', e);
+        this.cleanup();
+      }
+    }
+
+    cleanup() {
+      if (this.activeButton) {
+        this.activeButton.classList.remove('speaking');
+        const label = this.activeButton.querySelector('.speech-label');
+        if (label && this.activeButton.dataset.prevLabel) {
+          label.textContent = this.activeButton.dataset.prevLabel;
+        }
+        const icon = this.activeButton.querySelector('.speech-icon');
+        if (icon && this.activeButton.dataset.prevIcon) {
+          icon.textContent = this.activeButton.dataset.prevIcon;
+        }
+        this.activeButton = null;
+      }
+      if (this.activeAvatar) {
+        this.activeAvatar.classList.remove('ai-speaking-avatar');
+        this.activeAvatar = null;
+      }
+      this.currentUtterance = null;
+    }
+
+    stop() {
+      if (this.synth) {
+        try {
+          this.synth.cancel();
+        } catch (e) {}
+      }
+      this.cleanup();
+    }
+  }
+
+  // ==========================================================================
   // 4. Sentinel-X Cyber-Bot Scoreboard & Gamified HUD
   // ==========================================================================
   class SentinelScoreboard {
@@ -3777,6 +3994,10 @@
     const soundEngine = new CosmicSoundEngine();
     window.portfolioSoundEngine = soundEngine;
 
+    // 2b. Initialize Charlie AI Speech Synthesis Engine (Text-to-Speech)
+    const charlieVoice = new CharlieVoiceEngine();
+    window.charlieVoice = charlieVoice;
+
     // Global User Gesture Audio Unlock (Unlocks Web Audio on first click / touch / key)
     const unlockAudio = () => {
       soundEngine.ensureContext();
@@ -4098,6 +4319,32 @@
         e.preventDefault();
         e.stopPropagation();
         setPortfolioAudioMute();
+      });
+    }
+
+    // Setup Chat Voice Toggle Button (Text-to-Speech Spoken Summaries)
+    const aiChatVoiceToggle = document.getElementById('aiChatVoiceToggle');
+    const aiChatVoiceIcon = document.getElementById('aiChatVoiceIcon');
+    const aiChatVoiceText = document.getElementById('aiChatVoiceText');
+
+    function updateVoiceToggleUI(isEnabled) {
+      if (!aiChatVoiceToggle) return;
+      aiChatVoiceToggle.classList.toggle('muted', !isEnabled);
+      aiChatVoiceToggle.setAttribute('title', isEnabled ? 'Mute Charlie Voice (Text-to-Speech)' : 'Enable Charlie Voice (Text-to-Speech)');
+      if (aiChatVoiceIcon) aiChatVoiceIcon.textContent = isEnabled ? '🗣️' : '🔇';
+      if (aiChatVoiceText) aiChatVoiceText.textContent = isEnabled ? 'VOICE ON' : 'VOICE OFF';
+    }
+
+    if (aiChatVoiceToggle) {
+      updateVoiceToggleUI(charlieVoice.isVoiceEnabled);
+      aiChatVoiceToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isEnabled = charlieVoice.toggleVoice();
+        updateVoiceToggleUI(isEnabled);
+        if (scoreboard) {
+          scoreboard.setMessage(isEnabled ? 'Charlie Voice online! Spoken summaries active! 🗣️' : 'Charlie Voice muted. Text-only mode! 🤫');
+        }
       });
     }
 
@@ -5406,6 +5653,11 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       if (!aiChatStream || !query) return;
       if (isGeneratingResponse) return; // Do NOT allow selecting other questions while generation is in progress!
 
+      // Stop any active speech from prior message immediately
+      if (window.charlieVoice) {
+        window.charlieVoice.stop();
+      }
+
       const trimmedQuery = query.trim();
       if (!trimmedQuery) return;
 
@@ -5656,6 +5908,66 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                     botMsgDiv.style.transform = 'translateY(0px)';
                     botMsgDiv.style.willChange = 'auto';
 
+                    // Append speech action buttons (Listen to Summary & Read Full Answer)
+                    const attachSpeechControls = () => {
+                      if (botMsgDiv.querySelector('.ai-msg-actions')) return;
+                      const actionsDiv = document.createElement('div');
+                      actionsDiv.className = 'ai-msg-actions';
+                      actionsDiv.innerHTML = `
+                        <button type="button" class="ai-speech-btn ai-speech-summary-btn" title="Listen to Charlie's Spoken Summary">
+                          <span class="speech-icon">🔊</span>
+                          <span class="speech-label">Listen to Summary</span>
+                        </button>
+                        <button type="button" class="ai-speech-btn ai-speech-full-btn" title="Listen to Full Technical Answer">
+                          <span class="speech-icon">📜</span>
+                          <span class="speech-label">Read Full Answer</span>
+                        </button>
+                      `;
+
+                      const summaryBtn = actionsDiv.querySelector('.ai-speech-summary-btn');
+                      const fullBtn = actionsDiv.querySelector('.ai-speech-full-btn');
+                      const avatarEl = botMsgDiv.querySelector('.ai-msg-avatar');
+
+                      summaryBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (!window.charlieVoice) return;
+                        if (summaryBtn.classList.contains('speaking')) {
+                          window.charlieVoice.stop();
+                        } else {
+                          const summaryText = window.charlieVoice.extractExecutiveSummary(fullResponse);
+                          window.charlieVoice.speak(summaryText, summaryBtn, avatarEl);
+                        }
+                      });
+
+                      fullBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (!window.charlieVoice) return;
+                        if (fullBtn.classList.contains('speaking')) {
+                          window.charlieVoice.stop();
+                        } else {
+                          const cleanFull = window.charlieVoice.cleanTextForSpeech(fullResponse);
+                          window.charlieVoice.speak(cleanFull, fullBtn, avatarEl);
+                        }
+                      });
+
+                      const bodyEl = botMsgDiv.querySelector('.ai-msg-body');
+                      const followContainer = botMsgDiv.querySelector('.ai-followup-container');
+                      if (followContainer && followContainer.parentNode === bodyEl) {
+                        bodyEl.insertBefore(actionsDiv, followContainer);
+                      } else {
+                        bodyEl.appendChild(actionsDiv);
+                      }
+                      scrollStreamToBottom();
+
+                      // If Voice Mode is ON, automatically speak the punchy Executive Summary!
+                      if (window.charlieVoice && window.charlieVoice.isVoiceEnabled) {
+                        const summaryText = window.charlieVoice.extractExecutiveSummary(fullResponse);
+                        window.charlieVoice.speak(summaryText, summaryBtn, avatarEl);
+                      }
+                    };
+
                     // Append followups smoothly once settled at Point C
                     if (followupsHtml && !botMsgDiv.querySelector('.ai-followup-container')) {
                       const followContainer = document.createElement('div');
@@ -5664,6 +5976,8 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                       botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
                       scrollStreamToBottom();
                     }
+
+                    attachSpeechControls();
 
                     // Trigger Victory Celebration!
                     if (window.portfolioCharlie) {
@@ -5709,6 +6023,63 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                   followContainer.innerHTML = followupsHtml;
                   botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
                 }
+
+                // Append speech controls in fallback branch
+                if (!botMsgDiv.querySelector('.ai-msg-actions')) {
+                  const actionsDiv = document.createElement('div');
+                  actionsDiv.className = 'ai-msg-actions';
+                  actionsDiv.innerHTML = `
+                    <button type="button" class="ai-speech-btn ai-speech-summary-btn" title="Listen to Charlie's Spoken Summary">
+                      <span class="speech-icon">🔊</span>
+                      <span class="speech-label">Listen to Summary</span>
+                    </button>
+                    <button type="button" class="ai-speech-btn ai-speech-full-btn" title="Listen to Full Technical Answer">
+                      <span class="speech-icon">📜</span>
+                      <span class="speech-label">Read Full Answer</span>
+                    </button>
+                  `;
+                  const summaryBtn = actionsDiv.querySelector('.ai-speech-summary-btn');
+                  const fullBtn = actionsDiv.querySelector('.ai-speech-full-btn');
+                  const avatarEl = botMsgDiv.querySelector('.ai-msg-avatar');
+
+                  summaryBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!window.charlieVoice) return;
+                    if (summaryBtn.classList.contains('speaking')) {
+                      window.charlieVoice.stop();
+                    } else {
+                      const summaryText = window.charlieVoice.extractExecutiveSummary(fullResponse);
+                      window.charlieVoice.speak(summaryText, summaryBtn, avatarEl);
+                    }
+                  });
+
+                  fullBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!window.charlieVoice) return;
+                    if (fullBtn.classList.contains('speaking')) {
+                      window.charlieVoice.stop();
+                    } else {
+                      const cleanFull = window.charlieVoice.cleanTextForSpeech(fullResponse);
+                      window.charlieVoice.speak(cleanFull, fullBtn, avatarEl);
+                    }
+                  });
+
+                  const bodyEl = botMsgDiv.querySelector('.ai-msg-body');
+                  const followContainer = botMsgDiv.querySelector('.ai-followup-container');
+                  if (followContainer && followContainer.parentNode === bodyEl) {
+                    bodyEl.insertBefore(actionsDiv, followContainer);
+                  } else {
+                    bodyEl.appendChild(actionsDiv);
+                  }
+
+                  if (window.charlieVoice && window.charlieVoice.isVoiceEnabled) {
+                    const summaryText = window.charlieVoice.extractExecutiveSummary(fullResponse);
+                    window.charlieVoice.speak(summaryText, summaryBtn, avatarEl);
+                  }
+                }
+
                 setCharlieThinkingState(false);
                 if (aiBotStatusPill) {
                   const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
