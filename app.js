@@ -5257,7 +5257,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
             title: 'Mobile Resolution Simulator Online [Local Build]',
             response: `📱 <strong>MOBILE RESOLUTION SIMULATOR ACTIVATED [LOCAL DEV]</strong><br/><br/>
 • <strong>Instant Shortcut:</strong> Press <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">M</kbd> anytime on desktop to toggle the simulator.<br/>
-• <strong>Device Presets:</strong> Test in <strong>iPhone 15 Pro</strong> (393&times;852), <strong>Pixel 8</strong> (412&times;915), <strong>Compact SE</strong> (375&times;667), and <strong>Tablet</strong> (768&times;1024).<br/>
+• <strong>Device Presets:</strong> Test in <strong>iPhone 16 Pro Max</strong> (440&times;956), <strong>Pixel 8</strong> (412&times;915), <strong>Compact SE</strong> (375&times;667), and <strong>Tablet</strong> (768&times;1024).<br/>
 • <strong>Orientation:</strong> Click the <strong>🔄 Rotate</strong> button to test landscape view.<br/>
 • <strong>Browser DevTools:</strong> Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>M</kbd> (Mac) for browser native responsive design mode.<br/><br/>
 <em>Launching the simulator now in your browser! Press <kbd>Esc</kbd> or <kbd>M</kbd> to exit anytime.</em>`,
@@ -6060,7 +6060,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       if (!overlay || !chassis || !frame) return;
 
       const DEVICE_PRESETS = {
-        iphone: { name: 'iPhone 15 Pro', width: 393, height: 852, radius: '54px' },
+        iphone: { name: 'iPhone 16 Pro Max', width: 440, height: 956, radius: '56px' },
         pixel: { name: 'Pixel 8', width: 412, height: 915, radius: '50px' },
         compact: { name: 'Compact (SE)', width: 375, height: 667, radius: '44px' },
         tablet: { name: 'Tablet (768px)', width: 768, height: 1024, radius: '36px' }
