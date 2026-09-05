@@ -151,6 +151,15 @@ body {
   display: block;
 }
 
+@media (max-width: 768px) {
+  #charlieCanvas {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+  }
+}
+
 /* ⚡ Cyber Charlie Combat Cursor Mode - Hide native browser pointer so Charlie IS the interactive cursor! */
 body.combat-cursor-active,
 body.combat-cursor-active #cometCanvas,
@@ -479,11 +488,12 @@ body.combat-cursor-active * {
 }
 
 @media (max-width: 768px) {
-  .floating-charlie-btn {
-    bottom: 20px;
-    right: 16px;
-    padding: 8px 14px 8px 12px;
-    font-size: 0.78rem;
+  .floating-charlie-btn,
+  #floatingCharlieBtn {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
   }
 }
 
@@ -949,10 +959,12 @@ body.combat-cursor-active * {
 }
 
 @media (max-width: 768px) {
-  .bot-hud-widget {
-    bottom: 80px;
-    left: 16px;
-    max-width: calc(100vw - 32px);
+  .bot-hud-widget,
+  #botHudWidget {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
   }
 }
 
@@ -3769,44 +3781,16 @@ body.combat-cursor-active * {
     justify-content: center;
   }
 
-  /* Mobile Game Switch & Desktop Only Notice */
-  .fx-switch-wrapper {
-    display: flex !important;
-    padding: 3px 6px;
-    gap: 4px;
-    cursor: pointer;
-  }
-
-  .fx-switch-wrapper span:first-child span {
-    display: none;
-  }
-
-  /* Desktop Notice Toast on Mobile */
-  .desktop-notice-toast {
-    display: flex !important;
-    position: fixed !important;
-    top: 64px !important;
-    left: 12px !important;
-    right: 12px !important;
-    max-width: none !important;
-    width: auto !important;
-    z-index: 99999 !important;
-    border-color: var(--accent-amber) !important;
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(245, 158, 11, 0.3) !important;
-    pointer-events: auto !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    padding: 10px 14px !important;
-  }
-
-  .desktop-notice-toast.hidden {
-    display: none !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transform: translateY(-20px) scale(0.92) !important;
-  }
-
-  /* Hide Game HUD, FX Canvas, and Presets on Mobile Screens */
+  /* Mobile: Completely Hide Fun Mode Switch, Notice Toast, Game HUD, Charlie Mascot Canvas, and Floating Launcher */
+  .fx-switch-wrapper,
+  #fxSwitchWrapper,
+  .mobile-desktop-hint,
+  .desktop-notice-toast,
+  #desktopNoticeToast,
+  #charlieCanvas,
+  .floating-charlie-btn,
+  #floatingCharlieBtn,
+  #charlieDockCanvas,
   .fx-widget,
   #fxWidget,
   .bot-hud-widget,
@@ -6296,6 +6280,7 @@ body.cv-theme-light .cv-edu-year {
 
 /* ==========================================================================
    📱 Interactive Mobile Resolution Simulator & Device Inspector
+   (Strictly Enabled in Local Development Builds Only)
    ========================================================================== */
 
 /* Hide simulator elements when viewed inside an iframe */
@@ -6304,13 +6289,28 @@ body.in-simulator #floatingSimTrigger {
   display: none !important;
 }
 
-/* Floating Desktop Shortcut Trigger Pill */
-.floating-sim-trigger {
+/* Production safety: Hidden completely on live production by default */
+.floating-sim-trigger,
+#floatingSimTrigger,
+html:not(.is-local-build) #mobileSimOverlay,
+body:not(.is-local-build) #mobileSimOverlay,
+html:not(.is-local-build) #floatingSimTrigger,
+body:not(.is-local-build) #floatingSimTrigger {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Floating Desktop Shortcut Trigger Pill (Local Development Only) */
+html.is-local-build .floating-sim-trigger,
+body.is-local-build .floating-sim-trigger {
   position: fixed;
   bottom: 24px;
   left: 24px;
   z-index: 9990;
-  display: inline-flex;
+  display: inline-flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
   align-items: center;
   gap: 9px;
   padding: 10px 18px;
@@ -6329,14 +6329,16 @@ body.in-simulator #floatingSimTrigger {
   user-select: none;
 }
 
-.floating-sim-trigger:hover {
+html.is-local-build .floating-sim-trigger:hover,
+body.is-local-build .floating-sim-trigger:hover {
   transform: translateY(-2px);
   background: rgba(15, 23, 42, 0.95);
   border-color: #00f2fe;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 242, 254, 0.35);
 }
 
-.floating-sim-trigger:active {
+html.is-local-build .floating-sim-trigger:active,
+body.is-local-build .floating-sim-trigger:active {
   transform: translateY(0);
 }
 
@@ -6366,6 +6368,8 @@ body.in-simulator #floatingSimTrigger {
 }
 
 @media screen and (max-width: 768px) {
+  html.is-local-build .floating-sim-trigger,
+  body.is-local-build .floating-sim-trigger,
   .floating-sim-trigger {
     display: none !important;
   }

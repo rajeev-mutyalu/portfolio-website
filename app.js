@@ -630,6 +630,7 @@
     }
 
     update() {
+      if (window.innerWidth <= 768) return;
       // Timing: Sprint Animation Speed = 1.0x, rest all = 0.5x
       const stateSpeedRate = (this.state === 'run' || this.state === 'cyber_dash') ? 1.0 : 0.5;
       this.animTimer += 0.15 * this.animSpeed * stateSpeedRate;
@@ -2698,7 +2699,7 @@
       if (this.charlieCtx) {
         this.charlieCtx.clearRect(0, 0, this.width, this.height);
       }
-      const shouldDrawCharlie = this.charlie && (
+      const shouldDrawCharlie = (window.innerWidth > 768) && this.charlie && (
         this.isEnabled ||
         this.charlie.state === 'cyber_dash' ||
         this.charlie.state === 'escort' ||
@@ -2896,6 +2897,7 @@
     }
 
     drawDockCharlie() {
+      if (window.innerWidth <= 768) return;
       if (!this.dockCanvas) {
         this.dockCanvas = document.getElementById('charlieDockCanvas');
         if (this.dockCanvas) {
@@ -5237,28 +5239,50 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
         };
       }
 
-      // 3e. Mobile Resolution Simulator Command
+      // 3e. Mobile Resolution Simulator Command (Local Build vs Live Production)
       if (/\b(mobile\s*sim(ulator)?|mobile\s*view|phone\s*mode|mobile\s*resolution|responsive\s*view)\b/i.test(q)) {
-        setTimeout(() => {
-          if (typeof window.toggleMobileSimulator === 'function') {
+        const isLocalBuild = (
+          window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1' ||
+          window.location.protocol === 'file:' ||
+          window.location.hostname.endsWith('.local')
+        );
+
+        if (isLocalBuild && typeof window.toggleMobileSimulator === 'function') {
+          setTimeout(() => {
             window.toggleMobileSimulator();
-          }
-        }, 900);
-        return {
-          id: 'mobile_simulator',
-          title: 'Mobile Resolution Simulator Online',
-          response: `📱 <strong>MOBILE RESOLUTION SIMULATOR ACTIVATED</strong><br/><br/>
+          }, 900);
+          return {
+            id: 'mobile_simulator',
+            title: 'Mobile Resolution Simulator Online [Local Build]',
+            response: `📱 <strong>MOBILE RESOLUTION SIMULATOR ACTIVATED [LOCAL DEV]</strong><br/><br/>
 • <strong>Instant Shortcut:</strong> Press <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">M</kbd> anytime on desktop to toggle the simulator.<br/>
 • <strong>Device Presets:</strong> Test in <strong>iPhone 15 Pro</strong> (393&times;852), <strong>Pixel 8</strong> (412&times;915), <strong>Compact SE</strong> (375&times;667), and <strong>Tablet</strong> (768&times;1024).<br/>
 • <strong>Orientation:</strong> Click the <strong>🔄 Rotate</strong> button to test landscape view.<br/>
 • <strong>Browser DevTools:</strong> Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>M</kbd> (Mac) for browser native responsive design mode.<br/><br/>
 <em>Launching the simulator now in your browser! Press <kbd>Esc</kbd> or <kbd>M</kbd> to exit anytime.</em>`,
-          followups: getDynamicFollowups([
-            'Who is Rajeev Mutyalu and why should we hire him?',
-            'Tell me about your AI certifications, accelerator credentials, and hackathons',
-            'Explain your OpenUSD VFX pipeline architecture'
-          ], 3)
-        };
+            followups: getDynamicFollowups([
+              'Who is Rajeev Mutyalu and why should we hire him?',
+              'Tell me about your AI certifications, accelerator credentials, and hackathons',
+              'Explain your OpenUSD VFX pipeline architecture'
+            ], 3)
+          };
+        } else {
+          return {
+            id: 'mobile_simulator_prod',
+            title: 'Mobile Testing via Browser DevTools',
+            response: `📱 <strong>MOBILE RESPONSIVE TESTING</strong><br/><br/>
+The in-browser device simulator is an internal development tool reserved exclusively for local builds. On this live production site, you can instantly test mobile views using your browser's native DevTools:<br/><br/>
+• <strong>Windows / Linux:</strong> Press <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">Ctrl</kbd> + <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">Shift</kbd> + <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">M</kbd><br/>
+• <strong>macOS:</strong> Press <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">Cmd</kbd> + <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">Option</kbd> + <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">M</kbd><br/><br/>
+This activates Chrome/Edge/Safari/Firefox native responsive mode with precise touch emulation and orientation switching!`,
+            followups: getDynamicFollowups([
+              'Who is Rajeev Mutyalu and why should we hire him?',
+              'Tell me about your AI certifications, accelerator credentials, and hackathons',
+              'Explain your OpenUSD VFX pipeline architecture'
+            ], 3)
+          };
+        }
       }
 
       // 4. Resilient "Who is Rajeev / Why hire him" Check
@@ -5545,12 +5569,17 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         `;
 
         // Physical Delivery Synchronization:
-        // Position botMsgDiv lower down at Point B where Charlie is typing
-        const textTravelY = Math.max(65, Math.min(130, Math.round(bottomCenter.y - writeCenter.y)));
+        const isMobile = window.innerWidth <= 768;
         botMsgDiv.style.animation = 'none';
         botMsgDiv.style.opacity = '1';
-        botMsgDiv.style.willChange = 'transform';
-        botMsgDiv.style.transform = `translateY(${textTravelY}px)`;
+
+        if (!isMobile) {
+          const textTravelY = Math.max(65, Math.min(130, Math.round(bottomCenter.y - writeCenter.y)));
+          botMsgDiv.style.willChange = 'transform';
+          botMsgDiv.style.transform = `translateY(${textTravelY}px)`;
+        } else {
+          botMsgDiv.style.transform = 'none';
+        }
 
         aiChatStream.appendChild(botMsgDiv);
         scrollStreamToBottom();
@@ -5614,7 +5643,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
               // Writing at Point B is 100% COMPLETE!
               // Now text & background bubble start moving up first towards Point C.
               // Charlie WAITS at Point B until text moves 20%, then ATTACHES and ascends in lockstep!
-              if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+              if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
                 const ascentDuration = 650;
                 const ascentStart = performance.now();
                 const startX = bottomCenter.x;
@@ -5744,7 +5773,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
           }, tickInterval);
         };
 
-        if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+        if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
           if (aiBotStatusPill) {
             const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
             if (text) text.textContent = 'CHARLIE DASHING TO CHAT...';
@@ -5899,6 +5928,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       if (!section || !terminal) return;
 
       const deployToSection = () => {
+        if (window.innerWidth <= 768) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie) return;
         if (engine.isEnabled) return; // Do not interrupt Game Mode!
@@ -5917,6 +5947,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       };
 
       const returnToDock = () => {
+        if (window.innerWidth <= 768) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie) return;
         if (engine.isEnabled) return; // Game Mode controls its own return
@@ -5950,6 +5981,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
       // Keep Charlie deployment in sync on scroll so he never desyncs from chat view
       window.addEventListener('scroll', () => {
+        if (window.innerWidth <= 768) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie || engine.isEnabled) return;
         if (engine.charlie.state === 'cyber_dash') return;
@@ -5980,9 +6012,30 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
     // =========================================================================
     // 9. Interactive Mobile Resolution Simulator (Shortcut: 'M')
+    // (Strictly Enabled in Local Development Builds Only)
     // =========================================================================
     function setupMobileSimulator() {
-      // Prevent recursive simulator setup if currently inside simulator iframe
+      // 1. Strictly local build check: Only enable simulator on localhost, 127.0.0.1, file://
+      const isLocalBuild = (
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.protocol === 'file:' ||
+        window.location.hostname.endsWith('.local')
+      );
+
+      if (!isLocalBuild) {
+        // Live production build: Completely strip simulator elements and exit
+        const trigger = document.getElementById('floatingSimTrigger');
+        if (trigger) trigger.remove();
+        const overlay = document.getElementById('mobileSimOverlay');
+        if (overlay) overlay.remove();
+        return;
+      }
+
+      // Mark body as local build so CSS displays the trigger pill
+      document.body.classList.add('is-local-build');
+
+      // 2. Prevent recursive simulator setup if currently inside simulator iframe
       if (window.self !== window.top) {
         document.body.classList.add('in-simulator');
         const trigger = document.getElementById('floatingSimTrigger');

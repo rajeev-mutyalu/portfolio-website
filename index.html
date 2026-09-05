@@ -23,7 +23,22 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=111" />
+  <link rel="stylesheet" href="style.css?v=112" />
+
+  <!-- Local Dev Environment Detection (Mobile Simulator only active in local builds) -->
+  <script>
+    (function () {
+      var isLocal = (
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.protocol === 'file:' ||
+        window.location.hostname.endsWith('.local')
+      );
+      if (isLocal) {
+        document.documentElement.classList.add('is-local-build');
+      }
+    })();
+  </script>
 </head>
 
 <body>
@@ -1505,6 +1520,6 @@
     <kbd class="floating-sim-kbd">M</kbd>
   </button>
 
-  <script src="app.js?v=111"></script>
+  <script src="app.js?v=112"></script>
 </body>
 </html>
