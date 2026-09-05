@@ -73,6 +73,14 @@
       this.writeTimer = 0;
       this.bladeTrails = [];
       this.sparks = [];
+
+      // Spontaneous Personality Engine (~45s - 75s intervals, avg 60s)
+      this.spontaneousTimer = 0;
+      this.spontaneousNextInterval = Math.floor(2700 + Math.random() * 1800);
+      this.isSpontaneousAction = false;
+      this.isShielded = false;
+      this.emoteText = '';
+      this.emoteTimer = 0;
     }
 
     addSparks(x, y, color = '#00f2fe', count = 10) {
@@ -227,6 +235,77 @@
       this.state = 'writing';
       this.face = 'writing';
       this.writeTimer = 0;
+    }
+
+    triggerSpontaneousAction() {
+      if (!window.portfolioEngine?.isEnabled) return;
+      if (this.state === 'slash' || this.state === 'flash_dash' || this.state === 'deploying') return;
+
+      this.spontaneousTimer = 0;
+      this.spontaneousNextInterval = Math.floor(2700 + Math.random() * 1800);
+      this.isSpontaneousAction = true;
+
+      const moves = ['jump', 'bonk', 'dizzy', 'victory'];
+      const move = moves[Math.floor(Math.random() * moves.length)];
+      const soundEngine = window.portfolioSoundEngine;
+
+      if (move === 'jump') {
+        this.state = 'jump';
+        this.jumpTimer = 0;
+        this.jumpLandedSpark = false;
+        this.face = 'wink';
+        this.setEmote('WOOHOO! 🦘', 70);
+        if (soundEngine && typeof soundEngine.playJump === 'function') {
+          soundEngine.playJump();
+        }
+        this.syncHudFace('[^_-]');
+      } else if (move === 'bonk') {
+        this.state = 'bonk';
+        this.face = 'shocked';
+        this.bonkTimer = 40;
+        this.vy = -6;
+        this.vx = -this.facing * 4.5;
+        this.isShielded = true;
+        this.setEmote('BONK! 💥', 65);
+        this.addSparks(this.x, this.y - 18 * this.scale, '#f59e0b', 16);
+        if (soundEngine && typeof soundEngine.playBonk === 'function') {
+          soundEngine.playBonk();
+        }
+        this.syncHudFace('[⊙_⊙]');
+      } else if (move === 'dizzy') {
+        this.state = 'dizzy';
+        this.face = 'dizzy';
+        this.dizzyTimer = 75; // ~2.2s
+        this.isShielded = true;
+        this.setEmote('WHOA! 😵', 80);
+        this.addSparks(this.x, this.y - 20 * this.scale, '#f59e0b', 14);
+        if (soundEngine && typeof soundEngine.playDizzy === 'function') {
+          soundEngine.playDizzy();
+        }
+        this.syncHudFace('[@_@]');
+      } else if (move === 'victory') {
+        this.state = 'victory';
+        this.victoryTimer = 0;
+        this.twirlAngle = 0;
+        this.face = 'victory';
+        this.setEmote('UNSTOPPABLE! 🌟', 85);
+        if (soundEngine && typeof soundEngine.playFanfare === 'function') {
+          soundEngine.playFanfare();
+        }
+        this.syncHudFace('[★_★]');
+      }
+    }
+
+    setEmote(text, duration = 75) {
+      this.emoteText = text;
+      this.emoteTimer = duration;
+    }
+
+    syncHudFace(faceStr) {
+      const hudFace = document.getElementById('botFace');
+      if (hudFace) {
+        hudFace.textContent = faceStr;
+      }
     }
 
     triggerWaiting() {
@@ -423,17 +502,19 @@
 
         let chaseFactor = 0.22;
         if (dist > 220) {
-          this.state = 'run';
-          this.face = 'sprint';
+          if (!this.isSpontaneousAction) {
+            this.state = 'run';
+            this.face = 'sprint';
+          }
           chaseFactor = 0.36;
         } else if (dist > 35) {
-          if (this.state !== 'slash' && this.state !== 'jump' && this.state !== 'victory') {
+          if (this.state !== 'slash' && this.state !== 'jump' && this.state !== 'victory' && !this.isSpontaneousAction) {
             this.state = 'walk';
             this.face = 'happy';
           }
           chaseFactor = 0.26;
         } else {
-          if (this.state !== 'slash' && this.state !== 'jump' && this.state !== 'victory') {
+          if (this.state !== 'slash' && this.state !== 'jump' && this.state !== 'victory' && !this.isSpontaneousAction) {
             this.state = 'idle';
             this.face = 'happy';
           }
@@ -471,6 +552,8 @@
         if (this.jumpTimer >= this.jumpMax) {
           this.state = 'idle';
           this.face = 'happy';
+          this.isSpontaneousAction = false;
+          this.isShielded = false;
         }
       }
 
@@ -487,7 +570,14 @@
           const bladeTipY = this.y - 28 * this.scale;
           this.addSparks(bladeTipX, bladeTipY, '#f59e0b', 4);
         }
-        if (this.victoryTimer >= this.victoryMax) {
+        if (this.isSpontaneousAction) {
+          if (this.victoryTimer >= 65) {
+            this.state = 'idle';
+            this.face = 'happy';
+            this.isSpontaneousAction = false;
+            this.isShielded = false;
+          }
+        } else if (this.victoryTimer >= this.victoryMax) {
           this.victoryTimer = 25;
         }
       }
@@ -506,9 +596,16 @@
         this.y += this.vy;
         this.vy += 0.35;
         if (this.bonkTimer <= 0) {
-          this.state = 'dizzy';
-          this.face = 'dizzy';
-          this.dizzyTimer = 180;
+          if (this.isSpontaneousAction) {
+            this.state = 'idle';
+            this.face = 'happy';
+            this.isSpontaneousAction = false;
+            this.isShielded = false;
+          } else {
+            this.state = 'dizzy';
+            this.face = 'dizzy';
+            this.dizzyTimer = 180;
+          }
         }
       }
 
@@ -517,6 +614,23 @@
         if (this.dizzyTimer <= 0) {
           this.state = 'idle';
           this.face = 'happy';
+          this.isSpontaneousAction = false;
+          this.isShielded = false;
+        }
+      }
+
+      if (this.emoteTimer > 0) this.emoteTimer--;
+
+      // Spontaneous Action Interval Check (Game Mode Only)
+      if (window.portfolioEngine && window.portfolioEngine.isEnabled && this.state !== 'flash_dash') {
+        this.spontaneousTimer++;
+        if (this.spontaneousTimer >= this.spontaneousNextInterval) {
+          if (this.state === 'idle' || this.state === 'walk' || this.state === 'run') {
+            this.triggerSpontaneousAction();
+          } else {
+            // Postpone slightly until attack completes
+            this.spontaneousTimer = this.spontaneousNextInterval - 60;
+          }
         }
       }
 
@@ -1343,6 +1457,67 @@
       c.restore();
       c.restore();
       c.restore();
+
+      // Energy Shield Bubble (during spontaneous bonk / dizzy or invulnerable mode)
+      if (this.isShielded || (this.isSpontaneousAction && (this.state === 'bonk' || this.state === 'dizzy'))) {
+        c.save();
+        const shieldPulse = Math.sin(this.animTimer * 6.0) * 2.5;
+        const shieldGrad = c.createRadialGradient(this.x, this.y, 10, this.x, this.y, 32 * this.scale + shieldPulse);
+        shieldGrad.addColorStop(0, 'rgba(0, 242, 254, 0.05)');
+        shieldGrad.addColorStop(0.7, 'rgba(0, 242, 254, 0.22)');
+        shieldGrad.addColorStop(1, 'rgba(0, 242, 254, 0.75)');
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.8;
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 14;
+        c.fillStyle = shieldGrad;
+        c.beginPath();
+        c.arc(this.x, this.y, 30 * this.scale + shieldPulse, 0, Math.PI * 2);
+        c.fill();
+        c.stroke();
+        c.restore();
+      }
+
+      // Floating Emote Speech Bubble
+      if (this.emoteTimer > 0 && this.emoteText) {
+        c.save();
+        c.translate(this.x, this.y - 44 * this.scale);
+        const emoteAlpha = Math.min(1.0, this.emoteTimer / 15);
+        c.globalAlpha = emoteAlpha;
+        c.font = 'bold 11px "JetBrains Mono", monospace';
+        const textWidth = c.measureText(this.emoteText).width;
+        const padX = 8;
+        const boxW = textWidth + padX * 2;
+        const boxH = 20;
+
+        // Glassmorphic Speech Pill
+        c.fillStyle = 'rgba(6, 11, 24, 0.92)';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.2;
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.roundRect(-boxW / 2, -boxH / 2, boxW, boxH, 6);
+        c.fill();
+        c.stroke();
+
+        // Speech pointer downward
+        c.fillStyle = 'rgba(6, 11, 24, 0.92)';
+        c.beginPath();
+        c.moveTo(-4, boxH / 2);
+        c.lineTo(0, boxH / 2 + 5);
+        c.lineTo(4, boxH / 2);
+        c.fill();
+        c.stroke();
+
+        // Text
+        c.fillStyle = '#00f2fe';
+        c.shadowBlur = 0;
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText(this.emoteText, 0, 0);
+        c.restore();
+      }
     }
 
     drawFace(c) {
@@ -1354,12 +1529,39 @@
       c.lineWidth = 1.8;
 
       if (this.face === 'happy') {
+        // Natural periodic blinking: blinks for ~12 frames every 210 frames (~3.5 seconds)
+        const isBlinking = (this.blinkTimer > 195);
+        if (isBlinking) {
+          // Closed happy blinking curves
+          c.beginPath();
+          c.moveTo(-7, -4); c.lineTo(-4, -6); c.lineTo(-1, -4);
+          c.moveTo(1, -4); c.lineTo(4, -6); c.lineTo(7, -4);
+          c.stroke();
+        } else {
+          // Open glowing cyber eyes with lively pupils & white specular shine
+          const glanceX = Math.sin(this.animTimer * 0.8) * 0.8;
+          c.fillStyle = '#00f2fe';
+          c.shadowColor = '#00f2fe';
+          c.shadowBlur = 8 * this.bladeGlowIntensity;
+          c.beginPath();
+          c.roundRect(-7 + glanceX, -7, 4.5, 6, 2);
+          c.roundRect(2.5 + glanceX, -7, 4.5, 6, 2);
+          c.fill();
+
+          // White specular reflection gleam
+          c.fillStyle = '#ffffff';
+          c.shadowBlur = 4;
+          c.beginPath();
+          c.arc(-4 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
+          c.arc(5.5 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
+          c.fill();
+        }
+
+        // Cheerful cyber smile
+        c.strokeStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
         c.beginPath();
-        c.moveTo(-7, -4); c.lineTo(-4, -7); c.lineTo(-1, -4);
-        c.moveTo(1, -4); c.lineTo(4, -7); c.lineTo(7, -4);
-        c.stroke();
-        c.beginPath();
-        c.arc(0, -2, 3.5, 0.2, Math.PI - 0.2);
+        c.arc(0, -1, 3.2, 0.2, Math.PI - 0.2);
         c.stroke();
       } else if (this.face === 'battle') {
         c.beginPath();
@@ -1856,8 +2058,22 @@
         }
       }
 
-      // 4. Check comet blade collisions when armed
+      // 4. Check comet blade collisions when armed OR deflect when shielded
       if (this.charlie) {
+        if (this.charlie.isShielded) {
+          for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i];
+            const dist = Math.hypot(p.x - this.charlie.x, p.y - this.charlie.y);
+            if (dist < 46 * this.charlie.scale) {
+              this.triggerShatterBurst(p.x, p.y, 10, true);
+              this.particles[i] = this.createParticle(false);
+              if (this.onShatter) {
+                this.onShatter(p.x, p.y, 1);
+              }
+            }
+          }
+        }
+
         const hasBladeEquipped = (this.charlie.state !== 'thinking' && this.charlie.state !== 'writing' && this.charlie.state !== 'waiting');
         if (hasBladeEquipped) {
           const bladeBoxX = this.charlie.x + this.charlie.facing * 22 * this.charlie.scale;
@@ -2338,6 +2554,86 @@
       subOsc.stop(now + 0.95);
     }
 
+    // Spontaneous Personality Sound Effects
+    playJump() {
+      if (this.isMuted) return;
+      this.ensureContext();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+      gain.gain.setValueAtTime(0.22, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      osc.connect(gain);
+      gain.connect(this.sfxGain);
+      osc.start(now);
+      osc.stop(now + 0.24);
+    }
+
+    playBonk() {
+      if (this.isMuted) return;
+      this.ensureContext();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(140, now + 0.16);
+      gain.gain.setValueAtTime(0.32, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+      osc.connect(gain);
+      gain.connect(this.sfxGain);
+      osc.start(now);
+      osc.stop(now + 0.20);
+    }
+
+    playDizzy() {
+      if (this.isMuted) return;
+      this.ensureContext();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(520, now);
+      osc.frequency.linearRampToValueAtTime(420, now + 0.12);
+      osc.frequency.linearRampToValueAtTime(480, now + 0.24);
+      osc.frequency.linearRampToValueAtTime(360, now + 0.38);
+      osc.frequency.linearRampToValueAtTime(260, now + 0.55);
+      gain.gain.setValueAtTime(0.24, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.58);
+      osc.connect(gain);
+      gain.connect(this.sfxGain);
+      osc.start(now);
+      osc.stop(now + 0.60);
+    }
+
+    playFanfare() {
+      if (this.isMuted) return;
+      this.ensureContext();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const chord = [523.25, 659.25, 783.99, 1046.50];
+      chord.forEach((freq, idx) => {
+        const start = now + (idx * 0.07);
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, start);
+        gain.gain.setValueAtTime(0.001, start);
+        gain.gain.linearRampToValueAtTime(0.26, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + (idx === 3 ? 0.45 : 0.15));
+        osc.connect(gain);
+        gain.connect(this.sfxGain);
+        osc.start(start);
+        osc.stop(start + 0.50);
+      });
+    }
+
     // 3. Ambient Cosmic Background Music for Comets Falling
     startBGM() {
       if (this.isPlayingBGM) return;
@@ -2769,6 +3065,7 @@
 
     // 2. Initialize Cosmic Audio Synthesizer Engine
     const soundEngine = new CosmicSoundEngine();
+    window.portfolioSoundEngine = soundEngine;
 
     // Global User Gesture Audio Unlock (Unlocks Web Audio on first click / touch / key)
     const unlockAudio = () => {
@@ -4379,9 +4676,11 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
           <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
           <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
           <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
-          <path d="M11 19 L13 16 L15 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M21 19 L23 16 L25 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M15 22 Q18 25 21 22" stroke="#00f2fe" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+          <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
+          <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+          <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
+          <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
         </svg>
       `;
 

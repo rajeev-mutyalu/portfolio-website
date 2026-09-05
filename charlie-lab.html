@@ -202,24 +202,33 @@
       position: absolute;
       top: 16px;
       left: 16px;
+      right: 16px;
       display: flex;
-      flex-direction: column;
-      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
       pointer-events: none;
       user-select: none;
+      z-index: 10;
     }
     .hud-chip {
       font-family: var(--font-mono);
       font-size: 0.75rem;
       padding: 4px 10px;
       border-radius: 6px;
-      background: rgba(6, 10, 20, 0.8);
+      background: rgba(6, 10, 20, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(8px);
       display: inline-flex;
       align-items: center;
       gap: 6px;
       color: #94a3b8;
+    }
+    .hud-chip.hud-hint-chip {
+      background: rgba(4, 7, 16, 0.85);
+      border-color: rgba(0, 242, 254, 0.35);
+      color: #cbd5e1;
+      margin-left: auto;
     }
     .hud-chip strong {
       color: var(--accent-cyan);
@@ -235,25 +244,6 @@
     @keyframes pulseDot {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.4; transform: scale(0.8); }
-    }
-
-    .stage-hint {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      color: #94a3b8;
-      background: rgba(4, 7, 16, 0.85);
-      border: 1px solid rgba(0, 242, 254, 0.25);
-      padding: 6px 14px;
-      border-radius: 20px;
-      backdrop-filter: blur(8px);
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     /* Quick Action Strip below stage */
@@ -475,10 +465,7 @@
           <div class="hud-chip"><span class="hud-dot"></span> CHARLIE CORE: <strong>ACTIVE</strong></div>
           <div class="hud-chip">MODE: <strong id="hudMode">IDLE BOB</strong></div>
           <div class="hud-chip">SLICED COMETS: <strong id="hudSlices">0</strong></div>
-        </div>
-
-        <div class="stage-hint">
-          <span>💡 Move mouse to direct Charlie &bull; Click to Trigger 3-Hit Blade Slash!</span>
+          <div class="hud-chip hud-hint-chip"><span>💡 Move mouse to direct Charlie &bull; Click to Trigger 3-Hit Blade Slash!</span></div>
         </div>
 
         <canvas id="stageCanvas"></canvas>
@@ -496,7 +483,7 @@
           <button type="button" class="action-btn" id="btnDizzy">😵 Dizzy</button>
           <button type="button" class="action-btn" id="btnThinking">🤔 Thinking</button>
           <button type="button" class="action-btn" id="btnWriting">✍️ Writing Ans</button>
-          <button type="button" class="action-btn" id="btnWaiting">😴 Chat Waiting</button>
+          <button type="button" class="action-btn" id="btnWaiting">🤖 Chat Mascot</button>
           <button type="button" class="action-btn" id="btnVictory">🌟 Victory</button>
         </div>
 
@@ -529,6 +516,9 @@
               <span>📥 Recall to Dock</span>
             </button>
           </div>
+          <button type="button" class="action-btn" id="btnSpontaneousTest" style="width: 100%; justify-content: center; font-size: 0.74rem; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
+            <span>🎲 Test 1-Min Random Move (Jump/Bonk/Dizzy/Victory)</span>
+          </button>
         </div>
         <div id="chatStatusText" style="margin-top: 10px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,242,254,0.08); padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); text-align: center;">
           Status: Ready for testing
@@ -540,7 +530,7 @@
         <h3><span>🎭</span> Visor LED Expressions</h3>
         <div class="face-grid">
           <button type="button" class="face-btn active" data-face="happy">
-            <span class="face-preview">^ ‿ ^</span>
+            <span class="face-preview">[●] ‿ [●]</span>
             <span class="face-tag">Happy</span>
           </button>
           <button type="button" class="face-btn" data-face="battle">
@@ -568,8 +558,8 @@
             <span class="face-tag">Writing</span>
           </button>
           <button type="button" class="face-btn" data-face="waiting">
-            <span class="face-preview">u ‿ u</span>
-            <span class="face-tag">Waiting</span>
+            <span class="face-preview">[●] ‿ [●]</span>
+            <span class="face-tag">Mascot</span>
           </button>
           <button type="button" class="face-btn" data-face="sad">
             <span class="face-preview">T ⤙ T</span>
@@ -763,6 +753,7 @@
         this.state = 'idle'; // idle, walk, run, jump, slash, bonk, dizzy, victory, thinking, writing, waiting, deploying
         this.face = 'happy'; // happy, battle, sprint, shocked, dizzy, sad, victory, wink, thinking, writing, waiting
         this.animTimer = 0;
+        this.blinkTimer = 0;
         this.bonkTimer = 0;
         this.dizzyTimer = 0;
         this.dizzyAngle = 0;
@@ -788,6 +779,14 @@
         this.victoryTimer = 0;
         this.victoryMax = 110;
         this.twirlAngle = 0;
+
+        // Spontaneous Personality Engine (~45s - 75s intervals)
+        this.spontaneousTimer = 0;
+        this.spontaneousNextInterval = Math.floor(2700 + Math.random() * 1800);
+        this.isSpontaneousAction = false;
+        this.isShielded = false;
+        this.emoteText = '';
+        this.emoteTimer = 0;
 
         // Writing Animation Timer
         this.writeTimer = 0;
@@ -933,8 +932,54 @@
       triggerWaiting() {
         this.state = 'waiting';
         this.face = 'waiting';
-        hudMode.textContent = 'CHAT WAITING 😴';
+        hudMode.textContent = 'CHATBOT MASCOT 🤖';
         telState.textContent = 'WAITING';
+      }
+
+      triggerSpontaneousAction() {
+        if (this.state === 'slash' || this.state === 'flash_dash') return;
+        this.isSpontaneousAction = true;
+        const moves = ['jump', 'bonk', 'dizzy', 'victory'];
+        const move = moves[Math.floor(Math.random() * moves.length)];
+
+        if (move === 'jump') {
+          this.state = 'jump';
+          this.jumpTimer = 0;
+          this.jumpLandedSpark = false;
+          this.face = 'wink';
+          this.setEmote('WOOHOO! 🦘', 70);
+          hudMode.textContent = 'SPONTANEOUS: AERIAL FLIP! 🦘';
+        } else if (move === 'bonk') {
+          this.state = 'bonk';
+          this.face = 'shocked';
+          this.bonkTimer = 40;
+          this.vy = -6;
+          this.vx = -this.facing * 4.5;
+          this.isShielded = true;
+          this.setEmote('BONK! 💥', 65);
+          hudMode.textContent = 'SPONTANEOUS: COMET BONK! 💥';
+          addSparks(this.x, this.y - 18 * charlieScale, '#f59e0b', 16);
+        } else if (move === 'dizzy') {
+          this.state = 'dizzy';
+          this.face = 'dizzy';
+          this.dizzyTimer = 75; // ~2.2s
+          this.isShielded = true;
+          this.setEmote('WHOA! 😵', 80);
+          hudMode.textContent = 'SPONTANEOUS: DIZZY WOBBLE! 😵';
+          addSparks(this.x, this.y - 20 * charlieScale, '#f59e0b', 14);
+        } else if (move === 'victory') {
+          this.state = 'victory';
+          this.victoryTimer = 0;
+          this.twirlAngle = 0;
+          this.face = 'victory';
+          this.setEmote('UNSTOPPABLE! 🌟', 85);
+          hudMode.textContent = 'SPONTANEOUS: VICTORY TWIRL! 🌟';
+        }
+      }
+
+      setEmote(text, duration = 75) {
+        this.emoteText = text;
+        this.emoteTimer = duration;
       }
 
       triggerDeployDemo() {
@@ -1026,7 +1071,18 @@
         // Sprint is 1.0x, all other states are smooth 0.5x
         const stateSpeedRate = (this.state === 'run' || this.state === 'flash_dash') ? 1.0 : 0.5;
         this.animTimer += 0.15 * animSpeed * stateSpeedRate;
+        this.blinkTimer = (this.blinkTimer + 1) % 210;
         this.dizzyAngle += 0.08 * animSpeed * stateSpeedRate;
+
+        if (this.emoteTimer > 0) this.emoteTimer--;
+        this.spontaneousTimer++;
+        if (this.spontaneousTimer >= this.spontaneousNextInterval) {
+          if (this.state === 'idle' || this.state === 'walk' || this.state === 'run') {
+            this.triggerSpontaneousAction();
+          }
+          this.spontaneousTimer = 0;
+          this.spontaneousNextInterval = Math.floor(2700 + Math.random() * 1800);
+        }
 
         // 1. Follow Cursor Physics (only active during locomotion/idle, NOT interrupting special actions)
         const isActionLocked = (
@@ -1821,6 +1877,63 @@
         }
 
         c.restore(); // end character root
+
+        // Energy Shield Bubble (during spontaneous bonk / dizzy)
+        if (this.isShielded || (this.isSpontaneousAction && (this.state === 'bonk' || this.state === 'dizzy'))) {
+          c.save();
+          const shieldPulse = Math.sin(this.animTimer * 6.0) * 2.5;
+          const shieldGrad = c.createRadialGradient(this.x, this.y, 10, this.x, this.y, 32 * charlieScale + shieldPulse);
+          shieldGrad.addColorStop(0, 'rgba(0, 242, 254, 0.05)');
+          shieldGrad.addColorStop(0.7, 'rgba(0, 242, 254, 0.22)');
+          shieldGrad.addColorStop(1, 'rgba(0, 242, 254, 0.75)');
+          c.strokeStyle = '#00f2fe';
+          c.lineWidth = 1.8;
+          c.shadowColor = '#00f2fe';
+          c.shadowBlur = 14;
+          c.fillStyle = shieldGrad;
+          c.beginPath();
+          c.arc(this.x, this.y, 30 * charlieScale + shieldPulse, 0, Math.PI * 2);
+          c.fill();
+          c.stroke();
+          c.restore();
+        }
+
+        // Floating Emote Speech Bubble
+        if (this.emoteTimer > 0 && this.emoteText) {
+          c.save();
+          c.translate(this.x, this.y - 44 * charlieScale);
+          const emoteAlpha = Math.min(1.0, this.emoteTimer / 15);
+          c.globalAlpha = emoteAlpha;
+          c.font = 'bold 11px monospace';
+          const textWidth = c.measureText(this.emoteText).width;
+          const padX = 8;
+          const boxW = textWidth + padX * 2;
+          const boxH = 20;
+
+          c.fillStyle = 'rgba(6, 11, 24, 0.92)';
+          c.strokeStyle = '#00f2fe';
+          c.lineWidth = 1.2;
+          c.shadowColor = '#00f2fe';
+          c.shadowBlur = 8;
+          c.beginPath();
+          c.roundRect(-boxW / 2, -boxH / 2, boxW, boxH, 6);
+          c.fill();
+          c.stroke();
+
+          c.beginPath();
+          c.moveTo(-4, boxH / 2);
+          c.lineTo(0, boxH / 2 + 5);
+          c.lineTo(4, boxH / 2);
+          c.fill();
+          c.stroke();
+
+          c.fillStyle = '#00f2fe';
+          c.shadowBlur = 0;
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillText(this.emoteText, 0, 0);
+          c.restore();
+        }
       }
 
       drawLeg(c, hipX, hipY, hipAngle, kneeAngle, isThrusterActive) {
@@ -2120,14 +2233,38 @@
         c.lineWidth = 1.8;
 
         if (this.face === 'happy') {
-          // ^  ^
+          // Natural periodic blinking: blinks for ~12 frames every 210 frames (~3.5 seconds)
+          const isBlinking = (this.blinkTimer > 195);
+          if (isBlinking) {
+            // Closed happy blinking curves
+            c.beginPath();
+            c.moveTo(-7, -4); c.lineTo(-4, -6); c.lineTo(-1, -4);
+            c.moveTo(1, -4); c.lineTo(4, -6); c.lineTo(7, -4);
+            c.stroke();
+          } else {
+            // Open glowing cyber eyes with lively pupils & white specular shine
+            const glanceX = Math.sin(this.animTimer * 0.8) * 0.8;
+            c.fillStyle = '#00f2fe';
+            c.shadowColor = '#00f2fe';
+            c.shadowBlur = 8 * glowMult;
+            c.beginPath();
+            c.roundRect(-7 + glanceX, -7, 4.5, 6, 2);
+            c.roundRect(2.5 + glanceX, -7, 4.5, 6, 2);
+            c.fill();
+
+            // White specular reflection gleam
+            c.fillStyle = '#ffffff';
+            c.shadowBlur = 4;
+            c.beginPath();
+            c.arc(-4 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
+            c.arc(5.5 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
+            c.fill();
+          }
+          // Cheerful cyber smile
+          c.strokeStyle = '#00f2fe';
+          c.shadowColor = '#00f2fe';
           c.beginPath();
-          c.moveTo(-7, -4); c.lineTo(-4, -7); c.lineTo(-1, -4);
-          c.moveTo(1, -4); c.lineTo(4, -7); c.lineTo(7, -4);
-          c.stroke();
-          // Smile
-          c.beginPath();
-          c.arc(0, -2, 3.5, 0.2, Math.PI - 0.2);
+          c.arc(0, -1, 3.2, 0.2, Math.PI - 0.2);
           c.stroke();
         } else if (this.face === 'battle') {
           // Fierce angular eyes: ◣  ◢
@@ -2233,16 +2370,38 @@
           c.arc(8, -6, 1.2, 0, Math.PI * 2);
           c.fill();
         } else if (this.face === 'waiting') {
-          // u  u
+          // Natural periodic blinking: blinks for ~12 frames every 210 frames (~3.5 seconds)
+          const isBlinking = (this.blinkTimer > 195);
+          if (isBlinking) {
+            // Closed happy blinking curves
+            c.beginPath();
+            c.moveTo(-7, -4); c.lineTo(-4, -6); c.lineTo(-1, -4);
+            c.moveTo(1, -4); c.lineTo(4, -6); c.lineTo(7, -4);
+            c.stroke();
+          } else {
+            // Open glowing cyber eyes with lively pupils & white specular shine
+            const glanceX = Math.sin(this.animTimer * 0.8) * 0.8;
+            c.fillStyle = '#00f2fe';
+            c.shadowColor = '#00f2fe';
+            c.shadowBlur = 8 * glowMult;
+            c.beginPath();
+            c.roundRect(-7 + glanceX, -7, 4.5, 6, 2);
+            c.roundRect(2.5 + glanceX, -7, 4.5, 6, 2);
+            c.fill();
+
+            // White specular reflection gleam
+            c.fillStyle = '#ffffff';
+            c.shadowBlur = 4;
+            c.beginPath();
+            c.arc(-4 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
+            c.arc(5.5 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
+            c.fill();
+          }
+          // Cute gentle cyber smile
+          c.strokeStyle = '#00f2fe';
+          c.shadowColor = '#00f2fe';
           c.beginPath();
-          c.arc(-4.5, -4, 2.4, 0, Math.PI);
-          c.stroke();
-          c.beginPath();
-          c.arc(4.5, -4, 2.4, 0, Math.PI);
-          c.stroke();
-          // Gentle calm smile
-          c.beginPath();
-          c.arc(0, -1, 2.8, 0.2, Math.PI - 0.2);
+          c.arc(0, 0, 2.6, 0.2, Math.PI - 0.2);
           c.stroke();
         }
 
@@ -2466,6 +2625,13 @@
       btnRecallDock.addEventListener('click', () => {
         charlie.triggerDockDemo();
         if (chatStatusText) chatStatusText.innerHTML = '📥 <strong>FLASH RETURN!</strong> Dashed to dock &rarr; cursor restored &rarr; Charlie waiting peacefully.';
+      });
+    }
+
+    const btnSpontaneousTest = document.getElementById('btnSpontaneousTest');
+    if (btnSpontaneousTest) {
+      btnSpontaneousTest.addEventListener('click', () => {
+        charlie.triggerSpontaneousAction();
       });
     }
 
