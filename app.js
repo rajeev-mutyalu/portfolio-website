@@ -17,6 +17,73 @@
   'use strict';
 
   // ==========================================================================
+  // Universal Mobile & Rotated Mobile Detection (Portrait & Landscape)
+  // ==========================================================================
+  window.isMobileOrRotatedMobile = function () {
+    // 1. Inside simulator iframe
+    if (window.self !== window.top) return true;
+    if (document.body && (document.body.classList.contains('in-simulator') || document.body.classList.contains('is-mobile-screen'))) return true;
+    // 2. Query param indicator
+    if (window.location.search && window.location.search.includes('sim=1')) return true;
+    // 3. Standard portrait mobile width (<= 768px)
+    if (window.innerWidth <= 768) return true;
+    // 4. Rotated mobile landscape: phone turned sideways has small height (<= 550px) while width > height
+    if (window.innerHeight <= 550 && window.innerWidth > window.innerHeight) return true;
+    // 5. CSS media queries for orientation landscape and mobile dimensions
+    if (window.matchMedia && (
+      window.matchMedia('(max-height: 550px) and (orientation: landscape)').matches ||
+      window.matchMedia('(pointer: coarse) and (max-height: 550px)').matches ||
+      window.matchMedia('(max-device-width: 956px) and (orientation: landscape)').matches
+    )) return true;
+    // 6. Touch phone: minimum dimension <= 500px covers all mobile smartphones (iPhone 16 Pro Max is 440x956)
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+    if (isTouch && Math.min(window.innerWidth, window.innerHeight) <= 500) return true;
+    return false;
+  };
+
+  function updateMobileOrientationState() {
+    const isMob = window.isMobileOrRotatedMobile();
+    if (!document.body) return;
+    if (isMob) {
+      document.body.classList.add('is-mobile-screen');
+      const floatingBtn = document.getElementById('floatingCharlieBtn');
+      if (floatingBtn) floatingBtn.classList.add('hidden');
+      const charlieCanvas = document.getElementById('charlieCanvas');
+      if (charlieCanvas) charlieCanvas.style.display = 'none';
+      const botHud = document.getElementById('botHudWidget');
+      if (botHud) botHud.classList.add('hidden');
+      if (window.portfolioCharlie) {
+        window.portfolioCharlie.x = -1000;
+        window.portfolioCharlie.y = -1000;
+        window.portfolioCharlie.sectionActive = false;
+      }
+      if (window.portfolioEngine && window.portfolioEngine.isEnabled) {
+        window.portfolioEngine.toggleState(false);
+      }
+    } else {
+      document.body.classList.remove('is-mobile-screen');
+      const charlieCanvas = document.getElementById('charlieCanvas');
+      if (charlieCanvas) charlieCanvas.style.display = '';
+    }
+  }
+  window.updateMobileOrientationState = updateMobileOrientationState;
+
+  window.addEventListener('resize', updateMobileOrientationState);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(updateMobileOrientationState, 60);
+    setTimeout(updateMobileOrientationState, 200);
+  });
+  if (window.screen && window.screen.orientation) {
+    try {
+      window.screen.orientation.addEventListener('change', () => {
+        setTimeout(updateMobileOrientationState, 60);
+        setTimeout(updateMobileOrientationState, 200);
+      });
+    } catch (e) {}
+  }
+  document.addEventListener('DOMContentLoaded', updateMobileOrientationState);
+
+  // ==========================================================================
   // 0. Cyber Charlie Character & Combat Engine
   // ==========================================================================
   class CyberCharlie {
@@ -635,7 +702,7 @@
     }
 
     update() {
-      if (window.innerWidth <= 768) return;
+      if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) return;
       // Timing: Sprint Animation Speed = 1.0x, rest all = 0.5x
       const stateSpeedRate = (this.state === 'run' || this.state === 'cyber_dash') ? 1.0 : 0.5;
       this.animTimer += 0.15 * this.animSpeed * stateSpeedRate;
@@ -2173,18 +2240,28 @@
 
     init() {
       if (this.canvas) this.canvas.classList.add('fx-disabled');
-      if (window.innerWidth <= 768) {
+      if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
         this.isEnabled = false;
       } else {
         this.resize();
       }
 
       window.addEventListener('resize', () => {
-        if (window.innerWidth <= 768) {
+        if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
           if (this.isEnabled) this.toggleState(false);
         } else {
           this.resize();
         }
+      });
+
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+          if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
+            if (this.isEnabled) this.toggleState(false);
+          } else {
+            this.resize();
+          }
+        }, 120);
       });
 
       // Mouse Trackers
@@ -2699,7 +2776,8 @@
       if (this.charlieCtx) {
         this.charlieCtx.clearRect(0, 0, this.width, this.height);
       }
-      const shouldDrawCharlie = (window.innerWidth > 768) && this.charlie && (
+      const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+      const shouldDrawCharlie = (!isMob) && this.charlie && (
         this.isEnabled ||
         this.charlie.state === 'cyber_dash' ||
         this.charlie.state === 'escort' ||
@@ -2897,7 +2975,7 @@
     }
 
     drawDockCharlie() {
-      if (window.innerWidth <= 768) return;
+      if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) return;
       if (!this.dockCanvas) {
         this.dockCanvas = document.getElementById('charlieDockCanvas');
         if (this.dockCanvas) {
@@ -3579,8 +3657,8 @@
         });
       }
 
-      // Auto-minimize on mobile & small tablet screens (<= 768px) to prevent blocking content
-      if (window.innerWidth <= 768 && this.hudWidget) {
+      // Auto-minimize on mobile & small tablet screens to prevent blocking content
+      if ((window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) && this.hudWidget) {
         this.hudWidget.classList.add('minimized');
         if (this.minBtn) this.minBtn.innerHTML = '+';
         if (this.avatarBox) {
@@ -3916,7 +3994,7 @@
       const dockCenterX = dockRect.left + dockRect.width / 2;
       const dockCenterY = dockRect.top + dockRect.height / 2;
 
-      if (window.innerWidth <= 768) {
+      if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
         if (forceState === false) {
           if (desktopNoticeToast) desktopNoticeToast.classList.add('hidden');
         } else {
@@ -5029,7 +5107,7 @@ You can download Rajeev's authentic executive portrait directly for event lineup
       const isGameModeOff = /\b(turn\s+off\s+game|game\s+mode\s+off|disable\s+game|stop\s+game|exit\s+game|deactivate\s+game|game\s+off)\b/i.test(q) || q === 'off';
 
       if (isGameModeOn) {
-        if (window.innerWidth <= 768) {
+        if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
           if (typeof window.togglePortfolioGameMode === 'function') {
             window.togglePortfolioGameMode(true);
           }
@@ -5112,7 +5190,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
 
       // 3. Comet FX Preset Live Switching
       if (/\b(solar\s*flare|preset:\s*solar|switch\s*fx\s*to\s*solar)\b/i.test(q) || q === 'solar') {
-        if (window.innerWidth <= 768) {
+        if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
           return {
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
@@ -5144,7 +5222,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
       }
 
       if (/\b(aurora\s*borealis|preset:\s*aurora|switch\s*fx\s*to\s*aurora)\b/i.test(q) || q === 'aurora') {
-        if (window.innerWidth <= 768) {
+        if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
           return {
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
@@ -5176,7 +5254,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
       }
 
       if (/\b(hyper\s*diamond|preset:\s*diamond|switch\s*fx\s*to\s*diamond)\b/i.test(q) || q === 'diamond') {
-        if (window.innerWidth <= 768) {
+        if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
           return {
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
@@ -5208,7 +5286,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
       }
 
       if (/\b(comet\s*cascade|preset:\s*comet|switch\s*fx\s*to\s*comet)\b/i.test(q) || q === 'comet') {
-        if (window.innerWidth <= 768) {
+        if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
           return {
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
@@ -5582,7 +5660,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         `;
 
         // Physical Delivery Synchronization:
-        const isMobile = window.innerWidth <= 768;
+        const isMobile = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
         const textTravelY = !isMobile ? Math.max(65, Math.min(130, Math.round(bottomCenter.y - writeCenter.y))) : 0;
         botMsgDiv.style.animation = 'none';
         botMsgDiv.style.opacity = '1';
@@ -5924,8 +6002,10 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       const terminal = document.querySelector('.ai-bot-terminal') || section;
       if (!section || !terminal) return;
 
+      const isMob = () => (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768));
+
       const deployToSection = () => {
-        if (window.innerWidth <= 768) return; // Completely disabled on mobile
+        if (isMob()) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie) return;
         if (engine.isEnabled) return; // Do not interrupt Game Mode!
@@ -5944,7 +6024,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       };
 
       const returnToDock = () => {
-        if (window.innerWidth <= 768) return; // Completely disabled on mobile
+        if (isMob()) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie) return;
         if (engine.isEnabled) return; // Game Mode controls its own return
@@ -5978,7 +6058,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
       // Keep Charlie deployment in sync on scroll so he never desyncs from chat view
       window.addEventListener('scroll', () => {
-        if (window.innerWidth <= 768) return; // Completely disabled on mobile
+        if (isMob()) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie || engine.isEnabled) return;
         if (engine.charlie.state === 'cyber_dash') return;
@@ -6167,6 +6247,13 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
           e.stopPropagation();
           simState.isLandscape = !simState.isLandscape;
           updateChassisDimensions();
+          if (frame && frame.contentWindow) {
+            try {
+              if (typeof frame.contentWindow.updateMobileOrientationState === 'function') {
+                frame.contentWindow.updateMobileOrientationState();
+              }
+            } catch (err) {}
+          }
         });
       }
 

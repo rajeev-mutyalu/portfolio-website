@@ -487,7 +487,7 @@ body.combat-cursor-active * {
   border-color: #a855f7 !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-height: 550px) and (orientation: landscape), (pointer: coarse) and (max-height: 550px), (max-device-width: 956px) and (orientation: landscape) {
   .floating-charlie-btn,
   #floatingCharlieBtn {
     display: none !important;
@@ -495,6 +495,16 @@ body.combat-cursor-active * {
     pointer-events: none !important;
     opacity: 0 !important;
   }
+}
+
+body.is-mobile-screen .floating-charlie-btn,
+body.is-mobile-screen #floatingCharlieBtn,
+body.in-simulator .floating-charlie-btn,
+body.in-simulator #floatingCharlieBtn {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
 }
 
 .fx-toggle-btn {
@@ -3823,6 +3833,118 @@ body.combat-cursor-active * {
     overflow: hidden !important;
     border: none !important;
   }
+}
+
+/* =========================================================================
+   🚫 Completely Remove Charlie & AI Assistant from Rotated Mobile (Landscape) & Simulator
+   ========================================================================= */
+@media (max-height: 550px) and (orientation: landscape), (pointer: coarse) and (max-height: 550px), (max-device-width: 956px) and (orientation: landscape) {
+  #ai-assistant,
+  section#ai-assistant,
+  .ai-assistant-section,
+  #charlie,
+  .ai-bot-terminal,
+  .mobile-nav-ai,
+  .mobile-nav-link[href="#ai-assistant"],
+  a[href="#ai-assistant"],
+  .nav-ai-link,
+  #charlieCanvas,
+  .floating-charlie-btn,
+  #floatingCharlieBtn,
+  #charlieDockCanvas,
+  .bot-hud-widget,
+  #botHudWidget,
+  .bot-avatar-box,
+  #botAvatarBox,
+  .fx-switch-wrapper,
+  #fxSwitchWrapper,
+  .mobile-desktop-hint,
+  .desktop-notice-toast,
+  #desktopNoticeToast,
+  .fx-widget,
+  #fxWidget,
+  #missionToast,
+  #cometCanvas,
+  .shatter-popup {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
+  }
+}
+
+body.is-mobile-screen #ai-assistant,
+body.is-mobile-screen section#ai-assistant,
+body.is-mobile-screen .ai-assistant-section,
+body.is-mobile-screen #charlie,
+body.is-mobile-screen .ai-bot-terminal,
+body.is-mobile-screen .mobile-nav-ai,
+body.is-mobile-screen .mobile-nav-link[href="#ai-assistant"],
+body.is-mobile-screen a[href="#ai-assistant"],
+body.is-mobile-screen .nav-ai-link,
+body.is-mobile-screen #charlieCanvas,
+body.is-mobile-screen .floating-charlie-btn,
+body.is-mobile-screen #floatingCharlieBtn,
+body.is-mobile-screen #charlieDockCanvas,
+body.is-mobile-screen .bot-hud-widget,
+body.is-mobile-screen #botHudWidget,
+body.is-mobile-screen .bot-avatar-box,
+body.is-mobile-screen #botAvatarBox,
+body.is-mobile-screen .fx-switch-wrapper,
+body.is-mobile-screen #fxSwitchWrapper,
+body.is-mobile-screen .mobile-desktop-hint,
+body.is-mobile-screen .desktop-notice-toast,
+body.is-mobile-screen #desktopNoticeToast,
+body.is-mobile-screen .fx-widget,
+body.is-mobile-screen #fxWidget,
+body.is-mobile-screen #missionToast,
+body.is-mobile-screen #cometCanvas,
+body.is-mobile-screen .shatter-popup,
+body.in-simulator #ai-assistant,
+body.in-simulator section#ai-assistant,
+body.in-simulator .ai-assistant-section,
+body.in-simulator #charlie,
+body.in-simulator .ai-bot-terminal,
+body.in-simulator .mobile-nav-ai,
+body.in-simulator .mobile-nav-link[href="#ai-assistant"],
+body.in-simulator a[href="#ai-assistant"],
+body.in-simulator .nav-ai-link,
+body.in-simulator #charlieCanvas,
+body.in-simulator .floating-charlie-btn,
+body.in-simulator #floatingCharlieBtn,
+body.in-simulator #charlieDockCanvas,
+body.in-simulator .bot-hud-widget,
+body.in-simulator #botHudWidget,
+body.in-simulator .bot-avatar-box,
+body.in-simulator #botAvatarBox,
+body.in-simulator .fx-switch-wrapper,
+body.in-simulator #fxSwitchWrapper,
+body.in-simulator .mobile-desktop-hint,
+body.in-simulator .desktop-notice-toast,
+body.in-simulator #desktopNoticeToast,
+body.in-simulator .fx-widget,
+body.in-simulator #fxWidget,
+body.in-simulator #missionToast,
+body.in-simulator #cometCanvas,
+body.in-simulator .shatter-popup {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: none !important;
 }
 
 /* 4. Extra Small Phones (< 380px) */
