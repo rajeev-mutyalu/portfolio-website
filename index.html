@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=110" />
+  <link rel="stylesheet" href="style.css?v=111" />
 </head>
 
 <body>
@@ -1410,6 +1410,101 @@
     <button type="button" class="mission-toast-close" id="desktopNoticeToastClose" title="Dismiss">&times;</button>
   </div>
 
-  <script src="app.js?v=110"></script>
+  <!-- =========================================================================
+       📱 Interactive Mobile Resolution Simulator & Device Inspector
+       ========================================================================= -->
+  <div class="mobile-sim-overlay hidden" id="mobileSimOverlay" role="dialog" aria-modal="true" aria-label="Mobile Device Simulator">
+    <!-- Top Simulator Control Bar -->
+    <header class="mobile-sim-topbar">
+      <div class="sim-topbar-left">
+        <div class="sim-brand-badge">
+          <span class="sim-brand-icon">📱</span>
+          <span class="sim-brand-title">MOBILE SIMULATOR</span>
+          <span class="sim-live-dim" id="simLiveDim">393 &times; 852 px</span>
+        </div>
+        <div class="sim-preset-group" role="group" aria-label="Device Presets">
+          <button type="button" class="sim-preset-btn active" data-device="iphone" data-w="393" data-h="852" title="iPhone 15/16 Pro (393 &times; 852)">
+            <span>iPhone 15 Pro</span>
+          </button>
+          <button type="button" class="sim-preset-btn" data-device="pixel" data-w="412" data-h="915" title="Google Pixel 8 (412 &times; 915)">
+            <span>Pixel 8</span>
+          </button>
+          <button type="button" class="sim-preset-btn" data-device="compact" data-w="375" data-h="667" title="Compact Phone / iPhone SE (375 &times; 667)">
+            <span>Compact (SE)</span>
+          </button>
+          <button type="button" class="sim-preset-btn" data-device="tablet" data-w="768" data-h="1024" title="iPad Mini / Tablet (768 &times; 1024)">
+            <span>Tablet (768px)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sim-topbar-center">
+        <button type="button" class="sim-control-btn" id="simRotateBtn" title="Rotate Device Orientation">
+          <span class="sim-btn-icon">🔄</span>
+          <span class="sim-btn-label">Rotate</span>
+        </button>
+        <div class="sim-zoom-group">
+          <span class="sim-zoom-label">Zoom:</span>
+          <select id="simZoomSelect" class="sim-zoom-select" aria-label="Simulator Zoom">
+            <option value="auto" selected>Auto Fit</option>
+            <option value="1.0">100%</option>
+            <option value="0.9">90%</option>
+            <option value="0.8">80%</option>
+            <option value="0.7">70%</option>
+          </select>
+        </div>
+        <button type="button" class="sim-control-btn" id="simReloadBtn" title="Reload Simulator Frame">
+          <span class="sim-btn-icon">⟳</span>
+          <span class="sim-btn-label">Reload</span>
+        </button>
+      </div>
+
+      <div class="sim-topbar-right">
+        <div class="sim-devtools-hint" title="Browser DevTools shortcut for native device mode">
+          <span class="sim-hint-icon">💡</span>
+          <span class="sim-hint-text">DevTools: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd></span>
+        </div>
+        <button type="button" class="sim-close-btn" id="simCloseBtn" title="Close Simulator (or press Esc / M)" aria-label="Close Simulator">
+          <span class="sim-close-icon">&times;</span>
+          <span class="sim-close-text">Close <kbd>Esc</kbd></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Simulator Center Stage with Realistic Device Chassis -->
+    <div class="mobile-sim-stage" id="mobileSimStage">
+      <div class="mobile-phone-chassis" id="mobilePhoneChassis" data-device="iphone" data-orientation="portrait">
+        <!-- Chassis Hardware Buttons -->
+        <div class="chassis-button chassis-btn-silent"></div>
+        <div class="chassis-button chassis-btn-vol-up"></div>
+        <div class="chassis-button chassis-btn-vol-down"></div>
+        <div class="chassis-button chassis-btn-power"></div>
+
+        <!-- Bezel & Screen Wrapper -->
+        <div class="phone-screen-wrapper">
+          <!-- Dynamic Island / Top Camera Notch -->
+          <div class="phone-dynamic-island" id="phoneDynamicIsland" title="Dynamic Island">
+            <div class="island-camera-lens"></div>
+            <div class="island-sensor"></div>
+          </div>
+
+          <!-- Live Embedded Web View (Simulates 100% Mobile Viewport) -->
+          <iframe id="mobileSimFrame" class="mobile-sim-frame" title="Mobile Portfolio Preview" src="about:blank"></iframe>
+
+          <!-- Home Indicator Touch Bar -->
+          <div class="phone-home-indicator"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📱 Floating Desktop Shortcut Pill -->
+  <button type="button" class="floating-sim-trigger" id="floatingSimTrigger" title="Preview Mobile Resolution Simulator (Shortcut: 'M')" aria-label="Preview in Mobile View">
+    <span class="floating-sim-icon">📱</span>
+    <span class="floating-sim-text">Mobile View</span>
+    <kbd class="floating-sim-kbd">M</kbd>
+  </button>
+
+  <script src="app.js?v=111"></script>
 </body>
 </html>

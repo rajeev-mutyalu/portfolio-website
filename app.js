@@ -5237,6 +5237,30 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
         };
       }
 
+      // 3e. Mobile Resolution Simulator Command
+      if (/\b(mobile\s*sim(ulator)?|mobile\s*view|phone\s*mode|mobile\s*resolution|responsive\s*view)\b/i.test(q)) {
+        setTimeout(() => {
+          if (typeof window.toggleMobileSimulator === 'function') {
+            window.toggleMobileSimulator();
+          }
+        }, 900);
+        return {
+          id: 'mobile_simulator',
+          title: 'Mobile Resolution Simulator Online',
+          response: `📱 <strong>MOBILE RESOLUTION SIMULATOR ACTIVATED</strong><br/><br/>
+• <strong>Instant Shortcut:</strong> Press <kbd style="background:rgba(0,242,254,0.15);border:1px solid #00f2fe;border-radius:4px;padding:2px 6px;color:#00f2fe;font-family:monospace;">M</kbd> anytime on desktop to toggle the simulator.<br/>
+• <strong>Device Presets:</strong> Test in <strong>iPhone 15 Pro</strong> (393&times;852), <strong>Pixel 8</strong> (412&times;915), <strong>Compact SE</strong> (375&times;667), and <strong>Tablet</strong> (768&times;1024).<br/>
+• <strong>Orientation:</strong> Click the <strong>🔄 Rotate</strong> button to test landscape view.<br/>
+• <strong>Browser DevTools:</strong> Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>M</kbd> (Mac) for browser native responsive design mode.<br/><br/>
+<em>Launching the simulator now in your browser! Press <kbd>Esc</kbd> or <kbd>M</kbd> to exit anytime.</em>`,
+          followups: getDynamicFollowups([
+            'Who is Rajeev Mutyalu and why should we hire him?',
+            'Tell me about your AI certifications, accelerator credentials, and hackathons',
+            'Explain your OpenUSD VFX pipeline architecture'
+          ], 3)
+        };
+      }
+
       // 4. Resilient "Who is Rajeev / Why hire him" Check
       if (/\b(rajeev|muthyalu|mutyalu|who\s+(is|si)\s+rajeev|who\s+(is|si)|why\s+hire|hire\s+him|hire\s+rajeev|about\s+rajeev)\b/i.test(q) || q === 'rajeev' || q === 'why hire') {
         const whyHireItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'why_hire_rajeev');
@@ -5953,6 +5977,235 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
     }
 
     setupCharlieSectionObserver();
+
+    // =========================================================================
+    // 9. Interactive Mobile Resolution Simulator (Shortcut: 'M')
+    // =========================================================================
+    function setupMobileSimulator() {
+      // Prevent recursive simulator setup if currently inside simulator iframe
+      if (window.self !== window.top) {
+        document.body.classList.add('in-simulator');
+        const trigger = document.getElementById('floatingSimTrigger');
+        if (trigger) trigger.remove();
+        const overlay = document.getElementById('mobileSimOverlay');
+        if (overlay) overlay.remove();
+        return;
+      }
+
+      const overlay = document.getElementById('mobileSimOverlay');
+      const stage = document.getElementById('mobileSimStage');
+      const chassis = document.getElementById('mobilePhoneChassis');
+      const frame = document.getElementById('mobileSimFrame');
+      const closeBtn = document.getElementById('simCloseBtn');
+      const rotateBtn = document.getElementById('simRotateBtn');
+      const reloadBtn = document.getElementById('simReloadBtn');
+      const zoomSelect = document.getElementById('simZoomSelect');
+      const liveDim = document.getElementById('simLiveDim');
+      const floatingTrigger = document.getElementById('floatingSimTrigger');
+      const presetBtns = document.querySelectorAll('.sim-preset-btn');
+
+      if (!overlay || !chassis || !frame) return;
+
+      const DEVICE_PRESETS = {
+        iphone: { name: 'iPhone 15 Pro', width: 393, height: 852, radius: '54px' },
+        pixel: { name: 'Pixel 8', width: 412, height: 915, radius: '50px' },
+        compact: { name: 'Compact (SE)', width: 375, height: 667, radius: '44px' },
+        tablet: { name: 'Tablet (768px)', width: 768, height: 1024, radius: '36px' }
+      };
+
+      const simState = {
+        isOpen: false,
+        device: 'iphone',
+        isLandscape: false,
+        zoom: 'auto',
+        hasLoadedOnce: false
+      };
+
+      function updateChassisDimensions() {
+        const preset = DEVICE_PRESETS[simState.device] || DEVICE_PRESETS.iphone;
+        const w = simState.isLandscape ? preset.height : preset.width;
+        const h = simState.isLandscape ? preset.width : preset.height;
+
+        chassis.style.width = `${w}px`;
+        chassis.style.height = `${h}px`;
+        chassis.style.borderRadius = preset.radius;
+        chassis.setAttribute('data-device', simState.device);
+        chassis.setAttribute('data-orientation', simState.isLandscape ? 'landscape' : 'portrait');
+
+        if (liveDim) {
+          liveDim.innerHTML = `${w} &times; ${h} px (${simState.isLandscape ? 'Landscape' : 'Portrait'})`;
+        }
+
+        updateChassisScale();
+      }
+
+      function updateChassisScale() {
+        if (!chassis || !stage) return;
+
+        if (simState.zoom !== 'auto') {
+          const val = parseFloat(simState.zoom);
+          chassis.style.transform = `scale(${val})`;
+          return;
+        }
+
+        // Auto-fit calculation
+        const stageW = stage.clientWidth - 48;
+        const stageH = stage.clientHeight - 48;
+        const chassisW = chassis.offsetWidth;
+        const chassisH = chassis.offsetHeight;
+
+        if (stageW > 0 && stageH > 0 && chassisW > 0 && chassisH > 0) {
+          const scaleX = stageW / chassisW;
+          const scaleY = stageH / chassisH;
+          const fitScale = Math.min(scaleX, scaleY, 1.0);
+          chassis.style.transform = `scale(${fitScale.toFixed(3)})`;
+        } else {
+          chassis.style.transform = 'scale(1)';
+        }
+      }
+
+      function openSimulator() {
+        simState.isOpen = true;
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        // Load iframe if not loaded yet
+        if (!simState.hasLoadedOnce || frame.getAttribute('src') === 'about:blank') {
+          const currentUrl = window.location.pathname.endsWith('index.html') ? 'index.html' : './';
+          frame.src = `${currentUrl}?sim=1&v=${Date.now()}`;
+          simState.hasLoadedOnce = true;
+        }
+
+        updateChassisDimensions();
+
+        // Recalculate scale after display transition
+        setTimeout(updateChassisScale, 60);
+        setTimeout(updateChassisScale, 200);
+      }
+
+      function closeSimulator() {
+        simState.isOpen = false;
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
+      function toggleSimulator() {
+        if (simState.isOpen) {
+          closeSimulator();
+        } else {
+          openSimulator();
+        }
+      }
+
+      // Preset selection
+      presetBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const devKey = btn.getAttribute('data-device');
+          if (DEVICE_PRESETS[devKey]) {
+            simState.device = devKey;
+            presetBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateChassisDimensions();
+          }
+        });
+      });
+
+      // Orientation rotation
+      if (rotateBtn) {
+        rotateBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          simState.isLandscape = !simState.isLandscape;
+          updateChassisDimensions();
+        });
+      }
+
+      // Zoom selector
+      if (zoomSelect) {
+        zoomSelect.addEventListener('change', (e) => {
+          simState.zoom = e.target.value;
+          updateChassisScale();
+        });
+      }
+
+      // Reload frame
+      if (reloadBtn) {
+        reloadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (frame) {
+            try {
+              frame.contentWindow.location.reload();
+            } catch (err) {
+              frame.src = frame.src;
+            }
+          }
+        });
+      }
+
+      // Close button
+      if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeSimulator();
+        });
+      }
+
+      // Backdrop click on stage closes simulator
+      if (stage) {
+        stage.addEventListener('click', (e) => {
+          if (e.target === stage) {
+            closeSimulator();
+          }
+        });
+      }
+
+      // Floating trigger button
+      if (floatingTrigger) {
+        floatingTrigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleSimulator();
+        });
+      }
+
+      // Window resize handler
+      window.addEventListener('resize', () => {
+        if (simState.isOpen) {
+          updateChassisScale();
+        }
+      }, { passive: true });
+
+      // Keyboard shortcut handler: 'M' or 'm' toggles; 'Escape' closes
+      window.addEventListener('keydown', (e) => {
+        // Guard: Ignore if user is typing in an input, textarea, select, or editable element
+        const activeEl = document.activeElement;
+        const isInput = activeEl && (
+          activeEl.tagName === 'INPUT' ||
+          activeEl.tagName === 'TEXTAREA' ||
+          activeEl.tagName === 'SELECT' ||
+          activeEl.isContentEditable
+        );
+
+        if (e.key === 'Escape') {
+          if (simState.isOpen) {
+            e.preventDefault();
+            closeSimulator();
+          }
+          return;
+        }
+
+        // Check for M key (either plain 'm'/'M' or 'Alt+M')
+        if ((e.key === 'm' || e.key === 'M') && !e.ctrlKey && !e.metaKey) {
+          if (!isInput) {
+            e.preventDefault();
+            toggleSimulator();
+          }
+        }
+      });
+
+      window.toggleMobileSimulator = toggleSimulator;
+    }
+
+    setupMobileSimulator();
   }
 
   if (document.readyState === 'loading') {

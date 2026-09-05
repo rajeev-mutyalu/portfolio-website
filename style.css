@@ -6293,3 +6293,449 @@ body.cv-theme-light .cv-edu-year {
     visibility: hidden !important;
   }
 }
+
+/* ==========================================================================
+   📱 Interactive Mobile Resolution Simulator & Device Inspector
+   ========================================================================== */
+
+/* Hide simulator elements when viewed inside an iframe */
+body.in-simulator #mobileSimOverlay,
+body.in-simulator #floatingSimTrigger {
+  display: none !important;
+}
+
+/* Floating Desktop Shortcut Trigger Pill */
+.floating-sim-trigger {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9990;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 18px;
+  background: rgba(10, 16, 30, 0.90);
+  border: 1px solid rgba(0, 242, 254, 0.35);
+  border-radius: 999px;
+  color: #f8fafc;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 242, 254, 0.15);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.floating-sim-trigger:hover {
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.95);
+  border-color: #00f2fe;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 242, 254, 0.35);
+}
+
+.floating-sim-trigger:active {
+  transform: translateY(0);
+}
+
+.floating-sim-icon {
+  font-size: 1.05rem;
+}
+
+.floating-sim-text {
+  letter-spacing: 0.02em;
+}
+
+.floating-sim-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 5px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #00f2fe;
+  background: rgba(0, 242, 254, 0.12);
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+@media screen and (max-width: 768px) {
+  .floating-sim-trigger {
+    display: none !important;
+  }
+}
+
+/* Fullscreen Simulator Overlay */
+.mobile-sim-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  background: rgba(4, 7, 15, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.mobile-sim-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Top Simulator Control Bar */
+.mobile-sim-topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 24px;
+  background: rgba(10, 16, 30, 0.96);
+  border-bottom: 1px solid rgba(0, 242, 254, 0.25);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+  z-index: 20;
+}
+
+.sim-topbar-left,
+.sim-topbar-center,
+.sim-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sim-brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  border-radius: 8px;
+}
+
+.sim-brand-icon {
+  font-size: 1.1rem;
+}
+
+.sim-brand-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: #f8fafc;
+}
+
+.sim-live-dim {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #00f2fe;
+  background: rgba(0, 242, 254, 0.15);
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.sim-preset-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sim-preset-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.sim-preset-btn:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sim-preset-btn.active {
+  color: #00f2fe;
+  background: rgba(0, 242, 254, 0.12);
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.2);
+}
+
+.sim-control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sim-control-btn:hover {
+  color: #00f2fe;
+  border-color: rgba(0, 242, 254, 0.5);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 0 14px rgba(0, 242, 254, 0.2);
+}
+
+.sim-zoom-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 4px 10px;
+}
+
+.sim-zoom-label {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.sim-zoom-select {
+  background: transparent;
+  border: none;
+  color: #00f2fe;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.sim-zoom-select option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.sim-devtools-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.sim-devtools-hint kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #f8fafc;
+}
+
+.sim-close-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sim-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.35);
+}
+
+.sim-close-btn kbd {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #ffffff;
+}
+
+/* Center Stage */
+.mobile-sim-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 24px;
+  position: relative;
+}
+
+/* Photorealistic Phone Chassis */
+.mobile-phone-chassis {
+  position: relative;
+  background: #080c14;
+  border: 12px solid #1e293b;
+  border-radius: 54px;
+  box-shadow: 
+    0 0 0 2px rgba(255, 255, 255, 0.12),
+    0 25px 70px rgba(0, 0, 0, 0.9),
+    0 0 60px rgba(0, 242, 254, 0.15);
+  display: flex;
+  flex-direction: column;
+  transform-origin: center center;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s ease;
+}
+
+/* Chassis Side Hardware Buttons */
+.chassis-button {
+  position: absolute;
+  background: #334155;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Left Side Buttons (Mute, Vol Up, Vol Down) */
+.mobile-phone-chassis[data-orientation="portrait"] .chassis-btn-silent {
+  left: -15px;
+  top: 110px;
+  width: 3px;
+  height: 26px;
+}
+
+.mobile-phone-chassis[data-orientation="portrait"] .chassis-btn-vol-up {
+  left: -15px;
+  top: 155px;
+  width: 3px;
+  height: 48px;
+}
+
+.mobile-phone-chassis[data-orientation="portrait"] .chassis-btn-vol-down {
+  left: -15px;
+  top: 215px;
+  width: 3px;
+  height: 48px;
+}
+
+/* Right Side Button (Power) */
+.mobile-phone-chassis[data-orientation="portrait"] .chassis-btn-power {
+  right: -15px;
+  top: 160px;
+  width: 3px;
+  height: 68px;
+}
+
+/* Screen Wrapper */
+.phone-screen-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 42px;
+  overflow: hidden;
+  background: #06080e;
+}
+
+/* Dynamic Island */
+.phone-dynamic-island {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 115px;
+  height: 28px;
+  background: #000000;
+  border-radius: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.island-camera-lens {
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle at 35% 35%, #1e3a8a, #020617);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.island-sensor {
+  width: 6px;
+  height: 6px;
+  background: #09090b;
+  border-radius: 50%;
+}
+
+/* Landscape adjustment for Dynamic Island */
+.mobile-phone-chassis[data-orientation="landscape"] .phone-dynamic-island {
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%) rotate(90deg);
+}
+
+/* Home Indicator */
+.phone-home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 135px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  z-index: 10;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.mobile-phone-chassis[data-orientation="landscape"] .phone-home-indicator {
+  bottom: 6px;
+  width: 170px;
+}
+
+/* Embedded Simulator Iframe */
+.mobile-sim-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: #06080e;
+}
