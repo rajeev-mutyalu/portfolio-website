@@ -5408,8 +5408,13 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
     }
 
     let isGeneratingResponse = false;
+    let chatGeneratingFailsafeTimeout = null;
 
     function setChatGeneratingLock(isLocked) {
+      if (chatGeneratingFailsafeTimeout) {
+        clearTimeout(chatGeneratingFailsafeTimeout);
+        chatGeneratingFailsafeTimeout = null;
+      }
       isGeneratingResponse = !!isLocked;
       const terminal = document.querySelector('.ai-bot-terminal');
       if (terminal) {
@@ -5434,6 +5439,14 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         btn.disabled = isGeneratingResponse;
         btn.setAttribute('aria-disabled', isGeneratingResponse ? 'true' : 'false');
       });
+
+      // Safety failsafe: automatically unlock after 8 seconds under all circumstances
+      if (isGeneratingResponse) {
+        chatGeneratingFailsafeTimeout = setTimeout(() => {
+          setChatGeneratingLock(false);
+          setCharlieThinkingState(false);
+        }, 8000);
+      }
     }
 
     function setCharlieThinkingState(isThinking) {
@@ -5570,11 +5583,11 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
         // Physical Delivery Synchronization:
         const isMobile = window.innerWidth <= 768;
+        const textTravelY = !isMobile ? Math.max(65, Math.min(130, Math.round(bottomCenter.y - writeCenter.y))) : 0;
         botMsgDiv.style.animation = 'none';
         botMsgDiv.style.opacity = '1';
 
         if (!isMobile) {
-          const textTravelY = Math.max(65, Math.min(130, Math.round(bottomCenter.y - writeCenter.y)));
           botMsgDiv.style.willChange = 'transform';
           botMsgDiv.style.transform = `translateY(${textTravelY}px)`;
         } else {
