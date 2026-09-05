@@ -1123,8 +1123,8 @@
         this.deployTargetX = targetX;
         this.deployTargetY = targetY;
         this.facing = this.deployTargetX >= this.x ? 1 : -1;
-        hudMode.textContent = '⚡ CYBER DASH TO CHAT CENTER!';
-        telState.textContent = 'WRITE DASH';
+        hudMode.textContent = '⚡ CYBER DASH TO BOTTOM-CENTER!';
+        telState.textContent = 'BOTTOM DASH';
         addSparks(this.x, this.y, '#00f2fe', 24);
       }
 
@@ -2818,48 +2818,58 @@
 
           charlie.triggerWriteDashDemo(bottomX, bottomY);
 
-          const responseFull = '⚡ CYBER CHARLIE WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"';
-          let charIdx = 0;
-          
-          chatTypeInterval = setInterval(() => {
-            if (charIdx < responseFull.length) {
-              if (chatStatusText) {
-                chatStatusText.innerHTML = `✍️ <span style="color:#00f2fe;">${responseFull.substring(0, charIdx + 1)}</span><span style="color:#fff;">|</span>`;
-              }
-              charIdx += 2; // fast 2 chars per tick!
+          // Allow ~240ms for Charlie to complete dash to bottom-center before text begins streaming!
+          setTimeout(() => {
+            charlie.state = 'writing';
+            charlie.face = 'writing';
+            charlie.x = bottomX;
+            charlie.y = bottomY;
+            charlie.facing = 1;
+            addSparks(bottomX, bottomY, '#00f2fe', 16);
+            hudMode.textContent = '⚡ WRITING & ASCENDING TO CENTER!';
+            telState.textContent = 'WRITING';
 
-              // Triangular ascent along with text from Bottom-Center to Center!
-              const progress = charIdx / responseFull.length;
-              if (charlie.state === 'writing' || charlie.state === 'cyber_dash') {
-                charlie.x = bottomX + (centerX - bottomX) * progress;
-                charlie.y = bottomY + (centerY - bottomY) * progress;
-                if (charlie.state === 'cyber_dash' && progress > 0.08) {
-                  charlie.state = 'writing';
-                  charlie.face = 'writing';
+            const responseFull = '⚡ CYBER CHARLIE WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"';
+            let charIdx = 0;
+            
+            chatTypeInterval = setInterval(() => {
+              if (charIdx < responseFull.length) {
+                if (chatStatusText) {
+                  chatStatusText.innerHTML = `✍️ <span style="color:#00f2fe;">${responseFull.substring(0, charIdx + 1)}</span><span style="color:#fff;">|</span>`;
                 }
-              }
+                charIdx += 2; // fast 2 chars per tick!
 
-              // Stylus burst sparks
-              if (Math.random() > 0.3) {
-                const stylusTipX = charlie.x + charlie.facing * 14 * charlieScale;
-                const stylusTipY = charlie.y - 2 * charlieScale;
-                addSparks(stylusTipX, stylusTipY, '#00f2fe', 2);
+                // Triangular ascent along with text from Bottom-Center to Center!
+                const progress = charIdx / responseFull.length;
+                if (charlie.state === 'writing') {
+                  charlie.x = bottomX + (centerX - bottomX) * progress;
+                  charlie.y = bottomY + (centerY - bottomY) * progress;
+                }
+
+                // Stylus burst sparks
+                if (Math.random() > 0.3) {
+                  const stylusTipX = charlie.x + charlie.facing * 14 * charlieScale;
+                  const stylusTipY = charlie.y - 2 * charlieScale;
+                  addSparks(stylusTipX, stylusTipY, '#00f2fe', 2);
+                }
+              } else {
+                clearInterval(chatTypeInterval);
+                chatTypeInterval = null;
+                if (chatStatusText) {
+                  chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                }
+                charlie.x = centerX;
+                charlie.y = centerY;
+                hudMode.textContent = '🌟 VICTORY CELEBRATION!';
+                telState.textContent = 'VICTORY';
+                charlie.triggerVictory();
+                setTimeout(() => {
+                  // Supersonic return dash to mascot anchor (completing the triangle)!
+                  charlie.triggerReturnDashDemo();
+                }, 1200);
               }
-            } else {
-              clearInterval(chatTypeInterval);
-              chatTypeInterval = null;
-              if (chatStatusText) {
-                chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
-              }
-              charlie.x = centerX;
-              charlie.y = centerY;
-              charlie.triggerVictory();
-              setTimeout(() => {
-                // Supersonic return dash to mascot anchor (completing the triangle)!
-                charlie.triggerReturnDashDemo();
-              }, 1200);
-            }
-          }, 18); // 18ms per 2 chars = ~9ms per char
+            }, 18); // 18ms per 2 chars = ~9ms per char
+          }, 240);
         }, 1200);
       });
     }

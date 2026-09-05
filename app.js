@@ -455,6 +455,7 @@
 
     getChatBottomCenter() {
       const streamEl = document.getElementById('aiChatStream');
+      const formEl = document.getElementById('aiChatForm');
       const terminalEl = document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
       const navbarEl = document.querySelector('.navbar');
       const navBottom = (navbarEl ? navbarEl.getBoundingClientRect().bottom : 70);
@@ -463,8 +464,17 @@
       if (targetEl) {
         const sRect = targetEl.getBoundingClientRect();
         const centerX = Math.max(60, Math.min(window.innerWidth - 60, sRect.left + sRect.width / 2));
-        // A few pixels above the bottom boundary / chat input bar
-        const bottomY = Math.max(navBottom + 60, Math.min(window.innerHeight - 55, sRect.bottom - 45));
+        // Position Charlie hovering a few pixels above the input bar at bottom-center
+        let bottomY;
+        if (formEl) {
+          const fRect = formEl.getBoundingClientRect();
+          // Charlie's feet extend downward from center by ~22*scale. To hover ~8px above the input bar:
+          bottomY = fRect.top - (30 * this.scale);
+        } else {
+          bottomY = sRect.bottom - (42 * this.scale);
+        }
+        // Clamp so Charlie stays safely inside visible viewport
+        bottomY = Math.max(navBottom + 60, Math.min(window.innerHeight - 55, bottomY));
         const isVisible = (sRect.bottom > navBottom + 50 && sRect.top < window.innerHeight - 50);
         return { x: centerX, y: bottomY, isVisible };
       }
@@ -584,8 +594,9 @@
       this.updateSparks();
 
       // 1. Terminal Anchor Tracking (When stationed as Meet Charlie section mascot AND Game Mode is strictly OFF)
-      if (!window.portfolioEngine?.isEnabled && this.sectionActive && this.state !== 'cyber_dash') {
-        const isCenteredMode = (this.state === 'writing' || this.state === 'victory');
+      // Note: Writing state trajectory is independently interpolated along the triangular path from bottom-center to screen-center
+      if (!window.portfolioEngine?.isEnabled && this.sectionActive && this.state !== 'cyber_dash' && this.state !== 'writing') {
+        const isCenteredMode = (this.state === 'victory');
         const anchor = isCenteredMode ? this.getChatWritingCenter() : this.getChatMascotAnchor();
         if (anchor.isVisible) {
           this.targetX = anchor.x;
@@ -5077,7 +5088,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         }
         if (aiBotStatusPill) {
           const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-          if (text) text.textContent = 'CHARLIE WRITING ANS [CYBER SPEED]...';
+          if (text) text.textContent = 'CHARLIE DASHING TO CHAT...';
         }
 
         const botMsgDiv = document.createElement('div');
@@ -5120,79 +5131,94 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         const contentEl = botMsgDiv.querySelector('.ai-msg-content');
         const fullResponse = match.response;
 
-        // Supersonic Cyber Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus!
-        let charIndex = 0;
-        const chunkSize = 18;
-        const tickInterval = 12;
-
-        const typeInterval = setInterval(() => {
-          charIndex = Math.min(fullResponse.length, charIndex + chunkSize);
-          contentEl.innerHTML = fullResponse.substring(0, charIndex) + (charIndex < fullResponse.length ? '<span class="typewriter-cursor">⚡</span>' : '');
-          scrollStreamToBottom();
-
-          // Triangular Motion: Ascend along with the text from Bottom-Center to Screen-Center!
-          const progress = Math.min(1.0, charIndex / fullResponse.length);
-          if (window.portfolioCharlie && (window.portfolioCharlie.state === 'writing' || window.portfolioCharlie.state === 'cyber_dash')) {
-            const currentX = bottomCenter.x + (writeCenter.x - bottomCenter.x) * progress;
-            const currentY = bottomCenter.y + (writeCenter.y - bottomCenter.y) * progress;
-            window.portfolioCharlie.x = currentX;
-            window.portfolioCharlie.y = currentY;
-            window.portfolioCharlie.targetX = currentX;
-            window.portfolioCharlie.targetY = currentY;
-            if (window.portfolioCharlie.state === 'cyber_dash' && progress > 0.08) {
-              window.portfolioCharlie.state = 'writing';
-              window.portfolioCharlie.face = 'writing';
-            }
-            if (Math.random() > 0.25) {
-              const stylusTipX = currentX + window.portfolioCharlie.facing * 14 * window.portfolioCharlie.scale;
-              const stylusTipY = currentY - 2 * window.portfolioCharlie.scale;
-              window.portfolioCharlie.addSparks(stylusTipX, stylusTipY, '#00f2fe', 2);
-            }
+        // Allow Charlie ~240ms to complete his supersonic dash to Bottom-Center before writing & text streaming begins!
+        setTimeout(() => {
+          if (aiBotStatusPill) {
+            const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+            if (text) text.textContent = 'CHARLIE WRITING ANS [CYBER SPEED]...';
+          }
+          if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+            window.portfolioCharlie.state = 'writing';
+            window.portfolioCharlie.face = 'writing';
+            window.portfolioCharlie.x = bottomCenter.x;
+            window.portfolioCharlie.y = bottomCenter.y;
+            window.portfolioCharlie.targetX = bottomCenter.x;
+            window.portfolioCharlie.targetY = bottomCenter.y;
+            window.portfolioCharlie.facing = 1;
+            window.portfolioCharlie.addSparks(bottomCenter.x, bottomCenter.y, '#00f2fe', 16);
           }
 
-          if (charIndex >= fullResponse.length) {
-            clearInterval(typeInterval);
-            contentEl.innerHTML = fullResponse;
+          // Supersonic Cyber Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus!
+          let charIndex = 0;
+          const chunkSize = 18;
+          const tickInterval = 12;
 
-            if (followupsHtml) {
-              const followContainer = document.createElement('div');
-              followContainer.innerHTML = followupsHtml;
-              botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
-            }
-
-            setCharlieThinkingState(false);
-            if (aiBotStatusPill) {
-              const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-              if (text) text.textContent = 'ANS COMPLETE ✨';
-            }
-
-            // Charlie reaches center of screen: trigger victory celebration, then return dash back to mascot anchor!
-            if (window.portfolioCharlie) {
-              window.portfolioCharlie.x = writeCenter.x;
-              window.portfolioCharlie.y = writeCenter.y;
-              window.portfolioCharlie.targetX = writeCenter.x;
-              window.portfolioCharlie.targetY = writeCenter.y;
-              window.portfolioCharlie.triggerVictory();
-              if (window.portfolioDockCharlie) {
-                window.portfolioDockCharlie.triggerVictory();
-              }
-              setTimeout(() => {
-                if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-                  const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
-                  window.portfolioCharlie.triggerReturnDash(window.portfolioCharlie.x, window.portfolioCharlie.y, homeAnchor.x, homeAnchor.y);
-                }
-                if (window.portfolioDockCharlie) {
-                  window.portfolioDockCharlie.triggerWaiting();
-                }
-                if (aiBotStatusPill) {
-                  const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                  if (text) text.textContent = 'LOCAL KB READY';
-                }
-              }, 1100);
-            }
+          const typeInterval = setInterval(() => {
+            charIndex = Math.min(fullResponse.length, charIndex + chunkSize);
+            contentEl.innerHTML = fullResponse.substring(0, charIndex) + (charIndex < fullResponse.length ? '<span class="typewriter-cursor">⚡</span>' : '');
             scrollStreamToBottom();
-          }
-        }, tickInterval);
+
+            // Triangular Motion: Ascend along with the text from Bottom-Center to Screen-Center!
+            const progress = Math.min(1.0, charIndex / fullResponse.length);
+            if (window.portfolioCharlie && (window.portfolioCharlie.state === 'writing')) {
+              const currentX = bottomCenter.x + (writeCenter.x - bottomCenter.x) * progress;
+              const currentY = bottomCenter.y + (writeCenter.y - bottomCenter.y) * progress;
+              window.portfolioCharlie.x = currentX;
+              window.portfolioCharlie.y = currentY;
+              window.portfolioCharlie.targetX = currentX;
+              window.portfolioCharlie.targetY = currentY;
+
+              if (Math.random() > 0.25) {
+                const stylusTipX = currentX + window.portfolioCharlie.facing * 14 * window.portfolioCharlie.scale;
+                const stylusTipY = currentY - 2 * window.portfolioCharlie.scale;
+                window.portfolioCharlie.addSparks(stylusTipX, stylusTipY, '#00f2fe', 2);
+              }
+            }
+
+            if (charIndex >= fullResponse.length) {
+              clearInterval(typeInterval);
+              contentEl.innerHTML = fullResponse;
+
+              if (followupsHtml) {
+                const followContainer = document.createElement('div');
+                followContainer.innerHTML = followupsHtml;
+                botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
+              }
+
+              setCharlieThinkingState(false);
+              if (aiBotStatusPill) {
+                const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+                if (text) text.textContent = 'ANS COMPLETE ✨';
+              }
+
+              // Charlie reaches center of screen: trigger victory celebration, then return dash back to mascot anchor!
+              if (window.portfolioCharlie) {
+                window.portfolioCharlie.x = writeCenter.x;
+                window.portfolioCharlie.y = writeCenter.y;
+                window.portfolioCharlie.targetX = writeCenter.x;
+                window.portfolioCharlie.targetY = writeCenter.y;
+                window.portfolioCharlie.triggerVictory();
+                if (window.portfolioDockCharlie) {
+                  window.portfolioDockCharlie.triggerVictory();
+                }
+                setTimeout(() => {
+                  if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+                    const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
+                    window.portfolioCharlie.triggerReturnDash(window.portfolioCharlie.x, window.portfolioCharlie.y, homeAnchor.x, homeAnchor.y);
+                  }
+                  if (window.portfolioDockCharlie) {
+                    window.portfolioDockCharlie.triggerWaiting();
+                  }
+                  if (aiBotStatusPill) {
+                    const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+                    if (text) text.textContent = 'LOCAL KB READY';
+                  }
+                }, 1100);
+              }
+              scrollStreamToBottom();
+            }
+          }, tickInterval);
+        }, 240);
       }, thinkingDelay);
     }
 
