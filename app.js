@@ -5731,39 +5731,23 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                       scrollStreamToBottom();
                     }
 
-                    // Trigger Victory Celebration!
-                    if (window.portfolioCharlie) {
-                      window.portfolioCharlie.x = endX;
-                      window.portfolioCharlie.y = endY;
-                      window.portfolioCharlie.targetX = endX;
-                      window.portfolioCharlie.targetY = endY;
-                      window.portfolioCharlie.triggerVictory();
-                    }
-                    if (window.portfolioDockCharlie) {
-                      window.portfolioDockCharlie.triggerVictory();
-                    }
-
                     setCharlieThinkingState(false);
                     if (aiBotStatusPill) {
                       const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                      if (text) text.textContent = 'ANS COMPLETE ✨';
+                      if (text) text.textContent = 'LOCAL KB READY';
                     }
 
-                    setTimeout(() => {
-                      if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-                        const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
-                        window.portfolioCharlie.triggerReturnDash(window.portfolioCharlie.x, window.portfolioCharlie.y, homeAnchor.x, homeAnchor.y);
-                      }
-                      if (window.portfolioDockCharlie) {
-                        window.portfolioDockCharlie.triggerWaiting();
-                      }
-                      if (aiBotStatusPill) {
-                        const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                        if (text) text.textContent = 'LOCAL KB READY';
-                      }
-                      // Re-enable selecting questions and inputs once return dash completes!
-                      setChatGeneratingLock(false);
-                    }, 1100);
+                    // Immediate return dash to Point A (mascot anchor) without victory delay
+                    if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+                      const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
+                      window.portfolioCharlie.triggerReturnDash(endX, endY, homeAnchor.x, homeAnchor.y);
+                    }
+                    if (window.portfolioDockCharlie) {
+                      window.portfolioDockCharlie.triggerWaiting();
+                    }
+
+                    // Re-enable selecting questions and inputs immediately as return dash commences
+                    setChatGeneratingLock(false);
                   }
                 };
 
