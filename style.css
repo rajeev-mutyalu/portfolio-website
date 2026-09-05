@@ -139,6 +139,28 @@ body {
   opacity: 0 !important;
 }
 
+/* ⚡ Cyber Charlie Foreground Mascot & Combat Canvas (Always On Top of All Blocks) */
+#charlieCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99990;
+  pointer-events: none;
+  display: block;
+}
+
+/* ⚡ Cyber Charlie Combat Cursor Mode - Hide native browser pointer so Charlie IS the interactive cursor! */
+body.combat-cursor-active,
+body.combat-cursor-active #cometCanvas,
+body.combat-cursor-active a,
+body.combat-cursor-active button,
+body.combat-cursor-active input,
+body.combat-cursor-active * {
+  cursor: none !important;
+}
+
 /* Fun Switch Wrapper & Hint Badge */
 .fx-switch-wrapper {
   display: flex;
@@ -414,9 +436,29 @@ body {
   flex-shrink: 0;
 }
 
+.floating-charlie-dock-wrap {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, rgba(2, 6, 23, 0.95) 85%);
+  border: 1.5px solid rgba(0, 242, 254, 0.65);
+  box-shadow: 0 0 14px rgba(0, 242, 254, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+}
+
+#charlieDockCanvas {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
 .floating-charlie-avatar {
-  font-size: 1.05rem;
-  line-height: 1;
+  display: none;
 }
 
 .floating-charlie-text {
@@ -546,7 +588,7 @@ body {
 }
 
 /* ==========================================================================
-   🤖 Sentinel-X Cyber-Bot Score HUD & Comet Destroyer
+   🤖 Cyber Charlie Score HUD & Comet Slasher
    ========================================================================== */
 .bot-hud-widget {
   position: fixed;
@@ -1070,6 +1112,21 @@ body {
 .nav-link.nav-ai-link.active .nav-ai-dot {
   background: var(--accent-cyan);
   box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+/* Cyber Charlie Helmet Quick-Link SVG */
+.nav-charlie-head {
+  display: inline-block;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 6px rgba(0, 242, 254, 0.65));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+  flex-shrink: 0;
+}
+
+.nav-link:hover .nav-charlie-head,
+.mobile-nav-link:hover .nav-charlie-head {
+  transform: scale(1.2) rotate(-5deg);
+  filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.95));
 }
 
 /* Mobile Nav Charlie Pill */
@@ -2582,6 +2639,31 @@ body {
   letter-spacing: 0.02em;
 }
 
+.ai-bot-lab-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.ai-bot-lab-link:hover {
+  background: rgba(0, 242, 254, 0.2);
+  border-color: var(--accent-cyan);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.35);
+  transform: translateY(-1px);
+}
+
 .ai-bot-status-pill {
   display: flex;
   align-items: center;
@@ -3051,6 +3133,236 @@ body {
 @keyframes pulseAmber {
   from { opacity: 0.4; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1.25); }
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  margin-left: 4px;
+  color: #00f2fe;
+  font-size: 0.85rem;
+  filter: drop-shadow(0 0 6px #00f2fe);
+  animation: flashCursor 0.25s infinite alternate;
+  vertical-align: middle;
+}
+
+@keyframes flashCursor {
+  from { opacity: 0.25; transform: scale(0.85); }
+  to { opacity: 1.0; transform: scale(1.2); }
+}
+
+/* ==========================================================================
+   🎮 Cyber Charlie Game Mode Chatbot Lockout Overlay
+   ========================================================================== */
+.ai-bot-terminal {
+  position: relative;
+}
+
+.ai-bot-terminal.game-mode-lockout {
+  border-color: rgba(255, 122, 0, 0.5) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 35px rgba(255, 122, 0, 0.22) !important;
+}
+
+.ai-bot-game-lockout {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: #03060f; /* 100% solid obsidian black - completely covers the full chat window */
+  border-radius: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+}
+
+.ai-bot-terminal.game-mode-lockout .ai-bot-game-lockout {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.ai-game-lockout-card {
+  max-width: 480px;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(8, 12, 24, 0.98) 100%);
+  border: 1px solid rgba(255, 122, 0, 0.45);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 122, 0, 0.22);
+  border-radius: 14px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  animation: lockoutPop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes lockoutPop {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.ai-lockout-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ff9800;
+  background: rgba(255, 152, 0, 0.12);
+  border: 1px solid rgba(255, 152, 0, 0.35);
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ai-lockout-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5722;
+  box-shadow: 0 0 10px #ff5722;
+  animation: aiCombatPulse 1.2s infinite;
+}
+
+@keyframes aiCombatPulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 14px #ff5722; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.ai-lockout-icon-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 122, 0, 0.25) 0%, rgba(255, 87, 34, 0.05) 70%);
+  border: 1.5px solid rgba(255, 122, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  box-shadow: 0 0 20px rgba(255, 122, 0, 0.35);
+  animation: swordBob 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes swordBob {
+  0% { transform: translateY(0) rotate(-4deg); }
+  100% { transform: translateY(-4px) rotate(4deg); }
+}
+
+.ai-lockout-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.ai-lockout-desc {
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 410px;
+}
+
+.ai-lockout-desc strong {
+  color: #ffb74d;
+}
+
+.ai-disable-game-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ff7a00 0%, #ea580c 50%, #dc2626 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full, 9999px);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.90rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.45), 0 0 25px rgba(255, 122, 0, 0.3);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.ai-disable-game-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 28px rgba(234, 88, 12, 0.6), 0 0 35px rgba(255, 122, 0, 0.5);
+  border-color: #ffffff;
+}
+
+.ai-disable-game-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.ai-disable-game-icon {
+  font-size: 1.15rem;
+}
+
+.ai-disable-game-spark {
+  font-size: 0.9rem;
+  color: #fef08a;
+  animation: sparkPulse 0.8s infinite alternate;
+}
+
+@keyframes sparkPulse {
+  0% { transform: scale(0.85); opacity: 0.7; }
+  100% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Status Pill Combat State */
+.ai-status-pulse.combat-pulse {
+  background: #ff5722 !important;
+  box-shadow: 0 0 10px #ff5722 !important;
+  animation: aiCombatPulse 1.2s infinite !important;
+}
+
+.ai-bot-status-pill.combat-pill {
+  color: #ff9800 !important;
+  background: rgba(255, 152, 0, 0.14) !important;
+  border-color: rgba(255, 152, 0, 0.4) !important;
+}
+
+/* Chat Input Bar Lockout State */
+.ai-bot-terminal.game-mode-lockout .ai-chat-input-bar {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ai-bot-terminal.game-mode-lockout .ai-input-field {
+  cursor: not-allowed;
+}
+
+.ai-bot-terminal.game-mode-lockout .ai-send-btn {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ai-bot-terminal.game-mode-lockout .ai-sidebar-btn {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 /* Mobile Responsiveness for AI Terminal Side Panel Split */

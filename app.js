@@ -17,6 +17,1481 @@
   'use strict';
 
   // ==========================================================================
+  // 0. Cyber Charlie Character & Combat Engine
+  // ==========================================================================
+  class CyberCharlie {
+    constructor(x = -1000, y = -1000, scale = 1.0) {
+      this.x = x;
+      this.y = y;
+      this.targetX = this.x;
+      this.targetY = this.y;
+      this.vx = 0;
+      this.vy = 0;
+      this.facing = 1; // 1 = right, -1 = left
+
+      // User Specifications
+      this.scale = scale;              // Character Scale: 1.0x
+      this.bladeGlowIntensity = 2.5;   // Plasma Blade Glow Intensity: 2.5x
+      this.animSpeed = 1.0;
+
+      // Animation & Face States
+      this.state = 'waiting'; // idle, walk, run, jump, slash, bonk, dizzy, victory, thinking, writing, waiting, flash_dash
+      this.face = 'waiting';  // happy, battle, sprint, shocked, dizzy, sad, victory, wink, thinking, writing, waiting
+      this.animTimer = 0;
+      this.bonkTimer = 0;
+      this.dizzyTimer = 0;
+      this.dizzyAngle = 0;
+      this.blinkTimer = Math.floor(Math.random() * 100);
+
+      // Meet Charlie Section Mascot & Mode States
+      this.sectionActive = false;
+      this.isGameModeDeploy = false;
+      this.combatCooldown = 0;
+
+      // Flash Man Dash Mechanics
+      this.deployTimer = 0;
+      this.deployStartX = 0;
+      this.deployStartY = 0;
+      this.deployTargetX = 0;
+      this.deployTargetY = 0;
+      this.dashType = 'to_cursor'; // 'to_cursor' or 'to_dock'
+      this.afterimages = [];
+
+      // Combat Action Timers & Sequences
+      this.slashPhase = 1;
+      this.slashTimer = 0;
+      this.slashMax = 16;
+
+      this.jumpTimer = 0;
+      this.jumpMax = 30;
+      this.jumpLandedSpark = false;
+
+      this.victoryTimer = 0;
+      this.victoryMax = 110;
+      this.twirlAngle = 0;
+
+      this.writeTimer = 0;
+      this.bladeTrails = [];
+      this.sparks = [];
+    }
+
+    addSparks(x, y, color = '#00f2fe', count = 10) {
+      for (let i = 0; i < count; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        const spd = 1.5 + Math.random() * 4.5;
+        this.sparks.push({
+          x: x,
+          y: y,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd,
+          radius: 1.0 + Math.random() * 2.0,
+          color: color,
+          alpha: 1.0,
+          decay: 0.03 + Math.random() * 0.03
+        });
+      }
+    }
+
+    updateSparks() {
+      for (let i = this.sparks.length - 1; i >= 0; i--) {
+        const s = this.sparks[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.vx *= 0.94;
+        s.vy *= 0.94;
+        s.alpha -= s.decay;
+        if (s.alpha <= 0) {
+          this.sparks.splice(i, 1);
+        }
+      }
+    }
+
+    drawSparks(c) {
+      this.sparks.forEach(s => {
+        c.save();
+        c.beginPath();
+        c.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        c.fillStyle = s.color;
+        c.globalAlpha = s.alpha;
+        c.shadowBlur = 8 * this.bladeGlowIntensity;
+        c.shadowColor = s.color;
+        c.fill();
+        c.restore();
+      });
+    }
+
+    setMode(mode) {
+      this.state = mode;
+      if (mode === 'run') this.face = 'sprint';
+      else if (mode === 'walk') this.face = 'happy';
+      else if (mode === 'slash') this.face = 'battle';
+      else if (mode === 'bonk') this.face = 'shocked';
+      else if (mode === 'dizzy') { this.face = 'dizzy'; this.dizzyTimer = 180; }
+      else if (mode === 'thinking') this.face = 'thinking';
+      else if (mode === 'writing') this.face = 'writing';
+      else if (mode === 'waiting') this.face = 'waiting';
+      else if (mode === 'victory') this.face = 'victory';
+      else if (mode === 'idle') this.face = 'happy';
+    }
+
+    triggerRandomCombatAction() {
+      if (this.combatCooldown > 0) return;
+      this.combatCooldown = 14;
+
+      // Randomly pick a combat move & expression
+      const roll = Math.random();
+      const combatFaces = ['battle', 'sprint', 'wink', 'victory'];
+      this.face = combatFaces[Math.floor(Math.random() * combatFaces.length)];
+
+      if (roll < 0.28) {
+        // High Cleave Slash
+        this.slashPhase = 1;
+        this.state = 'slash';
+        this.slashTimer = 0;
+        this.addSparks(this.x + this.facing * 32 * this.scale, this.y - 6 * this.scale, '#00f2fe', 18);
+      } else if (roll < 0.56) {
+        // Overhead Smite
+        this.slashPhase = 2;
+        this.state = 'slash';
+        this.slashTimer = 0;
+        this.addSparks(this.x + this.facing * 30 * this.scale, this.y - 20 * this.scale, '#f59e0b', 18);
+      } else if (roll < 0.80) {
+        // 360° Cyclone Vortex
+        this.slashPhase = 3;
+        this.state = 'slash';
+        this.slashTimer = 0;
+        this.addSparks(this.x, this.y - 6 * this.scale, '#38bdf8', 24);
+      } else {
+        // Aerial Somersault Flip Slice
+        this.state = 'jump';
+        this.jumpTimer = 0;
+        this.jumpLandedSpark = false;
+        this.addSparks(this.x, this.y + 12 * this.scale, '#00f2fe', 20);
+      }
+
+      // Sync HUD face if bot HUD is visible
+      const hudFace = document.getElementById('botFace');
+      if (hudFace) {
+        const faceMap = { battle: '[⚔_⚔]', sprint: '[⚡_⚡]', wink: '[^_-]', victory: '[★_★]' };
+        hudFace.textContent = faceMap[this.face] || '[•_•]';
+      }
+    }
+
+    triggerSlash() {
+      this.slashPhase = (this.slashPhase % 3) + 1;
+      this.state = 'slash';
+      this.slashTimer = 0;
+      this.face = 'battle';
+      this.addSparks(this.x + this.facing * 30 * this.scale, this.y - 6 * this.scale, '#00f2fe', 14);
+    }
+
+    triggerJump() {
+      this.state = 'jump';
+      this.jumpTimer = 0;
+      this.jumpLandedSpark = false;
+      this.face = 'wink';
+    }
+
+    triggerVictory() {
+      if (window.portfolioEngine?.isEnabled) return;
+      this.state = 'victory';
+      this.victoryTimer = 0;
+      this.twirlAngle = 0;
+      this.face = 'victory';
+    }
+
+    triggerBonk() {
+      this.state = 'bonk';
+      this.face = 'shocked';
+      this.bonkTimer = 45;
+      this.vy = -7;
+      this.vx = -this.facing * 5.5;
+      this.addSparks(this.x, this.y - 18 * this.scale, '#f59e0b', 16);
+    }
+
+    triggerDizzy() {
+      this.state = 'dizzy';
+      this.face = 'dizzy';
+      this.dizzyTimer = 180;
+      this.addSparks(this.x, this.y - 20 * this.scale, '#f59e0b', 12);
+    }
+
+    triggerThinking() {
+      if (window.portfolioEngine?.isEnabled) return;
+      this.state = 'thinking';
+      this.face = 'thinking';
+    }
+
+    triggerWriting() {
+      if (window.portfolioEngine?.isEnabled) return;
+      this.state = 'writing';
+      this.face = 'writing';
+      this.writeTimer = 0;
+    }
+
+    triggerWaiting() {
+      if (window.portfolioEngine?.isEnabled) return;
+      this.state = 'waiting';
+      this.face = 'waiting';
+    }
+
+    triggerDeploy(startX, startY, targetX, targetY, isGameMode = true) {
+      this.state = 'flash_dash';
+      this.dashType = 'to_cursor';
+      this.isGameModeDeploy = isGameMode;
+      this.sectionActive = !isGameMode;
+      this.face = isGameMode ? 'battle' : 'sprint';
+      this.deployTimer = 0;
+      this.deployStartX = startX;
+      this.deployStartY = startY;
+      this.deployTargetX = targetX;
+      this.deployTargetY = targetY;
+      this.targetX = targetX;
+      this.targetY = targetY;
+      this.x = startX;
+      this.y = startY;
+      this.facing = this.deployTargetX >= this.x ? 1 : -1;
+      this.addSparks(this.x, this.y, isGameMode ? '#00f2fe' : '#38bdf8', 24);
+    }
+
+    triggerDock(dockX, dockY) {
+      this.state = 'flash_dash';
+      this.dashType = 'to_dock';
+      this.face = 'sprint';
+      this.isGameModeDeploy = false;
+      this.sectionActive = false;
+      this.deployTimer = 0;
+      this.deployStartX = this.x;
+      this.deployStartY = this.y;
+      this.deployTargetX = dockX;
+      this.deployTargetY = dockY;
+      this.facing = this.deployTargetX >= this.x ? 1 : -1;
+      this.addSparks(this.x, this.y, '#f59e0b', 20);
+    }
+
+    getChatMascotAnchor() {
+      const streamEl = document.getElementById('aiChatStream');
+      const terminalEl = document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
+      const navbarEl = document.querySelector('.navbar');
+      const navBottom = (navbarEl ? navbarEl.getBoundingClientRect().bottom : 70);
+
+      if (streamEl) {
+        const sRect = streamEl.getBoundingClientRect();
+        // 1. Horizontal: inside chat window, comfortably towards the right, just to the left of the scrollbar
+        const anchorX = Math.min(window.innerWidth - 44, Math.max(44, sRect.right - 48));
+
+        // 2. Vertical: inside the chat window area, down below the terminal header & "LOCAL KB READY" pill
+        // Natural center is sRect.top + 62 (head at sRect.top + 34, cleanly down inside chat stream)
+        // Clamped to navBottom + 44 so when scrolling, Charlie never overlaps sticky top menu bar
+        const minAllowedY = navBottom + 44;
+        const maxAllowedY = sRect.bottom - 45;
+        const naturalY = sRect.top + 62;
+        const anchorY = Math.max(minAllowedY, Math.min(maxAllowedY, naturalY));
+
+        const isVisible = (sRect.bottom > navBottom + 65 && sRect.top < window.innerHeight - 60);
+        return { x: anchorX, y: anchorY, isVisible };
+      } else if (terminalEl) {
+        const tRect = terminalEl.getBoundingClientRect();
+        const anchorX = Math.min(window.innerWidth - 44, Math.max(44, tRect.right - 48));
+        const minAllowedY = navBottom + 44;
+        const maxAllowedY = tRect.bottom - 45;
+        const naturalY = tRect.top + 105;
+        const anchorY = Math.max(minAllowedY, Math.min(maxAllowedY, naturalY));
+        const isVisible = (tRect.bottom > navBottom + 65 && tRect.top < window.innerHeight - 60);
+        return { x: anchorX, y: anchorY, isVisible };
+      }
+      return { x: window.innerWidth - 80, y: 250, isVisible: false };
+    }
+
+    drawAfterimages(c) {
+      for (let i = this.afterimages.length - 1; i >= 0; i--) {
+        const ghost = this.afterimages[i];
+        ghost.alpha -= 0.045 * this.animSpeed;
+        if (ghost.alpha <= 0) {
+          this.afterimages.splice(i, 1);
+          continue;
+        }
+        c.save();
+        c.translate(ghost.x, ghost.y);
+        c.scale(ghost.facing * this.scale * 0.95, this.scale * 0.95);
+        c.globalAlpha = ghost.alpha * 0.55;
+        c.shadowColor = ghost.color;
+        c.shadowBlur = 14 * this.bladeGlowIntensity;
+        c.fillStyle = ghost.color;
+        c.beginPath();
+        c.roundRect(-14, -26, 28, 38, 7);
+        c.fill();
+        c.fillStyle = '#ffffff';
+        c.fillRect(-10, -14, 20, 4);
+        c.restore();
+      }
+    }
+
+    drawLightningArcs(c) {
+      if (this.state === 'flash_dash' && this.deployTimer < 1.0) {
+        c.save();
+        const color = this.dashType === 'to_cursor' ? '#00f2fe' : '#f59e0b';
+        c.strokeStyle = color;
+        c.shadowColor = color;
+        c.shadowBlur = 12 * this.bladeGlowIntensity;
+        c.lineWidth = 2.0;
+        for (let a = 0; a < 2; a++) {
+          c.beginPath();
+          c.moveTo(this.deployStartX, this.deployStartY);
+          const steps = 6;
+          for (let s = 1; s < steps; s++) {
+            const segT = s / steps;
+            const px = this.deployStartX + (this.x - this.deployStartX) * segT + (Math.random() - 0.5) * 26;
+            const py = this.deployStartY + (this.y - this.deployStartY) * segT + (Math.random() - 0.5) * 26;
+            c.lineTo(px, py);
+          }
+          c.lineTo(this.x, this.y);
+          c.stroke();
+        }
+        c.restore();
+      }
+    }
+
+    drawBladeTrails(c) {
+      for (let i = this.bladeTrails.length - 1; i >= 0; i--) {
+        const trail = this.bladeTrails[i];
+        trail.alpha -= 0.08;
+        if (trail.alpha <= 0) {
+          this.bladeTrails.splice(i, 1);
+          continue;
+        }
+        c.save();
+        c.globalAlpha = trail.alpha * 0.85;
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 12 * this.bladeGlowIntensity;
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(trail.x, trail.y, Math.max(1.0, 3.5 * this.scale * trail.alpha), 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+
+    update() {
+      // Timing: Sprint Animation Speed = 1.0x, rest all = 0.5x
+      const stateSpeedRate = (this.state === 'run' || this.state === 'flash_dash') ? 1.0 : 0.5;
+      this.animTimer += 0.15 * this.animSpeed * stateSpeedRate;
+      this.dizzyAngle += 0.08 * this.animSpeed * stateSpeedRate;
+      this.blinkTimer = (this.blinkTimer + 1) % 210; // ~3.5 seconds at 60fps natural blink cycle
+      if (this.combatCooldown > 0) this.combatCooldown--;
+      this.updateSparks();
+
+      // 1. Terminal Anchor Tracking (When stationed as Meet Charlie section mascot AND Game Mode is strictly OFF)
+      if (!window.portfolioEngine?.isEnabled && this.sectionActive && this.state !== 'flash_dash') {
+        const anchor = this.getChatMascotAnchor();
+        if (anchor.isVisible) {
+          this.targetX = anchor.x;
+          this.targetY = anchor.y;
+
+          const dx = this.targetX - this.x;
+          const dy = this.targetY - this.y;
+          this.x += dx * 0.22;
+          this.y += dy * 0.22;
+          if (Math.abs(dx) > 4) {
+            this.facing = dx > 0 ? 1 : -1;
+          }
+        } else {
+          // Chat window scrolled out of view -> trigger Flash Man return dash to dock
+          const floatingBtn = document.getElementById('floatingCharlieBtn');
+          const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+          const dockCenterX = dockRect.left + dockRect.width / 2;
+          const dockCenterY = dockRect.top + dockRect.height / 2;
+          this.triggerDock(dockCenterX, dockCenterY);
+        }
+      }
+
+      // 2. Fluid, Zero-Lag Mouse Tracking (When Game Mode is active - UNCONDITIONALLY overrides chat)
+      if (window.portfolioEngine && window.portfolioEngine.isEnabled && this.state !== 'flash_dash' && this.targetX > -500) {
+        this.sectionActive = false; // Game Mode unconditionally takes priority over chat!
+        if (this.state === 'waiting' || this.state === 'writing' || this.state === 'thinking') {
+          this.state = 'idle';
+          this.face = 'happy';
+        }
+
+        const dx = this.targetX - this.x;
+        const dy = this.targetY - this.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (Math.abs(dx) > 6) {
+          this.facing = dx > 0 ? 1 : -1;
+        }
+
+        let chaseFactor = 0.22;
+        if (dist > 220) {
+          this.state = 'run';
+          this.face = 'sprint';
+          chaseFactor = 0.36;
+        } else if (dist > 35) {
+          if (this.state !== 'slash' && this.state !== 'jump' && this.state !== 'victory') {
+            this.state = 'walk';
+            this.face = 'happy';
+          }
+          chaseFactor = 0.26;
+        } else {
+          if (this.state !== 'slash' && this.state !== 'jump' && this.state !== 'victory') {
+            this.state = 'idle';
+            this.face = 'happy';
+          }
+          chaseFactor = 0.18;
+        }
+
+        // Maintain agile combat movement during attacks so Charlie never freezes!
+        if (this.state === 'slash' || this.state === 'jump') {
+          chaseFactor = 0.20;
+        }
+
+        this.vx = dx * chaseFactor;
+        this.vy = dy * chaseFactor;
+        this.x += this.vx;
+        this.y += this.vy;
+      }
+
+      // Action Progressions
+      if (this.state === 'jump') {
+        this.jumpTimer += 1.0 * this.animSpeed;
+        const t = Math.min(1.0, this.jumpTimer / this.jumpMax);
+
+        if (t >= 0.15 && t < 0.52 && Math.random() > 0.3) {
+          this.addSparks(this.x, this.y + 16 * this.scale, '#00f2fe', 2);
+        }
+        if (t >= 0.50 && t < 0.78) {
+          this.face = 'battle';
+        } else if (t >= 0.78) {
+          this.face = 'happy';
+        }
+        if (t >= 0.92 && !this.jumpLandedSpark) {
+          this.jumpLandedSpark = true;
+          this.addSparks(this.x, this.y + 14 * this.scale, '#00f2fe', 8);
+        }
+        if (this.jumpTimer >= this.jumpMax) {
+          this.state = 'idle';
+          this.face = 'happy';
+        }
+      }
+
+      if (this.state === 'victory') {
+        this.victoryTimer += 1.0 * this.animSpeed * 0.5;
+        const t = Math.min(1.0, this.victoryTimer / this.victoryMax);
+        if (t < 0.35) {
+          this.twirlAngle = (t / 0.35) * Math.PI * 4;
+        } else {
+          this.twirlAngle = 0;
+        }
+        if (t >= 0.35 && t < 0.70 && Math.floor(this.victoryTimer) % 6 === 0) {
+          const bladeTipX = this.x + this.facing * 18 * this.scale;
+          const bladeTipY = this.y - 28 * this.scale;
+          this.addSparks(bladeTipX, bladeTipY, '#f59e0b', 4);
+        }
+        if (this.victoryTimer >= this.victoryMax) {
+          this.victoryTimer = 25;
+        }
+      }
+
+      if (this.state === 'slash') {
+        this.slashTimer += 1.0 * this.animSpeed;
+        if (this.slashTimer >= this.slashMax) {
+          this.state = 'idle';
+          this.face = 'happy';
+        }
+      }
+
+      if (this.state === 'bonk') {
+        this.bonkTimer--;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.35;
+        if (this.bonkTimer <= 0) {
+          this.state = 'dizzy';
+          this.face = 'dizzy';
+          this.dizzyTimer = 180;
+        }
+      }
+
+      if (this.state === 'dizzy') {
+        this.dizzyTimer -= 1.0 * this.animSpeed * 0.5;
+        if (this.dizzyTimer <= 0) {
+          this.state = 'idle';
+          this.face = 'happy';
+        }
+      }
+
+      if (this.state === 'thinking' && Math.random() > 0.65) {
+        this.addSparks(this.x, this.y - 28 * this.scale, '#f59e0b', 1);
+      }
+
+      if (this.state === 'writing') {
+        this.writeTimer += 1.0 * this.animSpeed * 0.5;
+        if (Math.random() > 0.35) {
+          const stylusTipX = this.x + this.facing * 14 * this.scale;
+          const stylusTipY = this.y - 2 * this.scale;
+          this.addSparks(stylusTipX, stylusTipY, '#00f2fe', 1);
+        }
+      }
+
+      // Flash Man Supersonic Dash
+      if (this.state === 'flash_dash') {
+        this.deployTimer += 0.055 * this.animSpeed;
+        const t = Math.min(1.0, this.deployTimer);
+        const ease = 1 - Math.pow(1 - t, 3);
+        this.x = this.deployStartX + (this.deployTargetX - this.deployStartX) * ease;
+        this.y = this.deployStartY + (this.deployTargetY - this.deployStartY) * ease;
+
+        const ghostColor = this.dashType === 'to_cursor' ? '#00f2fe' : '#f59e0b';
+        this.afterimages.push({
+          x: this.x,
+          y: this.y,
+          facing: this.facing,
+          alpha: 0.85,
+          color: ghostColor
+        });
+
+        if (Math.random() > 0.3) {
+          this.addSparks(this.x, this.y, ghostColor, 2);
+        }
+
+        if (t >= 1.0) {
+          if (this.dashType === 'to_dock') {
+            this.state = 'waiting';
+            this.face = 'waiting';
+            this.x = -1000;
+            this.y = -1000;
+            this.sectionActive = false;
+            document.body.classList.remove('combat-cursor-active');
+            this.addSparks(this.deployTargetX, this.deployTargetY, '#00f2fe', 16);
+            const floatingBtn = document.getElementById('floatingCharlieBtn');
+            if (floatingBtn) floatingBtn.classList.remove('hidden');
+          } else {
+            if (this.isGameModeDeploy) {
+              this.state = 'idle';
+              this.face = 'happy';
+              this.facing = 1;
+              document.body.classList.add('combat-cursor-active');
+              this.addSparks(this.x, this.y, '#00f2fe', 26);
+            } else {
+              this.state = 'waiting';
+              this.face = 'waiting';
+              this.sectionActive = true;
+              document.body.classList.remove('combat-cursor-active');
+              this.addSparks(this.x, this.y, '#00f2fe', 22);
+            }
+          }
+        }
+      }
+
+      // Blade Trail at Shoulder Level
+      if (this.state === 'slash' || this.state === 'run' || (this.state === 'jump' && this.jumpTimer > 15)) {
+        let tipOffsetX = 26;
+        let tipOffsetY = -5; // Shoulder height!
+
+        if (this.state === 'slash') {
+          const st = this.slashTimer / this.slashMax;
+          if (this.slashPhase === 1) {
+            tipOffsetX = 12 + Math.sin(st * Math.PI) * 22;
+            tipOffsetY = -6 - Math.sin(st * Math.PI) * 3;
+          } else if (this.slashPhase === 2) {
+            tipOffsetX = 16 + Math.sin(st * Math.PI) * 16;
+            tipOffsetY = -24 + (st * 20);
+          } else if (this.slashPhase === 3) {
+            const ang = st * Math.PI * 2;
+            tipOffsetX = 18 + Math.cos(ang) * 18;
+            tipOffsetY = -6 + Math.sin(ang) * 12;
+          }
+        }
+
+        const bladeTipX = this.x + this.facing * (tipOffsetX * this.scale);
+        const bladeTipY = this.y + (tipOffsetY * this.scale);
+        this.bladeTrails.push({ x: bladeTipX, y: bladeTipY, alpha: 0.95 });
+      }
+    }
+
+    draw(c) {
+      if (this.x < -200 || this.y < -200) return;
+
+      c.save();
+      c.translate(this.x, this.y);
+
+      let bobY = 0;
+      let squashX = 1.0;
+      let squashY = 1.0;
+      let leanAngle = 0;
+      let somersaultRotation = 0;
+
+      let hipL = 0, kneeL = 0;
+      let hipR = 0, kneeR = 0;
+      let upperL = 0, elbowL = 0;
+      let upperR = 0, elbowR = 0;
+      let customKnifeAngle = 0;
+      let thrusterL = false, thrusterR = false;
+
+      // IDLE CYCLE
+      if (this.state === 'idle') {
+        bobY = Math.sin(this.animTimer * 1.8) * 2.0;
+        hipL = 0.08; kneeL = 0.05;
+        hipR = -0.08; kneeR = 0.05;
+        upperL = 0.70; elbowL = -1.30;
+        upperR = 0.42; elbowR = -0.85;
+        customKnifeAngle = 0.43;
+      }
+
+      // WALK CYCLE
+      else if (this.state === 'walk') {
+        const w = this.animTimer * 2.2;
+        bobY = Math.abs(Math.sin(w)) * 2.5;
+        hipL = Math.sin(w) * 0.45;
+        kneeL = Math.max(0, -Math.sin(w) * 0.55);
+        hipR = -Math.sin(w) * 0.45;
+        kneeR = Math.max(0, Math.sin(w) * 0.55);
+        leanAngle = 0.08;
+        upperL = 0.70 + Math.sin(w) * 0.55;
+        elbowL = -1.15;
+        upperR = 0.42 - Math.sin(w) * 0.40;
+        elbowR = -0.85;
+        customKnifeAngle = 0.43;
+      }
+
+      // SPRINT CYCLE
+      else if (this.state === 'run') {
+        const r = this.animTimer * 3.6;
+        bobY = Math.abs(Math.sin(r)) * 4.0;
+        hipL = Math.sin(r) * 0.85;
+        kneeL = Math.max(0, -Math.sin(r) * 1.1);
+        hipR = -Math.sin(r) * 0.85;
+        kneeR = Math.max(0, Math.sin(r) * 1.1);
+        leanAngle = 0.30;
+        thrusterL = hipL > 0.2;
+        thrusterR = hipR > 0.2;
+        upperL = 0.45 - Math.sin(r) * 0.95;
+        elbowL = -1.0;
+        upperR = 0.30 + Math.sin(r) * 0.70;
+        elbowR = -0.70;
+        customKnifeAngle = 0.35;
+      }
+
+      // JUMP CYCLE
+      else if (this.state === 'jump') {
+        const t = Math.min(1.0, this.jumpTimer / this.jumpMax);
+        if (t < 0.15) {
+          const u = t / 0.15;
+          bobY = u * 5.0;
+          squashY = 1.0 - (u * 0.18);
+          squashX = 1.0 + (u * 0.15);
+          hipL = 0.35; kneeL = 0.75;
+          hipR = 0.35; kneeR = 0.75;
+          upperL = 0.85; elbowL = -0.3;
+          upperR = 0.85; elbowR = -0.3;
+        } else if (t < 0.52) {
+          const u = (t - 0.15) / 0.37;
+          bobY = -90 * Math.sin(u * Math.PI * 0.5);
+          squashY = 1.15; squashX = 0.90;
+          hipL = -0.15; kneeL = 0.2;
+          hipR = 0.25; kneeR = 0.3;
+          thrusterL = true; thrusterR = true;
+          upperL = 0.0; elbowL = -0.8;
+          upperR = 0.15; elbowR = -0.75;
+          customKnifeAngle = 0.3;
+        } else if (t < 0.78) {
+          const u = (t - 0.52) / 0.26;
+          bobY = -90 + Math.sin(u * Math.PI) * 10;
+          somersaultRotation = u * Math.PI * 2;
+          hipL = 0.9; kneeL = 1.2;
+          hipR = 0.9; kneeR = 1.2;
+          upperL = -0.6; elbowL = -0.4;
+          upperR = -0.4; elbowR = -0.5;
+          customKnifeAngle = u * Math.PI * 2;
+        } else if (t < 0.92) {
+          const u = (t - 0.78) / 0.14;
+          bobY = -80 * (1 - u * u);
+          hipL = -0.1; kneeL = 0.15;
+          hipR = 0.1; kneeR = 0.15;
+          thrusterL = (Math.random() > 0.4);
+          thrusterR = (Math.random() > 0.4);
+          upperL = 0.4; elbowL = -0.5;
+          upperR = 0.35; elbowR = -0.75;
+          customKnifeAngle = 0.35;
+        } else {
+          const u = (t - 0.92) / 0.08;
+          bobY = Math.sin(u * Math.PI) * 6.0;
+          squashY = 0.86; squashX = 1.14;
+          hipL = 0.3; kneeL = 0.6;
+          hipR = 0.3; kneeR = 0.6;
+          upperL = 0.6; elbowL = -0.7;
+          upperR = 0.5; elbowR = -0.85;
+        }
+      }
+
+      // VICTORY CELEBRATION
+      else if (this.state === 'victory') {
+        const t = Math.min(1.0, this.victoryTimer / this.victoryMax);
+        if (t < 0.35) {
+          bobY = Math.sin(this.animTimer * 3) * 2;
+          upperR = 0.38; elbowR = -0.82;
+          customKnifeAngle = this.twirlAngle;
+          upperL = 0.4; elbowL = -0.6;
+        } else if (t < 0.70) {
+          bobY = -Math.abs(Math.sin(this.animTimer * 2.5)) * 5;
+          upperR = -2.1; elbowR = 0.05; customKnifeAngle = 0;
+          upperL = -1.9; elbowL = 0.15;
+        } else {
+          const hop = ((t - 0.70) / 0.30) * Math.PI * 4;
+          bobY = -Math.abs(Math.sin(hop)) * 11;
+          leanAngle = Math.sin(hop) * 0.1;
+          hipL = 0.1; kneeL = 0.2;
+          hipR = -0.1; kneeR = 0.2;
+          upperR = -1.9 + Math.sin(hop) * 0.15; elbowR = 0.1;
+          upperL = -1.8 + Math.sin(hop) * 0.15; elbowL = 0.15;
+        }
+      }
+
+      // SLASH ATTACKS
+      else if (this.state === 'slash') {
+        const st = this.slashTimer / this.slashMax;
+        if (this.slashPhase === 1) {
+          bobY = Math.sin(st * Math.PI) * 2.5;
+          leanAngle = 0.18;
+          upperR = 0.65 - (st * 0.5);
+          elbowR = -1.1 + (st * 0.65);
+          customKnifeAngle = 0.45 - (st * 0.35);
+          upperL = 0.85; elbowL = -1.35;
+        } else if (this.slashPhase === 2) {
+          bobY = -Math.sin(st * Math.PI) * 3.5;
+          leanAngle = 0.22;
+          upperR = -1.6 + (st * 1.8);
+          elbowR = 0.25 - (st * 0.85);
+          customKnifeAngle = -0.2 + (st * 0.5);
+          upperL = 0.35; elbowL = -0.8;
+        } else if (this.slashPhase === 3) {
+          bobY = -Math.sin(st * Math.PI) * 5.5;
+          leanAngle = Math.sin(st * Math.PI * 2) * 0.25;
+          upperR = 0.35 + Math.sin(st * Math.PI * 2) * 0.6;
+          elbowR = -0.8;
+          customKnifeAngle = st * Math.PI * 2;
+          upperL = 0.35 - Math.sin(st * Math.PI * 2) * 0.6;
+          elbowL = -0.8;
+        }
+      }
+
+      // BONK REACTION
+      else if (this.state === 'bonk') {
+        leanAngle = -0.65;
+        bobY = -10;
+        hipL = 0.8; kneeL = 0.4;
+        hipR = 0.6; kneeR = 0.4;
+        upperR = 0.8; elbowR = 0.2;
+        upperL = 0.8; elbowL = 0.2;
+      }
+
+      // DIZZY REACTION
+      else if (this.state === 'dizzy') {
+        bobY = Math.sin(this.animTimer * 2) * 3.5;
+        leanAngle = Math.sin(this.animTimer * 1.8) * 0.22;
+        hipL = 0.15; kneeL = 0.1;
+        hipR = -0.15; kneeR = 0.1;
+        upperL = 0.4 + Math.sin(this.animTimer * 2) * 0.25;
+        elbowL = -0.5;
+        upperR = 0.35 + Math.cos(this.animTimer * 2) * 0.15;
+        elbowR = -0.7;
+        customKnifeAngle = 0.35;
+      }
+
+      // THINKING STATE (Unarmed, hand on chin, floating ?)
+      else if (this.state === 'thinking') {
+        bobY = Math.sin(this.animTimer * 1.5) * 2.0;
+        hipL = 0.08; kneeL = 0.05;
+        hipR = -0.08; kneeR = 0.05;
+        upperL = 0.65; elbowL = -1.2;
+        upperR = -1.35; elbowR = 2.1;
+        customKnifeAngle = 0;
+      }
+
+      // WRITING STATE (Rapid Flash Man stylus scribbling, unarmed)
+      else if (this.state === 'writing') {
+        bobY = Math.sin(this.animTimer * 8.0) * 1.6;
+        leanAngle = 0.14;
+        hipL = 0.12; kneeL = 0.1;
+        hipR = -0.12; kneeR = 0.1;
+        upperL = 0.55; elbowL = -1.25;
+        const scrib = Math.sin(this.animTimer * 32.0);
+        upperR = 0.35 + scrib * 0.18;
+        elbowR = -1.1 + scrib * 0.22;
+        customKnifeAngle = 0;
+      }
+
+      // DOCKED & SECTION WAITING (Active gentle floating, breathing chest expansion, zero-g limb drifting, unarmed)
+      else if (this.state === 'waiting') {
+        const floatCycle = this.animTimer * 1.6;
+        bobY = Math.sin(floatCycle) * 5.0;
+        squashY = 1.0 + Math.sin(floatCycle * 1.2) * 0.07;
+        squashX = 1.0 - Math.sin(floatCycle * 1.2) * 0.04;
+        leanAngle = Math.sin(floatCycle * 0.7) * 0.06;
+        hipL = 0.20 + Math.sin(floatCycle) * 0.12;
+        kneeL = 0.35 + Math.cos(floatCycle) * 0.14;
+        hipR = -0.15 + Math.sin(floatCycle + 1.2) * 0.12;
+        kneeR = 0.30 + Math.cos(floatCycle + 1.2) * 0.14;
+        upperL = 0.52 + Math.sin(floatCycle * 1.1) * 0.16;
+        elbowL = -0.85 + Math.cos(floatCycle * 1.1) * 0.12;
+        upperR = 0.46 + Math.sin(floatCycle * 1.1 + 1.5) * 0.16;
+        elbowR = -0.85 + Math.cos(floatCycle * 1.1 + 1.5) * 0.12;
+        customKnifeAngle = 0;
+      }
+
+      // FLASH MAN DASH POSTURE
+      else if (this.state === 'flash_dash') {
+        bobY = 0;
+        leanAngle = this.facing * 0.48;
+        hipL = -0.3; kneeL = 0.4;
+        hipR = 0.4; kneeR = 0.5;
+        thrusterL = true; thrusterR = true;
+        upperL = 0.85; elbowL = -0.25;
+        upperR = 0.85; elbowR = -0.25;
+        customKnifeAngle = 0.2;
+      }
+
+      // Apply scale, flip and rotation
+      c.scale(this.facing * this.scale * squashX, this.scale * squashY);
+      c.rotate(leanAngle + somersaultRotation);
+
+      // 1. Draw Legs
+      this.drawLeg(c, -7, 10 + bobY, hipL, kneeL, thrusterL);
+      this.drawLeg(c, 7, 10 + bobY, hipR, kneeR, thrusterR);
+
+      // 2. Draw Torso
+      c.save();
+      c.translate(0, bobY);
+      c.fillStyle = '#070d1a';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 2.0;
+      c.beginPath();
+      c.roundRect(-12, -5, 24, 18, 5);
+      c.fill();
+      c.stroke();
+
+      c.shadowColor = '#00f2fe';
+      c.shadowBlur = 12 * this.bladeGlowIntensity;
+      c.fillStyle = '#00f2fe';
+      c.beginPath();
+      c.arc(0, 4, 3.8, 0, Math.PI * 2);
+      c.fill();
+
+      c.fillStyle = '#ffffff';
+      c.beginPath();
+      c.arc(0, 4, 1.8, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+
+      // 3. Draw Head & Visor
+      c.save();
+      c.translate(0, -19 + bobY);
+
+      let antennaBend = (this.state === 'run' ? -0.4 : 0) + (this.state === 'sad' ? -1.2 : 0);
+      c.save();
+      c.translate(0, -15);
+      c.rotate(antennaBend);
+      c.strokeStyle = '#38bdf8';
+      c.lineWidth = 1.8;
+      c.beginPath();
+      c.moveTo(0, 0);
+      c.lineTo(0, -9);
+      c.stroke();
+
+      c.shadowColor = '#00f2fe';
+      c.shadowBlur = 10 * this.bladeGlowIntensity;
+      c.fillStyle = this.state === 'bonk' ? '#f59e0b' : '#00f2fe';
+      c.beginPath();
+      c.arc(0, -11, 3.0, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+
+      c.fillStyle = '#090f1f';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 2.2;
+      c.shadowColor = 'rgba(0, 242, 254, 0.4)';
+      c.shadowBlur = 8;
+      c.beginPath();
+      c.roundRect(-16, -16, 32, 23, 7);
+      c.fill();
+      c.stroke();
+
+      c.fillStyle = '#00f2fe';
+      c.beginPath();
+      c.arc(-16.5, -4, 2.6, 0, Math.PI * 2);
+      c.arc(16.5, -4, 2.6, 0, Math.PI * 2);
+      c.fill();
+
+      c.shadowBlur = 0;
+      c.fillStyle = '#02060f';
+      c.strokeStyle = 'rgba(0, 242, 254, 0.35)';
+      c.lineWidth = 1.1;
+      c.beginPath();
+      c.roundRect(-12, -12, 24, 15, 4);
+      c.fill();
+      c.stroke();
+
+      this.drawFace(c);
+
+      if (this.state === 'sad' || this.state === 'dizzy') {
+        c.save();
+        c.translate(-7, -10);
+        c.rotate(0.3);
+        c.fillStyle = '#f59e0b';
+        c.fillRect(-3, -2, 6, 4);
+        c.strokeStyle = '#fff';
+        c.lineWidth = 0.8;
+        c.strokeRect(-3, -2, 6, 4);
+        c.restore();
+      }
+      c.restore();
+
+      // Hand Equipment Modes (Unarmed sheathed during writing, thinking, waiting)
+      let leftHandMode = 'shield';
+      let rightHandMode = 'knife';
+
+      if (this.state === 'writing') {
+        leftHandMode = 'bare';
+        rightHandMode = 'stylus';
+      } else if (this.state === 'thinking' || this.state === 'waiting') {
+        leftHandMode = 'bare';
+        rightHandMode = 'bare';
+      } else if (this.state === 'flash_dash') {
+        if (this.dashType === 'to_cursor') {
+          leftHandMode = 'shield';
+          rightHandMode = 'knife';
+        } else {
+          leftHandMode = 'bare';
+          rightHandMode = 'bare';
+        }
+      }
+
+      // 4. Draw Left Arm
+      this.drawArm(c, -2, 0 + bobY, upperL, elbowL, leftHandMode, false, 0);
+
+      // 5. Draw Right Arm
+      this.drawArm(c, 10, -2 + bobY, upperR, elbowR, rightHandMode, true, customKnifeAngle);
+
+      // 6. Draw Dizzy Stars if Stunned
+      if (this.state === 'dizzy') {
+        c.save();
+        c.translate(0, -36 + bobY);
+        for (let s = 0; s < 3; s++) {
+          const starAngle = this.dizzyAngle + (s * (Math.PI * 2 / 3));
+          const starX = Math.cos(starAngle) * 18;
+          const starY = Math.sin(starAngle) * 6;
+          c.fillStyle = '#f59e0b';
+          c.shadowColor = '#f59e0b';
+          c.shadowBlur = 8;
+          c.font = '9px sans-serif';
+          c.fillText('★', starX - 4, starY + 3);
+        }
+        c.restore();
+      }
+
+      // 7. Draw Holographic Idea Gear if Thinking
+      if (this.state === 'thinking') {
+        c.save();
+        c.translate(0, -38 + bobY);
+        c.rotate(this.animTimer * 1.5);
+        c.strokeStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 10 * this.bladeGlowIntensity;
+        c.lineWidth = 1.6;
+        c.beginPath();
+        c.arc(0, 0, 7, 0, Math.PI * 2);
+        c.stroke();
+        for (let g = 0; g < 6; g++) {
+          const ang = (g * Math.PI) / 3;
+          c.beginPath();
+          c.moveTo(Math.cos(ang) * 7, Math.sin(ang) * 7);
+          c.lineTo(Math.cos(ang) * 10, Math.sin(ang) * 10);
+          c.stroke();
+        }
+        c.fillStyle = '#f59e0b';
+        c.beginPath();
+        c.arc(0, 0, 2.4, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+
+        c.save();
+        c.translate(13, -37 + bobY + Math.sin(this.animTimer * 2) * 2.5);
+        c.fillStyle = '#f59e0b';
+        c.shadowColor = '#f59e0b';
+        c.shadowBlur = 8;
+        c.font = 'bold 11px monospace';
+        c.fillText('?', 0, 0);
+        c.restore();
+      }
+
+      // 8. Draw Holographic Datapad if Writing
+      if (this.state === 'writing') {
+        c.save();
+        c.translate(8, -4 + bobY);
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 12 * this.bladeGlowIntensity;
+        c.fillStyle = 'rgba(0, 242, 254, 0.2)';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.5;
+        c.beginPath();
+        c.roundRect(-2, -9, 16, 19, 3);
+        c.fill();
+        c.stroke();
+
+        c.strokeStyle = '#38bdf8';
+        c.lineWidth = 1.4;
+        for (let l = 0; l < 4; l++) {
+          const lineY = -5 + l * 4;
+          const lineWidth = 5 + ((l * 3 + Math.floor(this.animTimer * 5)) % 7);
+          c.beginPath();
+          c.moveTo(1, lineY);
+          c.lineTo(1 + lineWidth, lineY);
+          c.stroke();
+        }
+
+        const stylusContactX = 3 + Math.sin(this.animTimer * 16) * 4;
+        const stylusContactY = -5 + ((Math.floor(this.animTimer * 3) % 4) * 4);
+        c.fillStyle = '#ffffff';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.arc(stylusContactX, stylusContactY, 1.5, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+
+      // 9. Draw Chatbot Aura & Drifting 'z z Z' if Waiting
+      if (this.state === 'waiting') {
+        c.save();
+        c.translate(0, bobY);
+        c.strokeStyle = 'rgba(0, 242, 254, 0.3)';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 8 * this.bladeGlowIntensity;
+        c.lineWidth = 1.2;
+        c.setLineDash([4, 4]);
+        c.beginPath();
+        c.arc(0, -4, 27, 0, Math.PI * 2);
+        c.stroke();
+        c.setLineDash([]);
+
+        c.fillStyle = '#38bdf8';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 6;
+        const zPhase = (this.animTimer * 0.8) % 3;
+        for (let z = 0; z < 3; z++) {
+          const zAge = (zPhase + z) % 3;
+          const zY = -28 - (zAge * 8);
+          const zX = 13 + Math.sin(zAge * 2) * 5;
+          const zAlpha = 1.0 - (zAge / 3);
+          c.globalAlpha = Math.max(0, zAlpha);
+          c.font = `${7 + z * 2}px monospace`;
+          c.fillText('z', zX, zY);
+        }
+        c.restore();
+      }
+
+      c.restore();
+    }
+
+    drawLeg(c, hipX, hipY, hipAngle, kneeAngle, isThrusterActive) {
+      c.save();
+      c.translate(hipX, hipY);
+      c.rotate(hipAngle);
+
+      c.strokeStyle = '#38bdf8';
+      c.lineWidth = 2.4;
+      c.beginPath();
+      c.moveTo(0, 0);
+      c.lineTo(0, 7);
+      c.stroke();
+
+      c.fillStyle = '#00f2fe';
+      c.beginPath();
+      c.arc(0, 7, 1.8, 0, Math.PI * 2);
+      c.fill();
+
+      c.save();
+      c.translate(0, 7);
+      c.rotate(kneeAngle);
+
+      c.strokeStyle = '#0284c7';
+      c.lineWidth = 2.2;
+      c.beginPath();
+      c.moveTo(0, 0);
+      c.lineTo(0, 7);
+      c.stroke();
+
+      c.fillStyle = '#070d1a';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 1.6;
+      c.beginPath();
+      c.roundRect(-4, 6, 9, 5, 2);
+      c.fill();
+      c.stroke();
+
+      if (isThrusterActive) {
+        c.save();
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 10 * this.bladeGlowIntensity;
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.moveTo(-3, 11);
+        c.lineTo(3, 11);
+        c.lineTo(0, 17 + Math.random() * 5);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.moveTo(-1.5, 11);
+        c.lineTo(1.5, 11);
+        c.lineTo(0, 14 + Math.random() * 3);
+        c.closePath();
+        c.fill();
+        c.restore();
+      }
+
+      c.restore();
+      c.restore();
+    }
+
+    drawArm(c, shoulderX, shoulderY, upperAngle, elbowAngle, handMode = 'bare', isRightArm = false, customKnifeAngle = 0) {
+      c.save();
+      c.translate(shoulderX, shoulderY);
+
+      c.fillStyle = '#070d1a';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 1.5;
+      c.beginPath();
+      c.arc(0, 0, 3.2, 0, Math.PI * 2);
+      c.fill();
+      c.stroke();
+
+      c.rotate(upperAngle);
+
+      c.strokeStyle = '#38bdf8';
+      c.lineWidth = 2.8;
+      c.lineCap = 'round';
+      c.beginPath();
+      c.moveTo(0, 0);
+      c.lineTo(6, 0);
+      c.stroke();
+
+      c.fillStyle = '#00f2fe';
+      c.beginPath();
+      c.arc(6, 0, 1.8, 0, Math.PI * 2);
+      c.fill();
+
+      c.save();
+      c.translate(6, 0);
+      c.rotate(elbowAngle);
+
+      c.strokeStyle = '#0284c7';
+      c.lineWidth = 2.6;
+      c.lineCap = 'round';
+      c.beginPath();
+      c.moveTo(0, 0);
+      c.lineTo(6.5, 0);
+      c.stroke();
+
+      c.save();
+      c.translate(6.5, 0);
+
+      if (handMode === 'knife' || handMode === true) {
+        c.rotate(customKnifeAngle);
+
+        c.fillStyle = '#0a101f';
+        c.strokeStyle = '#475569';
+        c.lineWidth = 1.0;
+        c.fillRect(-3, -2, 6, 4);
+
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(-3, 0, 1.3, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = '#091124';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.3;
+        c.beginPath();
+        c.roundRect(-2, -3, 5, 6, 2);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(0.5, 0, 1.1, 0, Math.PI * 2);
+        c.fill();
+
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.4;
+        c.beginPath();
+        c.moveTo(3, -4);
+        c.lineTo(3, 4);
+        c.stroke();
+
+        // Astra Plasma Dagger with 2.5x Glow
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 14 * this.bladeGlowIntensity;
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.moveTo(3, -2.8);
+        c.lineTo(18, -1);
+        c.lineTo(24, 0);
+        c.lineTo(18, 2);
+        c.lineTo(3, 2.8);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.moveTo(4, -1);
+        c.lineTo(20, 0);
+        c.lineTo(4, 1);
+        c.closePath();
+        c.fill();
+
+      } else if (handMode === 'stylus') {
+        c.rotate(customKnifeAngle);
+
+        c.fillStyle = '#091124';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.3;
+        c.beginPath();
+        c.roundRect(-2, -3, 5, 6, 2);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(0.5, 0, 1.1, 0, Math.PI * 2);
+        c.fill();
+
+        c.strokeStyle = '#cbd5e1';
+        c.lineWidth = 1.6;
+        c.lineCap = 'round';
+        c.beginPath();
+        c.moveTo(1, 0);
+        c.lineTo(9, 3.5);
+        c.stroke();
+
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(6, 2.3, 1.1, 0, Math.PI * 2);
+        c.fill();
+
+        c.strokeStyle = '#f59e0b';
+        c.shadowColor = '#f59e0b';
+        c.shadowBlur = 10 * this.bladeGlowIntensity;
+        c.lineWidth = 2.0;
+        c.beginPath();
+        c.moveTo(7.5, 3.0);
+        c.lineTo(11, 4.5);
+        c.stroke();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(11, 4.5, 1.2, 0, Math.PI * 2);
+        c.fill();
+
+      } else if (handMode === 'shield') {
+        c.fillStyle = '#091124';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.3;
+        c.beginPath();
+        c.roundRect(-2, -3, 5, 6, 2);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(0.5, 0, 1.2, 0, Math.PI * 2);
+        c.fill();
+
+        c.save();
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 10 * this.bladeGlowIntensity;
+        c.strokeStyle = 'rgba(0, 242, 254, 0.85)';
+        c.lineWidth = 1.5;
+        c.fillStyle = 'rgba(0, 242, 254, 0.2)';
+        c.beginPath();
+        c.arc(3.5, 0, 5, -Math.PI * 0.48, Math.PI * 0.48);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(2.5, 0, 1.2, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+
+      } else {
+        c.fillStyle = '#091124';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.3;
+        c.beginPath();
+        c.roundRect(-2, -3, 5, 6, 2);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(0.5, 0, 1.2, 0, Math.PI * 2);
+        c.fill();
+      }
+
+      c.restore();
+      c.restore();
+      c.restore();
+    }
+
+    drawFace(c) {
+      c.save();
+      c.shadowColor = '#00f2fe';
+      c.shadowBlur = 8 * this.bladeGlowIntensity;
+      c.fillStyle = '#00f2fe';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 1.8;
+
+      if (this.face === 'happy') {
+        c.beginPath();
+        c.moveTo(-7, -4); c.lineTo(-4, -7); c.lineTo(-1, -4);
+        c.moveTo(1, -4); c.lineTo(4, -7); c.lineTo(7, -4);
+        c.stroke();
+        c.beginPath();
+        c.arc(0, -2, 3.5, 0.2, Math.PI - 0.2);
+        c.stroke();
+      } else if (this.face === 'battle') {
+        c.beginPath();
+        c.moveTo(-7, -7); c.lineTo(-1, -4); c.lineTo(-7, -2);
+        c.moveTo(7, -7); c.lineTo(1, -4); c.lineTo(7, -2);
+        c.fill();
+      } else if (this.face === 'sprint') {
+        c.beginPath();
+        c.moveTo(-6, -7); c.lineTo(-2, -4); c.lineTo(-6, -1);
+        c.moveTo(6, -7); c.lineTo(2, -4); c.lineTo(6, -1);
+        c.stroke();
+      } else if (this.face === 'shocked') {
+        c.strokeStyle = '#f59e0b';
+        c.fillStyle = '#f59e0b';
+        c.shadowColor = '#f59e0b';
+        c.beginPath();
+        c.arc(-4.5, -5, 3.2, 0, Math.PI * 2);
+        c.arc(4.5, -5, 3.2, 0, Math.PI * 2);
+        c.stroke();
+        c.beginPath();
+        c.arc(-4.5, -5, 1.1, 0, Math.PI * 2);
+        c.arc(4.5, -5, 1.1, 0, Math.PI * 2);
+        c.fill();
+        c.beginPath();
+        c.arc(0, 0, 2.2, 0, Math.PI * 2);
+        c.stroke();
+      } else if (this.face === 'dizzy') {
+        c.strokeStyle = '#f59e0b';
+        c.shadowColor = '#f59e0b';
+        c.beginPath();
+        c.arc(-4.5, -5, 2.8, 0, Math.PI * 1.8);
+        c.stroke();
+        c.beginPath();
+        c.arc(4.5, -5, 2.8, 0, Math.PI * 1.8);
+        c.stroke();
+      } else if (this.face === 'sad') {
+        c.beginPath();
+        c.moveTo(-7, -7); c.lineTo(-1, -7);
+        c.moveTo(-4, -7); c.lineTo(-4, -2);
+        c.moveTo(1, -7); c.lineTo(7, -7);
+        c.moveTo(4, -7); c.lineTo(4, -2);
+        c.stroke();
+        c.fillStyle = '#38bdf8';
+        c.beginPath();
+        c.arc(-4, 2, 1.4, 0, Math.PI * 2);
+        c.arc(4, 2, 1.4, 0, Math.PI * 2);
+        c.fill();
+      } else if (this.face === 'victory') {
+        c.fillStyle = '#f59e0b';
+        c.shadowColor = '#f59e0b';
+        c.font = '7px sans-serif';
+        c.fillText('★', -7, -2);
+        c.fillText('★', 1, -2);
+        c.strokeStyle = '#f59e0b';
+        c.beginPath();
+        c.arc(0, 0, 3.5, 0.2, Math.PI - 0.2);
+        c.stroke();
+      } else if (this.face === 'wink') {
+        c.beginPath();
+        c.moveTo(-6, -7); c.lineTo(-2, -4); c.lineTo(-6, -1);
+        c.stroke();
+        c.beginPath();
+        c.arc(4, -4, 2.2, 0, Math.PI * 2);
+        c.fill();
+        c.beginPath();
+        c.arc(0, 0, 2.8, 0.2, Math.PI - 0.2);
+        c.stroke();
+      } else if (this.face === 'thinking') {
+        c.fillStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 8 * this.bladeGlowIntensity;
+        for (let d = 0; d < 3; d++) {
+          const dotX = -6 + d * 6;
+          const dotY = -4 + Math.sin(this.animTimer * 3.5 + d * 0.8) * 2.2;
+          c.beginPath();
+          c.arc(dotX, dotY, 1.6, 0, Math.PI * 2);
+          c.fill();
+        }
+      } else if (this.face === 'writing') {
+        c.beginPath();
+        c.moveTo(-6, -7); c.lineTo(-2, -4); c.lineTo(-6, -1);
+        c.moveTo(6, -7); c.lineTo(2, -4); c.lineTo(6, -1);
+        c.stroke();
+        c.beginPath();
+        c.moveTo(-3, 0); c.lineTo(3, 0);
+        c.stroke();
+        c.fillStyle = '#38bdf8';
+        c.beginPath();
+        c.arc(8, -6, 1.2, 0, Math.PI * 2);
+        c.fill();
+      } else if (this.face === 'waiting') {
+        // Natural periodic blinking: blinks for ~12 frames every 210 frames (~3.5 seconds)
+        const isBlinking = (this.blinkTimer > 195);
+        if (isBlinking) {
+          // Closed happy blinking curves
+          c.beginPath();
+          c.moveTo(-7, -4); c.lineTo(-4, -6); c.lineTo(-1, -4);
+          c.moveTo(1, -4); c.lineTo(4, -6); c.lineTo(7, -4);
+          c.stroke();
+        } else {
+          // Open glowing cyber eyes with lively pupils & white specular shine
+          const glanceX = Math.sin(this.animTimer * 0.8) * 0.8;
+          c.fillStyle = '#00f2fe';
+          c.shadowColor = '#00f2fe';
+          c.shadowBlur = 8 * this.bladeGlowIntensity;
+          c.beginPath();
+          c.roundRect(-7 + glanceX, -7, 4.5, 6, 2);
+          c.roundRect(2.5 + glanceX, -7, 4.5, 6, 2);
+          c.fill();
+
+          // White specular reflection gleam
+          c.fillStyle = '#ffffff';
+          c.shadowBlur = 4;
+          c.beginPath();
+          c.arc(-4 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
+          c.arc(5.5 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
+          c.fill();
+        }
+
+        // Cute gentle cyber smile
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.6;
+        c.beginPath();
+        c.arc(0, 0, 2.6, 0.2, Math.PI - 0.2);
+        c.stroke();
+      }
+
+      c.restore();
+    }
+  }
+
+  // ==========================================================================
   // 1. Dynamic Comet & Particle Engine
   // ==========================================================================
   class ParticleEngine {
@@ -24,6 +1499,10 @@
       this.canvas = document.getElementById(canvasId);
       if (!this.canvas) return;
       this.ctx = this.canvas.getContext('2d');
+
+      // Foreground Mascot & Combat Canvas (z-index: 99990, always on top of all blocks and text)
+      this.charlieCanvas = document.getElementById('charlieCanvas');
+      this.charlieCtx = this.charlieCanvas ? this.charlieCanvas.getContext('2d') : null;
       this.isEnabled = false;
 
       // Multi-Shade Theme Palettes
@@ -87,6 +1566,24 @@
       this.dpr = Math.min(window.devicePixelRatio || 1, 2);
       this.onShatter = null;
 
+      // Cyber Charlie Companion & Combat Cursor (Scale: 1.0x, Blade Glow: 2.5x)
+      this.charlie = new CyberCharlie();
+      this.charlie.scale = 1.0;
+      this.charlie.bladeGlowIntensity = 2.5;
+
+      // Miniature Dock Cyber Charlie (for floating bottom-right launcher button)
+      this.dockCanvas = document.getElementById('charlieDockCanvas');
+      this.dockCtx = null;
+      this.dockCharlie = null;
+      if (this.dockCanvas) {
+        this.dockCtx = this.dockCanvas.getContext('2d');
+        this.dockCharlie = new CyberCharlie(36, 39, 0.55);
+        this.dockCharlie.bladeGlowIntensity = 2.5;
+        this.dockCharlie.state = 'waiting';
+        this.dockCharlie.face = 'waiting';
+        window.portfolioDockCharlie = this.dockCharlie;
+      }
+
       this.init();
     }
 
@@ -112,6 +1609,11 @@
         this.mouse.y = e.clientY;
         this.mouse.isHovered = true;
 
+        if (this.charlie) {
+          this.charlie.targetX = e.clientX;
+          this.charlie.targetY = e.clientY;
+        }
+
         // Dynamic directional tilt based on mouse X position (Left / Center / Right)
         const normX = (this.mouse.x / this.width) - 0.5;
         this.targetAngle = (Math.PI / 2) + (normX * 0.65);
@@ -127,6 +1629,9 @@
       // Supernova Click Burst & Comet Shatter
       window.addEventListener('click', (e) => {
         if (!this.isEnabled) return;
+        if (this.charlie && this.charlie.state !== 'flash_dash') {
+          this.charlie.triggerRandomCombatAction();
+        }
         this.triggerShatterBurst(e.clientX, e.clientY, 20);
 
         let blastedCount = 0;
@@ -160,6 +1665,13 @@
       this.canvas.width = this.width * this.dpr;
       this.canvas.height = this.height * this.dpr;
       this.ctx.scale(this.dpr, this.dpr);
+      if (this.charlieCanvas) {
+        this.charlieCanvas.width = this.width * this.dpr;
+        this.charlieCanvas.height = this.height * this.dpr;
+        if (this.charlieCtx) {
+          this.charlieCtx.scale(this.dpr, this.dpr);
+        }
+      }
     }
 
     setTheme(themeKey) {
@@ -266,6 +1778,12 @@
     }
 
     update() {
+      // 1. Cyber Charlie update runs unconditionally (handles dash, terminal anchoring, and cursor tracking)
+      if (this.charlie) {
+        this.charlie.update();
+      }
+
+      // Background cosmic comets, particles, shards & ripples only update when Game Mode is active
       if (!this.isEnabled) return;
 
       // Smoothly interpolate wind angle
@@ -337,8 +1855,58 @@
           this.ripples.splice(i, 1);
         }
       }
-    }    draw() {
-      if (!this.isEnabled) return;
+
+      // 4. Check comet blade collisions when armed
+      if (this.charlie) {
+        const hasBladeEquipped = (this.charlie.state !== 'thinking' && this.charlie.state !== 'writing' && this.charlie.state !== 'waiting');
+        if (hasBladeEquipped) {
+          const bladeBoxX = this.charlie.x + this.charlie.facing * 22 * this.charlie.scale;
+          const bladeBoxY = this.charlie.y - 4 * this.charlie.scale;
+
+          for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i];
+            const dist = Math.hypot(p.x - bladeBoxX, p.y - bladeBoxY);
+            if (dist < 42 * this.charlie.scale) {
+              this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 14 : 8, p.isSuperFast);
+              this.particles[i] = this.createParticle(false);
+              if (this.onShatter) {
+                this.onShatter(p.x, p.y, 1);
+              }
+              this.charlie.triggerRandomCombatAction();
+            }
+          }
+        }
+      }
+    }
+
+    draw() {
+      // 1. Draw Cyber Charlie on FOREGROUND CANVAS unconditionally whenever deployed
+      if (this.charlieCtx) {
+        this.charlieCtx.clearRect(0, 0, this.width, this.height);
+      }
+      const shouldDrawCharlie = this.charlie && (
+        this.isEnabled ||
+        this.charlie.state === 'flash_dash' ||
+        this.charlie.sectionActive ||
+        this.charlie.state === 'thinking' ||
+        this.charlie.state === 'writing' ||
+        this.charlie.state === 'victory' ||
+        (this.charlie.state === 'waiting' && this.charlie.x > -200)
+      );
+      if (shouldDrawCharlie) {
+        const cCtx = this.charlieCtx || this.ctx;
+        this.charlie.drawAfterimages(cCtx);
+        this.charlie.drawLightningArcs(cCtx);
+        this.charlie.drawBladeTrails(cCtx);
+        this.charlie.drawSparks(cCtx);
+        this.charlie.draw(cCtx);
+      }
+
+      // Background cosmic comets, ripples, and particles ONLY draw when Game Mode is active
+      if (!this.isEnabled) {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+        return;
+      }
       this.ctx.clearRect(0, 0, this.width, this.height);
 
       // 1. Draw Shockwave Ripples with Neon Glow
@@ -441,9 +2009,55 @@
       this.ctx.globalAlpha = 1;
     }
 
+    drawDockCharlie() {
+      if (!this.dockCanvas) {
+        this.dockCanvas = document.getElementById('charlieDockCanvas');
+        if (this.dockCanvas) {
+          this.dockCtx = this.dockCanvas.getContext('2d');
+          this.dockCharlie = new CyberCharlie(36, 39, 0.55);
+          this.dockCharlie.bladeGlowIntensity = 2.5;
+          this.dockCharlie.state = 'waiting';
+          this.dockCharlie.face = 'waiting';
+          window.portfolioDockCharlie = this.dockCharlie;
+        }
+      }
+      if (!this.dockCanvas || !this.dockCtx || !this.dockCharlie) return;
+
+      // When Game Mode is active or Charlie is actively deployed outside the dock, suppress dock Charlie
+      const isCharlieDeployed = this.isEnabled ||
+        (this.charlie && (this.charlie.state === 'flash_dash' || this.charlie.sectionActive || (this.charlie.state !== 'waiting' && this.charlie.x > -200)));
+
+      if (isCharlieDeployed) {
+        return;
+      }
+
+      // Ensure dock Charlie stays in lively waiting state
+      if (this.dockCharlie.state !== 'waiting') {
+        this.dockCharlie.state = 'waiting';
+        this.dockCharlie.face = 'waiting';
+      }
+
+      this.dockCharlie.update();
+      this.dockCtx.clearRect(0, 0, this.dockCanvas.width, this.dockCanvas.height);
+
+      // Subtle ambient cyber energy aura in dock
+      const pulseAlpha = 0.25 + Math.sin(this.dockCharlie.animTimer * 2.0) * 0.15;
+      this.dockCtx.save();
+      this.dockCtx.beginPath();
+      this.dockCtx.arc(36, 36, 30, 0, Math.PI * 2);
+      this.dockCtx.fillStyle = `rgba(0, 242, 254, ${pulseAlpha * 0.2})`;
+      this.dockCtx.shadowColor = '#00f2fe';
+      this.dockCtx.shadowBlur = 10;
+      this.dockCtx.fill();
+      this.dockCtx.restore();
+
+      this.dockCharlie.draw(this.dockCtx);
+    }
+
     animate() {
       this.update();
       this.draw();
+      this.drawDockCharlie();
       requestAnimationFrame(() => this.animate());
     }
   }
@@ -923,7 +2537,7 @@
             e.stopPropagation();
             this.hudWidget.classList.remove('minimized');
             if (this.minBtn) this.minBtn.innerHTML = '&minus;';
-            if (this.avatarBox) this.avatarBox.setAttribute('title', 'Click to poke Sentinel-X!');
+            if (this.avatarBox) this.avatarBox.setAttribute('title', 'Click to poke Cyber Charlie!');
           }
         });
       }
@@ -935,7 +2549,7 @@
           if (this.hudWidget && this.hudWidget.classList.contains('minimized')) {
             this.hudWidget.classList.remove('minimized');
             if (this.minBtn) this.minBtn.innerHTML = '&minus;';
-            if (this.avatarBox) this.avatarBox.setAttribute('title', 'Click to poke Sentinel-X!');
+            if (this.avatarBox) this.avatarBox.setAttribute('title', 'Click to poke Cyber Charlie!');
             return;
           }
           const pokeFace = this.faces.poke[Math.floor(Math.random() * this.faces.poke.length)];
@@ -952,7 +2566,7 @@
           const isMin = this.hudWidget.classList.toggle('minimized');
           this.minBtn.innerHTML = isMin ? '+' : '&minus;';
           if (this.avatarBox) {
-            this.avatarBox.setAttribute('title', isMin ? 'Click to open Sentinel Scoreboard!' : 'Click to poke Sentinel-X!');
+            this.avatarBox.setAttribute('title', isMin ? 'Click to open Cyber Charlie Scoreboard!' : 'Click to poke Cyber Charlie!');
           }
         });
       }
@@ -962,7 +2576,7 @@
         this.hudWidget.classList.add('minimized');
         if (this.minBtn) this.minBtn.innerHTML = '+';
         if (this.avatarBox) {
-          this.avatarBox.setAttribute('title', 'Click to open Sentinel Scoreboard!');
+          this.avatarBox.setAttribute('title', 'Click to open Cyber Charlie Scoreboard!');
         }
       }
     }
@@ -1150,6 +2764,8 @@
   function init() {
     // 1. Initialize Particle Engine
     const engine = new ParticleEngine('cometCanvas');
+    window.portfolioEngine = engine;
+    window.portfolioCharlie = engine ? engine.charlie : null;
 
     // 2. Initialize Cosmic Audio Synthesizer Engine
     const soundEngine = new CosmicSoundEngine();
@@ -1286,6 +2902,11 @@
     window.syncCharlieGameModeChips = syncCharlieGameModeChips;
 
     function toggleFunMode(forceState) {
+      const floatingBtn = document.getElementById('floatingCharlieBtn');
+      const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+      const dockCenterX = dockRect.left + dockRect.width / 2;
+      const dockCenterY = dockRect.top + dockRect.height / 2;
+
       if (window.innerWidth <= 768) {
         if (forceState === false) {
           if (desktopNoticeToast) desktopNoticeToast.classList.add('hidden');
@@ -1315,7 +2936,43 @@
         syncCharlieGameModeChips(true);
         if (scoreboard) {
           scoreboard.setFace('[★_★]', 1800);
-          scoreboard.setMessage('Weapons & Synth BGM online! Vaporize comets, Cadet! 🚀');
+          scoreboard.setMessage('Cyber Charlie deployed! Vaporize comets, Cadet! 🚀');
+        }
+
+        // Charlie Flash Man Supersonic Dash: directly to Cursor!
+        // Game Mode unconditionally overrides everything
+        const targetX = (engine.mouse && engine.mouse.x > 0) ? engine.mouse.x : (window.innerWidth / 2);
+        const targetY = (engine.mouse && engine.mouse.y > 0) ? engine.mouse.y : (window.innerHeight / 2);
+
+        // Lockout the chatbot & show that Charlie is busy destroying comets
+        const charlieTerminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+        if (charlieTerminal) {
+          charlieTerminal.classList.add('game-mode-lockout');
+        }
+        const aiInput = document.getElementById('aiInputField');
+        if (aiInput) {
+          aiInput.disabled = true;
+          aiInput.placeholder = 'Charlie is busy destroying comets... Click "Disable Game to Use Bot" to chat';
+        }
+        const aiSend = document.getElementById('aiSendBtn');
+        if (aiSend) aiSend.disabled = true;
+
+        const aiStatusPill = document.getElementById('aiBotStatusPill');
+        if (aiStatusPill) {
+          aiStatusPill.classList.add('combat-pill');
+          const pulse = aiStatusPill.querySelector('.ai-status-pulse');
+          if (pulse) pulse.classList.add('combat-pulse');
+          const text = aiStatusPill.querySelector('.ai-status-text') || aiStatusPill.querySelector('span:last-child');
+          if (text) text.textContent = 'CHARLIE DESTROYING COMETS';
+        }
+
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+        if (engine && engine.charlie) {
+          engine.charlie.sectionActive = false;
+          engine.charlie.isGameModeDeploy = true;
+          const startX = (engine.charlie.x > -200) ? engine.charlie.x : dockCenterX;
+          const startY = (engine.charlie.y > -200) ? engine.charlie.y : dockCenterY;
+          engine.charlie.triggerDeploy(startX, startY, targetX, targetY, true);
         }
       } else {
         soundEngine.stopBGM();
@@ -1327,6 +2984,41 @@
         if (botHud) botHud.classList.add('hidden');
         if (missionToast) missionToast.classList.add('hidden');
         syncCharlieGameModeChips(false);
+
+        // Unlock the chatbot & restore normal state
+        const charlieTerminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+        if (charlieTerminal) {
+          charlieTerminal.classList.remove('game-mode-lockout');
+        }
+        const aiInput = document.getElementById('aiInputField');
+        if (aiInput) {
+          aiInput.disabled = false;
+          aiInput.placeholder = 'Ask about AI Certifications, OpenUSD, Conform Ingest, MCP, On-Prem LLMs, n8n, or Why Hire Rajeev...';
+        }
+        const aiSend = document.getElementById('aiSendBtn');
+        if (aiSend) aiSend.disabled = false;
+
+        const aiStatusPill = document.getElementById('aiBotStatusPill');
+        if (aiStatusPill) {
+          aiStatusPill.classList.remove('combat-pill');
+          const pulse = aiStatusPill.querySelector('.ai-status-pulse');
+          if (pulse) pulse.classList.remove('combat-pulse');
+          const text = aiStatusPill.querySelector('.ai-status-text') || aiStatusPill.querySelector('span:last-child');
+          if (text) text.textContent = 'LOCAL KB READY';
+        }
+
+        // Charlie Flash Man Reverse Return Dash: straight back to mascot station or dock!
+        document.body.classList.remove('combat-cursor-active');
+        if (engine && engine.charlie && engine.charlie.x > -200) {
+          const anchor = engine.charlie.getChatMascotAnchor();
+          if (anchor.isVisible) {
+            engine.charlie.triggerDeploy(engine.charlie.x, engine.charlie.y, anchor.x, anchor.y, false);
+          } else {
+            engine.charlie.triggerDock(dockCenterX, dockCenterY);
+          }
+        } else {
+          if (floatingBtn) floatingBtn.classList.remove('hidden');
+        }
       }
     }
     window.togglePortfolioGameMode = toggleFunMode;
@@ -2244,11 +3936,11 @@ You can download Rajeev's authentic executive portrait directly for event lineup
         const muteResponses = [
           `🔇 <strong>GAME AUDIO MUTED</strong><br/><br/>
 • Ambient synth BGM and laser sfx have been silenced.<br/>
-• Sentinel-X HUD is running in stealth mode.<br/><br/>
+• Cyber Charlie HUD is running in stealth mode.<br/><br/>
 <em>Type <code>unmute sound</code> or <code>sound on</code> anytime to bring back the audio!</em>`,
           `🔇 <strong>STEALTH MODE ENGAGED // AUDIO OFF</strong><br/><br/>
 • Audio synthesizer silenced for focus.<br/>
-• Particle physics and combo scoring continue uninterrupted.<br/><br/>
+• Particle physics, Cyber Charlie combat, and combo scoring continue uninterrupted.<br/><br/>
 <em>Type <code>unmute sound</code> whenever you want to restore the synth BGM!</em>`
         ];
         return {
@@ -2273,7 +3965,7 @@ You can download Rajeev's authentic executive portrait directly for event lineup
         const unmuteResponses = [
           `🔊 <strong>GAME AUDIO UNMUTED</strong><br/><br/>
 • Ambient synthwave BGM and interactive collision sfx are now live.<br/>
-• Sentinel-X audio cues active.<br/><br/>
+• Cyber Charlie audio cues active.<br/><br/>
 <em>Type <code>mute sound</code> anytime for silent play!</em>`,
           `🔊 <strong>SYNTH AUDIO ONLINE // 44.1kHz WEB AUDIO ACTIVE</strong><br/><br/>
 • Dynamic pentatonic laser sfx and ambient pads engaged.<br/>
@@ -2308,8 +4000,8 @@ You can download Rajeev's authentic executive portrait directly for event lineup
             id: 'game_mobile_notice',
             title: 'Desktop Precision Required for Cosmic Game Mode',
             response: `📱 <strong>DESKTOP &amp; LAPTOP PRECISION REQUIRED:</strong><br/><br/>
-The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X Scoreboard</strong> are engineered specifically for precision mouse/trackpad pointer physics, raycasted particle collision, and real-time Web Audio synthesis.<br/><br/>
-💻 <em>Please open <strong>rajeev-mutyalu.github.io/portfolio-website</strong> on a desktop or laptop to vaporize comets, build multi-stage combos, and unlock Sentinel-X ranks!</em>`,
+The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charlie Combat System</strong> are engineered specifically for precision mouse/trackpad pointer physics, raycasted particle collision, and real-time Web Audio synthesis.<br/><br/>
+💻 <em>Please open <strong>rajeev-mutyalu.github.io/portfolio-website</strong> on a desktop or laptop to vaporize comets, build multi-stage combos, and slash comets with Cyber Charlie!</em>`,
             followups: getDynamicFollowups([
               'Who is Rajeev Mutyalu and why should we hire him?',
               'Tell me about your 20-year engineering leadership and mentorship background',
@@ -2325,13 +4017,13 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
         const gameOnResponses = [
           `🎮 <strong>COSMIC GAME MODE ACTIVATED!</strong><br/><br/>
 • <strong>Comet Cascade Canvas:</strong> Online &amp; responsive to mouse/trackpad physics.<br/>
-• <strong>Sentinel-X HUD:</strong> Tracking combos, rank, and score in the bottom-right corner.<br/>
+• <strong>Cyber Charlie:</strong> Deployed as supersonic Flash Man combat cursor with Astra Plasma Dagger!<br/>
 • <strong>Audio Synthesizer:</strong> Ambient BGM and laser sfx unlocked.<br/>
-• <strong>Controls:</strong> Hover or click on falling comets to vaporize them and build combos!<br/><br/>
+• <strong>Controls:</strong> Guide Cyber Charlie to slash comets, trigger random combo flurries, and build multi-stage combos!<br/><br/>
 <em>Switch visual presets, mute audio, or turn off below:</em>`,
 
-          `🚀 <strong>SENTINEL-X COMET DEFENSE ONLINE!</strong><br/><br/>
-• Dual shockwave physics and raycasted particle collisions active.<br/>
+          `🚀 <strong>CYBER CHARLIE COMET DEFENSE ONLINE!</strong><br/><br/>
+• Supersonic Flash Man locomotion, randomized combat slashes, and raycasted blade collisions active.<br/>
 • Chain comet hits within 1.5 seconds to trigger multi-stage combo multipliers (<code>+5 COMBO x3! 🔥</code>).<br/>
 • Web Audio synthesizer reactive to hit velocity.<br/><br/>
 <em>Select an FX preset or explore technical topics below:</em>`
@@ -2358,11 +4050,11 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Sentinel-X S
         }
         const gameOffResponses = [
           `🌌 <strong>COSMIC GAME MODE DEACTIVATED.</strong><br/><br/>
-• The comet canvas and Sentinel-X HUD have returned to standby mode.<br/>
+• Cyber Charlie has returned to the dock in standby mode and the cursor is restored.<br/>
 • Audio synthesis halted.<br/><br/>
 <em>Type <code>turn on game mode</code> or click the Cosmic Switch in the top navbar anytime to jump back in!</em>`,
 
-          `🛑 <strong>SENTINEL-X STANDBY // GAME MODE OFF</strong><br/><br/>
+          `🛑 <strong>CYBER CHARLIE STANDBY // GAME MODE OFF</strong><br/><br/>
 • Interactive particle arcade disengaged.<br/>
 • High-contrast reading mode restored.<br/><br/>
 <em>Type <code>turn on game mode</code> anytime to play again!</em>`
@@ -2670,14 +4362,34 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       aiChatStream.appendChild(userMsgDiv);
       scrollStreamToBottom();
 
-      // 2. Set Status Telemetry to Thinking
+      // 2. Set Status Telemetry to Thinking & Trigger Charlie Thinking Animation
       setCharlieThinkingState(true);
+      if (window.portfolioCharlie) {
+        window.portfolioCharlie.triggerThinking();
+      }
+      if (window.portfolioDockCharlie) {
+        window.portfolioDockCharlie.triggerThinking();
+      }
+
+      const CYBER_CHARLIE_AVATAR_SVG = `
+        <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
+          <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
+          <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
+          <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
+          <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
+          <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
+          <path d="M11 19 L13 16 L15 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 19 L23 16 L25 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 22 Q18 25 21 22" stroke="#00f2fe" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+      `;
 
       // 3. Append Typing Indicator Bubble
       const typingDiv = document.createElement('div');
       typingDiv.className = 'ai-message ai-bot-msg bot-message ai-typing-indicator';
       typingDiv.innerHTML = `
-        <div class="ai-msg-avatar" title="Charlie (AI Assistant)">🤖</div>
+        <div class="ai-msg-avatar ai-bot-avatar" title="Charlie (AI Assistant)">${CYBER_CHARLIE_AVATAR_SVG}</div>
         <div class="ai-msg-body">
           <div class="ai-msg-author">Charlie <span>retrieving local weights...</span></div>
           <div class="ai-msg-content ai-typing-bubble">
@@ -2699,7 +4411,17 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
           typingDiv.parentNode.removeChild(typingDiv);
         }
 
-        setCharlieThinkingState(false);
+        // Charlie enters Writing Mode!
+        if (window.portfolioCharlie) {
+          window.portfolioCharlie.triggerWriting();
+        }
+        if (window.portfolioDockCharlie) {
+          window.portfolioDockCharlie.triggerWriting();
+        }
+        if (aiBotStatusPill) {
+          const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+          if (text) text.textContent = 'CHARLIE WRITING ANS [FLASH SPEED]...';
+        }
 
         const botMsgDiv = document.createElement('div');
         botMsgDiv.className = 'ai-message ai-bot-msg bot-message';
@@ -2728,16 +4450,67 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         }
 
         botMsgDiv.innerHTML = `
-          <div class="ai-msg-avatar" title="Charlie (AI Assistant)">🤖</div>
+          <div class="ai-msg-avatar ai-bot-avatar" title="Cyber Charlie (AI Assistant)">${CYBER_CHARLIE_AVATAR_SVG}</div>
           <div class="ai-msg-body">
             <div class="ai-msg-author">Charlie <span>Rajeev's AI Assistant</span></div>
-            <div class="ai-msg-content">${match.response}</div>
-            ${followupsHtml}
+            <div class="ai-msg-content"></div>
           </div>
         `;
 
         aiChatStream.appendChild(botMsgDiv);
         scrollStreamToBottom();
+
+        const contentEl = botMsgDiv.querySelector('.ai-msg-content');
+        const fullResponse = match.response;
+
+        // Flash Man Fast Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus!
+        let charIndex = 0;
+        const chunkSize = 18;
+        const tickInterval = 12;
+
+        const typeInterval = setInterval(() => {
+          charIndex = Math.min(fullResponse.length, charIndex + chunkSize);
+          contentEl.innerHTML = fullResponse.substring(0, charIndex) + (charIndex < fullResponse.length ? '<span class="typewriter-cursor">⚡</span>' : '');
+          scrollStreamToBottom();
+
+          if (charIndex >= fullResponse.length) {
+            clearInterval(typeInterval);
+            contentEl.innerHTML = fullResponse;
+
+            if (followupsHtml) {
+              const followContainer = document.createElement('div');
+              followContainer.innerHTML = followupsHtml;
+              botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
+            }
+
+            setCharlieThinkingState(false);
+            if (aiBotStatusPill) {
+              const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+              if (text) text.textContent = 'ANS COMPLETE ✨';
+            }
+
+            // Charlie celebration!
+            if (window.portfolioCharlie) {
+              window.portfolioCharlie.triggerVictory();
+              if (window.portfolioDockCharlie) {
+                window.portfolioDockCharlie.triggerVictory();
+              }
+              setTimeout(() => {
+                if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+                  window.portfolioCharlie.triggerWaiting();
+                }
+                if (window.portfolioDockCharlie) {
+                  window.portfolioDockCharlie.triggerWaiting();
+                }
+                if (aiBotStatusPill) {
+                  const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+                  if (text) text.textContent = 'LOCAL KB READY';
+                }
+              }, 2000);
+            }
+            scrollStreamToBottom();
+          }
+        }, tickInterval);
       }, thinkingDelay);
     }
 
@@ -2756,6 +4529,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       const btn = e.target.closest('.ai-sidebar-btn, .ai-topic-pill, .ai-followup-btn');
       if (btn) {
         e.preventDefault();
+        if (window.portfolioEngine?.isEnabled) return; // Chatbot paused while Game Mode is active
         const query = btn.getAttribute('data-query') || btn.textContent.replace(/^[\s→•🔌⚡🎬📦🔒🎙️🎥🐍🐾🏆🌟🛑🌌💎☄️🎮🔇🔊]+\s*/g, '').trim();
         if (query) {
           document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
@@ -2770,11 +4544,32 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
     if (aiChatForm && aiInputField) {
       aiChatForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        if (window.portfolioEngine?.isEnabled) return; // Chatbot paused while Game Mode is active
         const q = aiInputField.value.trim();
         if (!q) return;
         aiInputField.value = '';
         document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
         renderBotResponse(q);
+      });
+    }
+
+    // 3. Setup "Disable Game to Use Bot" Button on Chatbot Lockout Overlay
+    const disableGameBtn = document.getElementById('aiDisableGameBtn');
+    if (disableGameBtn) {
+      disableGameBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof window.togglePortfolioGameMode === 'function') {
+          window.togglePortfolioGameMode(false);
+        }
+        setTimeout(() => {
+          const input = document.getElementById('aiInputField');
+          if (input) {
+            input.focus({ preventScroll: true });
+            input.classList.add('input-pulse-highlight');
+            setTimeout(() => input.classList.remove('input-pulse-highlight'), 1200);
+          }
+        }, 300);
       });
     }
 
@@ -2785,6 +4580,12 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       floatingCharlieBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (window.portfolioDockCharlie) {
+          window.portfolioDockCharlie.triggerJump();
+        }
+        if (typeof window.deployCharlieToAiSection === 'function') {
+          window.deployCharlieToAiSection();
+        }
         const targetSection = document.getElementById('ai-assistant') || document.getElementById('charlie') || document.querySelector('.ai-bot-terminal');
         if (targetSection) {
           const navOffset = 76; // Clean scroll clearance so "Meet Charlie — Rajeev's AI Assistant" header is fully visible
@@ -2804,6 +4605,92 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         }, 350);
       });
     }
+
+    // 4. Setup Meet Charlie Section Fly-Out & Return Observer
+    function setupCharlieSectionObserver() {
+      const section = document.getElementById('ai-assistant');
+      const terminal = document.querySelector('.ai-bot-terminal') || section;
+      if (!section || !terminal) return;
+
+      const deployToSection = () => {
+        const engine = window.portfolioEngine;
+        if (!engine || !engine.charlie) return;
+        if (engine.isEnabled) return; // Do not interrupt Game Mode!
+        if (engine.charlie.sectionActive || engine.charlie.state === 'flash_dash') return;
+
+        const floatingBtn = document.getElementById('floatingCharlieBtn');
+        const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+        const dockCenterX = dockRect.left + dockRect.width / 2;
+        const dockCenterY = dockRect.top + dockRect.height / 2;
+
+        const anchor = engine.charlie.getChatMascotAnchor();
+        if (!anchor.isVisible) return;
+
+        if (floatingBtn) floatingBtn.classList.add('hidden');
+        engine.charlie.triggerDeploy(dockCenterX, dockCenterY, anchor.x, anchor.y, false);
+      };
+
+      const returnToDock = () => {
+        const engine = window.portfolioEngine;
+        if (!engine || !engine.charlie) return;
+        if (engine.isEnabled) return; // Game Mode controls its own return
+        if (!engine.charlie.sectionActive && engine.charlie.state !== 'waiting' && engine.charlie.state !== 'thinking' && engine.charlie.state !== 'writing' && engine.charlie.state !== 'victory') return;
+        if (engine.charlie.x < -200) return;
+
+        const floatingBtn = document.getElementById('floatingCharlieBtn');
+        const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+        const dockCenterX = dockRect.left + dockRect.width / 2;
+        const dockCenterY = dockRect.top + dockRect.height / 2;
+
+        engine.charlie.triggerDock(dockCenterX, dockCenterY);
+      };
+
+      window.deployCharlieToAiSection = deployToSection;
+      window.returnCharlieToDock = returnToDock;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            deployToSection();
+          } else {
+            returnToDock();
+          }
+        });
+      }, {
+        threshold: 0.15
+      });
+
+      observer.observe(section);
+
+      // Keep Charlie deployment in sync on scroll so he never desyncs from chat view
+      window.addEventListener('scroll', () => {
+        const engine = window.portfolioEngine;
+        if (!engine || !engine.charlie || engine.isEnabled) return;
+        if (engine.charlie.state === 'flash_dash') return;
+
+        const anchor = engine.charlie.getChatMascotAnchor();
+        if (anchor.isVisible) {
+          if (!engine.charlie.sectionActive && engine.charlie.x < -200) {
+            deployToSection();
+          }
+        } else {
+          if (engine.charlie.sectionActive && engine.charlie.x > -200) {
+            returnToDock();
+          }
+        }
+      }, { passive: true });
+
+      // Connect top navbar & mobile drawer quick-links to trigger fly-out proactively
+      document.querySelectorAll('a[href="#ai-assistant"]').forEach(link => {
+        link.addEventListener('click', () => {
+          setTimeout(() => {
+            deployToSection();
+          }, 150);
+        });
+      });
+    }
+
+    setupCharlieSectionObserver();
   }
 
   if (document.readyState === 'loading') {

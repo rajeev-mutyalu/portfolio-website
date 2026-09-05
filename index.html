@@ -31,6 +31,8 @@
        ✨ Interactive Comet Cascade Canvas Background (Inspired by getdesign.md)
        ========================================================================= -->
   <canvas id="cometCanvas" class="fx-disabled"></canvas>
+  <!-- Cyber Charlie Foreground Mascot & Combat Canvas (Always On Top) -->
+  <canvas id="charlieCanvas"></canvas>
 
   <!-- Ambient Background Glows -->
   <div class="ambient-glow glow-top-left"></div>
@@ -47,7 +49,21 @@
 
       <nav class="nav-links">
         <a href="#initiatives" class="nav-link">Arsenal</a>
-        <a href="#ai-assistant" class="nav-link nav-ai-link"><span class="nav-ai-dot"></span> 🤖 Charlie (AI)</a>
+        <a href="#ai-assistant" class="nav-link nav-ai-link" title="Ask Cyber Charlie (AI Assistant)">
+          <span class="nav-ai-dot"></span>
+          <svg class="nav-charlie-head" width="17" height="17" viewBox="0 0 36 36" fill="none">
+            <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
+            <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2.2"/>
+            <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
+            <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
+            <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
+            <path d="M11 19 L13 16 L15 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 19 L23 16 L25 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 22 Q18 25 21 22" stroke="#00f2fe" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          </svg>
+          <span>Charlie (AI)</span>
+        </a>
         <a href="#architecture" class="nav-link">Architecture</a>
         <a href="#conform" class="nav-link">Turnover &amp; Conform</a>
         <a href="#films" class="nav-link">Credits</a>
@@ -117,7 +133,20 @@
       <div class="mobile-nav-content">
         <a href="cv.html" class="mobile-nav-link" style="color: var(--accent-cyan); font-weight: 700;">📄 View Curriculum Vitae (CV)</a>
         <a href="#initiatives" class="mobile-nav-link">🚀 Technical Arsenal &amp; AI Stack</a>
-        <a href="#ai-assistant" class="mobile-nav-link mobile-nav-ai">🤖 Charlie (AI Assistant)</a>
+        <a href="#ai-assistant" class="mobile-nav-link mobile-nav-ai">
+          <svg class="nav-charlie-head" width="18" height="18" viewBox="0 0 36 36" fill="none" style="vertical-align: middle; margin-right: 6px;">
+            <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
+            <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2.2"/>
+            <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
+            <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
+            <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
+            <path d="M11 19 L13 16 L15 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 19 L23 16 L25 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 22 Q18 25 21 22" stroke="#00f2fe" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          </svg>
+          Charlie (AI Assistant)
+        </a>
         <a href="#architecture" class="mobile-nav-link">🎬 Architecture Flow</a>
         <a href="#conform" class="mobile-nav-link">📦 Conform Ingest</a>
         <a href="#films" class="mobile-nav-link">🏆 Credits &amp; Filmography</a>
@@ -130,7 +159,7 @@
           <span class="hint-icon">🎮</span>
           <div class="hint-text">
             <strong>Cosmic Game Mode &amp; FX</strong>
-            <span>Open on a desktop or laptop to vaporize comets &amp; interact with Sentinel-X!</span>
+            <span>Open on a desktop or laptop to vaporize comets &amp; interact with Cyber Charlie!</span>
           </div>
         </div>
       </div>
@@ -473,9 +502,34 @@
           </svg>
           <span>charlie-ai --session=assistant-console [LOCAL-KB]</span>
         </div>
-        <div class="ai-bot-status-pill" id="aiBotStatusPill">
-          <span class="ai-status-pulse"></span>
-          <span class="ai-status-text">LOCAL KB READY</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <a href="charlie-lab.html" target="_blank" class="ai-bot-lab-link" title="Open Interactive Cyber Charlie Character &amp; Motion Lab">🧪 Character Lab</a>
+          <div class="ai-bot-status-pill" id="aiBotStatusPill">
+            <span class="ai-status-pulse"></span>
+            <span class="ai-status-text">LOCAL KB READY</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Mode Active: Chatbot Lockout Overlay (Appears when Game Mode is active) -->
+      <div class="ai-bot-game-lockout" id="aiBotGameLockout" aria-live="polite">
+        <div class="ai-game-lockout-card">
+          <div class="ai-lockout-badge">
+            <span class="ai-lockout-pulse"></span>
+            <span>CYBER COMBAT ENGAGED // COSMIC DEFENSE</span>
+          </div>
+          <div class="ai-lockout-icon-ring">
+            <span class="ai-lockout-swords">⚔️</span>
+          </div>
+          <h3 class="ai-lockout-title">Charlie is Busy Destroying Comets!</h3>
+          <p class="ai-lockout-desc">
+            Cyber Charlie is currently deployed in <strong>Cosmic Game Mode</strong> across the screen, slicing comets with his Astra Plasma Dagger. Terminal query processing is paused while combat is active.
+          </p>
+          <button type="button" class="ai-disable-game-btn" id="aiDisableGameBtn" title="Deactivate Cosmic Game Mode and return Charlie to chat">
+            <span class="ai-disable-game-icon">🎮</span>
+            <span class="ai-disable-game-text">Disable Game to Use Bot</span>
+            <span class="ai-disable-game-spark">⚡</span>
+          </button>
         </div>
       </div>
 
@@ -550,7 +604,19 @@
           <div class="ai-chat-stream" id="aiChatStream">
             <!-- Initial Welcome Message from Bot -->
             <div class="ai-message ai-bot-msg">
-              <div class="ai-msg-avatar" title="Charlie (AI Assistant)">🤖</div>
+              <div class="ai-msg-avatar ai-bot-avatar" title="Cyber Charlie (AI Assistant)">
+                <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
+                  <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+                  <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
+                  <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
+                  <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
+                  <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
+                  <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
+                  <path d="M11 19 L13 16 L15 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21 19 L23 16 L25 19" stroke="#00f2fe" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15 22 Q18 25 21 22" stroke="#00f2fe" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                </svg>
+              </div>
               <div class="ai-msg-body">
                 <div class="ai-msg-author">Charlie <span>Rajeev's AI Assistant</span></div>
                 <div class="ai-msg-content">
@@ -1279,15 +1345,15 @@
     </button>
   </div>
 
-  <!-- 🤖 Cyber-Bot Sentinel-X Scoreboard HUD -->
+  <!-- 🤖 Cyber Charlie Scoreboard HUD -->
   <div class="bot-hud-widget hidden" id="botHudWidget">
-    <div class="bot-avatar-box" id="botAvatarBox" title="Click to poke Sentinel-X!">
+    <div class="bot-avatar-box" id="botAvatarBox" title="Click to poke Cyber Charlie!">
       <div class="bot-antenna"></div>
       <div class="bot-face" id="botFace">[•_•]</div>
     </div>
     <div class="bot-info-box">
       <div class="bot-header">
-        <span class="bot-name">SENTINEL-X</span>
+        <span class="bot-name">CYBER CHARLIE</span>
         <span class="bot-rank" id="botRank">CADET</span>
       </div>
       <div class="bot-score-row">
@@ -1298,15 +1364,17 @@
       <div class="bot-message" id="botMessage">Move mouse or click comets to vaporize!</div>
     </div>
     <div class="bot-actions-top">
-      <button type="button" class="bot-minimize-btn" id="botMinimizeBtn" title="Minimize Sentinel HUD">&minus;</button>
+      <button type="button" class="bot-minimize-btn" id="botMinimizeBtn" title="Minimize Charlie HUD">&minus;</button>
       <button type="button" class="bot-sound-btn" id="botSoundBtn" title="Toggle Game Audio &amp; Cosmic Synth BGM">🔊</button>
     </div>
   </div>
 
-  <!-- 🤖 Floating Quick-Access Charlie (AI) Launcher -->
+  <!-- ⚡ Floating Quick-Access Charlie (AI) Launcher with Live Miniature Dock Canvas -->
   <button type="button" class="floating-charlie-btn" id="floatingCharlieBtn" title="Chat with Charlie (AI Assistant)" aria-label="Chat with Charlie AI">
     <span class="floating-charlie-pulse"></span>
-    <span class="floating-charlie-avatar">🤖</span>
+    <span class="floating-charlie-dock-wrap" title="Cyber Charlie (Docked)">
+      <canvas id="charlieDockCanvas" width="72" height="72"></canvas>
+    </span>
     <span class="floating-charlie-text">Ask Charlie (AI)</span>
   </button>
 
@@ -1326,7 +1394,7 @@
     <div class="mission-toast-icon">💻</div>
     <div class="mission-toast-content">
       <div class="mission-toast-title">DESKTOP / LAPTOP FEATURE</div>
-      <div class="mission-toast-desc">Cosmic Game Mode &amp; Sentinel-X mascot are designed for desktop browsers with
+      <div class="mission-toast-desc">Cosmic Game Mode &amp; Cyber Charlie mascot are designed for desktop browsers with
         mouse/trackpad precision. Please open on a desktop or laptop to play!</div>
     </div>
     <button type="button" class="mission-toast-close" id="desktopNoticeToastClose" title="Dismiss">&times;</button>
