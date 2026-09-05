@@ -152,6 +152,29 @@
       box-shadow: 0 0 24px rgba(0, 242, 254, 0.6);
       transform: translateY(-1px);
     }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #e2e8f0;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+    .btn-glitter {
+      background: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%);
+      color: #040813;
+      font-weight: 700;
+      border: 1px solid #fef08a;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.55), 0 0 28px rgba(255, 215, 0, 0.35);
+      text-shadow: none;
+    }
+    .btn-glitter:hover {
+      background: linear-gradient(135deg, #fff3a1 0%, #fbbf24 50%, #b45309 100%);
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.85), 0 0 36px rgba(255, 215, 0, 0.55);
+      transform: translateY(-1px);
+      color: #000000;
+    }
 
     /* Main Grid */
     main.lab-main {
@@ -482,7 +505,7 @@
       <button type="button" class="btn btn-primary" id="spawnCometBtn">
         <span>☄️ Spawn Test Comet</span>
       </button>
-      <button type="button" class="btn btn-secondary" id="spawnGlitterBtn" style="border-color: #ffd700; color: #ffd700; box-shadow: 0 0 12px rgba(255, 215, 0, 0.25);">
+      <button type="button" class="btn btn-glitter" id="spawnGlitterBtn" title="Spawn a Rare Celestial Glitter Comet (Catch/shatter to activate 5.5s Holo-Shield!)">
         <span>✨ Spawn Glitter Comet</span>
       </button>
       <button type="button" class="btn btn-secondary" id="btnLabSound" title="Toggle Lab Sound Effects (SFX)">
@@ -984,30 +1007,56 @@
       draw(c) {
         c.save();
         if (this.isGlittery) {
-          // Radiant iridescent gold & cyan celestial aura
+          // 1. Radiant celestial tail streak
+          const tailX = this.x - (this.vx * 14);
+          const tailY = this.y - (this.vy * 14);
+          const tailGrad = c.createLinearGradient(this.x, this.y, tailX, tailY);
+          tailGrad.addColorStop(0, '#fffbeb');
+          tailGrad.addColorStop(0.25, '#ffd700');
+          tailGrad.addColorStop(0.65, '#00f2fe');
+          tailGrad.addColorStop(1, 'transparent');
+          c.beginPath();
+          c.moveTo(this.x, this.y);
+          c.lineTo(tailX, tailY);
+          c.strokeStyle = tailGrad;
+          c.lineWidth = 4.2;
+          c.lineCap = 'round';
           c.shadowColor = '#ffd700';
-          c.shadowBlur = 20;
-          const radGrad = c.createRadialGradient(this.x, this.y, 2, this.x, this.y, this.radius * 1.5);
-          radGrad.addColorStop(0, '#ffffff');
-          radGrad.addColorStop(0.35, '#ffd700');
-          radGrad.addColorStop(0.7, '#00f2fe');
+          c.shadowBlur = 18;
+          c.stroke();
+
+          // 2. Radiant iridescent gold & cyan celestial aura
+          c.shadowColor = '#ffd700';
+          c.shadowBlur = 24;
+          const radGrad = c.createRadialGradient(this.x, this.y, 2, this.x, this.y, this.radius * 1.8);
+          radGrad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+          radGrad.addColorStop(0.25, 'rgba(255, 215, 0, 0.88)');
+          radGrad.addColorStop(0.65, 'rgba(0, 242, 254, 0.50)');
           radGrad.addColorStop(1, 'transparent');
           c.fillStyle = radGrad;
           c.beginPath();
-          c.arc(this.x, this.y, this.radius * 1.5, 0, Math.PI * 2);
+          c.arc(this.x, this.y, this.radius * 1.8, 0, Math.PI * 2);
           c.fill();
 
-          // Rotating diamond stardust sparkles (✦)
+          // 3. Solid Brilliant Pure White Core
+          c.beginPath();
+          c.arc(this.x, this.y, 4.5, 0, Math.PI * 2);
+          c.fillStyle = '#ffffff';
+          c.shadowColor = '#00f2fe';
+          c.shadowBlur = 12;
+          c.fill();
+
+          // 4. Rotating diamond stardust sparkles (✦)
           for (let s = 0; s < 3; s++) {
             const a = this.glitterAngle + (s * Math.PI * 2 / 3);
-            const sx = this.x + Math.cos(a) * (this.radius + 6);
-            const sy = this.y + Math.sin(a) * (this.radius + 6);
+            const sx = this.x + Math.cos(a) * (this.radius + 8);
+            const sy = this.y + Math.sin(a) * (this.radius + 8);
             c.fillStyle = s === 0 ? '#ffd700' : (s === 1 ? '#00f2fe' : '#ffffff');
             c.beginPath();
-            c.moveTo(sx, sy - 5);
-            c.lineTo(sx + 3, sy);
-            c.lineTo(sx, sy + 5);
-            c.lineTo(sx - 3, sy);
+            c.moveTo(sx, sy - 6);
+            c.lineTo(sx + 3.5, sy);
+            c.lineTo(sx, sy + 6);
+            c.lineTo(sx - 3.5, sy);
             c.closePath();
             c.fill();
           }
@@ -1050,6 +1099,7 @@
     if (spawnGlitterBtn) {
       spawnGlitterBtn.addEventListener('click', () => {
         comets.push(new TestComet(canvas.clientWidth / 2 + (Math.random() - 0.5) * 200, -20, true));
+        try { sound.playLaserDeflect(); } catch(e) {}
       });
     }
 
