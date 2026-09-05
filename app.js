@@ -2398,40 +2398,71 @@
         }
       }
 
-      // 4. Check comet blade collisions when armed OR deflect when shielded
+      // 4. Combat Suite: Holo-Shield Deflection & Plasma Blade Combat
       if (this.charlie) {
-        // Reflexive auto-shield deployment ONLY if close danger and not currently slashing comets
-        if (!this.charlie.isShielded && this.charlie.state !== 'slash' && this.charlie.state !== 'jump') {
+        // A. Reflexive Auto-Shield Deployment in Game Mode
+        // Proactively triggers on fast meteors, close proximity, or comet clusters!
+        if (!this.charlie.isShielded) {
+          let shouldDeployShield = false;
+          let closeCometsCount = 0;
+
           for (let i = 0; i < this.particles.length; i++) {
             const p = this.particles[i];
             const dist = Math.hypot(p.x - this.charlie.x, p.y - this.charlie.y);
-            if (dist < 45 * this.charlie.scale) {
-              this.charlie.isShielded = true;
-              this.charlie.shieldTimer = 35; // auto-shield for ~0.6s
-              this.charlie.setEmote('🛡️ REFLEX SHIELD!', 45);
+
+            // Fast meteors trigger reflex shield at generous distance
+            if (p.isSuperFast && dist < 92 * this.charlie.scale) {
+              shouldDeployShield = true;
               break;
             }
+            // Close comets entering danger zone trigger reflex shield
+            if (dist < 62 * this.charlie.scale) {
+              shouldDeployShield = true;
+              break;
+            }
+            // Cluster detection: 2 or more comets in vicinity
+            if (dist < 110 * this.charlie.scale) {
+              closeCometsCount++;
+              if (closeCometsCount >= 2) {
+                shouldDeployShield = true;
+                break;
+              }
+            }
+          }
+
+          if (shouldDeployShield) {
+            this.charlie.isShielded = true;
+            this.charlie.shieldTimer = 55; // Visible for ~0.9s
+            this.charlie.setEmote('🛡️ REFLEX SHIELD!', 55);
+            try {
+              if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
+                window.portfolioSoundEngine.playLaserDeflect();
+              }
+            } catch (e) {}
           }
         }
 
+        // B. Active Holo-Shield Bubble Deflection Field
         if (this.charlie.isShielded) {
+          const deflectRadius = 60 * this.charlie.scale;
           for (let i = this.particles.length - 1; i >= 0; i--) {
             const p = this.particles[i];
             const dist = Math.hypot(p.x - this.charlie.x, p.y - this.charlie.y);
-            if (dist < 48 * this.charlie.scale) {
-              this.triggerShatterBurst(p.x, p.y, 14, true);
+            if (dist < deflectRadius) {
+              this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 18 : 14, true);
               this.particles[i] = this.createParticle(false);
               this.ripples.push({
                 x: p.x,
                 y: p.y,
-                radius: 5,
-                maxRadius: 40,
-                speed: 3.5,
-                alpha: 0.9,
-                lineWidth: 2.2
+                radius: 6,
+                maxRadius: 48,
+                speed: 3.8,
+                alpha: 1.0,
+                lineWidth: 2.5
               });
+              this.charlie.addSparks(p.x, p.y, '#00f2fe', 12);
               if (this.onShatter) {
-                this.onShatter(p.x, p.y, 1);
+                this.onShatter(p.x, p.y, 2); // Double score for shield deflection!
               }
               try {
                 if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
@@ -2442,6 +2473,7 @@
           }
         }
 
+        // C. Plasma Blade Combat Reach (High-Low Cleave, Uppercut, Cyclone & Thrust)
         const hasBladeEquipped = (this.charlie.state !== 'thinking' && this.charlie.state !== 'writing' && this.charlie.state !== 'waiting');
         if (hasBladeEquipped) {
           const sliceReach = 85 * this.charlie.scale;
@@ -2452,10 +2484,23 @@
             if (dist < sliceReach) {
               this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 18 : 12, p.isSuperFast);
               this.particles[i] = this.createParticle(false);
+              this.combatShatters = (this.combatShatters || 0) + 1;
               if (this.onShatter) {
                 this.onShatter(p.x, p.y, 1);
               }
               this.charlie.triggerRandomCombatAction();
+
+              // Periodic Tactical Shield Pulse: Every 7 comet slices, Charlie flares tactical shield!
+              if (this.combatShatters % 7 === 0 && !this.charlie.isShielded) {
+                this.charlie.isShielded = true;
+                this.charlie.shieldTimer = 50;
+                this.charlie.setEmote('🛡️ TACTICAL SHIELD!', 50);
+                try {
+                  if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
+                    window.portfolioSoundEngine.playLaserDeflect();
+                  }
+                } catch (e) {}
+              }
             }
           }
         }
@@ -5179,33 +5224,32 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
             window.portfolioCharlie.addSparks(bottomCenter.x, bottomCenter.y, '#00f2fe', 16);
           }
 
-          // Supersonic Cyber Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus!
+          // Supersonic Cyber Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus at Point B!
           let charIndex = 0;
-          const chunkSize = 18;
-          const tickInterval = 12;
+          const chunkSize = 16;
+          const tickInterval = 14;
 
           const typeInterval = setInterval(() => {
             charIndex = Math.min(fullResponse.length, charIndex + chunkSize);
             contentEl.innerHTML = fullResponse.substring(0, charIndex) + (charIndex < fullResponse.length ? '<span class="typewriter-cursor">⚡</span>' : '');
 
-            // Triangular Motion: Charlie ascends with perfect mathematical smoothness from Bottom-Center to Screen-Center!
-            const progress = Math.min(1.0, charIndex / fullResponse.length);
-
+            // At Point B: Charlie stays firmly locked at bottomCenter scribbling with his laser stylus!
             if (window.portfolioCharlie && (window.portfolioCharlie.state === 'writing')) {
-              const currentX = bottomCenter.x + (writeCenter.x - bottomCenter.x) * progress;
-              const currentY = bottomCenter.y + (writeCenter.y - bottomCenter.y) * progress;
-              window.portfolioCharlie.x = currentX;
-              window.portfolioCharlie.y = currentY;
-              window.portfolioCharlie.targetX = currentX;
-              window.portfolioCharlie.targetY = currentY;
+              window.portfolioCharlie.x = bottomCenter.x;
+              window.portfolioCharlie.y = bottomCenter.y;
+              window.portfolioCharlie.targetX = bottomCenter.x;
+              window.portfolioCharlie.targetY = bottomCenter.y;
 
               if (Math.random() > 0.25) {
-                const stylusTipX = currentX + window.portfolioCharlie.facing * 14 * window.portfolioCharlie.scale;
-                const stylusTipY = currentY - 2 * window.portfolioCharlie.scale;
+                const stylusTipX = bottomCenter.x + window.portfolioCharlie.facing * 14 * window.portfolioCharlie.scale;
+                const stylusTipY = bottomCenter.y - 2 * window.portfolioCharlie.scale;
                 window.portfolioCharlie.addSparks(stylusTipX, stylusTipY, '#00f2fe', 2);
               }
             }
 
+            scrollStreamToBottom();
+
+            // When writing animation at Point B completes:
             if (charIndex >= fullResponse.length) {
               clearInterval(typeInterval);
               contentEl.innerHTML = fullResponse;
@@ -5216,37 +5260,89 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                 botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
               }
 
-              setCharlieThinkingState(false);
+              scrollStreamToBottom();
+
               if (aiBotStatusPill) {
                 const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                if (text) text.textContent = 'ANS COMPLETE ✨';
+                if (text) text.textContent = 'CHARLIE DELIVERING ANS [ASCENDING]...';
               }
 
-              // Charlie reaches center of screen: trigger victory celebration, then return dash back to mascot anchor!
-              if (window.portfolioCharlie) {
-                window.portfolioCharlie.x = writeCenter.x;
-                window.portfolioCharlie.y = writeCenter.y;
-                window.portfolioCharlie.targetX = writeCenter.x;
-                window.portfolioCharlie.targetY = writeCenter.y;
-                window.portfolioCharlie.triggerVictory();
-                if (window.portfolioDockCharlie) {
-                  window.portfolioDockCharlie.triggerVictory();
+              // Writing at Point B is 100% COMPLETE!
+              // Now Charlie and the text smoothly ascend together from Point B (bottomCenter) to Point C (writeCenter)!
+              if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+                const ascentDuration = 480;
+                const ascentStart = performance.now();
+                const startX = bottomCenter.x;
+                const startY = bottomCenter.y;
+                const endX = writeCenter.x;
+                const endY = writeCenter.y;
+
+                const stepAscent = (now) => {
+                  const elapsed = now - ascentStart;
+                  const progress = Math.min(1.0, elapsed / ascentDuration);
+                  const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+
+                  const curX = startX + (endX - startX) * ease;
+                  const curY = startY + (endY - startY) * ease;
+
+                  if (window.portfolioCharlie && window.portfolioCharlie.state === 'writing') {
+                    window.portfolioCharlie.x = curX;
+                    window.portfolioCharlie.y = curY;
+                    window.portfolioCharlie.targetX = curX;
+                    window.portfolioCharlie.targetY = curY;
+
+                    if (Math.random() > 0.3) {
+                      window.portfolioCharlie.addSparks(curX, curY + 14 * window.portfolioCharlie.scale, '#00f2fe', 2);
+                    }
+                  }
+
+                  scrollStreamToBottom();
+
+                  if (progress < 1.0) {
+                    requestAnimationFrame(stepAscent);
+                  } else {
+                    // Arrived at Point C (Screen Center): Trigger Victory Celebration!
+                    if (window.portfolioCharlie) {
+                      window.portfolioCharlie.x = endX;
+                      window.portfolioCharlie.y = endY;
+                      window.portfolioCharlie.targetX = endX;
+                      window.portfolioCharlie.targetY = endY;
+                      window.portfolioCharlie.triggerVictory();
+                    }
+                    if (window.portfolioDockCharlie) {
+                      window.portfolioDockCharlie.triggerVictory();
+                    }
+
+                    setCharlieThinkingState(false);
+                    if (aiBotStatusPill) {
+                      const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+                      if (text) text.textContent = 'ANS COMPLETE ✨';
+                    }
+
+                    setTimeout(() => {
+                      if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+                        const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
+                        window.portfolioCharlie.triggerReturnDash(window.portfolioCharlie.x, window.portfolioCharlie.y, homeAnchor.x, homeAnchor.y);
+                      }
+                      if (window.portfolioDockCharlie) {
+                        window.portfolioDockCharlie.triggerWaiting();
+                      }
+                      if (aiBotStatusPill) {
+                        const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+                        if (text) text.textContent = 'LOCAL KB READY';
+                      }
+                    }, 1100);
+                  }
+                };
+
+                requestAnimationFrame(stepAscent);
+              } else {
+                setCharlieThinkingState(false);
+                if (aiBotStatusPill) {
+                  const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+                  if (text) text.textContent = 'LOCAL KB READY';
                 }
-                setTimeout(() => {
-                  if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-                    const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
-                    window.portfolioCharlie.triggerReturnDash(window.portfolioCharlie.x, window.portfolioCharlie.y, homeAnchor.x, homeAnchor.y);
-                  }
-                  if (window.portfolioDockCharlie) {
-                    window.portfolioDockCharlie.triggerWaiting();
-                  }
-                  if (aiBotStatusPill) {
-                    const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                    if (text) text.textContent = 'LOCAL KB READY';
-                  }
-                }, 1100);
               }
-              scrollStreamToBottom();
             }
           }, tickInterval);
         };

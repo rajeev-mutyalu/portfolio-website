@@ -2891,7 +2891,7 @@
             charlie.y = bottomY;
             charlie.facing = 1;
             addSparks(bottomX, bottomY, '#00f2fe', 16);
-            hudMode.textContent = '⚡ WRITING & ASCENDING TO CENTER!';
+            hudMode.textContent = '⚡ POINT B: WRITING AT CYBER SPEED!';
             telState.textContent = 'WRITING';
 
             const responseFull = '⚡ CYBER CHARLIE WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"';
@@ -2904,36 +2904,66 @@
                 }
                 charIdx += 2; // fast 2 chars per tick!
 
-                // Triangular ascent along with text from Bottom-Center to Center!
-                const progress = charIdx / responseFull.length;
-                if (charlie.state === 'writing') {
-                  charlie.x = bottomX + (centerX - bottomX) * progress;
-                  charlie.y = bottomY + (centerY - bottomY) * progress;
-                }
+                // AT POINT B: Charlie stays locked at bottom-center until writing is 100% complete!
+                charlie.x = bottomX;
+                charlie.y = bottomY;
 
                 // Stylus burst sparks
                 if (Math.random() > 0.3) {
-                  const stylusTipX = charlie.x + charlie.facing * 14 * charlieScale;
-                  const stylusTipY = charlie.y - 2 * charlieScale;
+                  const stylusTipX = bottomX + charlie.facing * 14 * charlieScale;
+                  const stylusTipY = bottomY - 2 * charlieScale;
                   addSparks(stylusTipX, stylusTipY, '#00f2fe', 2);
                 }
               } else {
                 clearInterval(chatTypeInterval);
                 chatTypeInterval = null;
+
+                // Writing at Point B is 100% COMPLETE!
+                // Now Charlie and the text smoothly ascend together from Point B to Point C (center)!
+                hudMode.textContent = '🚀 ASCENDING WITH DELIVERED TEXT TO CENTER!';
+                telState.textContent = 'ASCENDING';
                 if (chatStatusText) {
-                  chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                  chatStatusText.innerHTML = `🚀 <span style="color:#38bdf8;">ASCENDING WITH DELIVERED TEXT...</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
                 }
-                charlie.x = centerX;
-                charlie.y = centerY;
-                hudMode.textContent = '🌟 VICTORY CELEBRATION!';
-                telState.textContent = 'VICTORY';
-                charlie.triggerVictory();
-                setTimeout(() => {
-                  // Supersonic return dash to mascot anchor (completing the triangle)!
-                  charlie.triggerReturnDashDemo();
-                }, 1200);
+
+                const ascentDuration = 480;
+                const ascentStart = performance.now();
+
+                function stepAscent(now) {
+                  const elapsed = now - ascentStart;
+                  const progress = Math.min(1.0, elapsed / ascentDuration);
+                  const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+
+                  charlie.x = bottomX + (centerX - bottomX) * ease;
+                  charlie.y = bottomY + (centerY - bottomY) * ease;
+
+                  if (Math.random() > 0.3) {
+                    addSparks(charlie.x, charlie.y + 14 * charlieScale, '#00f2fe', 2);
+                  }
+
+                  if (progress < 1.0) {
+                    requestAnimationFrame(stepAscent);
+                  } else {
+                    // Arrived at Point C (Center): Trigger Victory Celebration!
+                    charlie.x = centerX;
+                    charlie.y = centerY;
+                    if (chatStatusText) {
+                      chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                    }
+                    hudMode.textContent = '🌟 VICTORY CELEBRATION!';
+                    telState.textContent = 'VICTORY';
+                    charlie.triggerVictory();
+
+                    setTimeout(() => {
+                      // Supersonic return dash to mascot anchor (completing the triangle)!
+                      charlie.triggerReturnDashDemo();
+                    }, 1200);
+                  }
+                }
+
+                requestAnimationFrame(stepAscent);
               }
-            }, 18); // 18ms per 2 chars = ~9ms per char
+            }, 18);
           }, 240);
         }, 1200);
       });
