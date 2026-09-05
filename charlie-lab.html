@@ -574,10 +574,6 @@
             <span id="labSoundQuickIcon">🔊</span>
             <span>Sound: <strong id="labSoundQuickState">ON</strong></span>
           </button>
-          <button type="button" class="action-btn" id="btnLabVoiceTest" title="Test Charlie's Spoken Speech Synthesis Voice">
-            <span id="labVoiceIcon">🗣️</span>
-            <span>Voice: <strong id="labVoiceState">TEST SPEECH</strong></span>
-          </button>
         </div>
       </div>
     </div>
@@ -1104,50 +1100,6 @@
       spawnGlitterBtn.addEventListener('click', () => {
         comets.push(new TestComet(canvas.clientWidth / 2 + (Math.random() - 0.5) * 200, -20, true));
         try { sound.playLaserDeflect(); } catch(e) {}
-      });
-    }
-
-    // Test Charlie Voice in Lab (SpeechSynthesis)
-    const btnLabVoiceTest = document.getElementById('btnLabVoiceTest');
-    if (btnLabVoiceTest && ('speechSynthesis' in window)) {
-      btnLabVoiceTest.addEventListener('click', () => {
-        if (window.speechSynthesis.speaking) {
-          window.speechSynthesis.cancel();
-          btnLabVoiceTest.classList.remove('active');
-          const stateText = document.getElementById('labVoiceState');
-          if (stateText) stateText.textContent = 'TEST SPEECH';
-          return;
-        }
-
-        const voices = window.speechSynthesis.getVoices() || [];
-        const preferred = voices.find(v => (v.name.includes('Ryan') || v.name.includes('Guy')) && v.lang.startsWith('en'))
-          || voices.find(v => v.name.includes('Google UK English Male'))
-          || voices.find(v => (v.name.includes('George') || v.name.includes('Daniel')) && v.lang.startsWith('en'))
-          || voices.find(v => v.lang === 'en-GB')
-          || voices.find(v => v.lang.startsWith('en'));
-
-        const utt = new SpeechSynthesisUtterance("Greetings! I am Cyber Charlie, Rajeev's AI pipeline assistant. All systems nominal!");
-        if (preferred) utt.voice = preferred;
-        utt.rate = 1.02;
-        utt.pitch = 1.05;
-
-        btnLabVoiceTest.classList.add('active');
-        const stateText = document.getElementById('labVoiceState');
-        if (stateText) stateText.textContent = 'SPEAKING...';
-        charlie.face = 'happy';
-        charlie.setEmote('🗣️ GREETINGS! (VOICE TEST)', 120);
-
-        utt.onend = () => {
-          btnLabVoiceTest.classList.remove('active');
-          if (stateText) stateText.textContent = 'TEST SPEECH';
-          charlie.face = 'idle';
-        };
-        utt.onerror = () => {
-          btnLabVoiceTest.classList.remove('active');
-          if (stateText) stateText.textContent = 'TEST SPEECH';
-        };
-
-        window.speechSynthesis.speak(utt);
       });
     }
 
