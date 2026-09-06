@@ -41,9 +41,29 @@
     return false;
   };
 
+  window.isRotatedMobileLandscape = function () {
+    const isLandscape = (window.innerWidth > window.innerHeight);
+    const isSmallHeight = (window.innerHeight <= 550);
+    const isMobileDim = (Math.min(window.innerWidth, window.innerHeight) <= 500) ||
+      (window.matchMedia && (
+        window.matchMedia('(max-height: 550px) and (orientation: landscape)').matches ||
+        window.matchMedia('(pointer: coarse) and (max-height: 550px)').matches ||
+        window.matchMedia('(max-device-width: 956px) and (orientation: landscape)').matches
+      ));
+    return isLandscape && (isSmallHeight || isMobileDim);
+  };
+
   function updateMobileOrientationState() {
     const isMob = window.isMobileOrRotatedMobile();
+    const isRotated = window.isRotatedMobileLandscape ? window.isRotatedMobileLandscape() : false;
     if (!document.body) return;
+
+    if (isRotated) {
+      document.body.classList.add('is-rotated-mobile');
+    } else {
+      document.body.classList.remove('is-rotated-mobile');
+    }
+
     if (isMob) {
       document.body.classList.add('is-mobile-screen');
       const floatingBtn = document.getElementById('floatingCharlieBtn');
@@ -157,6 +177,9 @@
       this.isShielded = false;
       this.manualShieldActive = false;
       this.shieldTimer = 0;
+      this.invincibleTimer = 0;
+      this.recentBonkCount = 0;
+      this.lastBonkTime = 0;
       this.emoteText = '';
       this.emoteTimer = 0;
     }
@@ -272,6 +295,7 @@
     }
 
     triggerJump() {
+      if (this.state === 'bonk' || this.state === 'dizzy') return;
       this.state = 'jump';
       this.jumpStartX = this.x;
       this.jumpStartY = this.y;
@@ -279,30 +303,83 @@
       this.jumpTimer = 0;
       this.jumpLandedSpark = false;
       this.face = 'wink';
+      this.setEmote('WOOHOO! 🦘', 70);
+      try {
+        if (typeof window.portfolioSoundEngine?.playJump === 'function') {
+          window.portfolioSoundEngine.playJump();
+        }
+      } catch (err) {}
+      this.syncHudFace('[^_-]');
     }
 
-    triggerVictory() {
-      if (window.portfolioEngine?.isEnabled) return;
+    triggerVictory(pts) {
       this.state = 'victory';
       this.victoryTimer = 0;
       this.twirlAngle = 0;
       this.face = 'victory';
+      const ptsLabel = pts ? `${pts} PTS!` : 'CHAMPION!';
+      this.setEmote(`VICTORY! 🏆 ${ptsLabel}`, 110);
+      this.syncHudFace('[★_★]');
+      try {
+        if (typeof window.portfolioSoundEngine?.playFanfare === 'function') {
+          window.portfolioSoundEngine.playFanfare();
+        }
+      } catch (err) {}
     }
 
     triggerBonk() {
       this.state = 'bonk';
       this.face = 'shocked';
-      this.bonkTimer = 45;
-      this.vy = -7;
-      this.vx = -this.facing * 5.5;
+      this.bonkTimer = 40;
+      this.vy = -6.5;
+      this.vx = -this.facing * 5.0;
+      this.invincibleTimer = 35;
+      this.setEmote('BONK! 💥', 65);
       this.addSparks(this.x, this.y - 18 * this.scale, '#f59e0b', 16);
+      this.syncHudFace('[⊙_⊙]');
+      try {
+        if (typeof window.portfolioSoundEngine?.playBonk === 'function') {
+          window.portfolioSoundEngine.playBonk();
+        }
+      } catch (err) {}
     }
 
     triggerDizzy() {
       this.state = 'dizzy';
       this.face = 'dizzy';
-      this.dizzyTimer = 180;
-      this.addSparks(this.x, this.y - 20 * this.scale, '#f59e0b', 12);
+      this.dizzyTimer = 95; // ~1.6s of dizzy stun
+      this.invincibleTimer = 110;
+      this.setEmote('WHOA! 💫', 85);
+      this.addSparks(this.x, this.y - 20 * this.scale, '#f59e0b', 14);
+      this.syncHudFace('[@_@]');
+      try {
+        if (typeof window.portfolioSoundEngine?.playDizzy === 'function') {
+          window.portfolioSoundEngine.playDizzy();
+        }
+      } catch (err) {}
+    }
+
+    handleCometBonk(cx, cy) {
+      if (this.isShielded || this.manualShieldActive) return;
+      if (this.invincibleTimer > 0) return;
+      if (this.state === 'jump') return;
+
+      const now = Date.now();
+      if (!this.lastBonkTime || (now - this.lastBonkTime > 3200)) {
+        this.recentBonkCount = 1;
+      } else {
+        this.recentBonkCount++;
+      }
+      this.lastBonkTime = now;
+
+      if (this.recentBonkCount >= 2) {
+        // 2 Hits within 3.2s -> Dizzy!
+        this.recentBonkCount = 0;
+        this.triggerDizzy();
+      } else {
+        // Single Hit -> Bonk!
+        this.triggerBonk();
+      }
     }
 
     triggerThinking() {
@@ -403,6 +480,9 @@
       this.dashType = 'to_cursor';
       this.isGameModeDeploy = isGameMode;
       this.sectionActive = !isGameMode;
+      if (isGameMode) {
+        document.body.classList.add('combat-cursor-active');
+      }
       this.face = isGameMode ? 'battle' : 'sprint';
       this.deployTimer = 0;
       this.deployStartX = startX;
@@ -760,10 +840,18 @@
           this.facing = dx > 0 ? 1 : -1;
         }
 
-        // In Game Mode: Charlie is ALWAYS doing sword fighting!
-        if (!this.manualShieldActive) {
-          if (this.state !== 'slash') {
-            this.triggerSlash();
+        // In Game Mode: Charlie tracks cursor with fluid combat agility!
+        const canChangeMoveState = (this.state !== 'slash' && this.state !== 'jump' && this.state !== 'bonk' && this.state !== 'dizzy' && this.state !== 'victory');
+        if (canChangeMoveState) {
+          if (dist > 75) {
+            this.state = 'run';
+            this.face = 'sprint';
+          } else if (dist > 12) {
+            this.state = 'walk';
+            this.face = 'battle';
+          } else {
+            this.state = 'idle';
+            this.face = 'battle';
           }
         }
 
@@ -784,7 +872,13 @@
 
       // Action Progressions
       if (this.state === 'jump') {
-        this.x = this.jumpStartX; // Lock horizontal position in-place for pure vertical leap!
+        if (window.portfolioEngine && window.portfolioEngine.isEnabled) {
+          const targetX = (this.targetX > -500) ? this.targetX : this.x;
+          const dx = targetX - this.x;
+          this.x += dx * 0.08;
+        } else {
+          this.x = this.jumpStartX;
+        }
         this.vx = 0;
         this.vy = 0;
         this.jumpTimer += 1.0 * this.animSpeed;
@@ -809,47 +903,39 @@
         }
         if (this.jumpTimer >= this.jumpMax) {
           this.state = 'idle';
-          this.face = 'happy';
+          this.face = 'battle';
           this.isSpontaneousAction = false;
-          if (!this.manualShieldActive) this.isShielded = false;
+          if (!this.manualShieldActive && this.shieldTimer <= 0) this.isShielded = false;
         }
       }
 
       if (this.state === 'victory') {
-        this.victoryTimer += 1.0 * this.animSpeed * 0.5;
+        this.victoryTimer += 1.0 * this.animSpeed * 0.6;
         const t = Math.min(1.0, this.victoryTimer / this.victoryMax);
-        if (t < 0.35) {
-          this.twirlAngle = (t / 0.35) * Math.PI * 4;
+        if (t < 0.45) {
+          this.twirlAngle = (t / 0.45) * Math.PI * 4;
         } else {
           this.twirlAngle = 0;
         }
-        if (t >= 0.35 && t < 0.70 && Math.floor(this.victoryTimer) % 6 === 0) {
+        if (t >= 0.30 && t < 0.75 && Math.floor(this.victoryTimer) % 5 === 0) {
           const bladeTipX = this.x + this.facing * 18 * this.scale;
           const bladeTipY = this.y - 28 * this.scale;
-          this.addSparks(bladeTipX, bladeTipY, '#f59e0b', 4);
+          this.addSparks(bladeTipX, bladeTipY, '#ffd700', 4);
+          this.addSparks(bladeTipX, bladeTipY, '#00f2fe', 2);
         }
-        if (this.isSpontaneousAction) {
-          if (this.victoryTimer >= 65) {
-            this.state = 'idle';
-            this.face = 'happy';
-            this.isSpontaneousAction = false;
-            this.isShielded = false;
-          }
-        } else if (this.victoryTimer >= this.victoryMax) {
-          this.victoryTimer = 25;
+        if (this.victoryTimer >= 95) {
+          this.state = 'idle';
+          this.face = 'battle';
+          this.twirlAngle = 0;
+          this.syncHudFace('[⚔_⚔]');
         }
       }
 
       if (this.state === 'slash') {
         this.slashTimer += 1.0 * this.animSpeed;
         if (this.slashTimer >= this.slashMax) {
-          if (window.portfolioEngine && window.portfolioEngine.isEnabled && !this.manualShieldActive) {
-            // In Game Mode: Charlie is ALWAYS doing sword fighting! Seamlessly chain to next sword strike!
-            this.triggerSlash();
-          } else {
-            this.state = 'idle';
-            this.face = 'happy';
-          }
+          this.state = 'idle';
+          this.face = 'battle';
         }
       }
 
@@ -859,29 +945,27 @@
         this.y += this.vy;
         this.vy += 0.35;
         if (this.bonkTimer <= 0) {
-          if (this.isSpontaneousAction) {
-            this.state = 'idle';
-            this.face = 'happy';
-            this.isSpontaneousAction = false;
-            this.isShielded = false;
-          } else {
-            this.state = 'dizzy';
-            this.face = 'dizzy';
-            this.dizzyTimer = 180;
-          }
+          this.state = 'idle';
+          this.face = 'battle';
+          this.syncHudFace('[⚔_⚔]');
         }
       }
 
       if (this.state === 'dizzy') {
-        this.dizzyTimer -= 1.0 * this.animSpeed * 0.5;
+        this.dizzyTimer -= 1.0 * this.animSpeed;
+        if (Math.floor(this.dizzyTimer) % 10 === 0) {
+          this.addSparks(this.x + Math.sin(this.dizzyTimer * 0.25) * 20 * this.scale, this.y - 28 * this.scale, '#ffd700', 2);
+        }
         if (this.dizzyTimer <= 0) {
           this.state = 'idle';
-          this.face = 'happy';
-          this.isSpontaneousAction = false;
-          this.isShielded = false;
+          this.face = 'wink';
+          this.setEmote('BACK IN ACTION! ⚡', 50);
+          this.syncHudFace('[^_-]');
+          this.invincibleTimer = 25;
         }
       }
 
+      if (this.invincibleTimer > 0) this.invincibleTimer--;
       if (this.emoteTimer > 0) this.emoteTimer--;
 
       // Holo-Shield Timer Countdown
@@ -892,14 +976,14 @@
         }
       }
 
-      // Spontaneous Action Interval Check (Game Mode Only)
-      if (window.portfolioEngine && window.portfolioEngine.isEnabled && this.state !== 'cyber_dash') {
+      // Spontaneous Action Interval Check (Standard Mascot Mode Only, Never in Game Mode)
+      if (!window.portfolioEngine?.isEnabled && this.state !== 'cyber_dash') {
         this.spontaneousTimer++;
         if (this.spontaneousTimer >= this.spontaneousNextInterval) {
           if (this.state === 'idle' || this.state === 'walk' || this.state === 'run') {
             this.triggerSpontaneousAction();
           } else {
-            // Postpone slightly until attack completes
+            // Postpone slightly until action completes
             this.spontaneousTimer = this.spontaneousNextInterval - 60;
           }
         }
@@ -2287,59 +2371,41 @@
         this.targetAngle = Math.PI / 2;
       });
 
-      // Prevent context menu during Game Mode to enable Right-Click tactical shield
+      // Prevent context menu during Game Mode to enable Right-Click tactical jump
       window.addEventListener('contextmenu', (e) => {
         if (this.isEnabled) {
           e.preventDefault();
         }
       });
 
-      // Right-Click Hold & Space/Shift/S Holo-Shield deployment
+      // Right-Click: Acrobatic Jump Flip!
       window.addEventListener('mousedown', (e) => {
         if (!this.isEnabled) return;
-        if (e.button === 2 && this.charlie) {
-          this.charlie.manualShieldActive = true;
-          this.charlie.isShielded = true;
-          this.charlie.setEmote('🛡️ HOLO-SHIELD ACTIVE', 60);
-          this.charlie.addSparks(this.charlie.x, this.charlie.y, '#00f2fe', 16);
-          try {
-            if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
-              window.portfolioSoundEngine.playLaserDeflect();
-            }
-          } catch (err) {}
+        if (e.button === 2 && this.charlie && this.charlie.state !== 'cyber_dash') {
+          e.preventDefault();
+          this.charlie.facing = e.clientX >= this.charlie.x ? 1 : -1;
+          this.charlie.triggerJump();
         }
       });
 
-      window.addEventListener('mouseup', (e) => {
-        if (e.button === 2 && this.charlie) {
-          this.charlie.manualShieldActive = false;
-          this.charlie.isShielded = false;
-        }
-      });
-
+      // Space bar: Sword Fight Attack!
       window.addEventListener('keydown', (e) => {
         if (!this.isEnabled || !this.charlie) return;
-        if (e.code === 'Space' || e.key === 'Shift' || e.key === 's' || e.key === 'S') {
-          if (!this.charlie.manualShieldActive) {
-            this.charlie.manualShieldActive = true;
-            this.charlie.isShielded = true;
-            this.charlie.setEmote('🛡️ HOLO-SHIELD ACTIVE', 60);
-            this.charlie.addSparks(this.charlie.x, this.charlie.y, '#00f2fe', 16);
+        if (e.code === 'Space') {
+          e.preventDefault();
+          if (this.charlie.state !== 'cyber_dash') {
+            this.charlie.triggerRandomCombatAction();
+            this.triggerShatterBurst(this.charlie.x + this.charlie.facing * 35, this.charlie.y - 10, 16);
           }
         }
       });
 
-      window.addEventListener('keyup', (e) => {
-        if (!this.charlie) return;
-        if (e.code === 'Space' || e.key === 'Shift' || e.key === 's' || e.key === 'S') {
-          this.charlie.manualShieldActive = false;
-          this.charlie.isShielded = false;
-        }
-      });
-
-      // Supernova Click Burst & Comet Shatter
+      // Left-Click: Sword Fight Slash Attack & Supernova Burst!
       window.addEventListener('click', (e) => {
         if (!this.isEnabled) return;
+        // Don't trigger combat attack if clicking interactive UI buttons
+        if (e.target.closest('.navbar, #botHudWidget, #aiBotGameLockout, .ai-disable-game-btn, button, a')) return;
+
         if (this.charlie && this.charlie.state !== 'cyber_dash') {
           this.charlie.facing = e.clientX >= this.charlie.x ? 1 : -1;
           this.charlie.triggerRandomCombatAction();
@@ -2743,7 +2809,7 @@
           }
         }
 
-        // B. Plasma Blade Combat Reach (High-Low Cleave, Uppercut, Cyclone & Thrust)
+        // B. Plasma Blade Combat Reach & Comet Collision Mechanics
         const hasBladeEquipped = (this.charlie.state !== 'thinking' && this.charlie.state !== 'writing' && this.charlie.state !== 'waiting');
         if (hasBladeEquipped) {
           const sliceReach = 85 * this.charlie.scale;
@@ -2752,11 +2818,47 @@
             const p = this.particles[i];
             const dist = Math.hypot(p.x - this.charlie.x, p.y - this.charlie.y);
             if (dist < sliceReach) {
+              // 1. Rare Glitter Comet: Always caught for Holo-Shield power-up!
               if (p.isGlittery) {
-                // CAUGHT THE GLITTERY COMET! Holo-Shield power-up activated for few seconds!
                 this.triggerGlitterCatch(p.x, p.y);
                 this.particles[i] = this.createParticle(false);
-              } else {
+                continue;
+              }
+
+              // 2. Shielded or Invincible Recovery: Deflects harmlessly with shield sparks
+              if (this.charlie.isShielded || this.charlie.manualShieldActive || this.charlie.invincibleTimer > 0) {
+                this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 18 : 12, p.isSuperFast);
+                this.particles[i] = this.createParticle(false);
+                if (this.onShatter) this.onShatter(p.x, p.y, 1);
+                continue;
+              }
+
+              // 3. Jump Flip Somersault: Charlie's aerial leap shatters comets in flight!
+              if (this.charlie.state === 'jump') {
+                this.triggerShatterBurst(p.x, p.y, 18, true, '#00f2fe');
+                this.particles[i] = this.createParticle(false);
+                this.charlie.addSparks(p.x, p.y, '#00f2fe', 10);
+                if (this.onShatter) this.onShatter(p.x, p.y, 2); // Bonus point for aerial jump kick!
+                continue;
+              }
+
+              // 4. Stunned States (Bonk or Dizzy): Comets push/deflect softly without stacking
+              if (this.charlie.state === 'bonk' || this.charlie.state === 'dizzy') {
+                if (dist < 40 * this.charlie.scale) {
+                  this.triggerShatterBurst(p.x, p.y, 8, false);
+                  this.particles[i] = this.createParticle(false);
+                }
+                continue;
+              }
+
+              // 5. Active Combat & Movement Direction Check:
+              // relX relative to Charlie's facing direction:
+              // positive -> in front of Charlie
+              // negative -> behind Charlie's back
+              const relX = (p.x - this.charlie.x) * this.charlie.facing;
+
+              if (relX >= -14) {
+                // Front / Overhead: Charlie slashes the comet with his plasma blade!
                 this.triggerShatterBurst(p.x, p.y, p.isSuperFast ? 18 : 12, p.isSuperFast);
                 this.particles[i] = this.createParticle(false);
                 this.combatShatters = (this.combatShatters || 0) + 1;
@@ -2764,6 +2866,11 @@
                   this.onShatter(p.x, p.y, 1);
                 }
                 this.charlie.triggerRandomCombatAction();
+              } else if (dist < 46 * this.charlie.scale) {
+                // Direct hit from behind on Charlie's back/head -> BONK (or DIZZY on 2nd hit)!
+                this.triggerShatterBurst(p.x, p.y, 14, false, '#f59e0b');
+                this.particles[i] = this.createParticle(false);
+                this.charlie.handleCometBonk(p.x, p.y);
               }
             }
           }
@@ -3668,8 +3775,26 @@
     }
 
     onHit(x, y, count = 1) {
+      const prevScore = this.score;
       this.score += count;
       const now = Date.now();
+
+      // Victory celebration for every 250 points! (250, 500, 750, 1000...)
+      const prevMilestone250 = Math.floor(prevScore / 250);
+      const currentMilestone250 = Math.floor(this.score / 250);
+      if (currentMilestone250 > prevMilestone250 && currentMilestone250 > 0) {
+        const milestoneScore = currentMilestone250 * 250;
+        if (window.portfolioCharlie && typeof window.portfolioCharlie.triggerVictory === 'function') {
+          window.portfolioCharlie.triggerVictory(milestoneScore);
+        }
+        this.setFace('[★_★]', 2600);
+        this.setMessage(`VICTORY! 🏆 ${milestoneScore.toLocaleString()} POINTS REACHED!`);
+        this.isMilestoneLocked = true;
+        clearTimeout(this.milestoneLockTimer);
+        this.milestoneLockTimer = setTimeout(() => {
+          this.isMilestoneLocked = false;
+        }, 3000);
+      }
 
       // Combo streak
       if (now - this.lastHitTime < 1400) {
@@ -4014,6 +4139,7 @@
       engine.toggleState(isNowEnabled);
 
       if (isNowEnabled) {
+        document.body.classList.add('combat-cursor-active');
         soundEngine.ensureContext();
         soundEngine.startBGM();
         if (navFxToggle) navFxToggle.classList.add('active');
@@ -4340,28 +4466,40 @@
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
     if (mobileNavToggle && mobileNavDrawer) {
-      mobileNavToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = mobileNavDrawer.classList.toggle('open');
+      function setDrawerOpen(isOpen) {
+        mobileNavDrawer.classList.toggle('open', isOpen);
         mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         mobileNavToggle.querySelector('.nav-bar-icon').innerHTML = isOpen ? '&times;' : '&#9776;';
+      }
+
+      mobileNavToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !mobileNavDrawer.classList.contains('open');
+        setDrawerOpen(isOpen);
       });
 
       mobileNavLinks.forEach(link => {
         link.addEventListener('click', () => {
-          mobileNavDrawer.classList.remove('open');
-          mobileNavToggle.setAttribute('aria-expanded', 'false');
-          mobileNavToggle.querySelector('.nav-bar-icon').innerHTML = '&#9776;';
+          setDrawerOpen(false);
         });
       });
 
       document.addEventListener('click', (e) => {
-        if (!mobileNavDrawer.contains(e.target) && !mobileNavToggle.contains(e.target)) {
-          mobileNavDrawer.classList.remove('open');
-          mobileNavToggle.setAttribute('aria-expanded', 'false');
-          mobileNavToggle.querySelector('.nav-bar-icon').innerHTML = '&#9776;';
+        if (mobileNavDrawer.classList.contains('open') &&
+            !mobileNavDrawer.contains(e.target) &&
+            !mobileNavToggle.contains(e.target)) {
+          setDrawerOpen(false);
         }
       });
+
+      // Prevent background touch scrolling outside the drawer while open without breaking body scroll coordinates
+      document.addEventListener('touchmove', (e) => {
+        if (mobileNavDrawer.classList.contains('open') &&
+            !mobileNavDrawer.contains(e.target) &&
+            !mobileNavToggle.contains(e.target)) {
+          e.preventDefault();
+        }
+      }, { passive: false });
     }
 
     // =========================================================================
