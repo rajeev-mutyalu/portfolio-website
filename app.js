@@ -4554,6 +4554,7 @@
 • <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London, Montreal, and Bangalore.<br/>
 • <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bangalore under strict Hollywood delivery deadlines.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
+<a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`,
@@ -4564,14 +4565,17 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 • <strong>⚡ Applied AI Frontier Leadership:</strong> Early pioneer in production MCP (Model Context Protocol) tool servers, autonomous Claude Code/Devin swarms, and air-gapped private LLM deployments (Nous Hermes, Ollama 4-bit GGUF).<br/>
 • <strong>🎬 Oscar-Winning &amp; Landmark Deliverables:</strong> Key pipeline architect across Academy Award-winning productions and global tentpoles (<em>1917</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>, <em>Back in Action</em>, <em>Spaceman</em>, <em>Prehistoric Planet</em>).<br/>
 • <strong>🏆 Production Heritage:</strong> Trusted technical leader on landmark VFX and animation sequences for Disney, Warner Bros, Universal, and Netflix.<br/><br/>
-<a href="cv.html" class="ai-section-link">📄 Review Full Career Timeline &amp; Credits &rarr;</a>
-<a href="#initiatives" class="ai-section-link">🚀 Inspect Technical Arsenal &rarr;</a>`,
+<a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
+<a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Inspect Technical Arsenal &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`,
 
           `<strong>🚀 Immediate Production ROI &amp; Engineering Velocity:</strong><br/>
 • <strong>⚡ 5x–10x Delivery Acceleration:</strong> Replaces manual studio friction with zero-touch event-driven automation (n8n webhooks, automated QC verification loops, and agentic workflows).<br/>
 • <strong>🎯 Zero Ramp-Up Time:</strong> Having architected pipelines for top-tier studios across London and Bangalore, Rajeev steps into any enterprise VFX, animation, or AI pipeline and delivers immediate impact on Day 1.<br/>
 • <strong>👥 Cross-Continental Leadership:</strong> Mentored over 50+ TDs and engineers, establishing high-trust engineering cultures, automated code-review gates, and strict sprint cadences.<br/>
 • <strong>📍 Location &amp; Status:</strong> Based in London, UK (British Citizen) with full global remote/onsite mobility.<br/><br/>
+<a href="#experience" class="ai-section-link">⏳ Explore Career Timeline &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Connect with Rajeev Directly &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 View 1-Click ATS Resume &rarr;</a>`,
 
@@ -4581,6 +4585,7 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 • <strong>🧠 Frontier AI Integration:</strong> Architect of <em>Scene Weaver (Studio.AI)</em>, integrating Google Veo, Kling, and Seedance into conformed VFX studio pipelines.<br/>
 • <strong>🏆 Production Proof:</strong> Credits on <em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>.<br/><br/>
 <a href="#architecture" class="ai-section-link">🎬 Launch Interactive Pipeline Visualizer &rarr;</a>
+<a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
         ],
         followupPool: [
@@ -5024,8 +5029,9 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 &nbsp;&nbsp;• <strong>Back in Action (2025)</strong> &mdash; Netflix Feature Production<br/>
 &nbsp;&nbsp;• <strong>Spaceman (2024)</strong> &mdash; Sci-Fi Feature Production<br/>
 &nbsp;&nbsp;• <strong>Prehistoric Planet (2022&ndash;2023)</strong> &mdash; Apple TV+ Natural History Landmark Series<br/><br/>
+<a href="#experience" class="ai-section-link">⏳ Explore 20-Year Career Timeline &rarr;</a>
 <a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &amp; Credits &rarr;</a>
-<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Timeline &rarr;</a>`,
+<a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &rarr;</a>`,
 
           `• <strong>🏆 Verified Filmography &amp; Production Pedigree:</strong><br/>
 • <strong>1917 (2019):</strong> 🏆 Academy Award for Best Visual Effects &mdash; engineered core 2D Nuke pipeline and review architecture at MPC Film enabling seamless continuous-take shot assembly.<br/>
@@ -5034,6 +5040,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 • <strong>Back in Action (2025):</strong> Netflix Feature &mdash; high-energy VFX execution, plate ingestion conform, and automated review workflows.<br/>
 • <strong>Spaceman (2024):</strong> Sci-Fi Drama &mdash; photorealistic creature integration and atmospheric cosmic environment pipelines.<br/>
 • <strong>Prehistoric Planet (2022&ndash;2023):</strong> Apple TV+ Landmark Series &mdash; natural history VFX pipeline, live-action plate integration, and high-resolution review frameworks.<br/><br/>
+<a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
 <a href="#films" class="ai-section-link">🏆 View Filmography Gallery &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`,
 
@@ -5041,6 +5048,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 • <strong>Sprint Excellence:</strong> Led multi-disciplinary teams through high-stakes delivery cycles with predictable sprint velocity and zero production crunch.<br/>
 • <strong>Cross-Continental Bridge:</strong> Successfully aligned London, Montreal, and Bangalore engineering hubs to operate as a unified, collaborative development engine.<br/>
 • <strong>Architectural Evolution:</strong> Led studio modernization from monolithic legacy scripts to modular OpenUSD, MCP tooling, and automated CI/CD.<br/><br/>
+<a href="#experience" class="ai-section-link">⏳ Explore Career Timeline &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`
         ],
