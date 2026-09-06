@@ -418,6 +418,7 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 16px;
+      overflow: hidden;
     }
     #cardAiLifecycle .button-stack {
       display: flex;
@@ -426,6 +427,29 @@
     }
     #cardAiLifecycle #chatStatusText {
       margin-top: 6px !important;
+      max-height: 70px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      box-sizing: border-box;
+      line-height: 1.42;
+      word-break: break-word;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 242, 254, 0.45) rgba(0, 242, 254, 0.05);
+    }
+    #cardAiLifecycle #chatStatusText::-webkit-scrollbar {
+      width: 4px;
+    }
+    #cardAiLifecycle #chatStatusText::-webkit-scrollbar-track {
+      background: rgba(0, 242, 254, 0.05);
+      border-radius: 4px;
+    }
+    #cardAiLifecycle #chatStatusText::-webkit-scrollbar-thumb {
+      background: rgba(0, 242, 254, 0.4);
+      border-radius: 4px;
+    }
+    #cardAiLifecycle #chatStatusText::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 242, 254, 0.85);
     }
 
     #cardVisorLed {
@@ -813,7 +837,7 @@
             <span>🚀 Test Section Escort &rarr; Victory &rarr; Dock Dash</span>
           </button>
         </div>
-        <div id="chatStatusText" style="margin-top: 14px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,242,254,0.08); padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); text-align: center;">
+        <div id="chatStatusText" style="margin-top: 6px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,242,254,0.08); padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); text-align: left; max-height: 70px; overflow-y: auto; overflow-x: hidden; box-sizing: border-box;">
           Status: Ready for testing
         </div>
       </div>
@@ -3691,11 +3715,31 @@
     const btnRecallDock = document.getElementById('btnRecallDock');
     let chatTypeInterval = null;
 
+    const SIM_QUERIES = [
+      {
+        q: 'Explain Astra USD Pipeline...',
+        a: '⚡ CYBER CHARLIE WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"'
+      },
+      {
+        q: 'What are Rajeev\'s blockbuster film credits?',
+        a: '⚡ CYBER CHARLIE WRITING: "Rajeev led pipeline architecture & turnover across milestone VFX features including Guardians of the Galaxy, The Lion King, Life of Pi, and Fast & Furious 7!"'
+      },
+      {
+        q: 'How does the Autonomous GenAI Platform work?',
+        a: '⚡ CYBER CHARLIE WRITING: "Studio.AI (Scene Weaver) combines local quantized Ollama LLMs, Claude CLI subagents, n8n zero-touch pipelines, and Model Context Protocol tools for autonomous production."'
+      }
+    ];
+    let simQueryIdx = 0;
+
     if (btnSimulateChat) {
       btnSimulateChat.addEventListener('click', () => {
         if (chatTypeInterval) clearInterval(chatTypeInterval);
+        const queryItem = SIM_QUERIES[simQueryIdx % SIM_QUERIES.length];
+        simQueryIdx++;
+
         if (chatStatusText) {
-          chatStatusText.innerHTML = '🤔 <span style="color:#f59e0b;">USER QUERY:</span> "Explain Astra USD Pipeline..." <br><span style="color:#94a3b8;">Charlie thinking...</span>';
+          chatStatusText.innerHTML = `🤔 <span style="color:#f59e0b;">USER QUERY:</span> "${queryItem.q}" <br><span style="color:#94a3b8;">Charlie thinking...</span>`;
+          chatStatusText.scrollTop = 0;
         }
         charlie.triggerThinking();
 
@@ -3725,7 +3769,7 @@
             labChatDelivery.y = bottomY - 55;
             labChatDelivery.showPointer = false;
 
-            const responseFull = '⚡ CYBER CHARLIE WRITING: "Astra USD Pipeline v3 integrates OpenUSD composition, non-destructive layer stacking, and automated asset caching across Maya, Houdini & UE5.4!"';
+            const responseFull = queryItem.a;
             let charIdx = 0;
             
             chatTypeInterval = setInterval(() => {
@@ -3733,6 +3777,7 @@
                 const curText = responseFull.substring(0, charIdx + 1);
                 if (chatStatusText) {
                   chatStatusText.innerHTML = `✍️ <span style="color:#00f2fe;">${curText}</span><span style="color:#fff;">|</span>`;
+                  chatStatusText.scrollTop = chatStatusText.scrollHeight;
                 }
                 labChatDelivery.text = curText;
                 labChatDelivery.x = bottomX;
@@ -3759,9 +3804,8 @@
                 hudMode.textContent = '⏳ TEXT ASCENDING (CHARLIE WAITING 20%)...';
                 telState.textContent = 'WAITING 20%';
                 if (chatStatusText) {
-                  chatStatusText.style.willChange = 'transform';
-                  chatStatusText.style.transform = 'translateY(35px)';
                   chatStatusText.innerHTML = `⏳ <span style="color:#f59e0b;">TEXT ASCENDING FIRST (CHARLIE WAITING 20%)...</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                  chatStatusText.scrollTop = chatStatusText.scrollHeight;
                 }
 
                 const ascentDuration = 650;
@@ -3777,10 +3821,6 @@
                   // 1. Text & Background bubble continuously moves up from Point B to Point C!
                   labChatDelivery.y = startBubbleY + (endBubbleY - startBubbleY) * textEase;
                   labChatDelivery.x = centerX;
-
-                  if (chatStatusText) {
-                    chatStatusText.style.transform = 'translateY(' + ((1 - textEase) * 35).toFixed(2) + 'px)';
-                  }
 
                   // 2. Charlie Sync: wait at Point B until text has moved 20%, then attach!
                   if (textProgress < 0.20) {
@@ -3811,6 +3851,7 @@
                     telState.textContent = 'ATTACHED ASCENT';
                     if (chatStatusText) {
                       chatStatusText.innerHTML = `🚀 <span style="color:#38bdf8;">CHARLIE ATTACHED & ASCENDING WITH TEXT...</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                      chatStatusText.scrollTop = chatStatusText.scrollHeight;
                     }
                   }
 
@@ -3822,9 +3863,8 @@
                     charlie.y = centerY;
                     labChatDelivery.y = endBubbleY;
                     if (chatStatusText) {
-                      chatStatusText.style.transform = 'translateY(0px)';
-                      chatStatusText.style.willChange = 'auto';
                       chatStatusText.innerHTML = `🌟 <span style="color:#10b981;">DELIVERED AT CYBER SPEED!</span><br><span style="color:#e2e8f0;">${responseFull}</span>`;
+                      chatStatusText.scrollTop = 0;
                     }
                     hudMode.textContent = '⚡ RETURNING TO ANCHOR!';
                     telState.textContent = 'RETURNING';
