@@ -2184,41 +2184,68 @@
         c.beginPath();
         c.arc(8, -6, 1.2, 0, Math.PI * 2);
         c.fill();
-      } else if (this.face === 'waiting') {
-        // Natural periodic blinking: blinks for ~12 frames every 210 frames (~3.5 seconds)
-        const isBlinking = (this.blinkTimer > 195);
-        if (isBlinking) {
-          // Closed happy blinking curves
-          c.beginPath();
-          c.moveTo(-7, -4); c.lineTo(-4, -6); c.lineTo(-1, -4);
-          c.moveTo(1, -4); c.lineTo(4, -6); c.lineTo(7, -4);
-          c.stroke();
-        } else {
-          // Open glowing cyber eyes with lively pupils & white specular shine
-          const glanceX = Math.sin(this.animTimer * 0.8) * 0.8;
-          c.fillStyle = '#00f2fe';
-          c.shadowColor = '#00f2fe';
-          c.shadowBlur = 8 * this.bladeGlowIntensity;
-          c.beginPath();
-          c.roundRect(-7 + glanceX, -7, 4.5, 6, 2);
-          c.roundRect(2.5 + glanceX, -7, 4.5, 6, 2);
-          c.fill();
-
-          // White specular reflection gleam
-          c.fillStyle = '#ffffff';
-          c.shadowBlur = 4;
-          c.beginPath();
-          c.arc(-4 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
-          c.arc(5.5 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
-          c.fill();
-        }
-
-        // Cute gentle cyber smile
-        c.strokeStyle = '#00f2fe';
-        c.lineWidth = 1.6;
+      } else if (this.face === 'love') {
+        c.fillStyle = '#f43f5e';
+        c.shadowColor = '#f43f5e';
+        c.shadowBlur = 9 * this.bladeGlowIntensity;
+        c.font = '7.5px sans-serif';
+        c.fillText('♥', -7.5, -2);
+        c.fillText('♥', 0.5, -2);
+        c.strokeStyle = '#f43f5e';
         c.beginPath();
-        c.arc(0, 0, 2.6, 0.2, Math.PI - 0.2);
+        c.arc(0, 0, 3.2, 0.2, Math.PI - 0.2);
         c.stroke();
+      } else if (this.face === 'waiting') {
+        // Mascot / AI Companion: Radiant 4-Point AI Sparkle Eyes ✦  ✦
+        const pulse = 0.88 + Math.sin(this.animTimer * 3.2) * 0.12;
+        const outerR = 4.2 * pulse;
+
+        c.fillStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 10 * this.bladeGlowIntensity;
+
+        // Left radiant sparkle star ✦
+        c.beginPath();
+        c.moveTo(-4.8, -3.8 - outerR);
+        c.quadraticCurveTo(-4.8, -3.8, -4.8 + outerR, -3.8);
+        c.quadraticCurveTo(-4.8, -3.8, -4.8, -3.8 + outerR);
+        c.quadraticCurveTo(-4.8, -3.8, -4.8 - outerR, -3.8);
+        c.quadraticCurveTo(-4.8, -3.8, -4.8, -3.8 - outerR);
+        c.closePath();
+        c.fill();
+
+        // Right radiant sparkle star ✦
+        c.beginPath();
+        c.moveTo(4.8, -3.8 - outerR);
+        c.quadraticCurveTo(4.8, -3.8, 4.8 + outerR, -3.8);
+        c.quadraticCurveTo(4.8, -3.8, 4.8, -3.8 + outerR);
+        c.quadraticCurveTo(4.8, -3.8, 4.8 - outerR, -3.8);
+        c.quadraticCurveTo(4.8, -3.8, 4.8, -3.8 - outerR);
+        c.closePath();
+        c.fill();
+
+        // Brilliant white specular center twinkles
+        c.fillStyle = '#ffffff';
+        c.shadowColor = '#ffffff';
+        c.shadowBlur = 4;
+        c.beginPath();
+        c.arc(-4.8, -3.8, 1.0, 0, Math.PI * 2);
+        c.arc(4.8, -3.8, 1.0, 0, Math.PI * 2);
+        c.fill();
+
+        // Cheerful friendly mascot smile
+        c.strokeStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
+        c.beginPath();
+        c.arc(0, 0, 2.8, 0.2, Math.PI - 0.2);
+        c.stroke();
+
+        // Cute cyber cheek sensor nodes
+        c.fillStyle = 'rgba(0, 242, 254, 0.7)';
+        c.beginPath();
+        c.arc(-8.5, -0.5, 0.9, 0, Math.PI * 2);
+        c.arc(8.5, -0.5, 0.9, 0, Math.PI * 2);
+        c.fill();
       }
 
       c.restore();
@@ -6230,16 +6257,15 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
     // (Strictly Enabled in Local Development Builds Only)
     // =========================================================================
     function setupMobileSimulator() {
-      // 1. Strictly local build check: Only enable simulator on localhost, 127.0.0.1, file://
+      // 1. Strictly local development server check: Only enable simulator on localhost / 127.0.0.1
       const isLocalBuild = (
         window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:' ||
         window.location.hostname.endsWith('.local')
       );
 
       if (!isLocalBuild) {
-        // Live production build: Completely strip simulator elements and exit
+        // Live production build: Completely strip simulator elements, suppress M shortcut and exit
         const trigger = document.getElementById('floatingSimTrigger');
         if (trigger) trigger.remove();
         const overlay = document.getElementById('mobileSimOverlay');

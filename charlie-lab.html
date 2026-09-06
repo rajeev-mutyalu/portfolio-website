@@ -79,20 +79,31 @@
       z-index: 100;
       background: rgba(4, 7, 14, 0.92);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 12px 24px;
+      padding: 12px 0;
+      width: 100%;
+    }
+
+    .lab-topbar-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+      box-sizing: border-box;
     }
 
     .lab-logo {
       display: flex;
       align-items: center;
       gap: 12px;
-      text-decoration: none;
       color: #fff;
+      cursor: default;
+      user-select: none;
     }
     .lab-badge {
       font-family: var(--font-mono);
@@ -211,13 +222,14 @@
       overflow: hidden;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 242, 254, 0.1);
       height: 520px;
-      cursor: crosshair;
+      cursor: crosshair !important;
     }
 
     #stageCanvas {
       width: 100%;
       height: 100%;
       display: block;
+      cursor: crosshair !important;
     }
 
     /* Canvas Overlays */
@@ -288,19 +300,27 @@
     /* Quick Action Strip below stage */
     .quick-actions-bar {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+      flex-direction: column;
+      gap: 8px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
-      padding: 12px 16px;
+      padding: 10px 14px;
+      height: 92px;
+      box-sizing: border-box;
+      justify-content: space-between;
     }
 
-    .quick-group {
+    .quick-line {
       display: flex;
       align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .quick-line.quick-line-bottom {
+      justify-content: flex-start;
       gap: 8px;
     }
 
@@ -331,6 +351,23 @@
       color: var(--accent-cyan);
       box-shadow: 0 0 16px rgba(0, 242, 254, 0.35);
     }
+
+    /* Locomotion Base Stance Buttons (Idle / Walk / Sprint): Cyan Cyber Glow */
+    .loco-btn.active {
+      background: rgba(0, 242, 254, 0.22);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.40), inset 0 0 8px rgba(0, 242, 254, 0.15);
+    }
+
+    /* Action Trigger Buttons (Jump / Slash / Bonk / Dizzy / etc.): Amber Radiant Glow */
+    .action-trigger-btn.active {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: #f59e0b;
+      color: #fbbf24;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.45), inset 0 0 8px rgba(245, 158, 11, 0.15);
+    }
+
     .action-btn.btn-bonk {
       border-color: rgba(244, 63, 94, 0.4);
       color: #fda4af;
@@ -340,6 +377,23 @@
       border-color: var(--accent-rose);
       color: #fff;
       box-shadow: 0 0 16px rgba(244, 63, 94, 0.35);
+    }
+    .action-trigger-btn.btn-bonk.active {
+      background: rgba(244, 63, 94, 0.26);
+      border-color: var(--accent-rose);
+      color: #fda4af;
+      box-shadow: 0 0 16px rgba(244, 63, 94, 0.45);
+    }
+
+    /* Elegant Vertical Divider separating Base Movement from Action Triggers */
+    .quick-divider {
+      width: 1.5px;
+      height: 22px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 242, 254, 0.55) 50%, rgba(255, 255, 255, 0.05) 100%);
+      margin: 0 4px;
+      align-self: center;
+      flex-shrink: 0;
+      border-radius: 1px;
     }
 
     /* Right Control Deck */
@@ -355,6 +409,43 @@
       border-radius: 14px;
       padding: 16px;
       backdrop-filter: blur(20px);
+    }
+
+    #cardAiLifecycle {
+      height: 350px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+    }
+    #cardAiLifecycle .button-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    #cardAiLifecycle #chatStatusText {
+      margin-top: 6px !important;
+    }
+
+    #cardVisorLed {
+      height: 262px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+    #cardVisorLed .face-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 6px;
+    }
+    #cardVisorLed .face-btn {
+      padding: 5px 3px;
+      justify-content: center;
+      min-width: 0;
     }
 
     .control-card h3 {
@@ -381,6 +472,50 @@
       flex-direction: column;
       gap: 6px;
       margin-bottom: 12px;
+    }
+
+    #cardMotionTweaks,
+    #cardTelemetry {
+      height: 182px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 16px;
+    }
+    #cardMotionTweaks h3,
+    #cardTelemetry h3 {
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+    }
+    #cardMotionTweaks .tweaks-slider-stack {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    #cardMotionTweaks .slider-row {
+      margin-bottom: 0;
+      gap: 3px;
+    }
+    #cardTelemetry .telemetry-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      margin-bottom: 0;
+      padding: 6px 10px;
+      font-size: 0.71rem;
+      line-height: 1.35;
+    }
+    @media (max-width: 1024px) {
+      .quick-actions-bar,
+      #cardAiLifecycle,
+      #cardVisorLed,
+      #cardMotionTweaks,
+      #cardTelemetry {
+        height: auto;
+        min-height: 170px;
+      }
     }
     .slider-label {
       display: flex;
@@ -415,13 +550,14 @@
     .face-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(3, 1fr);
       gap: 6px;
     }
     .face-btn {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
-      padding: 8px 4px;
+      padding: 6px 3px;
       font-family: var(--font-mono);
       font-size: 0.75rem;
       color: #e2e8f0;
@@ -429,8 +565,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 3px;
       transition: all 0.2s ease;
+      overflow: hidden;
     }
     .face-btn:hover {
       background: rgba(0, 242, 254, 0.15);
@@ -444,7 +582,11 @@
       box-shadow: 0 0 12px rgba(0, 242, 254, 0.35);
     }
     .face-preview {
-      font-size: 0.95rem;
+      font-size: 0.74rem;
+      white-space: nowrap !important;
+      line-height: 1.1;
+      letter-spacing: -0.3px;
+      display: inline-block;
     }
     .face-tag {
       font-size: 0.62rem;
@@ -477,41 +619,43 @@
 
   <!-- Top Bar -->
   <header class="lab-topbar">
-    <a href="index.html" class="lab-logo" title="Back to Portfolio">
-      <span class="lab-badge">CHARLIE LAB v1.0</span>
-      <span class="lab-title">
-        <svg width="22" height="22" viewBox="0 0 36 36" fill="none" style="vertical-align: -4px; display: inline-block; margin-right: 6px;">
-          <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
-          <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
-          <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
-          <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
-          <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
-          <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
-          <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
-          <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
-          <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
-          <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
-          <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-        </svg>Cyber Charlie: Character &amp; Motion Lab
-      </span>
-    </a>
+    <div class="lab-topbar-container">
+      <div class="lab-logo">
+        <span class="lab-badge">CHARLIE LAB v1.0</span>
+        <span class="lab-title">
+          <svg width="22" height="22" viewBox="0 0 36 36" fill="none" style="vertical-align: -4px; display: inline-block; margin-right: 6px;">
+            <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
+            <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
+            <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
+            <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
+            <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
+            <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
+            <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+            <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
+            <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
+            <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
+            <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          </svg>Cyber Charlie: Character &amp; Motion Lab
+        </span>
+      </div>
 
-    <div class="lab-nav-actions">
-      <a href="index.html" class="btn btn-ghost">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        <span>Back to Portfolio</span>
-      </a>
-      <a href="cv.html" class="btn btn-ghost"><span>View CV</span></a>
-      <button type="button" class="btn btn-primary" id="spawnCometBtn">
-        <span>☄️ Spawn Test Comet</span>
-      </button>
-      <button type="button" class="btn btn-glitter" id="spawnGlitterBtn" title="Spawn a Rare Celestial Glitter Comet (Catch/shatter to activate 5.5s Holo-Shield!)">
-        <span>✨ Spawn Glitter Comet</span>
-      </button>
-      <button type="button" class="btn btn-secondary" id="btnLabSound" title="Toggle Lab Sound Effects (SFX)">
-        <span id="labSoundIcon">🔊</span>
-        <span>SFX: <strong id="labSoundState">ON</strong></span>
-      </button>
+      <div class="lab-nav-actions">
+        <a href="index.html" class="btn btn-ghost">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Portfolio</span>
+        </a>
+        <a href="cv.html" class="btn btn-ghost"><span>View CV</span></a>
+        <button type="button" class="btn btn-primary" id="spawnCometBtn">
+          <span>☄️ Spawn Test Comet</span>
+        </button>
+        <button type="button" class="btn btn-glitter" id="spawnGlitterBtn" title="Spawn a Rare Celestial Glitter Comet (Catch/shatter to activate 5.5s Holo-Shield!)">
+          <span>✨ Spawn Glitter Comet</span>
+        </button>
+        <button type="button" class="btn btn-secondary" id="btnLabSound" title="Toggle Lab Sound Effects (SFX)">
+          <span id="labSoundIcon">🔊</span>
+          <span>SFX: <strong id="labSoundState">ON</strong></span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -533,19 +677,31 @@
         <canvas id="stageCanvas"></canvas>
       </div>
 
-      <!-- Quick Action Strip -->
+      <!-- Quick Action Strip (Balanced 2-Line Layout with Vertical Separators) -->
       <div class="quick-actions-bar">
-        <div class="quick-group">
-          <button type="button" class="action-btn active" id="btnIdle">🧘 Idle</button>
-          <button type="button" class="action-btn" id="btnWalk">🚶 Walk</button>
-          <button type="button" class="action-btn" id="btnRun">🏃 Sprint</button>
-          <button type="button" class="action-btn" id="btnJump">🦘 Jump Flip</button>
-          <button type="button" class="action-btn" id="btnSlash">🗡️ 3-Hit Slash</button>
-          <button type="button" class="action-btn btn-bonk" id="btnBonk">💥 Comet Bonk!</button>
-          <button type="button" class="action-btn" id="btnDizzy">😵 Dizzy</button>
-          <button type="button" class="action-btn" id="btnThinking">🤔 Thinking</button>
-          <button type="button" class="action-btn" id="btnWriting">✍️ Writing Ans</button>
-          <button type="button" class="action-btn" id="btnWaiting">
+        <!-- Line 1: Locomotion Stance & Combat/Movement Stunts -->
+        <div class="quick-line quick-line-top">
+          <!-- Locomotion Stance Modes (Base Movement: Exactly one always active) -->
+          <button type="button" class="action-btn loco-btn active" id="btnIdle" data-mode="idle" title="Combat Idle: Hover &amp; Bob while following cursor">🧘 Idle</button>
+          <button type="button" class="action-btn loco-btn" id="btnWalk" data-mode="walk" title="Walk: Articulated Stride towards cursor">🚶 Walk</button>
+          <button type="button" class="action-btn loco-btn" id="btnRun" data-mode="run" title="Sprint: Supersonic Run towards cursor">🏃 Sprint</button>
+
+          <!-- Visual Vertical Separator between Base Locomotion State and Action Triggers -->
+          <div class="quick-divider" title="Current Locomotion Mode | Action Stunts"></div>
+
+          <!-- Action Triggers: Combat & Movement Stunts -->
+          <button type="button" class="action-btn action-trigger-btn" id="btnJump" data-action="jump" title="Aerial 360° Somersault Flip">🦘 Jump Flip</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnSlash" data-action="slash" title="Astra Plasma Blade 4-Phase Combo Slash">🗡️ 3-Hit Slash</button>
+          <button type="button" class="action-btn action-trigger-btn btn-bonk" id="btnBonk" data-action="bonk" title="Comet Bonk Stun Simulation">💥 Comet Bonk!</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnDizzy" data-action="dizzy" title="Dizzy Wobble &amp; Orbiting Stars">😵 Dizzy</button>
+        </div>
+
+        <!-- Line 2: AI Companion Modes, Victory, Vertical Separator & Laboratory System Controls -->
+        <div class="quick-line quick-line-bottom">
+          <!-- Companion & AI Action Stunts -->
+          <button type="button" class="action-btn action-trigger-btn" id="btnThinking" data-action="thinking" title="AI Agent Thinking with Holographic Gear">🤔 Thinking</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnWriting" data-action="writing" title="AI Agent Writing Answer on Holographic Pad">✍️ Writing Ans</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnWaiting" data-action="waiting" title="Restful Chatbot Companion Mode">
             <svg width="15" height="15" viewBox="0 0 36 36" fill="none" style="vertical-align: -2px; display: inline-block; margin-right: 3px;">
               <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
               <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
@@ -560,14 +716,13 @@
               <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
             </svg>Chat Mascot
           </button>
-          <button type="button" class="action-btn" id="btnVictory">🌟 Victory</button>
-        </div>
+          <button type="button" class="action-btn action-trigger-btn" id="btnVictory" data-action="victory" title="Celebratory Victory Spin &amp; Joy Sparks">🌟 Victory</button>
 
-        <div class="quick-group">
-          <div class="action-btn" id="shieldPill" style="cursor: default; pointer-events: none; opacity: 0.95; background: rgba(15, 23, 42, 0.7); border-color: rgba(56, 189, 248, 0.3);" title="Holo-Shield automatically activates for 5.5s when a Glitter Comet is burst or collected!">
-            <span>🛡️ Holo-Shield: <strong id="shieldState" style="color: #94a3b8;">READY (Burst Glitter)</strong></span>
-          </div>
-          <button type="button" class="action-btn" id="btnFollowMouse" title="Toggle real-time cursor following">
+          <!-- Vertical Separator after Victory -->
+          <div class="quick-divider" title="Victory | System Controls"></div>
+
+          <!-- Secondary Options: Follow Cursor, Sound -->
+          <button type="button" class="action-btn active" id="btnFollowMouse" title="Toggle real-time cursor following">
             <span>🎯 Follow Cursor: <strong id="followState">ON</strong></span>
           </button>
           <button type="button" class="action-btn" id="btnLabSoundQuick" title="Toggle Lab Sound Effects (SFX)">
@@ -576,13 +731,49 @@
           </button>
         </div>
       </div>
+
+      <!-- Physics & Scale Controls -->
+      <div class="control-card" id="cardMotionTweaks">
+        <h3 style="display: flex; align-items: center; justify-content: space-between;">
+          <span><span>⚙️</span> Motion &amp; Scale Tweaks</span>
+          <button type="button" class="btn btn-ghost" id="btnResetTweaks" title="Reset Scale, Speed &amp; Glow to Defaults" style="padding: 3px 9px; font-size: 0.72rem; gap: 4px; border-radius: 6px; border-color: rgba(255,255,255,0.18);">
+            <span>🔄 Reset</span>
+          </button>
+        </h3>
+        
+        <div class="tweaks-slider-stack">
+          <div class="slider-row">
+            <div class="slider-label">
+              <span>Character Scale</span>
+              <span id="scaleVal">1.0x</span>
+            </div>
+            <input type="range" id="scaleSlider" min="0.25" max="1.5" step="0.05" value="1.0" />
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-label">
+              <span>Animation Speed</span>
+              <span id="speedVal">1.0x (Sprint 1.0x, Rest 0.5x)</span>
+            </div>
+            <input type="range" id="speedSlider" min="0.2" max="2.0" step="0.1" value="1.0" />
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-label">
+              <span>Plasma Blade Glow Intensity</span>
+              <span id="glowVal">2.5x</span>
+            </div>
+            <input type="range" id="glowSlider" min="0.4" max="2.5" step="0.1" value="2.5" />
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Right Control Deck -->
     <aside class="control-deck">
       
       <!-- AI Assistant & Chatbot Life Cycle Simulator -->
-      <div class="control-card" style="border-color: rgba(0, 242, 254, 0.45); background: linear-gradient(180deg, rgba(8, 16, 32, 0.95), rgba(4, 8, 18, 0.95)); box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);">
+      <div class="control-card" id="cardAiLifecycle" style="border-color: rgba(0, 242, 254, 0.45); background: linear-gradient(180deg, rgba(8, 16, 32, 0.95), rgba(4, 8, 18, 0.95)); box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);">
         <h3>
           <span style="display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; margin-right: 5px;">
             <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
@@ -603,7 +794,7 @@
         <p style="font-size: 0.76rem; color: #94a3b8; margin-bottom: 12px; line-height: 1.4;">
           Test Charlie's chatbot life states &amp; the bottom-right dock &harr; game deploy leap:
         </p>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="button-stack" style="display: flex; flex-direction: column; gap: 10px;">
           <button type="button" class="btn btn-primary" id="btnSimulateChat" style="width: 100%; justify-content: center;">
             <span>💬 Simulate "Ask Charlie" Query</span>
           </button>
@@ -622,93 +813,68 @@
             <span>🚀 Test Section Escort &rarr; Victory &rarr; Dock Dash</span>
           </button>
         </div>
-        <div id="chatStatusText" style="margin-top: 10px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,242,254,0.08); padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); text-align: center;">
+        <div id="chatStatusText" style="margin-top: 14px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,242,254,0.08); padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); text-align: center;">
           Status: Ready for testing
         </div>
       </div>
 
       <!-- Expression Matrix -->
-      <div class="control-card">
+      <div class="control-card" id="cardVisorLed">
         <h3><span>🎭</span> Visor LED Expressions</h3>
         <div class="face-grid">
-          <button type="button" class="face-btn active" data-face="happy">
-            <span class="face-preview">[●] ‿ [●]</span>
+          <button type="button" class="face-btn active" data-face="happy" title="Happy Cyber Visor">
+            <span class="face-preview">[●]‿[●]</span>
             <span class="face-tag">Happy</span>
           </button>
-          <button type="button" class="face-btn" data-face="battle">
+          <button type="button" class="face-btn" data-face="battle" title="Combat Battle Visor">
             <span class="face-preview">◣ ‿ ◢</span>
             <span class="face-tag">Battle</span>
           </button>
-          <button type="button" class="face-btn" data-face="sprint">
+          <button type="button" class="face-btn" data-face="sprint" title="Supersonic Sprint Visor">
             <span class="face-preview">&gt; ⤙ &lt;</span>
             <span class="face-tag">Sprint</span>
           </button>
-          <button type="button" class="face-btn" data-face="shocked">
+          <button type="button" class="face-btn" data-face="shocked" title="Electric Shock Visor">
             <span class="face-preview">⊙ ﹏ ⊙</span>
             <span class="face-tag">Shock</span>
           </button>
-          <button type="button" class="face-btn" data-face="dizzy">
+          <button type="button" class="face-btn" data-face="dizzy" title="Dizzy Stun Visor">
             <span class="face-preview">@ ‿ @</span>
             <span class="face-tag">Dizzy</span>
           </button>
-          <button type="button" class="face-btn" data-face="thinking">
+          <button type="button" class="face-btn" data-face="thinking" title="Thinking Visor">
             <span class="face-preview">• • •</span>
             <span class="face-tag">Thinking</span>
           </button>
-          <button type="button" class="face-btn" data-face="writing">
-            <span class="face-preview">&gt; ⤙ &lt;</span>
+          <button type="button" class="face-btn" data-face="writing" title="Focused Writing Visor (Sweat Drop)">
+            <span class="face-preview">&gt; ⤙ &lt;’</span>
             <span class="face-tag">Writing</span>
           </button>
-          <button type="button" class="face-btn" data-face="waiting">
-            <span class="face-preview">[●] ‿ [●]</span>
+          <button type="button" class="face-btn" data-face="waiting" title="AI Chatbot Mascot Visor">
+            <span class="face-preview">[✧]‿[✧]</span>
             <span class="face-tag">Mascot</span>
           </button>
-          <button type="button" class="face-btn" data-face="sad">
+          <button type="button" class="face-btn" data-face="sad" title="Sad Visor">
             <span class="face-preview">T ⤙ T</span>
             <span class="face-tag">Sad</span>
           </button>
-          <button type="button" class="face-btn" data-face="victory">
+          <button type="button" class="face-btn" data-face="victory" title="Celebratory Stars Visor">
             <span class="face-preview">★ ‿ ★</span>
             <span class="face-tag">Stars</span>
           </button>
-          <button type="button" class="face-btn" data-face="wink">
+          <button type="button" class="face-btn" data-face="wink" title="Playful Wink Visor">
             <span class="face-preview">&gt; ‿ ●</span>
             <span class="face-tag">Wink</span>
           </button>
-        </div>
-      </div>
-
-      <!-- Physics & Scale Controls -->
-      <div class="control-card">
-        <h3><span>⚙️</span> Motion &amp; Scale Tweaks</h3>
-        
-        <div class="slider-row">
-          <div class="slider-label">
-            <span>Character Scale</span>
-            <span id="scaleVal">1.0x</span>
-          </div>
-          <input type="range" id="scaleSlider" min="0.25" max="1.5" step="0.05" value="1.0" />
-        </div>
-
-        <div class="slider-row">
-          <div class="slider-label">
-            <span>Animation Speed</span>
-            <span id="speedVal">1.0x (Sprint 1.0x, Rest 0.5x)</span>
-          </div>
-          <input type="range" id="speedSlider" min="0.2" max="2.0" step="0.1" value="1.0" />
-        </div>
-
-        <div class="slider-row">
-          <div class="slider-label">
-            <span>Plasma Blade Glow Intensity</span>
-            <span id="glowVal">2.5x</span>
-          </div>
-          <input type="range" id="glowSlider" min="0.4" max="2.5" step="0.1" value="2.5" />
+          <button type="button" class="face-btn" data-face="love" title="Cyber Pink Heart Eyes Visor">
+            <span class="face-preview">♥ ‿ ♥</span>
+            <span class="face-tag">Love</span>
+          </button>
         </div>
       </div>
 
       <!-- Live Telemetry Box -->
-      <div class="control-card">
+      <div class="control-card" id="cardTelemetry">
         <h3><span>📊</span> Live Telemetry</h3>
         <div class="telemetry-box">
           <div>Velocity: <span class="telemetry-val" id="telSpeed">0.0 px/f</span></div>
@@ -1161,7 +1327,10 @@
 
         // Animation States
         this.state = 'idle'; // idle, walk, run, jump, slash, bonk, dizzy, victory, thinking, writing, waiting, deploying
-        this.face = 'happy'; // happy, battle, sprint, shocked, dizzy, sad, victory, wink, thinking, writing, waiting
+        this.locomotionMode = 'idle'; // 'idle', 'walk', 'run'
+        this.face = 'happy'; // happy, battle, sprint, shocked, dizzy, sad, victory, wink, love, thinking, writing, waiting
+        this.prevFace = 'happy';
+        this.faceTimer = 0;
         this.animTimer = 0;
         this.blinkTimer = 0;
         this.bonkTimer = 0;
@@ -1202,36 +1371,75 @@
         this.emoteText = '';
         this.emoteTimer = 0;
 
-        // Writing Animation Timer
+        // Action Stunt Auto-Stop Timers
+        this.thinkTimer = 0;
+        this.thinkMax = 160; // ~2.6s
         this.writeTimer = 0;
+        this.writeMax = 180; // ~3.0s
+        this.waitingTimer = 0;
+        this.waitingMax = 180; // ~3.0s
 
         // Blade Ribbon Trails
         this.bladeTrails = [];
       }
 
       setMode(mode) {
+        if (mode === 'idle' || mode === 'walk' || mode === 'run') {
+          this.locomotionMode = mode;
+        }
         this.state = mode;
-        hudMode.textContent = mode.toUpperCase();
+        hudMode.textContent = mode === 'run' ? 'SUPERSONIC SPRINT' : (mode === 'walk' ? 'WALK STRIDE' : (mode === 'idle' ? 'IDLE BOB' : mode.toUpperCase()));
         telState.textContent = mode.toUpperCase();
 
-        if (mode === 'run') this.face = 'sprint';
-        else if (mode === 'walk') this.face = 'happy';
-        else if (mode === 'slash') this.face = 'battle';
-        else if (mode === 'bonk') this.face = 'shocked';
-        else if (mode === 'dizzy') {
-          this.face = 'dizzy';
-          this.dizzyTimer = 180;
+        if (this.faceTimer <= 0) {
+          if (mode === 'run') this.face = 'sprint';
+          else if (mode === 'walk') this.face = 'happy';
+          else if (mode === 'slash') this.face = 'battle';
+          else if (mode === 'bonk') this.face = 'shocked';
+          else if (mode === 'dizzy') {
+            this.face = 'dizzy';
+            this.dizzyTimer = 180;
+          }
+          else if (mode === 'thinking') {
+            this.face = 'thinking';
+            this.thinkTimer = 0;
+          }
+          else if (mode === 'writing') {
+            this.face = 'writing';
+            this.writeTimer = 0;
+          }
+          else if (mode === 'waiting') {
+            this.face = 'waiting';
+            this.waitingTimer = 0;
+          }
+          else if (mode === 'victory') {
+            this.face = 'victory';
+            this.victoryTimer = 0;
+          }
+          else if (mode === 'idle') this.face = 'happy';
         }
-        else if (mode === 'thinking') this.face = 'thinking';
-        else if (mode === 'writing') this.face = 'writing';
-        else if (mode === 'waiting') this.face = 'waiting';
-        else if (mode === 'victory') this.face = 'victory';
-        else if (mode === 'idle') this.face = 'happy';
 
         // Sync buttons
         document.querySelectorAll('.face-btn').forEach(btn => {
           btn.classList.toggle('active', btn.getAttribute('data-face') === this.face);
         });
+
+        if (typeof syncLocoUI === 'function') syncLocoUI();
+      }
+
+      setTemporaryExpression(faceName, durationSeconds = 3.0) {
+        // Record prior face if not currently in a temporary expression
+        if (this.faceTimer <= 0) {
+          this.prevFace = this.face;
+        }
+        this.face = faceName;
+        this.faceTimer = Math.round(durationSeconds * 60);
+
+        // Flash joyful micro-sparks on Charlie
+        const sparkColor = (faceName === 'love' ? '#f43f5e' : (faceName === 'victory' ? '#f59e0b' : '#00f2fe'));
+        addSparks(this.x, this.y - 4 * charlieScale, sparkColor, 8);
+
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerSlash() {
@@ -1244,6 +1452,7 @@
 
         // High shoulder-level spark burst
         addSparks(this.x + this.facing * 30 * charlieScale, this.y - 6 * charlieScale, '#00f2fe', 14);
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerRandomCombatAction() {
@@ -1296,6 +1505,7 @@
           telState.textContent = 'FLIP SLICE';
           addSparks(this.x, this.y + 12 * charlieScale, '#00f2fe', 20);
         }
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerJump() {
@@ -1308,6 +1518,7 @@
         this.face = 'wink';
         hudMode.textContent = 'AERIAL SOMERSAULT 🦘';
         telState.textContent = 'JUMP FLIP';
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerVictory() {
@@ -1317,6 +1528,7 @@
         this.face = 'victory';
         hudMode.textContent = 'VICTORY SALUTE 🌟';
         telState.textContent = 'VICTORY';
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerBonk() {
@@ -1331,6 +1543,7 @@
         telBonk.textContent = 'STUNNED!';
         telBonk.style.color = '#f43f5e';
         addSparks(this.x, this.y - 18 * charlieScale, '#f59e0b', 16);
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerDizzy() {
@@ -1344,13 +1557,16 @@
         telBonk.textContent = 'STUNNED!';
         telBonk.style.color = '#f59e0b';
         addSparks(this.x, this.y - 20 * charlieScale, '#f59e0b', 12);
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerThinking() {
         this.state = 'thinking';
         this.face = 'thinking';
+        this.thinkTimer = 0;
         hudMode.textContent = 'THINKING... 🤔';
         telState.textContent = 'THINKING';
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerWriting() {
@@ -1359,13 +1575,16 @@
         this.writeTimer = 0;
         hudMode.textContent = 'WRITING ANS ✍️';
         telState.textContent = 'WRITING';
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerWaiting() {
         this.state = 'waiting';
         this.face = 'waiting';
+        this.waitingTimer = 0;
         hudMode.textContent = 'CHATBOT MASCOT ✨';
         telState.textContent = 'WAITING';
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       triggerSpontaneousAction() {
@@ -1412,6 +1631,7 @@
           this.setEmote('UNSTOPPABLE! 🌟', 85);
           hudMode.textContent = 'SPONTANEOUS: VICTORY TWIRL! 🌟';
         }
+        if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
       setEmote(text, duration = 75) {
@@ -1575,6 +1795,17 @@
           this.spontaneousNextInterval = Math.floor(2700 + Math.random() * 1800);
         }
 
+        // Visor LED Expression Temporary Duration Timer (reverts after 3 seconds)
+        if (this.faceTimer > 0) {
+          this.faceTimer -= 1.0 * animSpeed;
+          if (this.faceTimer <= 0) {
+            this.faceTimer = 0;
+            // Revert back to what the face was before the change (or base stance face)
+            this.face = this.prevFace || (this.locomotionMode === 'run' ? 'sprint' : 'happy');
+            if (typeof syncLocoUI === 'function') syncLocoUI();
+          }
+        }
+
         // 1. Follow Cursor Physics (only active during locomotion/idle, NOT interrupting special actions)
         const isActionLocked = (
           this.state === 'jump' ||
@@ -1589,38 +1820,92 @@
           this.state === 'cyber_dash'
         );
 
-        if (followCursor && !isActionLocked) {
-          this.targetX = mouse.x;
-          this.targetY = mouse.y;
+        if (!isActionLocked) {
+          const mode = this.locomotionMode || 'idle';
+          this.state = mode;
 
-          const dx = this.targetX - this.x;
-          const dy = this.targetY - this.y;
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
           const dist = Math.hypot(dx, dy);
 
-          // Facing direction
-          if (Math.abs(dx) > 4) {
+          // Facing direction when cursor is followed
+          if (followCursor && Math.abs(dx) > 4) {
             this.facing = dx > 0 ? 1 : -1;
             telFacing.textContent = this.facing === 1 ? 'RIGHT →' : '← LEFT';
           }
 
-          // Locomotion state resolution
-          if (dist > 180) {
-            this.state = 'run';
-            this.face = 'sprint';
-          } else if (dist > 30) {
-            this.state = 'walk';
-            this.face = 'happy';
-          } else {
-            this.state = 'idle';
-            this.face = 'happy';
+          if (mode === 'idle') {
+            if (this.faceTimer <= 0) this.face = 'happy';
+            if (followCursor) {
+              if (dist > 12) {
+                // Smooth hover glide towards cursor in floating combat idle pose
+                const idleHoverSpeed = Math.min(3.2, 1.8 * animSpeed + dist * 0.015);
+                this.vx = (dx / dist) * idleHoverSpeed;
+                this.vy = (dy / dist) * idleHoverSpeed;
+              } else {
+                this.vx *= 0.78;
+                this.vy *= 0.78;
+              }
+              this.x += this.vx;
+              this.y += this.vy;
+            } else {
+              // Smooth deceleration to idle rest in place
+              this.vx *= 0.82;
+              this.vy *= 0.82;
+              this.x += this.vx;
+              this.y += this.vy;
+            }
+            hudMode.textContent = 'IDLE BOB';
+            telState.textContent = 'IDLE';
+          } else if (mode === 'walk') {
+            if (this.faceTimer <= 0) this.face = 'happy';
+            if (followCursor) {
+              if (dist > 14) {
+                const walkSpeed = 2.4 * animSpeed;
+                this.vx = (dx / dist) * walkSpeed;
+                this.vy = (dy / dist) * walkSpeed;
+              } else {
+                this.vx *= 0.65;
+                this.vy *= 0.65;
+              }
+              this.x += this.vx;
+              this.y += this.vy;
+            } else {
+              // Autonomous patrol walk across stage
+              this.vx = this.facing * 2.2 * animSpeed;
+              this.vy = 0;
+              this.x += this.vx;
+              if (this.x < 50) { this.x = 50; this.facing = 1; }
+              else if (this.x > canvas.clientWidth - 50) { this.x = canvas.clientWidth - 50; this.facing = -1; }
+              telFacing.textContent = this.facing === 1 ? 'RIGHT →' : '← LEFT';
+            }
+            hudMode.textContent = 'WALK STRIDE';
+            telState.textContent = 'WALK';
+          } else if (mode === 'run') {
+            if (this.faceTimer <= 0) this.face = 'sprint';
+            if (followCursor) {
+              if (dist > 18) {
+                const sprintSpeed = Math.min(8.5, 4.8 * animSpeed + dist * 0.035);
+                this.vx = (dx / dist) * sprintSpeed;
+                this.vy = (dy / dist) * sprintSpeed;
+              } else {
+                this.vx *= 0.75;
+                this.vy *= 0.75;
+              }
+              this.x += this.vx;
+              this.y += this.vy;
+            } else {
+              // Autonomous sprint patrol across stage
+              this.vx = this.facing * 5.0 * animSpeed;
+              this.vy = 0;
+              this.x += this.vx;
+              if (this.x < 60) { this.x = 60; this.facing = 1; }
+              else if (this.x > canvas.clientWidth - 60) { this.x = canvas.clientWidth - 60; this.facing = -1; }
+              telFacing.textContent = this.facing === 1 ? 'RIGHT →' : '← LEFT';
+            }
+            hudMode.textContent = 'SUPERSONIC SPRINT';
+            telState.textContent = 'SPRINT';
           }
-
-          // Smooth Chase Lerp
-          const chaseFactor = this.state === 'run' ? 0.09 : 0.06;
-          this.vx = dx * chaseFactor;
-          this.vy = dy * chaseFactor;
-          this.x += this.vx;
-          this.y += this.vy;
         }
 
         // 2. Action Sequences Progression
@@ -1657,13 +1942,13 @@
           }
 
           if (this.jumpTimer >= this.jumpMax) {
-            this.state = 'idle';
-            this.face = 'happy';
+            this.state = this.locomotionMode || 'idle';
+            if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
             if (this.jumpStartX > 0) {
               this.x = this.jumpStartX;
               this.y = this.jumpStartY;
             }
-            hudMode.textContent = 'IDLE BOB';
+            if (typeof syncLocoUI === 'function') syncLocoUI();
           }
         }
 
@@ -1687,8 +1972,10 @@
           }
 
           if (this.victoryTimer >= this.victoryMax) {
-            // Loop victory celebration while on Victory mode
-            this.victoryTimer = 25; // loop into skyward thrust & joy hops
+            this.state = this.locomotionMode || 'idle';
+            if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
+            this.twirlAngle = 0;
+            if (typeof syncLocoUI === 'function') syncLocoUI();
           }
         }
 
@@ -1696,9 +1983,9 @@
         if (this.state === 'slash') {
           this.slashTimer += 1.0 * animSpeed;
           if (this.slashTimer >= this.slashMax) {
-            this.state = 'idle';
-            this.face = 'happy';
-            hudMode.textContent = 'IDLE BOB';
+            this.state = this.locomotionMode || 'idle';
+            if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
+            if (typeof syncLocoUI === 'function') syncLocoUI();
           }
         }
 
@@ -1715,6 +2002,7 @@
             this.dizzyTimer = 180;
             telBonk.textContent = 'RECOVERING...';
             telBonk.style.color = '#f59e0b';
+            if (typeof syncLocoUI === 'function') syncLocoUI();
           }
         }
 
@@ -1722,35 +2010,58 @@
         if (this.state === 'dizzy') {
           this.dizzyTimer -= 1.0 * animSpeed;
           if (this.dizzyTimer <= 0) {
-            this.state = 'idle';
-            this.face = 'happy';
+            this.state = this.locomotionMode || 'idle';
+            if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
             if (!this.manualShieldActive) {
               this.isShielded = false;
               const shieldEl = document.getElementById('shieldState');
               if (shieldEl) {
-                shieldEl.textContent = 'OFF';
-                shieldEl.style.color = '#f87171';
+                shieldEl.textContent = 'READY (Burst Glitter)';
+                shieldEl.style.color = '#94a3b8';
               }
             }
-            hudMode.textContent = 'IDLE BOB';
             telBonk.textContent = 'NORMAL';
             telBonk.style.color = '#00f2fe';
+            if (typeof syncLocoUI === 'function') syncLocoUI();
           }
         }
 
-        // --- THINKING SPARK PARTICLES ---
-        if (this.state === 'thinking' && Math.random() > 0.65) {
-          // Electric idea spark from antenna tip
-          addSparks(this.x, this.y - 28 * charlieScale, '#f59e0b', 1);
+        // --- THINKING SEQUENCE ---
+        if (this.state === 'thinking') {
+          this.thinkTimer += 1.0 * animSpeed;
+          if (Math.random() > 0.65) {
+            // Electric idea spark from antenna tip
+            addSparks(this.x, this.y - 28 * charlieScale, '#f59e0b', 1);
+          }
+          if (this.thinkTimer >= this.thinkMax) {
+            this.state = this.locomotionMode || 'idle';
+            if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
+            if (typeof syncLocoUI === 'function') syncLocoUI();
+          }
         }
 
-        // --- WRITING STYLUS PARTICLES ---
+        // --- WRITING SEQUENCE ---
         if (this.state === 'writing') {
           this.writeTimer += 1.0 * animSpeed;
           if (Math.random() > 0.35) {
             const stylusTipX = this.x + this.facing * 14 * charlieScale;
             const stylusTipY = this.y - 2 * charlieScale;
             addSparks(stylusTipX, stylusTipY, '#00f2fe', 1);
+          }
+          if (!labChatDelivery.active && this.writeTimer >= this.writeMax) {
+            this.state = this.locomotionMode || 'idle';
+            if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
+            if (typeof syncLocoUI === 'function') syncLocoUI();
+          }
+        }
+
+        // --- CHAT MASCOT / WAITING SEQUENCE ---
+        if (this.state === 'waiting') {
+          this.waitingTimer += 1.0 * animSpeed;
+          if (this.waitingTimer >= this.waitingMax) {
+            this.state = this.locomotionMode || 'idle';
+            if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
+            if (typeof syncLocoUI === 'function') syncLocoUI();
           }
         }
 
@@ -1828,8 +2139,8 @@
               followCursor = true;
               followState.textContent = 'ON (ACTIVE)';
               followBtn.classList.add('active');
-              canvas.style.cursor = 'none'; // Mouse cursor disappears!
-              hudMode.textContent = '⚡ CYBER CHARLIE AT CURSOR (CURSOR HIDDEN)';
+              canvas.style.cursor = 'crosshair'; // Mouse cursor remains always visible in playground!
+              hudMode.textContent = '⚡ CYBER CHARLIE AT CURSOR (FOLLOW ACTIVE)';
               telState.textContent = 'COMBAT READY';
               addSparks(this.x, this.y, '#00f2fe', 26);
             }
@@ -2981,6 +3292,19 @@
           c.beginPath();
           c.arc(0, 0, 2.8, 0.2, Math.PI - 0.2);
           c.stroke();
+        } else if (this.face === 'love') {
+          // ♥  ♥ Cyber Heart Eyes
+          c.fillStyle = '#f43f5e';
+          c.shadowColor = '#f43f5e';
+          c.shadowBlur = 9 * glowMult;
+          c.font = '7.5px sans-serif';
+          c.fillText('♥', -7.5, -2);
+          c.fillText('♥', 0.5, -2);
+          // Joyful curve smile
+          c.strokeStyle = '#f43f5e';
+          c.beginPath();
+          c.arc(0, 0, 3.2, 0.2, Math.PI - 0.2);
+          c.stroke();
         } else if (this.face === 'thinking') {
           // Animated wave dots: • • •
           c.fillStyle = '#00f2fe';
@@ -3009,39 +3333,56 @@
           c.arc(8, -6, 1.2, 0, Math.PI * 2);
           c.fill();
         } else if (this.face === 'waiting') {
-          // Natural periodic blinking: blinks for ~12 frames every 210 frames (~3.5 seconds)
-          const isBlinking = (this.blinkTimer > 195);
-          if (isBlinking) {
-            // Closed happy blinking curves
-            c.beginPath();
-            c.moveTo(-7, -4); c.lineTo(-4, -6); c.lineTo(-1, -4);
-            c.moveTo(1, -4); c.lineTo(4, -6); c.lineTo(7, -4);
-            c.stroke();
-          } else {
-            // Open glowing cyber eyes with lively pupils & white specular shine
-            const glanceX = Math.sin(this.animTimer * 0.8) * 0.8;
-            c.fillStyle = '#00f2fe';
-            c.shadowColor = '#00f2fe';
-            c.shadowBlur = 8 * glowMult;
-            c.beginPath();
-            c.roundRect(-7 + glanceX, -7, 4.5, 6, 2);
-            c.roundRect(2.5 + glanceX, -7, 4.5, 6, 2);
-            c.fill();
+          // Mascot / AI Companion: Radiant 4-Point AI Sparkle Eyes ✦  ✦
+          const pulse = 0.88 + Math.sin(this.animTimer * 3.2) * 0.12;
+          const outerR = 4.2 * pulse;
 
-            // White specular reflection gleam
-            c.fillStyle = '#ffffff';
-            c.shadowBlur = 4;
-            c.beginPath();
-            c.arc(-4 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
-            c.arc(5.5 + glanceX, -5.5, 1.1, 0, Math.PI * 2);
-            c.fill();
-          }
-          // Cute gentle cyber smile
+          c.fillStyle = '#00f2fe';
+          c.shadowColor = '#00f2fe';
+          c.shadowBlur = 10 * glowMult;
+
+          // Left radiant sparkle star ✦
+          c.beginPath();
+          c.moveTo(-4.8, -3.8 - outerR);
+          c.quadraticCurveTo(-4.8, -3.8, -4.8 + outerR, -3.8);
+          c.quadraticCurveTo(-4.8, -3.8, -4.8, -3.8 + outerR);
+          c.quadraticCurveTo(-4.8, -3.8, -4.8 - outerR, -3.8);
+          c.quadraticCurveTo(-4.8, -3.8, -4.8, -3.8 - outerR);
+          c.closePath();
+          c.fill();
+
+          // Right radiant sparkle star ✦
+          c.beginPath();
+          c.moveTo(4.8, -3.8 - outerR);
+          c.quadraticCurveTo(4.8, -3.8, 4.8 + outerR, -3.8);
+          c.quadraticCurveTo(4.8, -3.8, 4.8, -3.8 + outerR);
+          c.quadraticCurveTo(4.8, -3.8, 4.8 - outerR, -3.8);
+          c.quadraticCurveTo(4.8, -3.8, 4.8, -3.8 - outerR);
+          c.closePath();
+          c.fill();
+
+          // Brilliant white specular center twinkles
+          c.fillStyle = '#ffffff';
+          c.shadowColor = '#ffffff';
+          c.shadowBlur = 4;
+          c.beginPath();
+          c.arc(-4.8, -3.8, 1.0, 0, Math.PI * 2);
+          c.arc(4.8, -3.8, 1.0, 0, Math.PI * 2);
+          c.fill();
+
+          // Cheerful friendly mascot smile
           c.strokeStyle = '#00f2fe';
           c.shadowColor = '#00f2fe';
           c.beginPath();
-          c.arc(0, 0, 2.6, 0.2, Math.PI - 0.2);
+          c.arc(0, 0, 2.8, 0.2, Math.PI - 0.2);
           c.stroke();
+
+          // Cute cyber cheek sensor nodes
+          c.fillStyle = 'rgba(0, 242, 254, 0.7)';
+          c.beginPath();
+          c.arc(-8.5, -0.5, 0.9, 0, Math.PI * 2);
+          c.arc(8.5, -0.5, 0.9, 0, Math.PI * 2);
+          c.fill();
         }
 
         c.restore();
@@ -3215,58 +3556,98 @@
     /* =========================================================================
        UI Event Listeners
        ========================================================================= */
-    // Action Mode Buttons
-    const modeButtons = [
-      { id: 'btnIdle', mode: 'idle' },
-      { id: 'btnWalk', mode: 'walk' },
-      { id: 'btnRun', mode: 'run' },
-      { id: 'btnJump', mode: 'jump' },
-      { id: 'btnSlash', mode: 'slash' },
-      { id: 'btnBonk', mode: 'bonk' },
-      { id: 'btnDizzy', mode: 'dizzy' },
-      { id: 'btnThinking', mode: 'thinking' },
-      { id: 'btnWriting', mode: 'writing' },
-      { id: 'btnWaiting', mode: 'waiting' },
-      { id: 'btnVictory', mode: 'victory' }
+    function syncLocoUI() {
+      if (!charlie) return;
+      const locoMode = charlie.locomotionMode || 'idle';
+
+      // 1. Locomotion Stance Mode (Radio Selection: Exactly one always active - Cyan glow)
+      document.querySelectorAll('.loco-btn').forEach(b => {
+        const mode = b.getAttribute('data-mode') || (b.id === 'btnRun' ? 'run' : (b.id === 'btnWalk' ? 'walk' : 'idle'));
+        b.classList.toggle('active', mode === locoMode);
+      });
+
+      // 2. Action Trigger Buttons (Amber / Rose glow when stunt is active, simultaneous with locomotion mode)
+      const currentAction = ['jump', 'slash', 'bonk', 'dizzy', 'thinking', 'writing', 'waiting', 'victory'].includes(charlie.state) ? charlie.state : null;
+      document.querySelectorAll('.action-trigger-btn').forEach(b => {
+        const act = b.getAttribute('data-action');
+        b.classList.toggle('active', act === currentAction);
+      });
+
+      // 3. Face Matrix sync
+      document.querySelectorAll('.face-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-face') === (charlie ? charlie.face : 'happy'));
+      });
+
+      // 4. Telemetry & HUD State sync
+      if (hudMode) {
+        if (charlie.state === 'slash') hudMode.textContent = `COMBO SLASH ${charlie.slashPhase || 1}/4`;
+        else if (charlie.state === 'jump') hudMode.textContent = 'AERIAL SOMERSAULT 🦘';
+        else if (charlie.state === 'bonk') hudMode.textContent = 'COMET BONK! 💥';
+        else if (charlie.state === 'dizzy') hudMode.textContent = 'DIZZY STUN 😵';
+        else if (charlie.state === 'thinking') hudMode.textContent = 'THINKING... 🤔';
+        else if (charlie.state === 'writing') hudMode.textContent = 'WRITING ANS ✍️';
+        else if (charlie.state === 'waiting') hudMode.textContent = 'CHATBOT MASCOT ✨';
+        else if (charlie.state === 'victory') hudMode.textContent = 'VICTORY SALUTE 🌟';
+        else if (locoMode === 'run') hudMode.textContent = 'SUPERSONIC SPRINT';
+        else if (locoMode === 'walk') hudMode.textContent = 'WALK STRIDE';
+        else hudMode.textContent = 'IDLE BOB';
+      }
+      if (telState) {
+        telState.textContent = charlie.state.toUpperCase();
+      }
+    }
+
+    // Locomotion Mode Buttons (Idle, Walk, Sprint)
+    document.querySelectorAll('.loco-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.getAttribute('data-mode') || (btn.id === 'btnRun' ? 'run' : (btn.id === 'btnWalk' ? 'walk' : 'idle'));
+        charlie.locomotionMode = mode;
+
+        const isActionLocked = (
+          charlie.state === 'jump' ||
+          charlie.state === 'bonk' ||
+          charlie.state === 'slash' ||
+          charlie.state === 'dizzy' ||
+          charlie.state === 'deploying' ||
+          charlie.state === 'cyber_dash'
+        );
+
+        if (!isActionLocked) {
+          charlie.setMode(mode);
+        } else {
+          // If in a sustained companion mode like thinking/waiting/victory, clicking locomotion immediately wakes him up!
+          if (charlie.state === 'thinking' || charlie.state === 'writing' || charlie.state === 'waiting' || charlie.state === 'victory') {
+            charlie.setMode(mode);
+          }
+        }
+        syncLocoUI();
+      });
+    });
+
+    // Action Trigger Buttons (Jump Flip, 3-Hit Slash, Comet Bonk, Dizzy, Thinking, Writing, Chat Mascot, Victory)
+    const actionTriggers = [
+      { id: 'btnJump', action: 'jump', fn: () => { charlie.triggerJump(); sound.playJump(); } },
+      { id: 'btnSlash', action: 'slash', fn: () => { charlie.triggerSlash(); sound.playLaserSlice(); } },
+      { id: 'btnBonk', action: 'bonk', fn: () => { charlie.triggerBonk(); sound.playBonk(); } },
+      { id: 'btnDizzy', action: 'dizzy', fn: () => { charlie.triggerDizzy(); sound.playDizzy(); } },
+      { id: 'btnThinking', action: 'thinking', fn: () => { charlie.triggerThinking(); } },
+      { id: 'btnWriting', action: 'writing', fn: () => { charlie.triggerWriting(); sound.playComboDing(); } },
+      { id: 'btnWaiting', action: 'waiting', fn: () => { charlie.triggerWaiting(); } },
+      { id: 'btnVictory', action: 'victory', fn: () => { charlie.triggerVictory(); sound.playFanfare(); } }
     ];
 
-    modeButtons.forEach(item => {
+    actionTriggers.forEach(item => {
       const btn = document.getElementById(item.id);
       if (btn) {
         btn.addEventListener('click', () => {
-          document.querySelectorAll('.action-btn').forEach(b => {
-            if (b.id !== 'btnFollowMouse') b.classList.remove('active');
-          });
-          btn.classList.add('active');
-
-          if (item.mode === 'slash') {
-            charlie.triggerSlash();
-            sound.playLaserSlice();
-          } else if (item.mode === 'jump') {
-            charlie.triggerJump();
-            sound.playJump();
-          } else if (item.mode === 'victory') {
-            charlie.triggerVictory();
-            sound.playFanfare();
-          } else if (item.mode === 'bonk') {
-            charlie.triggerBonk();
-            sound.playBonk();
-          } else if (item.mode === 'dizzy') {
-            charlie.triggerDizzy();
-            sound.playDizzy();
-          } else if (item.mode === 'thinking') {
-            charlie.triggerThinking();
-          } else if (item.mode === 'writing') {
-            charlie.triggerWriting();
-            sound.playComboDing();
-          } else if (item.mode === 'waiting') {
-            charlie.triggerWaiting();
-          } else {
-            charlie.setMode(item.mode);
-          }
+          item.fn();
+          syncLocoUI();
         });
       }
     });
+
+    // Initialize UI active selection states
+    syncLocoUI();
 
     // Sound Effects ON/OFF Toggle Buttons & UI Synchronization
     const labSoundBtn = document.getElementById('btnLabSound');
@@ -3533,12 +3914,14 @@
       });
     }
 
-    // Face Matrix Buttons
+    // Face Matrix Buttons (Visor LED Expressions with 3-second temporary preview)
     document.querySelectorAll('.face-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.face-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        charlie.face = btn.getAttribute('data-face');
+        const targetFace = btn.getAttribute('data-face');
+        if (sound && !sound.isMuted) {
+          sound.playComboDing();
+        }
+        charlie.setTemporaryExpression(targetFace, 3.0);
       });
     });
 
@@ -3564,6 +3947,28 @@
       glowMult = parseFloat(e.target.value);
       glowVal.textContent = `${glowMult.toFixed(1)}x`;
     });
+
+    // Reset Motion & Scale Tweaks to Defaults
+    const btnResetTweaks = document.getElementById('btnResetTweaks');
+    if (btnResetTweaks) {
+      btnResetTweaks.addEventListener('click', () => {
+        scaleSlider.value = '1.0';
+        charlieScale = 1.0;
+        scaleVal.textContent = '1.0x';
+
+        speedSlider.value = '1.0';
+        animSpeed = 1.0;
+        speedVal.textContent = '1.0x (Sprint 1.0x, Rest 0.5x)';
+
+        glowSlider.value = '2.5';
+        glowMult = 2.5;
+        glowVal.textContent = '2.5x';
+
+        if (sound && !sound.isMuted) {
+          sound.playComboDing();
+        }
+      });
+    }
 
     // Periodically spawn background test comets for practice slicing
     setInterval(() => {

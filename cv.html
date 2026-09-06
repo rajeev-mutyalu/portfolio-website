@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=131" />
+  <link rel="stylesheet" href="style.css?v=132" />
 </head>
 
 <body class="cv-body">
@@ -1051,25 +1051,37 @@ Jawaharlal Nehru Technological University (JNTU) / SVCET
     // 📱 Dynamic Mobile & Rotated Mobile Mode Handler
     function updateCvMobileState() {
       const isSimulator = document.body && document.body.classList.contains('in-simulator');
-      const isMob = (
-        (window.self !== window.top) ||
-        isSimulator ||
-        (window.innerWidth <= 768) ||
-        (window.innerHeight <= 550 && window.innerWidth > window.innerHeight) ||
+      const isLandscape = (window.innerWidth > window.innerHeight);
+      const isSmallHeight = (window.innerHeight <= 550);
+      const isMobileDim = (Math.min(window.innerWidth, window.innerHeight) <= 500) ||
         (window.matchMedia && (
           window.matchMedia('(max-height: 550px) and (orientation: landscape)').matches ||
           window.matchMedia('(pointer: coarse) and (max-height: 550px)').matches ||
           window.matchMedia('(max-device-width: 956px) and (orientation: landscape)').matches
-        ))
+        ));
+      const isRotated = isLandscape && (isSmallHeight || isMobileDim);
+      const isMob = (
+        (window.self !== window.top) ||
+        isSimulator ||
+        (window.innerWidth <= 768) ||
+        isRotated
       );
+
       if (document.body) {
         if (isMob) {
           document.body.classList.add('is-mobile-screen');
         } else {
           document.body.classList.remove('is-mobile-screen');
         }
+
+        if (isRotated) {
+          document.body.classList.add('is-rotated-mobile');
+        } else {
+          document.body.classList.remove('is-rotated-mobile');
+        }
       }
     }
+    window.updateMobileOrientationState = updateCvMobileState;
     window.addEventListener('resize', updateCvMobileState);
     window.addEventListener('orientationchange', () => {
       setTimeout(updateCvMobileState, 60);

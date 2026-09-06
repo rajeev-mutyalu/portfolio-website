@@ -23,15 +23,14 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=131" />
+  <link rel="stylesheet" href="style.css?v=132" />
 
-  <!-- Local Dev Environment Detection (Mobile Simulator only active in local builds) -->
+  <!-- Local Dev Environment Detection (Mobile Simulator only active on local dev server) -->
   <script>
     (function () {
       var isLocal = (
         window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:' ||
         window.location.hostname.endsWith('.local')
       );
       if (isLocal) {
@@ -1562,7 +1561,7 @@
     <kbd class="floating-sim-kbd">M</kbd>
   </button>
 
-  <script src="app.js?v=130"></script>
+  <script src="app.js?v=132"></script>
 </body>
 
 </html>
