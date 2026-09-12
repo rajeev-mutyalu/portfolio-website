@@ -23,7 +23,21 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=133" />
+  <link rel="stylesheet" href="style.css?v=135" />
+  <style>
+    /* Critical Dual-View Print / Screen Isolation (prevents CSS caching bugs) */
+    .print-only {
+      display: none !important;
+    }
+    @media print {
+      .print-only {
+        display: block !important;
+      }
+      .screen-only {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
 
 <body class="cv-body">
@@ -720,7 +734,7 @@
       <!-- =====================================================================
            6. RECENT AI PROFESSIONAL DEVELOPMENT (PRINT / PDF ONLY)
            ===================================================================== -->
-      <section class="cv-section print-only">
+      <section class="cv-section print-only" style="display: none;">
         <h2 class="cv-section-title" style="font-size: 1.05rem;">
           <span class="cv-sec-icon">💡</span> Recent AI Professional Development
         </h2>
