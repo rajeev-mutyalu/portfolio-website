@@ -23,15 +23,23 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=135" />
+  <link rel="stylesheet" href="style.css?v=140" />
 
-  <!-- Local Dev Environment Detection (Mobile Simulator only active on local dev server) -->
+  <!-- Local Dev Environment Detection (Mobile Simulator active in local environments) -->
   <script>
     (function () {
       var isLocal = (
         window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
-        window.location.hostname.endsWith('.local')
+        window.location.hostname === '[::1]' ||
+        window.location.protocol === 'file:' ||
+        !window.location.hostname ||
+        window.location.hostname.endsWith('.local') ||
+        window.location.hostname.indexOf('192.168.') !== -1 ||
+        window.location.hostname.indexOf('10.0.') !== -1 ||
+        window.location.search.indexOf('simulator=1') !== -1 ||
+        window.location.search.indexOf('sim=1') !== -1 ||
+        window.location.search.indexOf('local=1') !== -1
       );
       if (isLocal) {
         document.documentElement.classList.add('is-local-build');
@@ -72,7 +80,8 @@
       </nav>
 
       <div class="nav-actions">
-        <a href="cv.html" class="btn btn-secondary btn-sm" title="View Official Curriculum Vitae">
+        <!-- Curriculum Vitae Modal Trigger -->
+        <button type="button" class="btn btn-secondary btn-sm nav-cv-btn" id="navCvTrigger" title="Select Curriculum Vitae Focus" aria-haspopup="dialog">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
@@ -80,7 +89,7 @@
             <line x1="16" y1="17" x2="8" y2="17"></line>
           </svg>
           <span>View CV</span>
-        </a>
+        </button>
         <a href="#contact" class="btn btn-primary btn-sm">Get in Touch</a>
         <button type="button" class="fx-switch-wrapper" id="fxSwitchWrapper" title="Toggle Interactive Cosmic Game Mode"
           aria-label="Toggle Interactive Cosmic Game Mode">
@@ -115,6 +124,14 @@
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-content">
+        <div class="mobile-nav-group-title">CURRICULUM VITAE TRACKS</div>
+        <a href="cv.html?track=ai" class="mobile-nav-link cv-highlight-link">
+          <span>⚡ AI &amp; GenAI Systems Architect</span>
+        </a>
+        <a href="cv.html?track=vfx" class="mobile-nav-link cv-highlight-link">
+          <span>🎬 Production Tech &amp; Core VFX Architect</span>
+        </a>
+        <div class="mobile-nav-group-title">PORTFOLIO SECTIONS</div>
         <a href="#initiatives" class="mobile-nav-link">🚀 Technical Arsenal &amp; AI Stack</a>
         <a href="#architecture" class="mobile-nav-link">🎬 Architecture Flow</a>
         <a href="#conform" class="mobile-nav-link">📦 Conform Ingest</a>
@@ -1591,6 +1608,11 @@
             title="iPhone 16 Pro Max (440 &times; 956)">
             <span>iPhone 16 Pro Max</span>
           </button>
+          <button type="button" class="sim-preset-btn sim-preset-duo" data-device="duo" data-w="1240" data-h="1024"
+            title="Apple Duo: iPhone 16 Pro Max + iPad Side-by-Side Dual Simulator">
+            <span class="preset-duo-sparkle">✨</span>
+            <span>Apple Duo</span>
+          </button>
           <button type="button" class="sim-preset-btn" data-device="pixel" data-w="412" data-h="915"
             title="Google Pixel 8 (412 &times; 915)">
             <span>Pixel 8</span>
@@ -1642,27 +1664,47 @@
 
     <!-- Simulator Center Stage with Realistic Device Chassis -->
     <div class="mobile-sim-stage" id="mobileSimStage">
-      <div class="mobile-phone-chassis" id="mobilePhoneChassis" data-device="iphone" data-orientation="portrait">
-        <!-- Chassis Hardware Buttons -->
-        <div class="chassis-button chassis-btn-silent"></div>
-        <div class="chassis-button chassis-btn-vol-up"></div>
-        <div class="chassis-button chassis-btn-vol-down"></div>
-        <div class="chassis-button chassis-btn-power"></div>
+      <div class="sim-stage-inner" id="simStageInner">
+        <!-- Device 1: iPhone 16 Pro Max Chassis -->
+        <div class="mobile-phone-chassis" id="mobilePhoneChassis" data-device="iphone" data-orientation="portrait">
+          <div class="sim-device-header-pill">iPhone 16 Pro Max</div>
+          <!-- Chassis Hardware Buttons -->
+          <div class="chassis-button chassis-btn-silent"></div>
+          <div class="chassis-button chassis-btn-vol-up"></div>
+          <div class="chassis-button chassis-btn-vol-down"></div>
+          <div class="chassis-button chassis-btn-power"></div>
 
-        <!-- Bezel & Screen Wrapper -->
-        <div class="phone-screen-wrapper">
-          <!-- Dynamic Island / Top Camera Notch -->
-          <div class="phone-dynamic-island" id="phoneDynamicIsland" title="Dynamic Island">
-            <div class="island-camera-lens"></div>
-            <div class="island-sensor"></div>
+          <!-- Bezel & Screen Wrapper -->
+          <div class="phone-screen-wrapper">
+            <!-- Dynamic Island / Top Camera Notch -->
+            <div class="phone-dynamic-island" id="phoneDynamicIsland" title="Dynamic Island">
+              <div class="island-camera-lens"></div>
+              <div class="island-sensor"></div>
+            </div>
+
+            <!-- Live Embedded Web View (Simulates 100% Mobile Viewport) -->
+            <iframe id="mobileSimFrame" class="mobile-sim-frame" title="Mobile Portfolio Preview"
+              src="about:blank"></iframe>
+
+            <!-- Home Indicator Touch Bar -->
+            <div class="phone-home-indicator"></div>
           </div>
+        </div>
 
-          <!-- Live Embedded Web View (Simulates 100% Mobile Viewport) -->
-          <iframe id="mobileSimFrame" class="mobile-sim-frame" title="Mobile Portfolio Preview"
-            src="about:blank"></iframe>
+        <!-- Device 2: Apple iPad Companion Chassis (Apple Duo Mode) -->
+        <div class="mobile-phone-chassis mobile-ipad-chassis hidden" id="mobileIpadChassis" data-device="ipad" data-orientation="portrait">
+          <div class="sim-device-header-pill">iPad Pro / Air (768 &times; 1024)</div>
+          <div class="phone-screen-wrapper ipad-screen-wrapper">
+            <!-- iPad Top Center Camera Sensor -->
+            <div class="ipad-camera-dot" title="Front Camera"></div>
 
-          <!-- Home Indicator Touch Bar -->
-          <div class="phone-home-indicator"></div>
+            <!-- Live Embedded iPad Web View -->
+            <iframe id="mobileIpadFrame" class="mobile-sim-frame" title="iPad Portfolio Preview"
+              src="about:blank"></iframe>
+
+            <!-- iPad Home Indicator -->
+            <div class="phone-home-indicator ipad-home-indicator"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1676,7 +1718,76 @@
     <kbd class="floating-sim-kbd">M</kbd>
   </button>
 
-  <script src="app.js?v=143"></script>
+  <!-- =========================================================================
+       📄 Curriculum Vitae Specialisation Selector Modal
+       ========================================================================= -->
+  <div class="cv-modal-overlay hidden" id="cvModalOverlay" role="dialog" aria-modal="true" aria-labelledby="cvModalTitle">
+    <div class="cv-modal-backdrop" id="cvModalBackdrop"></div>
+    <div class="cv-modal-card">
+      <header class="cv-modal-header">
+        <div class="cv-modal-title-wrap">
+          <div class="cv-modal-icon-badge">📄</div>
+          <div>
+            <h3 class="cv-modal-title" id="cvModalTitle">Select Curriculum Vitae Focus</h3>
+            <p class="cv-modal-subtitle">Choose the engineering focus tailored to your recruitment or technical leadership evaluation</p>
+          </div>
+        </div>
+        <button type="button" class="cv-modal-close" id="cvModalClose" aria-label="Close modal">
+          &times;
+        </button>
+      </header>
+
+      <div class="cv-modal-grid">
+        <!-- Track 1: AI & GenAI Systems Architect -->
+        <a href="cv.html?track=ai" class="cv-modal-option option-ai" id="cvModalTrackAi">
+          <div class="cv-option-top">
+            <span class="cv-option-badge badge-ai">Frontier GenAI Focus</span>
+            <span class="cv-option-icon">⚡</span>
+          </div>
+          <h4 class="cv-option-title">AI &amp; GenAI Systems Architect</h4>
+          <p class="cv-option-desc">Frontier Generative AI production platforms, Studio.AI prompt&#8209;to&#8209;video, Google Veo, Kling AI, ComfyUI node workflows, character identity consistency, private on-premise LLMs, and studio automation.</p>
+          <div class="cv-option-tags">
+            <span class="cv-opt-tag">Studio.AI Platform</span>
+            <span class="cv-opt-tag">ComfyUI Workflows</span>
+            <span class="cv-opt-tag">Google Veo &amp; Kling</span>
+            <span class="cv-opt-tag">Private LLMs</span>
+            <span class="cv-opt-tag">n8n Automation</span>
+          </div>
+          <div class="cv-option-action">
+            <span>Open AI Systems CV</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+        </a>
+
+        <!-- Track 2: Production Technology & Core VFX Architect -->
+        <a href="cv.html?track=vfx" class="cv-modal-option option-vfx" id="cvModalTrackVfx">
+          <div class="cv-option-top">
+            <span class="cv-option-badge badge-vfx">20+ Yrs Pipelines Focus</span>
+            <span class="cv-option-icon">🎬</span>
+          </div>
+          <h4 class="cv-option-title">Production Technology &amp; Core VFX Architect</h4>
+          <p class="cv-option-desc">Studio infrastructure &amp; core pipelines, ReviewTool uncompressed real-time 4K caching, OpenUSD shot hierarchy, Editorial Turnover, Ingest &amp; Conform, and multi-site engineering scaling.</p>
+          <div class="cv-option-tags">
+            <span class="cv-opt-tag">ReviewTool 4K Caching</span>
+            <span class="cv-opt-tag">OpenUSD Pipelines</span>
+            <span class="cv-opt-tag">Nuke &amp; Maya APIs</span>
+            <span class="cv-opt-tag">Editorial Conform</span>
+            <span class="cv-opt-tag">ShotGrid Ingest</span>
+          </div>
+          <div class="cv-option-action">
+            <span>Open Production Tech CV</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </div>
+        </a>
+      </div>
+
+      <footer class="cv-modal-footer">
+        <span class="cv-footer-hint">💡 Both CV versions include Rajeev's complete 20+ year filmography (<em>1917</em>, <em>RRR</em>, <em>Mufasa</em>), engineering leadership history, and 1-click ATS-clean exports.</span>
+      </footer>
+    </div>
+  </div>
+
+  <script src="app.js?v=144"></script>
 </body>
 
 </html>

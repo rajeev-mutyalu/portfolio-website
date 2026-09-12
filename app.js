@@ -4544,6 +4544,48 @@
       }, { passive: false });
     }
 
+    // 7b. Curriculum Vitae Specialisation Selector Modal Handler
+    const navCvTrigger = document.getElementById('navCvTrigger');
+    const cvModalOverlay = document.getElementById('cvModalOverlay');
+    const cvModalClose = document.getElementById('cvModalClose');
+    const cvModalBackdrop = document.getElementById('cvModalBackdrop');
+
+    function openCvModal() {
+      if (!cvModalOverlay) return;
+      cvModalOverlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCvModal() {
+      if (!cvModalOverlay) return;
+      cvModalOverlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    if (navCvTrigger) {
+      navCvTrigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        openCvModal();
+      });
+    }
+
+    if (cvModalClose) {
+      cvModalClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeCvModal();
+      });
+    }
+
+    if (cvModalBackdrop) {
+      cvModalBackdrop.addEventListener('click', closeCvModal);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && cvModalOverlay && !cvModalOverlay.classList.contains('hidden')) {
+        closeCvModal();
+      }
+    });
+
     // =========================================================================
     // 8. Interactive Charlie AI Assistant & Technical Knowledge Base
     // =========================================================================
@@ -7063,11 +7105,19 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
     // (Strictly Enabled in Local Development Builds Only)
     // =========================================================================
     function setupMobileSimulator() {
-      // 1. Strictly local development server check: Only enable simulator on localhost / 127.0.0.1
+      // 1. Local environment check: Enable simulator on localhost, 127.0.0.1, file:///, local IPs or explicit query param
       const isLocalBuild = (
         window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
-        window.location.hostname.endsWith('.local')
+        window.location.hostname === '[::1]' ||
+        window.location.protocol === 'file:' ||
+        !window.location.hostname ||
+        window.location.hostname.endsWith('.local') ||
+        window.location.hostname.indexOf('192.168.') !== -1 ||
+        window.location.hostname.indexOf('10.0.') !== -1 ||
+        window.location.search.indexOf('simulator=1') !== -1 ||
+        window.location.search.indexOf('sim=1') !== -1 ||
+        window.location.search.indexOf('local=1') !== -1
       );
 
       if (!isLocalBuild) {
@@ -7079,7 +7129,8 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         return;
       }
 
-      // Mark body as local build so CSS displays the trigger pill
+      // Mark html and body as local build so CSS displays the trigger pill and enables overlay
+      document.documentElement.classList.add('is-local-build');
       document.body.classList.add('is-local-build');
 
       // 2. Prevent recursive simulator setup if currently inside simulator iframe
@@ -7094,8 +7145,11 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       const overlay = document.getElementById('mobileSimOverlay');
       const stage = document.getElementById('mobileSimStage');
+      const stageInner = document.getElementById('simStageInner');
       const chassis = document.getElementById('mobilePhoneChassis');
       const frame = document.getElementById('mobileSimFrame');
+      const ipadChassis = document.getElementById('mobileIpadChassis');
+      const ipadFrame = document.getElementById('mobileIpadFrame');
       const closeBtn = document.getElementById('simCloseBtn');
       const rotateBtn = document.getElementById('simRotateBtn');
       const reloadBtn = document.getElementById('simReloadBtn');
@@ -7108,6 +7162,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       const DEVICE_PRESETS = {
         iphone: { name: 'iPhone 16 Pro Max', width: 440, height: 956, radius: '56px' },
+        duo: { name: 'Apple Duo (iPhone + iPad)', isDuo: true, width: 440, height: 956, ipadWidth: 768, ipadHeight: 1024, radius: '56px', ipadRadius: '36px' },
         pixel: { name: 'Pixel 8', width: 412, height: 915, radius: '50px' },
         compact: { name: 'Compact (SE)', width: 375, height: 667, radius: '44px' },
         tablet: { name: 'Tablet (768px)', width: 768, height: 1024, radius: '36px' }
@@ -7118,50 +7173,130 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         device: 'iphone',
         isLandscape: false,
         zoom: 'auto',
-        hasLoadedOnce: false
+        hasLoadedOnce: false,
+        hasLoadedIpadOnce: false
       };
 
       function updateChassisDimensions() {
         const preset = DEVICE_PRESETS[simState.device] || DEVICE_PRESETS.iphone;
-        const w = simState.isLandscape ? preset.height : preset.width;
-        const h = simState.isLandscape ? preset.width : preset.height;
 
-        chassis.style.width = `${w}px`;
-        chassis.style.height = `${h}px`;
-        chassis.style.borderRadius = preset.radius;
-        chassis.setAttribute('data-device', simState.device);
-        chassis.setAttribute('data-orientation', simState.isLandscape ? 'landscape' : 'portrait');
+        if (preset.isDuo) {
+          if (stage) stage.classList.add('duo-active');
+          if (ipadChassis) ipadChassis.classList.remove('hidden');
 
-        if (liveDim) {
-          liveDim.innerHTML = `${w} &times; ${h} px (${simState.isLandscape ? 'Landscape' : 'Portrait'})`;
+          // iPhone dimensions
+          const phoneW = simState.isLandscape ? preset.height : preset.width;
+          const phoneH = simState.isLandscape ? preset.width : preset.height;
+          chassis.style.width = `${phoneW}px`;
+          chassis.style.height = `${phoneH}px`;
+          chassis.style.borderRadius = preset.radius;
+          chassis.setAttribute('data-device', 'iphone');
+          chassis.setAttribute('data-orientation', simState.isLandscape ? 'landscape' : 'portrait');
+
+          // iPad companion dimensions
+          if (ipadChassis) {
+            const ipadW = simState.isLandscape ? preset.ipadHeight : preset.ipadWidth;
+            const ipadH = simState.isLandscape ? preset.ipadWidth : preset.ipadHeight;
+            ipadChassis.style.width = `${ipadW}px`;
+            ipadChassis.style.height = `${ipadH}px`;
+            ipadChassis.style.borderRadius = preset.ipadRadius;
+            ipadChassis.setAttribute('data-device', 'ipad');
+            ipadChassis.setAttribute('data-orientation', simState.isLandscape ? 'landscape' : 'portrait');
+          }
+
+          // Load iPad frame if needed
+          if (ipadFrame && (!simState.hasLoadedIpadOnce || ipadFrame.getAttribute('src') === 'about:blank')) {
+            const currentUrl = window.location.pathname.endsWith('index.html') ? 'index.html' : './';
+            ipadFrame.src = `${currentUrl}?sim=1&device=ipad&v=${Date.now()}`;
+            simState.hasLoadedIpadOnce = true;
+          }
+
+          if (liveDim) {
+            liveDim.innerHTML = `Phone: ${phoneW}&times;${phoneH} &bull; iPad: ${preset.ipadWidth}&times;${preset.ipadHeight} px (Apple Duo)`;
+          }
+        } else {
+          if (stage) stage.classList.remove('duo-active');
+          if (ipadChassis) ipadChassis.classList.add('hidden');
+
+          const w = simState.isLandscape ? preset.height : preset.width;
+          const h = simState.isLandscape ? preset.width : preset.height;
+
+          chassis.style.width = `${w}px`;
+          chassis.style.height = `${h}px`;
+          chassis.style.borderRadius = preset.radius;
+          chassis.setAttribute('data-device', simState.device);
+          chassis.setAttribute('data-orientation', simState.isLandscape ? 'landscape' : 'portrait');
+
+          if (liveDim) {
+            liveDim.innerHTML = `${w} &times; ${h} px (${simState.isLandscape ? 'Landscape' : 'Portrait'})`;
+          }
         }
 
         updateChassisScale();
       }
 
       function updateChassisScale() {
-        if (!chassis || !stage) return;
+        if (!stage) return;
+        const target = stageInner || chassis;
+        if (!target) return;
 
         if (simState.zoom !== 'auto') {
           const val = parseFloat(simState.zoom);
-          chassis.style.transform = `scale(${val})`;
+          target.style.transform = `scale(${val})`;
           return;
         }
 
         // Auto-fit calculation
         const stageW = stage.clientWidth - 48;
         const stageH = stage.clientHeight - 48;
-        const chassisW = chassis.offsetWidth;
-        const chassisH = chassis.offsetHeight;
+        const targetW = target.offsetWidth || (simState.device === 'duo' ? 1280 : chassis.offsetWidth);
+        const targetH = target.offsetHeight || (simState.device === 'duo' ? 1024 : chassis.offsetHeight);
 
-        if (stageW > 0 && stageH > 0 && chassisW > 0 && chassisH > 0) {
-          const scaleX = stageW / chassisW;
-          const scaleY = stageH / chassisH;
+        if (stageW > 0 && stageH > 0 && targetW > 0 && targetH > 0) {
+          const scaleX = stageW / targetW;
+          const scaleY = stageH / targetH;
           const fitScale = Math.min(scaleX, scaleY, 1.0);
-          chassis.style.transform = `scale(${fitScale.toFixed(3)})`;
+          target.style.transform = `scale(${fitScale.toFixed(3)})`;
         } else {
-          chassis.style.transform = 'scale(1)';
+          target.style.transform = 'scale(1)';
         }
+      }
+
+      // Synchronized scrolling for Apple Duo
+      let isSyncingScroll = false;
+      function bindFrameScrollSync(sourceFrame, destFrame) {
+        try {
+          sourceFrame.contentWindow.addEventListener('scroll', () => {
+            if (isSyncingScroll || simState.device !== 'duo') return;
+            isSyncingScroll = true;
+            try {
+              const srcWin = sourceFrame.contentWindow;
+              const dstWin = destFrame.contentWindow;
+              if (srcWin && dstWin) {
+                const srcDoc = srcWin.document.documentElement;
+                const dstDoc = dstWin.document.documentElement;
+                const maxSrc = srcDoc.scrollHeight - srcWin.innerHeight;
+                const maxDst = dstDoc.scrollHeight - dstWin.innerHeight;
+                if (maxSrc > 0 && maxDst > 0) {
+                  const ratio = srcWin.scrollY / maxSrc;
+                  dstWin.scrollTo(0, ratio * maxDst);
+                }
+              }
+            } catch (err) { }
+            setTimeout(() => { isSyncingScroll = false; }, 50);
+          }, { passive: true });
+        } catch (err) { }
+      }
+
+      if (frame) {
+        frame.addEventListener('load', () => {
+          if (ipadFrame) bindFrameScrollSync(frame, ipadFrame);
+        });
+      }
+      if (ipadFrame) {
+        ipadFrame.addEventListener('load', () => {
+          if (frame) bindFrameScrollSync(ipadFrame, frame);
+        });
       }
 
       function openSimulator() {
@@ -7217,13 +7352,15 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           e.stopPropagation();
           simState.isLandscape = !simState.isLandscape;
           updateChassisDimensions();
-          if (frame && frame.contentWindow) {
-            try {
-              if (typeof frame.contentWindow.updateMobileOrientationState === 'function') {
-                frame.contentWindow.updateMobileOrientationState();
-              }
-            } catch (err) { }
-          }
+          [frame, ipadFrame].forEach(f => {
+            if (f && f.contentWindow) {
+              try {
+                if (typeof f.contentWindow.updateMobileOrientationState === 'function') {
+                  f.contentWindow.updateMobileOrientationState();
+                }
+              } catch (err) { }
+            }
+          });
         });
       }
 
@@ -7239,13 +7376,15 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       if (reloadBtn) {
         reloadBtn.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (frame) {
-            try {
-              frame.contentWindow.location.reload();
-            } catch (err) {
-              frame.src = frame.src;
+          [frame, ipadFrame].forEach(f => {
+            if (f) {
+              try {
+                f.contentWindow.location.reload();
+              } catch (err) {
+                f.src = f.src;
+              }
             }
-          }
+          });
         });
       }
 
@@ -7260,7 +7399,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       // Backdrop click on stage closes simulator
       if (stage) {
         stage.addEventListener('click', (e) => {
-          if (e.target === stage) {
+          if (e.target === stage || e.target === stageInner) {
             closeSimulator();
           }
         });
