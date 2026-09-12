@@ -4798,21 +4798,30 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         const data = await response.json();
         let rawReply = data.choices?.[0]?.message?.content || 'Charlie is ready for your next prompt.';
 
-        const isAskingToContactRajeev = /\b(hire|recruit|contact|reach|email|message|touch\s+base|connect\s+with)\b/i.test(userQuery) && /\b(rajeev|him|you|the\s+author|the\s+architect)\b/i.test(userQuery);
-        const isAskingAboutRajeev = isPortfolioTopic || isAskingToContactRajeev || /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev)\b/i.test(userQuery);
+        // Strictly determine if the user query is asking about Rajeev, his hiring, career, or portfolio
+        const isExplicitlyAboutRajeev = /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev)\b/i.test(userQuery)
+          || (/\b(hire|recruit|contact|reach|get\s+in\s+touch\s+with)\b/i.test(userQuery) && /\b(rajeev|muthyalu|mutyalu)\b/i.test(userQuery))
+          || (isPortfolioTopic && !/\b(grooming|dog|appointment|pet|recipe|weather|joke|story|general|doc|docs|email\s+to|write\s+an?\s+email|send\s+an?\s+email)\b/i.test(userQuery));
 
-        // If the query is an outside/general inquiry (not about Rajeev), sanitize away any erroneously attached portfolio chips
-        if (!isAskingAboutRajeev) {
-          rawReply = rawReply.replace(/<a\b[^>]*href=["'](?:#contact|cv\.html|#initiatives|#experience|#architecture|#awards|#skills|#films)["'][^>]*>[\s\S]*?<\/a>/gi, '').trim();
-        } else if (isAskingToContactRajeev && !rawReply.includes('#contact')) {
-          // Safeguard: only attach contact matrix if user explicitly asked how to reach/hire Rajeev
-          rawReply += `\n\n<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a> <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>`;
+        // If the query is an outside/general inquiry or writing task, strip away any portfolio action chips and markdown links
+        if (!isExplicitlyAboutRajeev) {
+          rawReply = rawReply
+            .replace(/<a\b[^>]*href=["'](?:#contact|cv\.html|#initiatives|#experience|#architecture|#awards|#skills|#films|charlie-lab\.html)["'][^>]*>[\s\S]*?<\/a>/gi, '')
+            .replace(/\[(?:Direct Contact Matrix|Open Executive CV[^\]]*|View[^\]]*|Explore[^\]]*|Open[^\]]*)\]\((?:#contact|cv\.html|#initiatives|#experience|#architecture|#awards|#skills|#films|charlie-lab\.html)\)/gi, '')
+            .trim();
         }
 
-        const formattedHtml = formatOpenAiResponse(rawReply);
+        let formattedHtml = formatOpenAiResponse(rawReply);
 
+        // Double-check sanitizer on formatted HTML: ensure zero portfolio link chips survive in general mode
+        if (!isExplicitlyAboutRajeev) {
+          formattedHtml = formattedHtml.replace(/<a\b[^>]*class=["']ai-section-link["'][^>]*>[\s\S]*?<\/a>/gi, '').trim();
+        }
+
+        // Keep chat history clean of HTML action chips so OpenAI in-context learning is never polluted by them
+        const historyReply = rawReply.replace(/<a\b[^>]*class=["']ai-section-link["'][^>]*>[\s\S]*?<\/a>/gi, '').trim();
         charlieConversationHistory.push({ role: 'user', content: userQuery });
-        charlieConversationHistory.push({ role: 'assistant', content: rawReply });
+        charlieConversationHistory.push({ role: 'assistant', content: historyReply });
         if (charlieConversationHistory.length > 8) {
           charlieConversationHistory = charlieConversationHistory.slice(-8);
         }
@@ -5510,7 +5519,12 @@ Awarded for rapid prototyping, creativity, and deployment of functional generati
       },
       {
         id: 'contact_info',
-        keywords: ['contact', 'email', 'phone', 'linkedin', 'reach', 'message', 'hire contact', 'call', 'location', 'london'],
+        keywords: [
+          'contact rajeev', 'email rajeev', 'phone rajeev', 'reach rajeev', 'hire rajeev', 'call rajeev',
+          'contact info', 'contact matrix', 'direct contact', 'get in touch with rajeev',
+          'how to contact rajeev', 'how to reach rajeev', 'rajeev email', 'rajeev phone',
+          'rajeev linkedin', 'rajeev location', 'contact details', 'contact information', 'get in touch'
+        ],
         title: 'Direct Contact Matrix',
         intros: [
           '📬 <strong>DIRECT CONTACT MATRIX // RAJEEV MUTYALU</strong>',
