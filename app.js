@@ -6862,6 +6862,123 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         }
       }
 
+      // Smart Linguistic & VFX Pipeline Entity Auto-Corrector
+      function cleanAndCorrectSpokenQuery(raw) {
+        if (!raw || typeof raw !== 'string') return '';
+        let text = raw.trim();
+
+        // 1. Strip disfluencies & speech hesitation fillers
+        text = text.replace(/^(?:um+|uh+|er+|ah+|like\s+so|so\s+basically|basically|you\s+know)[,\s]+/i, '');
+        text = text.replace(/\b(?:um+|uh+|er+|ah+)\b[,\s]*/gi, '');
+
+        // 2. Comprehensive VFX, AI & Pipeline Terminology Auto-Correction
+        const termReplacements = [
+          // OpenUSD & USD
+          { regex: /\bopen[\s\-.]*usd\b/gi, rep: 'OpenUSD' },
+          { regex: /\bopen\s*u[\s.]*s[\s.]*d\b/gi, rep: 'OpenUSD' },
+          { regex: /\busd\s*v(?:ersion)?\s*3\b/gi, rep: 'USD v3' },
+          { regex: /\busd\s*v(?:ersion)?\s*three\b/gi, rep: 'USD v3' },
+          { regex: /\bastra\s*vfx(?:\s*usd)?(?:\s*v3)?\b/gi, rep: 'Astra VFX USD v3' },
+          { regex: /\bu[\s.]*s[\s.]*d\b/gi, rep: 'USD' },
+
+          // n8n Studio Automation
+          { regex: /\b(?:n[\s\-_]*(?:eight|8)[\s\-_]*n|in\s*eight\s*in|an\s*eight\s*in|n\s*eight\s*eight\s*n)\b/gi, rep: 'n8n' },
+
+          // OpenTimelineIO & OpenColorIO & ACES
+          { regex: /\b(?:open[\s\-]*timeline[\s\-]*io|open\s*timeline\s*i[\s.]*o|otio)\b/gi, rep: 'OpenTimelineIO (OTIO)' },
+          { regex: /\b(?:open[\s\-]*colo(?:u)?r[\s\-]*io|open\s*colo(?:u)?r\s*i[\s.]*o|ocio)\b/gi, rep: 'OpenColorIO (OCIO)' },
+          { regex: /\baces(?:\s*1(?:\.3)?)?\b/gi, rep: 'ACES 1.3' },
+
+          // Model Context Protocol / MCP
+          { regex: /\b(?:model\s*context\s*protocol|m[\s.]*c[\s.]*p)\b/gi, rep: 'Model Context Protocol (MCP)' },
+
+          // GenAI & Studio Architect Frameworks
+          { regex: /\b(?:studio[\s\-.]*ai|studio\s*dot\s*ai)\b/gi, rep: 'Studio.AI (Scene Weaver)' },
+          { regex: /\bscene[\s\-]*weaver\b/gi, rep: 'Scene Weaver' },
+          { regex: /\bcomfy[\s\-]*ui\b/gi, rep: 'ComfyUI' },
+          { regex: /\b(?:pie|py)[\s\-]*side(?:\s*6)?\b/gi, rep: 'PySide6' },
+          { regex: /\b(?:nous|no)[\s\-]*hermes\b/gi, rep: 'Nous Hermes' },
+          { regex: /\b(?:o|oh)[\s\-]*llama\b/gi, rep: 'Ollama' },
+          { regex: /\bopen[\s\-]*claw\b/gi, rep: 'OpenClaw' },
+
+          // Core Industry Acronyms
+          { regex: /\bv[\s.]*f[\s.]*x\b/gi, rep: 'VFX' },
+          { regex: /\bc[\s.]*g[\s.]*i\b/gi, rep: 'CGI' },
+          { regex: /\b(?:gen\s*ai|generative\s*ai)\b/gi, rep: 'GenAI' },
+          { regex: /\bl[\s.]*l[\s.]*m\b/gi, rep: 'LLM' },
+          { regex: /\bl[\s.]*l[\s.]*ms\b/gi, rep: 'LLMs' },
+          { regex: /\ba[\s.]*p[\s.]*i\b/gi, rep: 'API' },
+          { regex: /\ba[\s.]*p[\s.]*is\b/gi, rep: 'APIs' },
+          { regex: /\bs[\s.]*d[\s.]*k\b/gi, rep: 'SDK' },
+
+          // DCC Software & Core APIs
+          { regex: /\bautodesk\s*maya\b/gi, rep: 'Autodesk Maya' },
+          { regex: /\bsidefx\s*houdini\b/gi, rep: 'SideFX Houdini' },
+          { regex: /\bfoundry\s*nuke\b/gi, rep: 'Foundry Nuke' },
+          { regex: /\bunreal\s*engine(?:\s*5)?\b/gi, rep: 'Unreal Engine 5' },
+          { regex: /\b(?:shotgrid|shotgun)\b/gi, rep: 'Autodesk ShotGrid' },
+          { regex: /\bpython\s*3(?:\.\d+)?\b/gi, rep: 'Python 3' },
+          { regex: /\bc\s*plus\s*plus\b/gi, rep: 'C++' },
+
+          // Filmography Credits & Studios
+          { regex: /\bnineteen\s*seventeen\b/gi, rep: '1917' },
+          { regex: /\br[\s.]*r[\s.]*r\b/gi, rep: 'RRR' },
+          { regex: /\bmufasa(?:\s*the\s*lion\s*king)?\b/gi, rep: 'Mufasa: The Lion King' },
+          { regex: /\b(?:the\s*)?lion\s*king\b/gi, rep: 'The Lion King' },
+          { regex: /\bmpc\b/gi, rep: 'MPC' },
+          { regex: /\bdneg\b/gi, rep: 'DNEG' },
+          { regex: /\bweta(?:\s*fx)?\b/gi, rep: 'Wētā FX' },
+
+          // Name normalization
+          { regex: /\b(?:rajiv|rajeev)\s*mutyalu\b/gi, rep: 'Rajeev Mutyalu' },
+          { regex: /\b(?:rajiv|rajeev)\b(?!\s*mutyalu)/gi, rep: 'Rajeev' },
+
+          // Common spoken contractions
+          { regex: /\bwhats\b/gi, rep: "what's" },
+          { regex: /\bhows\b/gi, rep: "how's" },
+          { regex: /\bcant\b/gi, rep: "can't" },
+          { regex: /\bwont\b/gi, rep: "won't" },
+          { regex: /\bdidnt\b/gi, rep: "didn't" },
+          { regex: /\bdoesnt\b/gi, rep: "doesn't" },
+          { regex: /\bisnt\b/gi, rep: "isn't" },
+          { regex: /\baren't\b/gi, rep: "aren't" }
+        ];
+
+        termReplacements.forEach(({ regex, rep }) => {
+          text = text.replace(regex, rep);
+        });
+
+        // 3. Remove inline duplicate stutter words (e.g. "what what is" -> "what is")
+        text = text.replace(/\b(\w+)\s+\1\b/gi, '$1');
+
+        // 4. Clean consecutive whitespace
+        text = text.replace(/\s{2,}/g, ' ').trim();
+
+        // 5. Fix standalone pronoun "i" and contractions
+        text = text.replace(/\bi\b/g, 'I');
+        text = text.replace(/\bi'm\b/g, "I'm");
+        text = text.replace(/\bi've\b/g, "I've");
+        text = text.replace(/\bi'll\b/g, "I'll");
+        text = text.replace(/\bi'd\b/g, "I'd");
+
+        // 6. Sentence capitalization
+        if (text.length > 0) {
+          text = text.charAt(0).toUpperCase() + text.slice(1);
+        }
+
+        // 7. Punctuation handling
+        const isQuestion = /^(?:what|why|how|who|where|when|which|can|could|would|should|is|are|does|do|did|will|has|have|tell|explain|show|describe|give)\b/i.test(text);
+        const lastChar = text.slice(-1);
+
+        if (lastChar !== '?' && lastChar !== '.' && lastChar !== '!') {
+          text += isQuestion ? '?' : '.';
+        } else if (isQuestion && lastChar === '.') {
+          text = text.slice(0, -1) + '?';
+        }
+
+        return text;
+      }
+
       async function transcribeWithWhisper(audioBlob) {
         const apiKey = getOpenAiKey();
         if (!apiKey) {
@@ -6876,7 +6993,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           inputWrapper.classList.remove('mic-active');
           inputWrapper.classList.add('whisper-transcribing');
         }
-        input.setAttribute('placeholder', '⚡ Transcribing with Whisper-1...');
+        input.setAttribute('placeholder', '⚡ Transcribing & correcting with Whisper-1...');
         input.value = '';
 
         try {
@@ -6885,7 +7002,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           formData.append('file', audioBlob, `speech.${ext}`);
           formData.append('model', 'whisper-1');
           formData.append('language', 'en');
-          formData.append('prompt', 'Rajeev Mutyalu, VFX Pipeline Architect, OpenUSD v3, Astra VFX, OTIO, OCIO ACES 1.3, n8n studio automation, Model Context Protocol, MCP, PySide, ComfyUI, Studio.AI, Nous Hermes, Ollama, 1917, RRR, Mufasa, Lion King');
+          formData.append('prompt', 'Rajeev Mutyalu, VFX Pipeline Architect, OpenUSD v3, Astra VFX, OTIO, OCIO ACES 1.3, n8n studio automation, Model Context Protocol, MCP, PySide6, ComfyUI, Studio.AI, Nous Hermes, Ollama, 1917, RRR, Mufasa, Lion King');
 
           const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
             method: 'POST',
@@ -6904,19 +7021,24 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           const transcribedText = (result.text || '').trim();
 
           if (transcribedText) {
-            input.value = transcribedText;
+            const correctedText = cleanAndCorrectSpokenQuery(transcribedText);
+            input.value = correctedText;
+            if (inputWrapper) {
+              inputWrapper.classList.add('voice-corrected');
+              setTimeout(() => inputWrapper.classList.remove('voice-corrected'), 1200);
+            }
             try {
-              if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
+              if (typeof window.portfolioSoundEngine?.playComboDing === 'function' && !window.portfolioSoundEngine.isMuted) {
                 window.portfolioSoundEngine.playComboDing();
               }
             } catch (e) {}
 
-            // Auto-submit question to Charlie after smooth 300ms confirmation
+            // Auto-submit corrected question to Charlie after 600ms so user can see their auto-corrected question
             setTimeout(() => {
               if (form && input.value.trim() && !isGeneratingResponse) {
                 form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
               }
-            }, 300);
+            }, 600);
           }
         } catch (err) {
           console.error('Whisper Transcription Error:', err);
@@ -6950,12 +7072,23 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             }
           }
 
-          const currentText = finalTranscript || interimTranscript;
-          if (currentText) {
-            input.value = currentText;
+          if (interimTranscript && !finalTranscript) {
+            input.value = interimTranscript;
           }
 
           if (finalTranscript) {
+            const correctedText = cleanAndCorrectSpokenQuery(finalTranscript);
+            input.value = correctedText;
+            if (inputWrapper) {
+              inputWrapper.classList.add('voice-corrected');
+              setTimeout(() => inputWrapper.classList.remove('voice-corrected'), 1200);
+            }
+            try {
+              if (typeof window.portfolioSoundEngine?.playComboDing === 'function' && !window.portfolioSoundEngine.isMuted) {
+                window.portfolioSoundEngine.playComboDing();
+              }
+            } catch (e) {}
+
             if (autoSubmitTimeout) clearTimeout(autoSubmitTimeout);
             autoSubmitTimeout = setTimeout(() => {
               if (isListening) stopListening();
@@ -6964,7 +7097,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
                   form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
                 }
               }
-            }, 900);
+            }, 750);
           }
         };
 
