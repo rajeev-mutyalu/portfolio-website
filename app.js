@@ -4565,6 +4565,7 @@
     if (navCvTrigger) {
       navCvTrigger.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         openCvModal();
       });
     }
@@ -4572,19 +4573,48 @@
     if (cvModalClose) {
       cvModalClose.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         closeCvModal();
       });
     }
 
     if (cvModalBackdrop) {
-      cvModalBackdrop.addEventListener('click', closeCvModal);
+      cvModalBackdrop.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeCvModal();
+      });
     }
+
+    if (cvModalOverlay) {
+      cvModalOverlay.addEventListener('click', (e) => {
+        if (e.target === cvModalOverlay) {
+          e.stopPropagation();
+          closeCvModal();
+        }
+      });
+    }
+
+    // Auto-close modal when an option link is clicked so bfcache is always clean
+    const cvOptionLinks = document.querySelectorAll('.cv-modal-option');
+    cvOptionLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        closeCvModal();
+      });
+    });
+
+    // Reset modal state on pageshow (ensures fresh state after browser Back button)
+    window.addEventListener('pageshow', () => {
+      closeCvModal();
+    });
 
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && cvModalOverlay && !cvModalOverlay.classList.contains('hidden')) {
         closeCvModal();
       }
     });
+
+    window.openCvModal = openCvModal;
+    window.closeCvModal = closeCvModal;
 
     // =========================================================================
     // 8. Interactive Charlie AI Assistant & Technical Knowledge Base
