@@ -4549,10 +4549,10 @@
           '🚀 <strong>HIGH-LEVERAGE CAPABILITY BRIEF // RAJEEV MUTYALU</strong>'
         ],
         responses: [
-          `<strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &amp; Creative Technologist with 20+ years of proven R&amp;D leadership across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning blockbuster productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
+          `<strong>📌 20-Year Production Pedigree:</strong> AI Workflows Architect &bull; Creative Technology Lead &bull; VFX &amp; GenAI Systems Architect with 20+ years of proven R&amp;D leadership across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning blockbuster productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
-• <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London, Montreal, and Bangalore.<br/>
-• <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bangalore under strict Hollywood delivery deadlines.<br/><br/>
+• <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London, Montreal, and Bengaluru.<br/>
+• <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bengaluru under strict Hollywood delivery deadlines.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
 <a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
@@ -4572,15 +4572,15 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 
           `<strong>🚀 Immediate Production ROI &amp; Engineering Velocity:</strong><br/>
 • <strong>⚡ 5x–10x Delivery Acceleration:</strong> Replaces manual studio friction with zero-touch event-driven automation (n8n webhooks, automated QC verification loops, and agentic workflows).<br/>
-• <strong>🎯 Zero Ramp-Up Time:</strong> Having architected pipelines for top-tier studios across London and Bangalore, Rajeev steps into any enterprise VFX, animation, or AI pipeline and delivers immediate impact on Day 1.<br/>
+• <strong>🎯 Zero Ramp-Up Time:</strong> Having architected pipelines for top-tier studios across London and Bengaluru, Rajeev steps into any enterprise VFX, animation, or AI pipeline and delivers immediate impact on Day 1.<br/>
 • <strong>👥 Cross-Continental Leadership:</strong> Mentored over 50+ TDs and engineers, establishing high-trust engineering cultures, automated code-review gates, and strict sprint cadences.<br/>
-• <strong>📍 Location &amp; Status:</strong> Based in London, UK (British Citizen) with full global remote/onsite mobility.<br/><br/>
+• <strong>📍 Location &amp; Status:</strong> Based in London, UK (UK Skilled Worker Visa • Existing Sponsorship in Place • Available Immediately) with full global remote/onsite mobility.<br/><br/>
 <a href="#experience" class="ai-section-link">⏳ Explore Career Timeline &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Connect with Rajeev Directly &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 View 1-Click ATS Resume &rarr;</a>`,
 
           `<strong>🌐 Global Team Builder &amp; Technical Visionary:</strong><br/>
-• <strong>🤝 London–Bangalore Engineering Bridge:</strong> Successfully aligned multi-site teams of 40+ software developers and pipeline TDs, delivering high-throughput 24/7 studio follow-the-sun workflows.<br/>
+• <strong>🤝 London–Bengaluru Engineering Bridge:</strong> Successfully aligned multi-site teams of 40+ software developers and pipeline TDs, delivering high-throughput 24/7 studio follow-the-sun workflows.<br/>
 • <strong>📦 Open Standards Champion:</strong> Proven expert in OpenUSD 2-tier composition, OpenTimelineIO (OTIO) cut conforms, and OpenColorIO (OCIO / ACEScg) color science.<br/>
 • <strong>🧠 Frontier AI Integration:</strong> Architect of <em>Scene Weaver (Studio.AI)</em>, integrating Google Veo, Kling, and Seedance into conformed VFX studio pipelines.<br/>
 • <strong>🏆 Production Proof:</strong> Credits on <em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>.<br/><br/>
@@ -4906,7 +4906,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
         ],
         responses: [
           `• <strong>📌 What is it?</strong> An enterprise multi-model generative AI platform for feature film storyboarding, visual development, and shot synthesis.<br/>
-• <strong>🎯 Where is it used?</strong> Previsualization, concept ideation, multi-model prompt routing (Google Veo, Kling AI, Higgsfield), and web asset extraction via FireCrawl.<br/>
+• <strong>🎯 Where is it used?</strong> Previsualization, concept ideation, multi-model prompt routing (Google Veo, Kling AI, Higgsfield), and web asset extraction via Firecrawl.<br/>
 • <strong>💡 Why is it used?</strong> Out-of-the-box video models produce inconsistent character faces, unstable wardrobe details, and non-standard color spaces.<br/>
 • <strong>🚀 How it helps production:</strong> Enforces character latent identity consistency across video shots, automates prompt generation from screenplays, and conformed outputs directly into OCIO/ACEScg for Nuke compositing.<br/><br/>
 <a href="#architecture" data-arch-tab="genai" class="ai-section-link">✨ View GenAI Flow in Pipeline Visualizer &rarr;</a>`,
@@ -4919,7 +4919,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 
           `• <strong>🎬 Script-to-Screenplay Automated Ideation:</strong><br/>
 • <strong>📜 Script Ingest:</strong> Ingests screenplays and storyboards, breaking text down into camera lens directives, lighting keys, and character blocking instructions.<br/>
-• <strong>🕷️ FireCrawl Ingest:</strong> Scrapes reference imagery and visual moodboards to establish stylistic DNA.<br/>
+• <strong>🕷️ Firecrawl Ingest:</strong> Scrapes reference imagery and visual moodboards to establish stylistic DNA.<br/>
 • <strong>🚀 Seamless Nuke &amp; Editorial Turnover:</strong> Outputs conform cleanly into OTIO timelines for instant editorial review.<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>`
@@ -4944,7 +4944,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
           `• <strong>📌 What is it?</strong> Foundational software engineering stack: Python 3.x, Qt/PySide desktop GUIs, FastAPI microservices, Docker containers, and Linux cluster dispatch.<br/>
 • <strong>🎯 Where is it used?</strong> In-DCC artist tools (Maya, Houdini, Nuke), standalone desktop review applications, and studio backend microservices.<br/>
 • <strong>💡 Why is it used?</strong> Artists require responsive, multi-threaded desktop user interfaces that handle large datasets without freezing or crashing DCC viewports.<br/>
-• <strong>🚀 How it helps production:</strong> 20+ years of architecting scalable, rock-solid desktop tools and modular Python libraries supporting hundreds of active studio artists across London and Bangalore with zero downtime.<br/><br/>
+• <strong>🚀 How it helps production:</strong> 20+ years of architecting scalable, rock-solid desktop tools and modular Python libraries supporting hundreds of active studio artists across London and Bengaluru with zero downtime.<br/><br/>
 <a href="#initiatives" class="ai-section-link">🐍 View Core Systems in Arsenal &rarr;</a>`,
 
           `• <strong>💻 High-Performance PySide Desktop Tools:</strong><br/>
@@ -5010,10 +5010,10 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
         intros: [
           '👥 <strong>20-YEAR ENGINEERING LEADERSHIP // FILM CREDITS &amp; TENURES</strong>',
           '🏆 <strong>OSCAR-WINNING FILMOGRAPHY &amp; LEADERSHIP TRACK RECORD</strong>',
-          '🌐 <strong>GLOBAL R&amp;D LEADERSHIP // LONDON &amp; BANGALORE</strong>'
+          '🌐 <strong>GLOBAL R&amp;D LEADERSHIP // LONDON &amp; BENGALURU</strong>'
         ],
         responses: [
-          `• <strong>📌 Leadership Background:</strong> Lead Software Architect &amp; Creative Technologist based in London, UK (British Citizen) with <strong>20+ years of Tier-1 leadership</strong> across global visual effects studios.<br/>
+          `• <strong>📌 Leadership Background:</strong> AI Workflows Architect &bull; Creative Technology Lead &bull; VFX &amp; GenAI Systems Architect based in London, UK (UK Skilled Worker Visa • Existing Sponsorship in Place • Available Immediately) with <strong>20+ years of Tier-1 leadership</strong> across global visual effects studios.<br/>
 • <strong>🎯 Verified Studio Tenures:</strong><br/>
 &nbsp;&nbsp;• <strong>Astra Studios</strong> (London, UK) &mdash; Lead Software Architect (Sep 2025 &ndash; Present)<br/>
 &nbsp;&nbsp;• <strong>Technicolor Group</strong> (London, UK) &mdash; R&amp;D Supervisor (Mar 2023 &ndash; Feb 2025)<br/>
@@ -5024,7 +5024,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 &nbsp;&nbsp;• <strong>e4e &amp; Dhruva Interactive</strong> (Bengaluru, India) &mdash; Application Engineer &amp; Game Programmer (Sep 2006 &ndash; Apr 2008)<br/>
 • <strong>💡 Major Film &amp; Tentpole Credits:</strong><br/>
 &nbsp;&nbsp;• <strong>1917 (2019)</strong> &mdash; 🏆 Academy Award Winner: Best Visual Effects (MPC Film)<br/>
-&nbsp;&nbsp;• <strong>RRR (2022)</strong> &mdash; 🏆 Academy Award Winner &amp; Global Phenomenon<br/>
+&nbsp;&nbsp;• <strong>RRR (2022)</strong> &mdash; Global Landmark Feature Production &amp; Phenomenon<br/>
 &nbsp;&nbsp;• <strong>Mufasa: The Lion King (2024)</strong> &mdash; Disney Live-Action Feature<br/>
 &nbsp;&nbsp;• <strong>Back in Action (2025)</strong> &mdash; Netflix Feature Production<br/>
 &nbsp;&nbsp;• <strong>Spaceman (2024)</strong> &mdash; Sci-Fi Feature Production<br/>
@@ -5035,7 +5035,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 
           `• <strong>🏆 Verified Filmography &amp; Production Pedigree:</strong><br/>
 • <strong>1917 (2019):</strong> 🏆 Academy Award for Best Visual Effects &mdash; engineered core 2D Nuke pipeline and review architecture at MPC Film enabling seamless continuous-take shot assembly.<br/>
-• <strong>RRR (2022):</strong> 🏆 Academy Award Winner &mdash; high-throughput visual effects execution, creature dynamics, and multi-facility shot delivery.<br/>
+• <strong>RRR (2022):</strong> Global Landmark Feature Production &mdash; high-throughput visual effects execution, creature dynamics, and multi-facility shot delivery.<br/>
 • <strong>Mufasa: The Lion King (2024):</strong> Disney Live-Action Feature &mdash; photorealistic digital cinematography, massive environments, and advanced review/comp toolsets.<br/>
 • <strong>Back in Action (2025):</strong> Netflix Feature &mdash; high-energy VFX execution, plate ingestion conform, and automated review workflows.<br/>
 • <strong>Spaceman (2024):</strong> Sci-Fi Drama &mdash; photorealistic creature integration and atmospheric cosmic environment pipelines.<br/>
@@ -5046,7 +5046,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 
           `• <strong>👥 Mentorship, High-Trust Culture &amp; Agile Engineering:</strong><br/>
 • <strong>Sprint Excellence:</strong> Led multi-disciplinary teams through high-stakes delivery cycles with predictable sprint velocity and zero production crunch.<br/>
-• <strong>Cross-Continental Bridge:</strong> Successfully aligned London, Montreal, and Bangalore engineering hubs to operate as a unified, collaborative development engine.<br/>
+• <strong>Cross-Continental Bridge:</strong> Successfully aligned London, Montreal, and Bengaluru engineering hubs to operate as a unified, collaborative development engine.<br/>
 • <strong>Architectural Evolution:</strong> Led studio modernization from monolithic legacy scripts to modular OpenUSD, MCP tooling, and automated CI/CD.<br/><br/>
 <a href="#experience" class="ai-section-link">⏳ Explore Career Timeline &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &rarr;</a>
@@ -5104,7 +5104,7 @@ Awarded for rapid prototyping, creativity, and deployment of functional generati
           '💼 <strong>EXECUTIVE CONSULTATION &amp; RECRUITING MATRIX</strong>'
         ],
         responses: [
-          `• <strong>📍 Location:</strong> London, United Kingdom (British Citizen)<br/>
+          `• <strong>📍 Location:</strong> London, United Kingdom (UK Skilled Worker Visa • Existing Sponsorship in Place • Available Immediately)<br/>
 • <strong>📧 Email:</strong> <a href="mailto:mutyalu.rajeev@gmail.com" style="color:#38bdf8; font-weight:700;">mutyalu.rajeev@gmail.com</a><br/>
 • <strong>📱 Phone:</strong> <a href="tel:+447827498399" style="color:#38bdf8; font-weight:700;">+44 7827 498399</a><br/>
 • <strong>💼 LinkedIn:</strong> <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" style="color:#38bdf8; text-decoration:underline;">linkedin.com/in/rajeevmuthyalu</a><br/><br/>
