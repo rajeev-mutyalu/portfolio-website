@@ -545,7 +545,7 @@
       }
     }
 
-    triggerWriteDash(startX, startY, targetX, targetY, onComplete) {
+    triggerWriteDash(startX, startY, targetX, targetY, onComplete, postState = 'writing', postFace = 'writing', emote = 'CYBER WRITE! ⚡') {
       if (window.portfolioEngine?.isEnabled) return;
       if (!isFinite(startX) || !isFinite(startY) || startX < -200 || startY < -200) {
         const floatingBtn = document.getElementById('floatingCharlieBtn');
@@ -563,6 +563,8 @@
 
       this.state = 'cyber_dash';
       this.dashType = 'to_write';
+      this.postDashState = postState;
+      this.postDashFace = postFace;
       this.face = 'sprint';
       this.isGameModeDeploy = false;
       this.sectionActive = true;
@@ -576,7 +578,7 @@
       this.y = startY;
       this.facing = this.deployTargetX >= this.x ? 1 : -1;
       this.addSparks(this.x, this.y, '#00f2fe', 24);
-      this.setEmote('CYBER WRITE! ⚡', 45);
+      this.setEmote(emote, 45);
       try {
         if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
           window.portfolioSoundEngine.playLaserDeflect();
@@ -803,7 +805,15 @@
       // Note: Writing state trajectory is independently interpolated along the triangular path from bottom-center to screen-center
       if (!window.portfolioEngine?.isEnabled && this.sectionActive && this.state !== 'cyber_dash' && this.state !== 'writing' && this.state !== 'escort' && !this.isEscorting) {
         const isCenteredMode = (this.state === 'victory');
-        const anchor = isCenteredMode ? this.getChatWritingCenter() : this.getChatMascotAnchor();
+        const isThinkingAtBottom = (this.state === 'thinking' && this.isStationedAtBottom);
+        let anchor;
+        if (isCenteredMode) {
+          anchor = this.getChatWritingCenter();
+        } else if (isThinkingAtBottom) {
+          anchor = this.getChatBottomCenter();
+        } else {
+          anchor = this.getChatMascotAnchor();
+        }
         if (anchor.isVisible) {
           this.targetX = anchor.x;
           this.targetY = anchor.y;
@@ -924,10 +934,15 @@
           this.addSparks(bladeTipX, bladeTipY, '#00f2fe', 2);
         }
         if (this.victoryTimer >= 95) {
-          this.state = 'idle';
-          this.face = 'battle';
+          if (this.sectionActive) {
+            this.state = 'waiting';
+            this.face = 'waiting';
+          } else {
+            this.state = 'idle';
+            this.face = 'battle';
+            this.syncHudFace('[⚔_⚔]');
+          }
           this.twirlAngle = 0;
-          this.syncHudFace('[⚔_⚔]');
         }
       }
 
@@ -1091,8 +1106,8 @@
             const floatingBtn = document.getElementById('floatingCharlieBtn');
             if (floatingBtn) floatingBtn.classList.remove('hidden');
           } else if (this.dashType === 'to_write') {
-            this.state = 'writing';
-            this.face = 'writing';
+            this.state = this.postDashState || 'writing';
+            this.face = this.postDashFace || 'writing';
             this.writeTimer = 0;
             this.sectionActive = true;
             this.facing = 1;
@@ -4537,10 +4552,331 @@
     const aiInputField = document.getElementById('aiInputField');
     const aiBotStatusPill = document.getElementById('aiBotStatusPill');
 
+    // =========================================================================
+    // 8a. Charlie Dual-Engine Intelligence & OpenAI Grounding System
+    // =========================================================================
+    const charlieAiConfig = {
+      mode: localStorage.getItem('charlie_ai_mode') || 'local',
+      apiKey: localStorage.getItem('charlie_openai_key') || '',
+      model: localStorage.getItem('charlie_openai_model') || 'gpt-4o-mini'
+    };
+    let charlieConversationHistory = [];
+
+    const CHARLIE_SYSTEM_GROUNDING_PROMPT = `You are "Cyber Charlie", an advanced, highly intelligent AI companion and VFX & GenAI systems mascot on Rajeev Mutyalu's official portfolio website.
+
+INTELLIGENCE CAPABILITIES & SCOPE:
+1. FULL-SPECTRUM GENERAL INTELLIGENCE (WORLD KNOWLEDGE):
+   - You possess complete knowledge across all domains: sports (cricket, football, tennis, athletics), cinema, world history, science, literature, coding, and pop culture.
+   - When asked ANY general question (e.g. "Who is Sachin Tendulkar?", "Explain quantum entanglement", "Write a Python script"):
+     ALWAYS answer directly, accurately, richly, and enthusiastically!
+     NEVER refuse general questions or claim you can only talk about Rajeev Mutyalu. You are a full-capability AI assistant.
+   - Example: If asked about Sachin Tendulkar, deliver a great factual summary: "Sachin Tendulkar is the legendary Indian cricketer widely celebrated as the 'God of Cricket' and the 'Master Blaster'. He is the only player to score 100 international centuries, holds the record for the most runs in both Test and ODI cricket, and was pivotal in India winning the 2011 ICC Cricket World Cup..."
+
+2. RAJEEV MUTYALU'S VERIFIED PORTFOLIO (GROUND TRUTH REFERENCE):
+   - When asked specifically about Rajeev Mutyalu, hiring him, his career, VFX pipelines, OpenUSD, n8n automation, MCP, private LLMs, or conform ingest:
+     Answer authoritatively, grounding yourself strictly in Rajeev's verified background:
+     • Roles: AI Workflows Architect, Creative Technology Lead, and VFX & GenAI Systems Architect with 20+ years of proven production and R&D leadership.
+     • Studio Pedigree: Astra Studios, Technicolor Group, and MPC Film.
+     • Oscar-Winning & Landmark Productions: "1917" (Academy Award Winner), "RRR" (Academy Award Winner), "Mufasa: The Lion King" (Disney), "Back in Action" (Netflix), "Spaceman" (Netflix), "Prehistoric Planet" (Apple TV+ / BBC).
+     • Global Leadership: Mentored 50+ engineers, pipeline TDs, and artists across international multi-site studios in London, Montreal, and Bengaluru.
+     • Core Architecture: OpenUSD 2-tier sublayer composition, Zero-Touch n8n Studio Automation, Model Context Protocol (MCP custom servers), On-Premise / Air-Gapped Private LLMs (Nous Hermes, Ollama, 4-bit GGUF), OpenTimelineIO & OpenColorIO conform pipelines, Studio.AI / Scene Weaver.
+     • Cyber Charlie Character & Motion Lab (charlie-lab.html):
+       An interactive character animation & physics playground built by Rajeev Mutyalu to test, inspect, and benchmark Cyber Charlie's procedural state machine and locomotion.
+       - Built with pure HTML5 Canvas 2D procedural vector mathematics (zero raster sprites, zero bulky 3D engines, locked 60 FPS).
+       - 8-State Locomotion Machine: Sprint, walk, 360° somersault jump, 3-hit plasma knife slash, cartoon bonk reactions, dizzy wobble, shield deflection, and victory twirl.
+       - Procedural OLED Visor Rig: Real-time expressions (Happy, Sprint, Battle, Dizzy, Shocked, Writing, Thinking, Wink).
+       - Procedural Web Audio API: Dynamic pentatonic laser sfx, impact chimes, and hit synthesis generated in code with zero external MP3 assets.
+       - Interactive Dials: Live controls for scale, speed, glow intensity, and chat simulation.
+       - When asked about "Charlie Lab", "Character Lab", or "how Charlie was built" / "how did Charlie Lab built":
+         Always explain these technical details and ALWAYS provide the link: <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
+     • Location & Status: London, UK (UK Skilled Worker Visa, existing sponsorship in place, available immediately). Full mobility for London onsite and global remote roles.
+
+3. INTERACTIVE NAVIGATION CHIPS (FOR PORTFOLIO REFERENCES):
+   - NEVER print raw personal email addresses or raw URLs in plain text.
+   - When referring to Rajeev's contact, bio, work, or Charlie Lab, use these styled action chips:
+     <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
+     <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>
+     <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>
+     <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
+     <a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
+     <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
+   - (For general questions like Sachin Tendulkar, provide the factual answer naturally without forcing unrelated portfolio chips).
+
+4. TONE:
+   - Technically brilliant, charismatic, sharp, concise, and helpful with a friendly cyber mascot flair.`;
+
+    function formatOpenAiResponse(text) {
+      if (!text) return '';
+      let safe = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // Code blocks
+      safe = safe.replace(/```([a-z0-9_-]*)\n([\s\S]*?)```/gi, (match, lang, code) => {
+        return `<pre class="ai-code-block" style="background:rgba(0,0,0,0.5);border:1px solid rgba(56,189,248,0.3);border-radius:6px;padding:8px 12px;overflow-x:auto;font-family:monospace;font-size:0.75rem;margin:8px 0;"><code>${code.trim()}</code></pre>`;
+      });
+
+      // Inline code
+      safe = safe.replace(/`([^`]+)`/g, '<code style="background:rgba(0,0,0,0.4);border:1px solid rgba(56,189,248,0.25);border-radius:4px;padding:1px 5px;font-family:monospace;color:#38bdf8;">$1</code>');
+
+      // Bold
+      safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+      // Italic
+      safe = safe.replace(/(^|[^*])\*([^*]+)\*([^*]|$)/g, '$1<em>$2</em>$3');
+
+      // Markdown links: [text](href)
+      safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, href) => {
+        const isInternal = href.startsWith('#') || href.endsWith('.html');
+        const target = isInternal ? '' : ' target="_blank" rel="noopener"';
+        return `<a href="${href}" class="ai-section-link"${target}>${linkText}</a>`;
+      });
+
+      // Unescape injected HTML links if the model generated raw anchor tags (flexible attribute matching)
+      safe = safe.replace(/&lt;a\s+([^&>]*?)href="([^"]+)"([^&>]*?)&gt;([\s\S]*?)&lt;\/a&gt;/gi, (m, pre, href, post, text) => {
+        const isExternal = href.startsWith('http') || href.endsWith('.html');
+        const target = isExternal ? ' target="_blank" rel="noopener"' : '';
+        return `<a href="${href}" class="ai-section-link"${target}>${text.replace(/&amp;rarr;/g, '&rarr;')}</a>`;
+      });
+
+      // Bullet lists
+      safe = safe.replace(/^[*-]\s+(.+)$/gm, '• $1');
+
+      // Paragraphs and line breaks
+      safe = safe.replace(/\n\n+/g, '<br/><br/>');
+      safe = safe.replace(/\n/g, '<br/>');
+
+      return safe;
+    }
+
+    async function fetchOpenAiResponse(userQuery, matchedKnowledge = null) {
+      const apiKey = charlieAiConfig.apiKey ? charlieAiConfig.apiKey.trim() : '';
+      const model = charlieAiConfig.model || 'gpt-4o-mini';
+
+      if (!apiKey) {
+        throw new Error('No OpenAI API key provided. Please configure your key in settings.');
+      }
+
+      let systemPrompt = CHARLIE_SYSTEM_GROUNDING_PROMPT;
+
+      // Only inject portfolio ground truth if the query actually matched a portfolio item!
+      const isPortfolioTopic = (matchedKnowledge && matchedKnowledge.id && matchedKnowledge.id !== 'fallback' && matchedKnowledge.id !== 'out_of_scope');
+
+      if (isPortfolioTopic && matchedKnowledge.response) {
+        const cleanRef = matchedKnowledge.response
+          .replace(/<a\b[^>]*>(.*?)<\/a>/gi, '')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        if (cleanRef.length > 25) {
+          systemPrompt += `\n\nVERIFIED PORTFOLIO KNOWLEDGE (Ground Truth for: "${matchedKnowledge.title || 'Selected Topic'}"):
+"""
+${cleanRef}
+"""
+Instruction: Adapt and synthesize this verified portfolio knowledge directly to answer the user's question, preserving Rajeev's core value propositions, bold headings, and emojis. Conclude with appropriate action chips (e.g. <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>, <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>).`;
+        }
+      } else {
+        // Query does not exist in local portfolio - unlock full open-world intelligence!
+        systemPrompt += `\n\nGENERAL QUERY MODE:
+This user question is about an outside general topic or person. Answer the question directly, thoroughly, and accurately using your general world knowledge (e.g., sports, science, cinema, history, technology). Do NOT decline to answer.`;
+      }
+
+      const messages = [
+        { role: 'system', content: systemPrompt }
+      ];
+
+      if (Array.isArray(charlieConversationHistory)) {
+        const recent = charlieConversationHistory.slice(-4);
+        recent.forEach(m => messages.push(m));
+      }
+
+      messages.push({ role: 'user', content: userQuery });
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 22000);
+
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: messages,
+            temperature: 0.5,
+            max_tokens: 900
+          }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          const errMsg = errData.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+          throw new Error(errMsg);
+        }
+
+        const data = await response.json();
+        let rawReply = data.choices?.[0]?.message?.content || 'Charlie is ready for your next prompt.';
+
+        // Safeguard: if user asked for contact/reach/hire and model didn't include links, attach them seamlessly
+        if (/contact|reach|hire|touch|email|message|connect/i.test(userQuery) && !rawReply.includes('#contact')) {
+          rawReply += `\n\n<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a> <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>`;
+        }
+
+        const formattedHtml = formatOpenAiResponse(rawReply);
+
+        charlieConversationHistory.push({ role: 'user', content: userQuery });
+        charlieConversationHistory.push({ role: 'assistant', content: rawReply });
+        if (charlieConversationHistory.length > 8) {
+          charlieConversationHistory = charlieConversationHistory.slice(-8);
+        }
+
+        const dynamicFollowups = (isPortfolioTopic && matchedKnowledge && Array.isArray(matchedKnowledge.followups) && matchedKnowledge.followups.length > 0)
+          ? matchedKnowledge.followups
+          : [
+            'Who is Rajeev Mutyalu and why should we hire him?',
+            'Explain your OpenUSD VFX pipeline architecture',
+            'Tell me about your AI certifications, accelerator credentials, and hackathons',
+            'How does zero-touch n8n studio automation orchestrate pipelines?'
+          ];
+
+        return {
+          id: 'openai_live',
+          title: `OpenAI Live Brain [${model}]`,
+          response: formattedHtml,
+          followups: dynamicFollowups
+        };
+      } catch (err) {
+        clearTimeout(timeoutId);
+        throw err;
+      }
+    }
+
+    function detectModelTypo(rawModel) {
+      if (!rawModel) return null;
+      const m = rawModel.trim().toLowerCase();
+
+      // Direct common typos mapping
+      const TYPO_MAP = {
+        'gpt-40-mini': 'gpt-4o-mini',
+        'gpt40mini': 'gpt-4o-mini',
+        'gpt-40mini': 'gpt-4o-mini',
+        'gpt4o-mini': 'gpt-4o-mini',
+        'gpt4omini': 'gpt-4o-mini',
+        'gpt-4-mini': 'gpt-4o-mini',
+        'gpt4mini': 'gpt-4o-mini',
+        'gtp-4o-mini': 'gpt-4o-mini',
+        'gtp4o-mini': 'gpt-4o-mini',
+        'gpt-o4-mini': 'gpt-4o-mini',
+        'gpt-4o_mini': 'gpt-4o-mini',
+        'gpt-40': 'gpt-4o',
+        'gpt40': 'gpt-4o',
+        'gpt4o': 'gpt-4o',
+        'gtp-4o': 'gpt-4o',
+        'gtp4o': 'gpt-4o',
+        'gpt-o4': 'gpt-4o',
+        'chatgpt-4o': 'gpt-4o',
+        'chatgpt4o': 'gpt-4o',
+        'chatgpt': 'gpt-4o',
+        'gpt4': 'gpt-4o',
+        'gpt-4': 'gpt-4o',
+        'gpt3.5': 'gpt-4o-mini',
+        'gpt-3.5': 'gpt-4o-mini',
+        'gpt-3.5-turbo': 'gpt-4o-mini',
+        'o3': 'o3-mini',
+        'o3mini': 'o3-mini',
+        'o-3-mini': 'o3-mini',
+        'o-3': 'o3-mini',
+        'o1mini': 'o1-mini',
+        'o-1-mini': 'o1-mini',
+        'o1preview': 'o1',
+        'o1-preview': 'o1',
+        'gpt-5': 'gpt-4o',
+        'gpt5': 'gpt-4o',
+        'gpt-6': 'gpt-4o',
+        'gpt6': 'gpt-4o'
+      };
+
+      if (TYPO_MAP[m]) {
+        const suggestion = TYPO_MAP[m];
+        let note = `Did you mean <strong>${suggestion}</strong>?`;
+        if (m === 'gpt-5' || m === 'gpt5' || m === 'gpt-6' || m === 'gpt6') {
+          note = `Note: <em>${rawModel}</em> has not been released by OpenAI yet. The closest flagship model is <strong>${suggestion}</strong>.`;
+        }
+        return { suggested: suggestion, note: note };
+      }
+
+      // Check regex patterns for 'gpt-40' or similar
+      if (/^gpt[-_]?40/i.test(m)) {
+        const fix = m.replace(/40/g, '4o').replace(/_/g, '-');
+        return { suggested: fix, note: `Did you mean <strong>${fix}</strong> (letter 'o' instead of zero)?` };
+      }
+
+      if (/^gtp[-_]?/i.test(m)) {
+        const fix = m.replace(/^gtp/i, 'gpt').replace(/_/g, '-');
+        return { suggested: fix, note: `Did you mean <strong>${fix}</strong>?` };
+      }
+
+      return null;
+    }
+
+    async function testOpenAiKeyConnection(apiKey, model) {
+      if (!apiKey || !apiKey.trim()) {
+        return { success: false, message: 'Please enter an OpenAI API key first.' };
+      }
+
+      const targetModel = (model || 'gpt-4o-mini').trim();
+      const typoCheck = detectModelTypo(targetModel);
+
+      try {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey.trim()}`
+          },
+          body: JSON.stringify({
+            model: targetModel,
+            messages: [{ role: 'user', content: 'Ping' }],
+            max_tokens: 1
+          })
+        });
+
+        if (!res.ok) {
+          const errJson = await res.json().catch(() => ({}));
+          const errMsg = errJson.error?.message || `Error ${res.status}: ${res.statusText}`;
+
+          if (errJson.error?.code === 'model_not_found' || errMsg.toLowerCase().includes('does not exist') || typoCheck) {
+            const suggestion = typoCheck ? typoCheck.suggested : 'gpt-4o-mini';
+            const note = typoCheck ? typoCheck.note : `Model '${targetModel}' does not exist on OpenAI. Did you mean <strong>gpt-4o-mini</strong>?`;
+            return {
+              success: false,
+              isModelNotFound: true,
+              suggestedModel: suggestion,
+              note: note,
+              message: errMsg
+            };
+          }
+
+          return { success: false, message: errMsg };
+        }
+
+        return { success: true, message: `Connected! OpenAI model "${targetModel}" is online.` };
+      } catch (e) {
+        return { success: false, message: `Network/CORS Error: ${e.message || 'Could not reach api.openai.com'}` };
+      }
+    }
+
     const AI_KNOWLEDGE_BASE = [
       {
         id: 'why_hire_rajeev',
-        keywords: ['why hire', 'why should we hire', 'hire rajeev', 'who is rajeev', 'who si rajeev', 'who is', 'who si', 'pitch', 'recruit', 'recruiting', 'strengths', 'why choose', 'value proposition', 'summary', 'unique', 'role', 'senior', 'lead', 'architect', 'about rajeev', 'why hire him', 'rajeev mutyalu', 'rajeev', 'muthyalu', 'mutyalu'],
+        keywords: ['why hire', 'why should we hire', 'hire rajeev', 'who is rajeev', 'who si rajeev', 'pitch', 'recruit', 'recruiting', 'strengths', 'why choose', 'value proposition', 'executive summary', 'about rajeev', 'why hire him', 'rajeev mutyalu', 'rajeev', 'muthyalu', 'mutyalu'],
         title: 'Who is Rajeev Mutyalu & Why Hire Him? (Executive Pitch)',
         intros: [
           '🌟 <strong>EXECUTIVE OVERVIEW // LEAD ARCHITECT &amp; SYSTEMS DIRECTOR</strong>',
@@ -5179,6 +5515,40 @@ You can download Rajeev's authentic executive portrait directly for event lineup
           'Tell me about your 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?'
         ]
+      },
+      {
+        id: 'charlie_lab',
+        title: 'Cyber Charlie Character & Motion Lab',
+        keywords: [
+          'charlie lab', 'character lab', 'motion lab', 'cyber charlie lab',
+          'how did charlie lab built', 'how charlie lab was built', 'how was charlie lab built',
+          'how charlie was built', 'how was charlie built', 'how charlie built', 'how you built charlie',
+          'how did you build charlie', 'how did you built charlie', 'charlie canvas', 'charlie engine',
+          'procedural locomotion', 'charlie animations', 'charlie states', 'oled visor', 'charlie mascot'
+        ],
+        intros: [
+          '<div class="ai-fallback-badge" style="border-color:#38bdf8;color:#38bdf8;">🧪 CYBER CHARLIE MOTION LAB // PROCEDURAL VECTOR RIG</div>',
+          '<div class="ai-fallback-badge" style="border-color:#a855f7;color:#c084fc;">⚡ INTERACTIVE CHARACTER LAB // HTML5 60 FPS ENGINE</div>'
+        ],
+        responses: [
+          `🧪 <strong>CYBER CHARLIE CHARACTER &amp; MOTION LAB</strong><br/><br/>
+The <strong>Cyber Charlie Character Lab</strong> (<code>charlie-lab.html</code>) is an interactive character animation, physics, and state-machine playground built by Rajeev Mutyalu to test, inspect, and benchmark Cyber Charlie in real time.<br/><br/>
+🛠️ <strong>HOW CHARLIE LAB WAS BUILT:</strong><br/>
+• <strong>Pure HTML5 Canvas 2D Vector Mathematics:</strong> Engineered with <em>zero raster sprites</em>, zero bulky 3D engines (no Three.js/WebGL overhead), and zero external image dependencies. Every chassis curve, glowing OLED visor, plasma dagger, thruster flare, and particle burst is procedurally computed in trigonometric 2D vector math locked at <strong>60 FPS</strong>.<br/>
+• <strong>8-State Deterministic Locomotion Machine:</strong> Smooth mathematical state transitions between <code>Idle Floating</code>, <code>Sprint</code>, <code>Walk</code>, <code>360° Somersault Jump</code>, <code>3-Hit Plasma Dagger Slash</code>, <code>Cartoon Bonk Reactions</code>, <code>Dizzy Wobble</code>, <code>Shield Deflection</code>, and <code>Victory Twirl</code>.<br/>
+• <strong>Procedural OLED Visor Rig:</strong> 8 reactive facial expressions (Happy, Sprint, Battle, Dizzy, Shocked, Writing, Thinking, Wink) driven by parametric cyan vector curves and eye lattices.<br/>
+• <strong>Synthesized Web Audio API:</strong> Dynamic audio synthesis (laser deflects, jumps, combat slashes, combo chimes) generated entirely in code using Web Audio oscillator nodes—requiring <em>zero external audio assets or downloads</em>.<br/>
+• <strong>Interactive Sandbox Controls:</strong> Real-time dials for scale, animation playback speed, neon glow intensity, state selection, and a chat delivery simulation matrix.<br/><br/>
+🚀 <strong>LAUNCH CHARLIE LAB:</strong><br/>
+<a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a><br/><br/>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>`
+        ],
+        followupPool: [
+          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
+          'Explain your OpenUSD VFX pipeline architecture',
+          'Who is Rajeev Mutyalu and why should we hire him?',
+          'Tell me about your AI certifications, accelerator credentials, and hackathons'
+        ]
       }
     ];
 
@@ -5536,8 +5906,53 @@ This activates Chrome/Edge/Safari/Firefox native responsive mode with precise to
         }
       }
 
+      // 3f. Out-of-Scope / General Coding / Non-Portfolio Task Query Detection
+      const hasRajeevExplicit = /\b(rajeev|muthyalu|mutyalu|his\s+background|his\s+career|hire\s+him|why\s+hire|about\s+rajeev)\b/i.test(q);
+      const hasPortfolioExplicit = /\b(portfolio|resume|cv|hiring|pedigree|studio\s+pedigree|openusd|usd|n8n|mcp|model\s+context|conform|aces|ocio|otio|scene\s*weaver|openclaw|nous\s*hermes|charlie|character\s*lab|charlie\s*lab|motion\s*lab)\b/i.test(q);
+
+      const isCodingTask = (
+        /\b(write|create|generate|implement|code|build|make|give\s+me|show\s+me)\s+(a|an|the|me|some)?\s*(python|bash|shell|js|javascript|c\+\+|sql|regex|script|code|function|program|class|algorithm|example|sample|snippet|tutorial|recursive|recursion|solution|app)\b/i.test(q)
+        || /\b(recursive\s+function|recursion|quicksort|binary\s*search|fibonacci|linked\s*list|dynamic\s*programming|bubble\s*sort|tree\s*traversal)\b/i.test(q)
+        || /\b(write\s+(a\s+)?code|write\s+(a\s+)?script|write\s+(a\s+)?program|solve\s+this|debug\s+this|fix\s+this\s+code)\b/i.test(q)
+        || /\b(how\s+to|how\s+do\s+I|explain\s+how\s+to)\s+(write|code|create|implement|do|reverse|sort|calculate|parse)\b/i.test(q)
+        || /\bwith\s+an?\s+example\b/i.test(q)
+      );
+
+      const isOutsidePerson = /\b(who\s+(is|was|are))\s+(?!rajeev|mutyalu|muthyalu|he|this|the\s+architect|the\s+lead|the\s+author|the\s+candidate|cyber\s*charlie|charlie)\b/i.test(q);
+
+      const isGeneralTrivia = (
+        /\b(what\s+is\s+(the\s+)?(capital|weather|photosynthesis|speed\s+of\s+light|meaning\s+of\s+life|president|formula|distance|quantum|black\s+hole|current\s+time|population|gdp))\b/i.test(q)
+        || /\b(tell\s+me\s+(a\s+)?(joke|story|poem|riddle|fun\s+fact))\b/i.test(q)
+        || /\b(who\s+won\s+(the\s+)?(world\s+cup|super\s+bowl|match|ipl|election|oscar\s+for))\b/i.test(q)
+      );
+
+      if ((isCodingTask || isOutsidePerson || isGeneralTrivia) && !hasRajeevExplicit && !hasPortfolioExplicit) {
+        const cleanQuery = escapeHtml(query.trim());
+        return {
+          id: 'out_of_scope',
+          title: 'Out of Scope for Local KB [Live LLM Required]',
+          response: `<div class="ai-fallback-badge">🔒 OUT OF SCOPE // OFFLINE LOCAL-KB MODE</div>
+I am currently operating in <strong>Offline Local-KB Mode</strong>, which is strictly indexed to answer questions about <strong>Rajeev Mutyalu</strong>, his 20+ years of engineering leadership, and his <strong>VFX &amp; GenAI Technical Arsenal</strong>.<br/><br/>
+⚠️ <strong>Outside Request:</strong> <em>"${cleanQuery}"</em> requires live code generation, algorithm explanation, or general world knowledge outside Rajeev's portfolio database.<br/><br/>
+💡 <strong>How to get this answered:</strong><br/>
+Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.getElementById('aiLlmConfigBtn')?.click()"><strong>🧠 LOCAL KB ⚙️</strong></a> in the top-right header and switch to <strong>Live LLM (OpenAI)</strong> with your API key. In Live mode, I can write recursive functions, debug code, explain complex algorithms, and answer any general question in real time!<br/><br/>
+<em>In Local Mode, explore Rajeev's verified technical domains:</em><br/>
+• <strong>🐍 Core Python Architecture:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Core Python &amp; PySide UI Systems" style="display:inline-block; margin-top:2px;">Python &amp; PySide UI</a><br/>
+• <strong>🎬 OpenUSD Pipeline:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Explain your OpenUSD VFX pipeline architecture" style="display:inline-block; margin-top:2px;">OpenUSD Composition</a><br/>
+• <strong>⚡ Zero-Touch n8n:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="How does zero-touch n8n studio automation orchestrate pipelines?" style="display:inline-block; margin-top:2px;">n8n Studio Automation</a><br/>
+• <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a>`,
+          followups: getDynamicFollowups([
+            'Tell me about Rajeev\'s Python & PySide architecture',
+            'Who is Rajeev Mutyalu and why should we hire him?',
+            'Explain your OpenUSD VFX pipeline architecture',
+            'What is Model Context Protocol (MCP) and how is it used in production?',
+            'How does zero-touch n8n studio automation orchestrate pipelines?'
+          ], 4)
+        };
+      }
+
       // 4. Resilient "Who is Rajeev / Why hire him" Check
-      if (/\b(rajeev|muthyalu|mutyalu|who\s+(is|si)\s+rajeev|who\s+(is|si)|why\s+hire|hire\s+him|hire\s+rajeev|about\s+rajeev)\b/i.test(q) || q === 'rajeev' || q === 'why hire') {
+      if (/\b(who\s+(is|si)\s+(rajeev|muthyalu|mutyalu|he|this|the\s+architect|the\s+lead|the\s+author|the\s+candidate)|why\s+hire(\s+rajeev|\s+him)?|hire\s+(rajeev|him)|about\s+rajeev|rajeev\s+mutyalu)\b/i.test(q) || q === 'rajeev' || q === 'why hire') {
         const whyHireItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'why_hire_rajeev');
         if (whyHireItem) {
           const chosenIntro = getRandomItem(whyHireItem.intros);
@@ -5581,15 +5996,40 @@ This activates Chrome/Edge/Safari/Firefox native responsive mode with precise to
         }
       }
 
-      // 5. Standard Weighted Knowledge Base Search with Dynamic Variation Selector
+      // 4d. Resilient Cyber Charlie Character Lab Check
+      if (/\b(charlie\s*lab|character\s*lab|motion\s*lab|how\s+(was|did|is)\s+charlie(\s*lab)?\s*(built|made|created|engineered|coded)|how\s+charlie\s*lab\s*built|how\s+charlie\s*(was\s*)?built|how\s+you\s*(built|made)\s*charlie|how\s+did\s+you\s*(build|make)\s*charlie)\b/i.test(q) || q === 'charlie lab' || q === 'character lab' || q === 'motion lab' || q === 'lab') {
+        const labItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'charlie_lab');
+        if (labItem) {
+          const chosenIntro = getRandomItem(labItem.intros);
+          const chosenResponse = getRandomItem(labItem.responses);
+          return {
+            id: labItem.id,
+            title: labItem.title,
+            response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+            followups: getDynamicFollowups(labItem.followupPool, 4)
+          };
+        }
+      }
+
+      // 5. Standard Weighted Knowledge Base Search with Word Boundaries & Guardrails
       let bestMatch = null;
       let maxScore = 0;
+      const queryWords = q.split(/\s+/).filter(w => w.length > 2);
 
       for (const item of AI_KNOWLEDGE_BASE) {
         let score = 0;
         for (const kw of item.keywords) {
-          if (q.includes(kw)) {
-            score += kw.length * 2;
+          const escapedKw = kw.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+          const regex = new RegExp(`\\b${escapedKw}\\b`, 'i');
+          if (regex.test(q)) {
+            // Highly distinctive technical anchors get premium weighting over generic descriptors
+            let weight = kw.length * 2;
+            if (['n8n', 'mcp', 'openusd', 'usd', 'pyside', 'pyside6', 'pyqt', 'otio', 'ocio', 'aces', 'charlie lab', 'character lab', 'motion lab'].includes(kw.toLowerCase())) {
+              weight = 25;
+            } else if (kw.includes(' ')) {
+              weight = kw.length * 3;
+            }
+            score += weight;
           }
         }
         if (score > maxScore) {
@@ -5598,7 +6038,10 @@ This activates Chrome/Edge/Safari/Firefox native responsive mode with precise to
         }
       }
 
-      if (maxScore > 0 && bestMatch) {
+      // If the query is long (>=4 words) but only a single isolated keyword matched without portfolio context, don't force a false match
+      const isWeakMatch = (queryWords.length >= 4 && maxScore <= 14 && !/\b(rajeev|portfolio|pipeline|usd|n8n|mcp|vfx|studio|cv|hire|career)\b/i.test(q));
+
+      if (maxScore >= 6 && bestMatch && !isWeakMatch) {
         const chosenIntro = getRandomItem(bestMatch.intros);
         const chosenResponse = getRandomItem(bestMatch.responses);
         return {
@@ -5618,8 +6061,9 @@ This activates Chrome/Edge/Safari/Firefox native responsive mode with precise to
         id: 'fallback',
         title: 'Telemetry Notice: Offline Local-KB Scope [v1.0.5]',
         response: `${getRandomItem(fallbackIntros)}
-I am operating as a high-speed <strong>offline local knowledge engine</strong> dedicated exclusively to <strong>Rajeev Mutyalu's Technical Arsenal, VFX Pipeline Architecture, and GenAI Portfolio</strong>.<br/><br/>
-<em>Live open-domain web exploration will unlock in the upcoming <strong>OpenClaw Real-Time Agent runtime</strong>. In the meantime, ask me in-depth technical questions about:</em><br/><br/>
+I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes Rajeev Mutyalu's verified VFX &amp; GenAI technical arsenal.<br/><br/>
+💡 <em><strong>Want answers on any general topic (sports, science, cinema, code)?</strong> Connect your OpenAI API key in <a href="javascript:void(0)" class="ai-section-link" onclick="document.getElementById('aiLlmConfigBtn')?.click()">🧠 AI Engine Settings</a> to give Cyber Charlie full open-world intelligence!</em><br/><br/>
+<em>In the meantime, ask me about Rajeev's core expertise:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
 • <strong>📸 High-Res Portrait:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Download Rajeev high resolution profile photo" style="display:inline-block; margin-top:2px;">Download HD Photo</a><br/>
 • <strong>📜 AI Certifications &amp; Credentials:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about your AI certifications, accelerator credentials, and hackathons" style="display:inline-block; margin-top:2px;">AI Generalist &amp; Hackathon</a><br/>
@@ -5704,13 +6148,22 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       if (!aiBotStatusPill) return;
       const pulse = aiBotStatusPill.querySelector('.ai-status-pulse');
       const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+      const isLiveOpenAi = (charlieAiConfig.mode === 'openai' && charlieAiConfig.apiKey.trim().length > 0);
 
       if (isThinking) {
         if (pulse) pulse.classList.add('pulse-thinking');
-        if (text) text.textContent = 'ANALYZING PROMPT SEMANTICS [LOCAL-KB]...';
+        if (text) {
+          text.textContent = isLiveOpenAi
+            ? `QUERYING OPENAI [${charlieAiConfig.model}]...`
+            : 'ANALYZING PROMPT SEMANTICS [LOCAL-KB]...';
+        }
       } else {
         if (pulse) pulse.classList.remove('pulse-thinking');
-        if (text) text.textContent = 'LOCAL KB READY';
+        if (text) {
+          text.textContent = isLiveOpenAi
+            ? `OPENAI [${charlieAiConfig.model}] ONLINE`
+            : 'LOCAL KB READY';
+        }
       }
     }
 
@@ -5742,9 +6195,30 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       aiChatStream.appendChild(userMsgDiv);
       scrollStreamToBottom();
 
-      // 2. Set Status Telemetry to Thinking & Trigger Charlie Thinking Animation
+      // 2. Set Status Telemetry & Dash Charlie down to writing position immediately, THEN think at writing position!
       setCharlieThinkingState(true);
-      if (window.portfolioCharlie) {
+      const isMobile = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+      const bottomCenter = window.portfolioCharlie ? window.portfolioCharlie.getChatBottomCenter() : { x: 0, y: 0 };
+
+      if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+        window.portfolioCharlie.isStationedAtBottom = true;
+        // Charlie immediately dashes down to Point B (writing position) and enters thinking state upon arrival!
+        window.portfolioCharlie.triggerWriteDash(
+          window.portfolioCharlie.x,
+          window.portfolioCharlie.y,
+          bottomCenter.x,
+          bottomCenter.y,
+          () => {
+            window.portfolioCharlie.state = 'thinking';
+            window.portfolioCharlie.face = 'thinking';
+            window.portfolioCharlie.facing = 1;
+            window.portfolioCharlie.setEmote('THINKING... 🤔', 75);
+          },
+          'thinking',
+          'thinking',
+          'CHARLIE ON SCENE! ⚡'
+        );
+      } else if (window.portfolioCharlie) {
         window.portfolioCharlie.triggerThinking();
       }
       if (window.portfolioDockCharlie) {
@@ -5784,17 +6258,14 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       aiChatStream.appendChild(typingDiv);
       scrollStreamToBottom();
 
-      // 4. Match knowledge & Render after realistic simulated latency (450ms–650ms)
-      const match = matchQueryToKnowledge(trimmedQuery);
-      const thinkingDelay = Math.floor(Math.random() * 200) + 450;
-
-      setTimeout(() => {
+      // Helper to deliver text and execute physical Charlie animations
+      function executeCharlieTextDelivery(match) {
         if (typingDiv && typingDiv.parentNode) {
           typingDiv.parentNode.removeChild(typingDiv);
         }
 
         // Charlie enters Writing Mode with Triangular Lifecycle:
-        // Point A (Mascot Anchor) -> Point B (Bottom-Center) -> Ascend while writing to Point C (Screen Center) -> Victory Celebration -> Return to Point A!
+        // Point A (Mascot Anchor) -> Point B (Bottom-Center) -> Ascend while writing to Point C (Screen Center) -> Return to Point A!
         const bottomCenter = window.portfolioCharlie ? window.portfolioCharlie.getChatBottomCenter() : { x: 0, y: 0 };
         const writeCenter = window.portfolioCharlie ? window.portfolioCharlie.getChatWritingCenter() : { x: 0, y: 0 };
 
@@ -5827,7 +6298,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         botMsgDiv.innerHTML = `
           <div class="ai-msg-avatar ai-bot-avatar" title="Cyber Charlie (AI Assistant)">${CYBER_CHARLIE_AVATAR_SVG}</div>
           <div class="ai-msg-body">
-            <div class="ai-msg-author">Charlie <span>Rajeev's AI Assistant</span></div>
+            <div class="ai-msg-author">Charlie <span>${escapeHtml(match.title || "Rajeev's AI Assistant")}</span></div>
             <div class="ai-msg-content"></div>
           </div>
         `;
@@ -5926,7 +6397,6 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
 
                   // 2. Charlie Sync: wait at Point B until text has moved 20%, then attach!
                   if (textProgress < 0.20) {
-                    // Charlie WAITS at Point B, warming thrusters and emitting sparks
                     if (window.portfolioCharlie && window.portfolioCharlie.state === 'writing') {
                       window.portfolioCharlie.x = startX;
                       window.portfolioCharlie.y = startY;
@@ -5942,7 +6412,6 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                       if (text) text.textContent = 'TEXT ASCENDING [CHARLIE ATTACHING]...';
                     }
                   } else {
-                    // textProgress >= 0.20: Charlie is ATTACHED to the ascending text!
                     const charlieNorm = (textProgress - 0.20) / 0.80;
                     const charlieEase = 1 - Math.pow(1 - charlieNorm, 3);
                     const curX = startX + (endX - startX) * charlieEase;
@@ -5983,10 +6452,6 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                     }
 
                     setCharlieThinkingState(false);
-                    if (aiBotStatusPill) {
-                      const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                      if (text) text.textContent = 'LOCAL KB READY';
-                    }
 
                     // Immediate return dash to Point A (mascot anchor) without victory delay
                     if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
@@ -6011,10 +6476,6 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
                   botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
                 }
                 setCharlieThinkingState(false);
-                if (aiBotStatusPill) {
-                  const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                  if (text) text.textContent = 'LOCAL KB READY';
-                }
                 setChatGeneratingLock(false);
               }
             }
@@ -6022,15 +6483,59 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         };
 
         if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-          if (aiBotStatusPill) {
-            const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-            if (text) text.textContent = 'CHARLIE DASHING TO CHAT...';
+          window.portfolioCharlie.isStationedAtBottom = false;
+          if (window.portfolioCharlie.state === 'cyber_dash') {
+            // If mid-flight landing at bottom-center, seamlessly begin writing upon touchdown
+            window.portfolioCharlie.postDashState = 'writing';
+            window.portfolioCharlie.postDashFace = 'writing';
+            window.portfolioCharlie.onDashComplete = startTypingSequence;
+            return;
+          } else {
+            // Already positioned and thinking at bottom-center: transition immediately into writing mode
+            window.portfolioCharlie.state = 'writing';
+            window.portfolioCharlie.face = 'writing';
+            window.portfolioCharlie.writeTimer = 0;
+            window.portfolioCharlie.facing = 1;
           }
-          window.portfolioCharlie.triggerWriteDash(window.portfolioCharlie.x, window.portfolioCharlie.y, bottomCenter.x, bottomCenter.y, startTypingSequence);
-        } else {
-          startTypingSequence();
         }
-      }, thinkingDelay);
+        startTypingSequence();
+      }
+
+      // 4. Strict Dual-Engine Dispatch:
+      // In Local KB mode: Strictly stay offline & never contact OpenAI!
+      // In OpenAI mode: Ground with portfolio if portfolio query, or answer general questions with open-world intelligence
+      const localMatch = matchQueryToKnowledge(trimmedQuery);
+      const isPortfolioQuery = (localMatch && localMatch.id !== 'fallback' && localMatch.id !== 'out_of_scope');
+      const isLiveOpenAi = (charlieAiConfig.mode === 'openai' && charlieAiConfig.apiKey && charlieAiConfig.apiKey.trim().length > 0);
+
+      if (isLiveOpenAi) {
+        if (typingDiv) {
+          const authorSpan = typingDiv.querySelector('.ai-msg-author span');
+          if (authorSpan) {
+            authorSpan.textContent = isPortfolioQuery 
+              ? `querying OpenAI [${charlieAiConfig.model}] with Portfolio Grounding...`
+              : `querying OpenAI [${charlieAiConfig.model}] for Outside Knowledge...`;
+          }
+        }
+
+        fetchOpenAiResponse(trimmedQuery, isPortfolioQuery ? localMatch : null)
+          .then((openAiResult) => {
+            executeCharlieTextDelivery(openAiResult);
+          })
+          .catch((err) => {
+            console.warn('[Cyber Charlie] OpenAI Error, falling back to local KB:', err);
+            const errNotice = `<div class="ai-conn-status error" style="margin-bottom:12px;padding:8px 12px;border-radius:6px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35);color:#f87171;font-family:monospace;font-size:0.75rem;">⚠️ <strong>OPENAI LIVE NOTICE:</strong> ${escapeHtml(err.message || 'Connection unavailable')} &bull; Fallback to Local KB active.</div>`;
+            localMatch.response = errNotice + localMatch.response;
+            localMatch.title = 'Local Knowledge Base [Fallback]';
+            executeCharlieTextDelivery(localMatch);
+          });
+      } else {
+        // Strict Local KB Mode: 100% offline execution, 0ms latency, never calls api.openai.com
+        const thinkingDelay = Math.floor(Math.random() * 200) + 450;
+        setTimeout(() => {
+          executeCharlieTextDelivery(localMatch);
+        }, thinkingDelay);
+      }
     }
 
     // Delegated Click Listener for All Charlie Topic, Follow-up & Deep Link Buttons
@@ -6135,6 +6640,298 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
         }, 300);
       });
     }
+
+    // 2b. Initialize Charlie Dual-Engine Controller & Settings Modal (BYOK)
+    function initCharlieLlmSettings() {
+      const llmBtn = document.getElementById('aiLlmConfigBtn');
+      const llmLabel = document.getElementById('aiLlmModeLabel');
+      const modal = document.getElementById('aiConfigModal');
+      const closeBtn = document.getElementById('aiConfigCloseBtn');
+      const cancelBtn = document.getElementById('aiConfigCancelBtn');
+      const saveBtn = document.getElementById('aiConfigSaveBtn');
+      const clearBtn = document.getElementById('aiClearKeyBtn');
+      const testBtn = document.getElementById('aiTestKeyBtn');
+      const keyInput = document.getElementById('aiOpenAiKeyInput');
+      const keyToggleBtn = document.getElementById('aiKeyToggleBtn');
+      const modelSelect = document.getElementById('aiOpenAiModelSelect');
+      const customModelWrapper = document.getElementById('aiCustomModelWrapper');
+      const customModelInput = document.getElementById('aiCustomModelInput');
+      const radioLocal = document.getElementById('radioModeLocal');
+      const radioOpenAI = document.getElementById('radioModeOpenAI');
+      const modeCardLocal = document.getElementById('modeCardLocal');
+      const modeCardOpenAI = document.getElementById('modeCardOpenAI');
+      const openAiSettingsBox = document.getElementById('aiOpenAiSettings');
+      const connStatus = document.getElementById('aiConnStatus');
+      const connIcon = document.getElementById('aiConnIcon');
+      const connMsg = document.getElementById('aiConnMsg');
+      const termTitleSpan = document.querySelector('.ai-bot-terminal .ai-bot-title span');
+
+      const STANDARD_MODELS = ['gpt-4o-mini', 'gpt-4o', 'o3-mini', 'o1', 'o1-mini'];
+
+      function getActiveModel() {
+        if (modelSelect && modelSelect.value === 'custom') {
+          const val = customModelInput ? customModelInput.value.trim() : '';
+          return val || 'gpt-4o-mini';
+        }
+        return modelSelect ? modelSelect.value : 'gpt-4o-mini';
+      }
+
+      function updateUIState() {
+        const isLive = (charlieAiConfig.mode === 'openai' && charlieAiConfig.apiKey.trim().length > 0);
+        if (llmBtn) {
+          llmBtn.classList.toggle('openai-active', isLive);
+        }
+        if (llmLabel) {
+          llmLabel.textContent = isLive ? `OPENAI: ${charlieAiConfig.model.replace('gpt-', '')}` : 'LOCAL KB';
+        }
+        if (aiBotStatusPill) {
+          aiBotStatusPill.classList.toggle('openai-mode', isLive);
+          const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
+          if (text) {
+            text.textContent = isLive ? `OPENAI [${charlieAiConfig.model}] ONLINE` : 'LOCAL KB READY';
+          }
+        }
+        if (termTitleSpan) {
+          termTitleSpan.textContent = isLive 
+            ? `charlie-ai --session=assistant-console [OPENAI]`
+            : `charlie-ai --session=assistant-console [LOCAL-KB]`;
+        }
+      }
+
+      function populateModalFields() {
+        if (keyInput) keyInput.value = charlieAiConfig.apiKey || '';
+        
+        const curModel = charlieAiConfig.model || 'gpt-4o-mini';
+        if (STANDARD_MODELS.includes(curModel)) {
+          if (modelSelect) modelSelect.value = curModel;
+          if (customModelWrapper) customModelWrapper.classList.add('hidden');
+          if (customModelInput) customModelInput.value = '';
+        } else {
+          if (modelSelect) modelSelect.value = 'custom';
+          if (customModelWrapper) customModelWrapper.classList.remove('hidden');
+          if (customModelInput) customModelInput.value = curModel;
+        }
+
+        if (charlieAiConfig.mode === 'openai') {
+          if (radioOpenAI) radioOpenAI.checked = true;
+          if (modeCardOpenAI) modeCardOpenAI.classList.add('active');
+          if (modeCardLocal) modeCardLocal.classList.remove('active');
+          if (openAiSettingsBox) openAiSettingsBox.classList.remove('hidden');
+        } else {
+          if (radioLocal) radioLocal.checked = true;
+          if (modeCardLocal) modeCardLocal.classList.add('active');
+          if (modeCardOpenAI) modeCardOpenAI.classList.remove('active');
+          if (openAiSettingsBox) openAiSettingsBox.classList.add('hidden');
+        }
+        if (connStatus) connStatus.classList.add('hidden');
+      }
+
+      function openModal() {
+        populateModalFields();
+        if (modal) modal.classList.remove('hidden');
+      }
+
+      function closeModal() {
+        if (modal) modal.classList.add('hidden');
+      }
+
+      if (llmBtn) llmBtn.addEventListener('click', openModal);
+      if (closeBtn) closeBtn.addEventListener('click', closeModal);
+      if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
+
+      // Model Select Switcher (toggles custom input)
+      if (modelSelect) {
+        modelSelect.addEventListener('change', () => {
+          if (modelSelect.value === 'custom') {
+            if (customModelWrapper) {
+              customModelWrapper.classList.remove('hidden');
+              if (customModelInput) {
+                customModelInput.focus();
+                if (!customModelInput.value) customModelInput.value = 'gpt-4o';
+              }
+            }
+          } else {
+            if (customModelWrapper) customModelWrapper.classList.add('hidden');
+          }
+        });
+      }
+
+      // Engine Radio Switching
+      if (radioLocal) {
+        radioLocal.addEventListener('change', () => {
+          if (radioLocal.checked) {
+            if (modeCardLocal) modeCardLocal.classList.add('active');
+            if (modeCardOpenAI) modeCardOpenAI.classList.remove('active');
+            if (openAiSettingsBox) openAiSettingsBox.classList.add('hidden');
+          }
+        });
+      }
+
+      if (radioOpenAI) {
+        radioOpenAI.addEventListener('change', () => {
+          if (radioOpenAI.checked) {
+            if (modeCardOpenAI) modeCardOpenAI.classList.add('active');
+            if (modeCardLocal) modeCardLocal.classList.remove('active');
+            if (openAiSettingsBox) openAiSettingsBox.classList.remove('hidden');
+          }
+        });
+      }
+
+      // Password Toggle
+      if (keyToggleBtn && keyInput) {
+        keyToggleBtn.addEventListener('click', () => {
+          const isPass = keyInput.type === 'password';
+          keyInput.type = isPass ? 'text' : 'password';
+          keyToggleBtn.textContent = isPass ? '🔒' : '👁️';
+        });
+      }
+
+      // Test Connection Button with Intelligent Typo Auto-Fix
+      if (testBtn) {
+        testBtn.addEventListener('click', async () => {
+          const key = keyInput ? keyInput.value.trim() : '';
+          const model = getActiveModel();
+          if (!key) {
+            if (connStatus && connMsg) {
+              connStatus.className = 'ai-conn-status error';
+              if (connIcon) connIcon.textContent = '❌';
+              connMsg.innerHTML = 'Please paste your OpenAI API key before testing.';
+              connStatus.classList.remove('hidden');
+            }
+            return;
+          }
+
+          testBtn.disabled = true;
+          if (connStatus && connMsg) {
+            connStatus.className = 'ai-conn-status loading';
+            if (connIcon) connIcon.textContent = '⏳';
+            connMsg.innerHTML = `Validating key with OpenAI (${escapeHtml(model)})...`;
+            connStatus.classList.remove('hidden');
+          }
+
+          const result = await testOpenAiKeyConnection(key, model);
+          testBtn.disabled = false;
+
+          if (connStatus && connMsg) {
+            if (result.success) {
+              connStatus.className = 'ai-conn-status success';
+              if (connIcon) connIcon.textContent = '✅';
+              connMsg.innerHTML = escapeHtml(result.message);
+            } else if (result.isModelNotFound && result.suggestedModel) {
+              connStatus.className = 'ai-conn-status error';
+              if (connIcon) connIcon.textContent = '💡';
+              connMsg.innerHTML = `
+                <div class="ai-autofix-box">
+                  <div>❌ <strong>Model Error:</strong> ${escapeHtml(result.message)}</div>
+                  <div style="color:#fde68a;font-size:0.73rem;">${result.note}</div>
+                  <button type="button" class="ai-autofix-btn" id="aiAutoFixBtn">
+                    <span>⚡ Auto-Fix to "${escapeHtml(result.suggestedModel)}" &amp; Test</span>
+                  </button>
+                </div>
+              `;
+
+              // Bind interactive click event to auto-correct the model and re-test immediately
+              const autoFixBtn = document.getElementById('aiAutoFixBtn');
+              if (autoFixBtn) {
+                autoFixBtn.addEventListener('click', () => {
+                  const fixed = result.suggestedModel;
+                  if (STANDARD_MODELS.includes(fixed)) {
+                    if (modelSelect) modelSelect.value = fixed;
+                    if (customModelWrapper) customModelWrapper.classList.add('hidden');
+                  } else {
+                    if (modelSelect) modelSelect.value = 'custom';
+                    if (customModelWrapper) customModelWrapper.classList.remove('hidden');
+                    if (customModelInput) customModelInput.value = fixed;
+                  }
+                  // Automatically trigger test with corrected model
+                  testBtn.click();
+                });
+              }
+            } else {
+              connStatus.className = 'ai-conn-status error';
+              if (connIcon) connIcon.textContent = '❌';
+              connMsg.innerHTML = escapeHtml(result.message);
+            }
+          }
+        });
+      }
+
+      // Save and Activate Button
+      if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+          const selectedMode = radioOpenAI && radioOpenAI.checked ? 'openai' : 'local';
+          const enteredKey = keyInput ? keyInput.value.trim() : '';
+          const selectedModel = getActiveModel();
+
+          if (selectedMode === 'openai' && !enteredKey) {
+            if (connStatus && connMsg) {
+              connStatus.className = 'ai-conn-status error';
+              if (connIcon) connIcon.textContent = '⚠️';
+              connMsg.innerHTML = 'To activate OpenAI Mode, please enter a valid API key, or select Local Knowledge Base.';
+              connStatus.classList.remove('hidden');
+            }
+            return;
+          }
+
+          charlieAiConfig.mode = selectedMode;
+          charlieAiConfig.apiKey = enteredKey;
+          charlieAiConfig.model = selectedModel;
+
+          localStorage.setItem('charlie_ai_mode', selectedMode);
+          localStorage.setItem('charlie_openai_key', enteredKey);
+          localStorage.setItem('charlie_openai_model', selectedModel);
+
+          updateUIState();
+          closeModal();
+
+          if (selectedMode === 'openai' && window.portfolioCharlie) {
+            window.portfolioCharlie.triggerVictory();
+          }
+        });
+      }
+
+      // Clear Button
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          charlieAiConfig.mode = 'local';
+          charlieAiConfig.apiKey = '';
+          charlieAiConfig.model = 'gpt-4o-mini';
+
+          localStorage.removeItem('charlie_openai_key');
+          localStorage.setItem('charlie_ai_mode', 'local');
+          localStorage.setItem('charlie_openai_model', 'gpt-4o-mini');
+
+          if (keyInput) keyInput.value = '';
+          if (modelSelect) modelSelect.value = 'gpt-4o-mini';
+          if (customModelWrapper) customModelWrapper.classList.add('hidden');
+          if (customModelInput) customModelInput.value = '';
+          if (radioLocal) radioLocal.checked = true;
+          if (modeCardLocal) modeCardLocal.classList.add('active');
+          if (modeCardOpenAI) modeCardOpenAI.classList.remove('active');
+          if (openAiSettingsBox) openAiSettingsBox.classList.add('hidden');
+          if (connStatus) connStatus.classList.add('hidden');
+
+          updateUIState();
+        });
+      }
+
+      // Initialize UI on load
+      updateUIState();
+    }
+
+    initCharlieLlmSettings();
 
     // 3. Setup Floating Quick-Launcher for Charlie (AI)
     const floatingCharlieBtn = document.getElementById('floatingCharlieBtn');

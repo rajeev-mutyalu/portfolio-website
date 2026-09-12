@@ -3833,22 +3833,33 @@
         const queryItem = SIM_QUERIES[simQueryIdx % SIM_QUERIES.length];
         simQueryIdx++;
 
+        const bottomX = canvas.clientWidth / 2;
+        const bottomY = canvas.clientHeight - 65;
+        const centerX = canvas.clientWidth / 2;
+        const centerY = canvas.clientHeight * 0.46;
+
         if (chatStatusText) {
-          chatStatusText.innerHTML = `🤔 <span style="color:#f59e0b;">USER QUERY:</span> "${queryItem.q}" <br><span style="color:#94a3b8;">Charlie thinking...</span>`;
+          chatStatusText.innerHTML = `🤔 <span style="color:#f59e0b;">USER QUERY:</span> "${queryItem.q}" <br><span style="color:#00f2fe;">Charlie dashing to writing position...</span>`;
           chatStatusText.scrollTop = 0;
         }
-        charlie.triggerThinking();
 
+        // 1. Dash to writing position FIRST!
+        charlie.triggerWriteDashDemo(bottomX, bottomY);
+
+        // 2. Once arrived at bottom-center (~220ms), Charlie THINKS at the writing position!
         setTimeout(() => {
-          // Charlie supersonic dashes to BOTTOM-CENTER of stage canvas to begin writing!
-          const bottomX = canvas.clientWidth / 2;
-          const bottomY = canvas.clientHeight - 65;
-          const centerX = canvas.clientWidth / 2;
-          const centerY = canvas.clientHeight * 0.46;
+          charlie.state = 'thinking';
+          charlie.face = 'thinking';
+          charlie.x = bottomX;
+          charlie.y = bottomY;
+          charlie.facing = 1;
+          hudMode.textContent = '🤔 THINKING AT WRITING POSITION!';
+          telState.textContent = 'THINKING (AT WRITING POS)';
+          if (chatStatusText) {
+            chatStatusText.innerHTML = `🤔 <span style="color:#f59e0b;">USER QUERY:</span> "${queryItem.q}" <br><span style="color:#f59e0b;">Charlie thinking at writing position...</span>`;
+          }
 
-          charlie.triggerWriteDashDemo(bottomX, bottomY);
-
-          // Allow ~240ms for Charlie to complete dash to bottom-center before text begins streaming!
+          // 3. After thinking delay (~650ms), begin writing and ascending!
           setTimeout(() => {
             charlie.state = 'writing';
             charlie.face = 'writing';

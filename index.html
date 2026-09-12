@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=133" />
+  <link rel="stylesheet" href="style.css?v=135" />
 
   <!-- Local Dev Environment Detection (Mobile Simulator only active on local dev server) -->
   <script>
@@ -476,7 +476,13 @@
           </svg>
           <span>charlie-ai --session=assistant-console [LOCAL-KB]</span>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="ai-bot-header-actions">
+          <button type="button" class="ai-bot-llm-btn" id="aiLlmConfigBtn"
+            title="Configure AI Model / Connect OpenAI Key" aria-label="OpenAI Model Settings">
+            <span class="ai-llm-icon">🧠</span>
+            <span class="ai-llm-text" id="aiLlmModeLabel">LOCAL KB</span>
+            <span class="ai-llm-gear">⚙️</span>
+          </button>
           <button type="button" class="ai-bot-sound-btn" id="aiChatSoundToggle" title="Toggle Chat Audio &amp; SFX"
             aria-label="Toggle Chat Sound">
             <span class="ai-sound-icon" id="aiChatSoundIcon">🔊</span>
@@ -484,10 +490,6 @@
           </button>
           <a href="charlie-lab.html" target="_blank" class="ai-bot-lab-link"
             title="Open Interactive Cyber Charlie Character &amp; Motion Lab">🧪 Character Lab</a>
-          <div class="ai-bot-status-pill" id="aiBotStatusPill">
-            <span class="ai-status-pulse"></span>
-            <span class="ai-status-text">LOCAL KB READY</span>
-          </div>
         </div>
       </div>
 
@@ -1456,6 +1458,121 @@
   </div>
 
   <!-- =========================================================================
+       🧠 Cyber Charlie AI Engine & OpenAI Configuration Modal (BYOK)
+       ========================================================================= -->
+  <div class="ai-config-modal-overlay hidden" id="aiConfigModal" role="dialog" aria-modal="true" aria-labelledby="aiConfigTitle">
+    <div class="ai-config-modal glass-card">
+      <div class="ai-config-header">
+        <div class="ai-config-brand">
+          <span class="ai-config-brand-icon">🧠</span>
+          <div>
+            <h3 class="ai-config-title" id="aiConfigTitle">CHARLIE INTELLIGENCE ENGINE</h3>
+            <span class="ai-config-subtitle">Dual-Mode AI Controller &bull; Local KB / OpenAI Live BYOK</span>
+          </div>
+        </div>
+        <button type="button" class="ai-config-close" id="aiConfigCloseBtn" aria-label="Close Settings">&times;</button>
+      </div>
+
+      <div class="ai-config-body">
+        <!-- Mode Switcher Cards -->
+        <div class="ai-engine-modes">
+          <label class="ai-mode-card active" id="modeCardLocal">
+            <input type="radio" name="charlieEngineMode" value="local" id="radioModeLocal" checked />
+            <div class="ai-mode-card-inner">
+              <div class="ai-mode-header">
+                <span class="ai-mode-tag tag-local">LIGHTNING FAST</span>
+                <span class="ai-mode-status-dot"></span>
+              </div>
+              <div class="ai-mode-name">⚡ Local Knowledge Base</div>
+              <p class="ai-mode-desc">0ms instantaneous local response. Grounded directly in Rajeev's verified portfolio &amp; technical arsenal. Zero API key required.</p>
+            </div>
+          </label>
+
+          <label class="ai-mode-card" id="modeCardOpenAI">
+            <input type="radio" name="charlieEngineMode" value="openai" id="radioModeOpenAI" />
+            <div class="ai-mode-card-inner">
+              <div class="ai-mode-header">
+                <span class="ai-mode-tag tag-openai">LIVE LLM + RAG</span>
+                <span class="ai-mode-status-dot"></span>
+              </div>
+              <div class="ai-mode-name">🧠 OpenAI Live Brain (BYOK)</div>
+              <p class="ai-mode-desc">Powered by OpenAI models. Charlie reasons dynamically over Rajeev's full 20-year career with fluid natural conversation.</p>
+            </div>
+          </label>
+        </div>
+
+        <!-- OpenAI Settings Section (Visible when OpenAI Mode selected) -->
+        <div class="ai-openai-settings hidden" id="aiOpenAiSettings">
+          <div class="ai-field-group">
+            <div class="ai-field-label-row">
+              <label for="aiOpenAiKeyInput">OpenAI API Key</label>
+              <span class="ai-field-tip">Never leaves your browser</span>
+            </div>
+            <div class="ai-key-input-wrapper">
+              <input type="password" id="aiOpenAiKeyInput" class="ai-text-input" placeholder="sk-proj-..." autocomplete="off" spellcheck="false" />
+              <button type="button" class="ai-key-toggle-btn" id="aiKeyToggleBtn" title="Show/Hide API Key">👁️</button>
+            </div>
+            <div class="ai-key-hint">
+              <span>Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com</a></span>
+            </div>
+          </div>
+
+          <div class="ai-field-row">
+            <div class="ai-field-group flex-1">
+              <label for="aiOpenAiModelSelect">Model Selection</label>
+              <select id="aiOpenAiModelSelect" class="ai-select-input">
+                <option value="gpt-4o-mini" selected>gpt-4o-mini (Recommended • Fast &amp; Cheap)</option>
+                <option value="gpt-4o">gpt-4o (High Precision • Flagship)</option>
+                <option value="o3-mini">o3-mini (High Reasoning)</option>
+                <option value="o1">o1 (Frontier Reasoning)</option>
+                <option value="o1-mini">o1-mini (Fast Reasoning)</option>
+                <option value="custom">⚙️ Custom Model ID (e.g. gpt-5, fine-tunes)...</option>
+              </select>
+            </div>
+            <div class="ai-field-group btn-align">
+              <button type="button" class="ai-test-btn" id="aiTestKeyBtn">
+                <span class="ai-test-icon">⚡</span>
+                <span class="ai-test-text">Test Key</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom Model Identifier Input (Unhides when Custom is selected) -->
+          <div class="ai-field-group hidden" id="aiCustomModelWrapper">
+            <div class="ai-field-label-row">
+              <label for="aiCustomModelInput">Custom Model Identifier</label>
+              <span class="ai-field-tip">Type any model ID</span>
+            </div>
+            <input type="text" id="aiCustomModelInput" class="ai-text-input" placeholder="e.g. gpt-5, o3, ft:gpt-4o-mini:..." autocomplete="off" spellcheck="false" />
+          </div>
+
+          <!-- Connection Status Alert -->
+          <div class="ai-conn-status hidden" id="aiConnStatus">
+            <span class="ai-conn-icon" id="aiConnIcon">⚡</span>
+            <span class="ai-conn-msg" id="aiConnMsg">Testing connection to OpenAI...</span>
+          </div>
+        </div>
+
+        <!-- Security & Privacy Banner -->
+        <div class="ai-security-banner">
+          <span class="ai-sec-icon">🔒</span>
+          <div class="ai-sec-text">
+            <strong>Client-Side BYOK Security Guarantee:</strong> Your OpenAI API key is stored strictly inside your browser's private <code>localStorage</code>. It is directly transmitted via TLS to <code>api.openai.com</code> and is never logged, stored, or visible to any third-party server.
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-config-footer">
+        <button type="button" class="ai-config-clear-btn" id="aiClearKeyBtn">Clear Key &amp; Reset</button>
+        <div class="ai-footer-right">
+          <button type="button" class="ai-config-cancel-btn" id="aiConfigCancelBtn">Cancel</button>
+          <button type="button" class="ai-config-save-btn" id="aiConfigSaveBtn">Save &amp; Activate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
        📱 Interactive Mobile Resolution Simulator & Device Inspector
        ========================================================================= -->
   <div class="mobile-sim-overlay hidden" id="mobileSimOverlay" role="dialog" aria-modal="true"
@@ -1558,7 +1675,7 @@
     <kbd class="floating-sim-kbd">M</kbd>
   </button>
 
-  <script src="app.js?v=133"></script>
+  <script src="app.js?v=142"></script>
 </body>
 
 </html>
