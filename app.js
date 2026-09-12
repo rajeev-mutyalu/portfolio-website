@@ -676,8 +676,8 @@
 
       if (streamEl) {
         const sRect = streamEl.getBoundingClientRect();
-        // 1. Horizontal: inside chat window, comfortably towards the right, just to the left of the scrollbar
-        const anchorX = Math.min(window.innerWidth - 44, Math.max(44, sRect.right - 48));
+        // 1. Horizontal: inside chat window, comfortably towards the right, shifted 5px right from previous anchor
+        const anchorX = Math.min(window.innerWidth - 39, Math.max(44, sRect.right - 43));
 
         // 2. Vertical: inside the chat window area, down below the terminal header & "LOCAL KB READY" pill
         // Natural center is sRect.top + 62 (head at sRect.top + 34, cleanly down inside chat stream)
@@ -691,7 +691,7 @@
         return { x: anchorX, y: anchorY, isVisible };
       } else if (terminalEl) {
         const tRect = terminalEl.getBoundingClientRect();
-        const anchorX = Math.min(window.innerWidth - 44, Math.max(44, tRect.right - 48));
+        const anchorX = Math.min(window.innerWidth - 39, Math.max(44, tRect.right - 43));
         const minAllowedY = navBottom + 44;
         const maxAllowedY = tRect.bottom - 45;
         const naturalY = tRect.top + 105;
@@ -699,7 +699,7 @@
         const isVisible = (tRect.bottom > navBottom + 65 && tRect.top < window.innerHeight - 60);
         return { x: anchorX, y: anchorY, isVisible };
       }
-      return { x: window.innerWidth - 80, y: 250, isVisible: false };
+      return { x: window.innerWidth - 75, y: 250, isVisible: false };
     }
 
     drawAfterimages(c) {
@@ -7016,10 +7016,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const terminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
       if (!terminal) return;
 
-      const sidebarToggleBtn = document.getElementById('aiSidebarToggleBtn');
-      const panelToggleText = document.getElementById('aiPanelToggleText');
-      const panelIconSvg = sidebarToggleBtn ? sidebarToggleBtn.querySelector('.ai-panel-icon-svg') : null;
-      const profileIconSvg = sidebarToggleBtn ? sidebarToggleBtn.querySelector('.ai-profile-icon-svg') : null;
+      const profileReturnBtn = document.getElementById('aiProfileReturnBtn');
+      const sidebarCollapseBtn = document.getElementById('aiSidebarCollapseBtn');
+      const sidebarExpandTab = document.getElementById('aiSidebarExpandTab');
 
       const maxBtn = document.getElementById('aiTerminalMaximizeBtn');
       const maxText = document.getElementById('aiMaxToggleText');
@@ -7038,31 +7037,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       updateNavHeightVar();
       window.addEventListener('resize', updateNavHeightVar, { passive: true });
 
-      // Helper to update the Panel / Profile button state
-      function syncHeaderButtons(isExpanded, isCollapsed) {
-        if (!sidebarToggleBtn) return;
-        if (isExpanded) {
-          sidebarToggleBtn.classList.add('ai-profile-mode');
-          sidebarToggleBtn.classList.remove('panel-closed');
-          if (panelIconSvg) panelIconSvg.style.display = 'none';
-          if (profileIconSvg) profileIconSvg.style.display = 'block';
-          if (panelToggleText) panelToggleText.textContent = 'Profile';
-          sidebarToggleBtn.title = 'Return to Profile (Restore Terminal View - Esc)';
-        } else {
-          sidebarToggleBtn.classList.remove('ai-profile-mode');
-          sidebarToggleBtn.classList.toggle('panel-closed', isCollapsed);
-          if (panelIconSvg) panelIconSvg.style.display = 'block';
-          if (profileIconSvg) profileIconSvg.style.display = 'none';
-          if (panelToggleText) panelToggleText.textContent = isCollapsed ? 'Open Panel' : 'Panel';
-          sidebarToggleBtn.title = isCollapsed ? 'Open Arsenal Directory (Left Panel)' : 'Close Arsenal Directory (Left Panel)';
-        }
-      }
-
       // --- 1. Left Panel (Sidebar) Collapse / Expand ---
       function setSidebarCollapsed(collapsed) {
         terminal.classList.toggle('sidebar-collapsed', collapsed);
-        const isExpanded = terminal.classList.contains('is-fullscreen');
-        syncHeaderButtons(isExpanded, collapsed);
         try {
           localStorage.setItem('charlie_sidebar_collapsed', collapsed ? 'true' : 'false');
         } catch (e) {}
@@ -7080,6 +7057,24 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         setSidebarCollapsed(!isCollapsed);
       }
 
+      // Small arrow inside sidebar header closes the menu
+      if (sidebarCollapseBtn) {
+        sidebarCollapseBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setSidebarCollapsed(true);
+        });
+      }
+
+      // Quick tab inside chat area re-opens Arsenal Directory
+      if (sidebarExpandTab) {
+        sidebarExpandTab.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setSidebarCollapsed(false);
+        });
+      }
+
       // Restore saved sidebar preference if available
       try {
         const savedCollapsed = localStorage.getItem('charlie_sidebar_collapsed');
@@ -7093,9 +7088,6 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         updateNavHeightVar();
         terminal.classList.toggle('is-fullscreen', fullscreen);
         document.body.classList.toggle('charlie-fullscreen-active', fullscreen);
-
-        const isCollapsed = terminal.classList.contains('sidebar-collapsed');
-        syncHeaderButtons(fullscreen, isCollapsed);
 
         if (maxBtn) {
           maxBtn.classList.toggle('is-maximized', fullscreen);
@@ -7128,25 +7120,17 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         setTerminalFullscreen(!isFullscreen);
       }
 
-      // Panel button: Toggles sidebar in normal view; acts as Return to Profile in expanded view!
-      if (sidebarToggleBtn) {
-        sidebarToggleBtn.addEventListener('click', (e) => {
+      // Profile button: Exits maximize mode and returns back to the first page (Profile)
+      if (profileReturnBtn) {
+        profileReturnBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          if (terminal.classList.contains('is-fullscreen')) {
-            setTerminalFullscreen(false);
-            const targetSection = document.getElementById('ai-assistant') || document.getElementById('charlie');
-            if (targetSection) {
-              const navOffset = 76;
-              const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset - navOffset;
-              window.scrollTo({ top: Math.max(0, sectionTop), behavior: 'smooth' });
-            }
-          } else {
-            toggleSidebar();
-          }
+          setTerminalFullscreen(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       }
 
+      // Maximize / Restore button: Toggles fullscreen; Restore just reduces size and stays in chat window
       if (maxBtn) {
         maxBtn.addEventListener('click', (e) => {
           e.preventDefault();

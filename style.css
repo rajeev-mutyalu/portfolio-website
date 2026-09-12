@@ -2916,18 +2916,18 @@ body.in-simulator #floatingCharlieBtn {
   transform: translateY(-1px);
 }
 
-/* Sidebar (Left Panel) Toggle Button in Charlie Header */
-.ai-bot-sidebar-toggle-btn {
-  display: inline-flex;
+/* Return to Profile Button (Active ONLY in Charlie Full Screen View) */
+.ai-bot-profile-btn {
+  display: none;
   align-items: center;
   gap: 5px;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 0.68rem;
-  font-weight: 700;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.08);
-  border: 1px solid rgba(56, 189, 248, 0.32);
-  padding: 2px 8px;
+  font-weight: 800;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  padding: 2px 9px;
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -2936,38 +2936,16 @@ body.in-simulator #floatingCharlieBtn {
   line-height: 1.25;
 }
 
-.ai-bot-sidebar-toggle-btn:hover {
-  background: rgba(56, 189, 248, 0.22);
-  border-color: #38bdf8;
-  color: #ffffff;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
-  transform: translateY(-1px);
-}
-
-.ai-bot-sidebar-toggle-btn.panel-closed {
-  color: #94a3b8;
-  background: rgba(148, 163, 184, 0.1);
-  border-color: rgba(148, 163, 184, 0.28);
-}
-
-.ai-bot-sidebar-toggle-btn.panel-closed:hover {
-  color: #38bdf8;
-  border-color: #38bdf8;
-}
-
-/* Profile Return Mode (When Terminal is Full Screen) */
-.ai-bot-sidebar-toggle-btn.ai-profile-mode {
-  color: #f59e0b;
-  background: rgba(245, 158, 11, 0.12);
-  border-color: rgba(245, 158, 11, 0.45);
-  font-weight: 800;
-}
-
-.ai-bot-sidebar-toggle-btn.ai-profile-mode:hover {
+.ai-bot-profile-btn:hover {
   background: rgba(245, 158, 11, 0.26);
   border-color: #f59e0b;
   color: #ffffff;
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+
+.ai-bot-terminal.is-fullscreen .ai-bot-profile-btn {
+  display: inline-flex !important;
 }
 
 /* Maximize / Full Screen Button in Charlie Header */
@@ -3665,6 +3643,28 @@ body.in-simulator #floatingCharlieBtn {
   --navbar-actual-height: 62px;
 }
 
+body.charlie-fullscreen-active {
+  overflow: hidden !important;
+}
+
+/* Elevate #ai-assistant above all sibling sections on the page */
+body.charlie-fullscreen-active #ai-assistant {
+  z-index: 998 !important;
+  position: relative !important;
+}
+
+/* Hide all other sections while Charlie is Full Screen so Studio Pipeline Architecture & other sections cannot overlap or bleed through */
+body.charlie-fullscreen-active #architecture,
+body.charlie-fullscreen-active #conform,
+body.charlie-fullscreen-active #featured-projects,
+body.charlie-fullscreen-active #systems,
+body.charlie-fullscreen-active #filmography,
+body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
+
 .ai-bot-terminal.is-fullscreen {
   position: fixed !important;
   top: var(--navbar-actual-height, 62px) !important;
@@ -3681,13 +3681,9 @@ body.in-simulator #floatingCharlieBtn {
   border-right: none !important;
   border-bottom: none !important;
   border-top: 1px solid rgba(56, 189, 248, 0.45) !important;
-  z-index: 995 !important;
+  z-index: 999 !important;
   box-shadow: 0 20px 80px rgba(0, 0, 0, 0.98), 0 0 50px rgba(56, 189, 248, 0.2) !important;
   background: rgba(4, 7, 16, 0.98) !important;
-}
-
-body.charlie-fullscreen-active {
-  overflow: hidden !important;
 }
 
 .ai-bot-terminal.is-fullscreen .ai-bot-body-split {
@@ -3727,7 +3723,7 @@ body.charlie-fullscreen-active {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 8px 10px 8px;
+  padding: 6px 8px 10px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   margin-bottom: 8px;
 }
@@ -3738,16 +3734,60 @@ body.charlie-fullscreen-active {
   color: #64748b;
   font-weight: 700;
   letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
-.ai-sidebar-count {
-  font-size: 0.65rem;
-  font-family: var(--font-mono);
+.ai-sidebar-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  padding: 0;
+}
+
+.ai-sidebar-collapse-btn:hover {
+  color: #ffffff;
+  background: rgba(56, 189, 248, 0.22);
+  border-color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+
+.ai-sidebar-expand-tab {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  margin: 10px 16px 0 16px;
+  align-self: flex-start;
+  background: rgba(14, 22, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  border-radius: 6px;
   color: #38bdf8;
-  background: rgba(56, 189, 248, 0.12);
-  padding: 1px 6px;
-  border-radius: 10px;
-  border: 1px solid rgba(56, 189, 248, 0.25);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.ai-sidebar-expand-tab:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+.ai-bot-terminal.sidebar-collapsed .ai-sidebar-expand-tab {
+  display: inline-flex;
+  animation: msgFadeIn 0.25s ease forwards;
 }
 
 .ai-sidebar-nav {
