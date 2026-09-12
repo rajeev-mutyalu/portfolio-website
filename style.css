@@ -2955,6 +2955,21 @@ body.in-simulator #floatingCharlieBtn {
   border-color: #38bdf8;
 }
 
+/* Profile Return Mode (When Terminal is Full Screen) */
+.ai-bot-sidebar-toggle-btn.ai-profile-mode {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.45);
+  font-weight: 800;
+}
+
+.ai-bot-sidebar-toggle-btn.ai-profile-mode:hover {
+  background: rgba(245, 158, 11, 0.26);
+  border-color: #f59e0b;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
 /* Maximize / Full Screen Button in Charlie Header */
 .ai-bot-maximize-btn {
   display: inline-flex;
@@ -3626,63 +3641,21 @@ body.in-simulator #floatingCharlieBtn {
   pointer-events: none !important;
 }
 
-.ai-sidebar-header-info {
+.ai-sidebar-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  padding: 6px 8px 10px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 8px;
 }
 
-.ai-sidebar-collapse-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #94a3b8;
-  cursor: pointer;
-  transition: all 0.18s ease;
-  padding: 0;
-}
-
-.ai-sidebar-collapse-btn:hover {
-  color: #ffffff;
-  background: rgba(56, 189, 248, 0.22);
-  border-color: #38bdf8;
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
-}
-
-.ai-sidebar-expand-tab {
-  display: none;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  margin: 10px 16px 0 16px;
-  align-self: flex-start;
-  background: rgba(14, 22, 42, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.32);
-  border-radius: 6px;
-  color: #38bdf8;
+.ai-sidebar-title {
+  font-size: 0.68rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-}
-
-.ai-sidebar-expand-tab:hover {
-  background: rgba(56, 189, 248, 0.2);
-  border-color: #38bdf8;
-  color: #ffffff;
-  transform: translateX(2px);
-}
-
-.ai-bot-terminal.sidebar-collapsed .ai-sidebar-expand-tab {
-  display: inline-flex;
-  animation: msgFadeIn 0.25s ease forwards;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -3922,6 +3895,45 @@ body.charlie-fullscreen-active {
   gap: 4px;
   flex: 1;
   min-width: 0;
+}
+
+.ai-msg-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.ai-msg-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  line-height: 1.2;
+}
+
+.ai-msg-copy-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  transform: translateY(-1px);
+}
+
+.ai-msg-copy-btn.copied {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #10b981;
 }
 
 .ai-msg-author {

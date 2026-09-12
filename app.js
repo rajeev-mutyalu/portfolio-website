@@ -538,7 +538,7 @@
       this.escortMaxDuration = 80; // ~1.3s companion flight
       this.sectionActive = false;
 
-      this.setEmote(`ESCORTING TO ${this.escortSectionName.toUpperCase()}! 🚀`, 110);
+      // Companion flight begins smoothly without intrusive blocking speech bubbles over chat
       this.addSparks(this.x, this.y, '#00f2fe', 26);
       if (typeof window.portfolioSoundEngine?.playJump === 'function' && !window.portfolioSoundEngine.isMuted) {
         window.portfolioSoundEngine.playJump();
@@ -1054,7 +1054,6 @@
           this.victoryTimer = 0;
           this.twirlAngle = 0;
           this.face = 'victory';
-          this.setEmote(`ARRIVED AT ${this.escortSectionName.toUpperCase()}! 🌟`, 90);
           this.addSparks(this.x, this.y, '#f59e0b', 26);
           this.addSparks(this.x, this.y, '#00f2fe', 20);
 
@@ -6368,7 +6367,16 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         botMsgDiv.innerHTML = `
           <div class="ai-msg-avatar ai-bot-avatar" title="Cyber Charlie (AI Assistant)">${CYBER_CHARLIE_AVATAR_SVG}</div>
           <div class="ai-msg-body">
-            <div class="ai-msg-author">Charlie <span>${escapeHtml(match.title || "Rajeev's AI Assistant")}</span></div>
+            <div class="ai-msg-header-row">
+              <div class="ai-msg-author">Charlie <span>${escapeHtml(match.title || "Rajeev's AI Assistant")}</span></div>
+              <button type="button" class="ai-msg-copy-btn" title="Copy response to clipboard" aria-label="Copy Response">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
             <div class="ai-msg-content"></div>
           </div>
         `;
@@ -7009,9 +7017,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       if (!terminal) return;
 
       const sidebarToggleBtn = document.getElementById('aiSidebarToggleBtn');
-      const sidebarCollapseBtn = document.getElementById('aiSidebarCollapseBtn');
-      const sidebarExpandTab = document.getElementById('aiSidebarExpandTab');
       const panelToggleText = document.getElementById('aiPanelToggleText');
+      const panelIconSvg = sidebarToggleBtn ? sidebarToggleBtn.querySelector('.ai-panel-icon-svg') : null;
+      const profileIconSvg = sidebarToggleBtn ? sidebarToggleBtn.querySelector('.ai-profile-icon-svg') : null;
 
       const maxBtn = document.getElementById('aiTerminalMaximizeBtn');
       const maxText = document.getElementById('aiMaxToggleText');
@@ -7030,21 +7038,35 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       updateNavHeightVar();
       window.addEventListener('resize', updateNavHeightVar, { passive: true });
 
+      // Helper to update the Panel / Profile button state
+      function syncHeaderButtons(isExpanded, isCollapsed) {
+        if (!sidebarToggleBtn) return;
+        if (isExpanded) {
+          sidebarToggleBtn.classList.add('ai-profile-mode');
+          sidebarToggleBtn.classList.remove('panel-closed');
+          if (panelIconSvg) panelIconSvg.style.display = 'none';
+          if (profileIconSvg) profileIconSvg.style.display = 'block';
+          if (panelToggleText) panelToggleText.textContent = 'Profile';
+          sidebarToggleBtn.title = 'Return to Profile (Restore Terminal View - Esc)';
+        } else {
+          sidebarToggleBtn.classList.remove('ai-profile-mode');
+          sidebarToggleBtn.classList.toggle('panel-closed', isCollapsed);
+          if (panelIconSvg) panelIconSvg.style.display = 'block';
+          if (profileIconSvg) profileIconSvg.style.display = 'none';
+          if (panelToggleText) panelToggleText.textContent = isCollapsed ? 'Open Panel' : 'Panel';
+          sidebarToggleBtn.title = isCollapsed ? 'Open Arsenal Directory (Left Panel)' : 'Close Arsenal Directory (Left Panel)';
+        }
+      }
+
       // --- 1. Left Panel (Sidebar) Collapse / Expand ---
       function setSidebarCollapsed(collapsed) {
         terminal.classList.toggle('sidebar-collapsed', collapsed);
-        if (sidebarToggleBtn) {
-          sidebarToggleBtn.classList.toggle('panel-closed', collapsed);
-          sidebarToggleBtn.title = collapsed ? 'Open Arsenal Directory (Left Panel)' : 'Close Arsenal Directory (Left Panel)';
-        }
-        if (panelToggleText) {
-          panelToggleText.textContent = collapsed ? 'Open Panel' : 'Panel';
-        }
+        const isExpanded = terminal.classList.contains('is-fullscreen');
+        syncHeaderButtons(isExpanded, collapsed);
         try {
           localStorage.setItem('charlie_sidebar_collapsed', collapsed ? 'true' : 'false');
         } catch (e) {}
 
-        // Allow layout to recalculate, then scroll stream & re-anchor Charlie
         setTimeout(() => {
           scrollStreamToBottom();
           if (window.portfolioCharlie && typeof window.portfolioCharlie.onResize === 'function') {
@@ -7056,30 +7078,6 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       function toggleSidebar() {
         const isCollapsed = terminal.classList.contains('sidebar-collapsed');
         setSidebarCollapsed(!isCollapsed);
-      }
-
-      if (sidebarToggleBtn) {
-        sidebarToggleBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          toggleSidebar();
-        });
-      }
-
-      if (sidebarCollapseBtn) {
-        sidebarCollapseBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setSidebarCollapsed(true);
-        });
-      }
-
-      if (sidebarExpandTab) {
-        sidebarExpandTab.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setSidebarCollapsed(false);
-        });
       }
 
       // Restore saved sidebar preference if available
@@ -7095,6 +7093,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         updateNavHeightVar();
         terminal.classList.toggle('is-fullscreen', fullscreen);
         document.body.classList.toggle('charlie-fullscreen-active', fullscreen);
+
+        const isCollapsed = terminal.classList.contains('sidebar-collapsed');
+        syncHeaderButtons(fullscreen, isCollapsed);
 
         if (maxBtn) {
           maxBtn.classList.toggle('is-maximized', fullscreen);
@@ -7127,6 +7128,25 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         setTerminalFullscreen(!isFullscreen);
       }
 
+      // Panel button: Toggles sidebar in normal view; acts as Return to Profile in expanded view!
+      if (sidebarToggleBtn) {
+        sidebarToggleBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (terminal.classList.contains('is-fullscreen')) {
+            setTerminalFullscreen(false);
+            const targetSection = document.getElementById('ai-assistant') || document.getElementById('charlie');
+            if (targetSection) {
+              const navOffset = 76;
+              const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset - navOffset;
+              window.scrollTo({ top: Math.max(0, sectionTop), behavior: 'smooth' });
+            }
+          } else {
+            toggleSidebar();
+          }
+        });
+      }
+
       if (maxBtn) {
         maxBtn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -7141,6 +7161,60 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           setTerminalFullscreen(false);
         }
       });
+
+      // --- 3. Copy Button for Charlie's Responses Only ---
+      document.addEventListener('click', (e) => {
+        const copyBtn = e.target.closest('.ai-msg-copy-btn');
+        if (copyBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const botMsg = copyBtn.closest('.ai-bot-msg');
+          if (!botMsg) return;
+          const contentEl = botMsg.querySelector('.ai-msg-content');
+          if (!contentEl) return;
+
+          // Clean text extraction: preserve line breaks, strip HTML markup
+          const temp = document.createElement('div');
+          temp.innerHTML = contentEl.innerHTML;
+          temp.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+          temp.querySelectorAll('p, div, li').forEach(el => el.prepend('\n'));
+          const textToCopy = (temp.textContent || temp.innerText || '').trim();
+
+          const onCopied = () => {
+            copyBtn.classList.add('copied');
+            const span = copyBtn.querySelector('span');
+            if (span) span.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              if (span) span.textContent = 'Copy';
+            }, 1800);
+          };
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textToCopy).then(onCopied).catch(() => {
+              fallbackCopyText(textToCopy, onCopied);
+            });
+          } else {
+            fallbackCopyText(textToCopy, onCopied);
+          }
+        }
+      });
+
+      function fallbackCopyText(text, cb) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand('copy');
+          if (typeof cb === 'function') cb();
+        } catch (err) {}
+        document.body.removeChild(ta);
+      }
 
       // Expose globally for convenience
       window.toggleCharlieFullscreen = toggleTerminalFullscreen;
