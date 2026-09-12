@@ -6649,11 +6649,31 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               sectionTitle = heading.textContent.trim().replace(/^[\s⚡🎬📦🔒🎙️🎥🐍🐾🏆🌟🛑🌌💎☄️🎮🔇🔊•→]+\s*/g, '');
             }
 
-            // Trigger Charlie Companion Flight & Escort!
-            if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-              window.portfolioCharlie.triggerSectionEscort(targetEl, sectionTitle);
-            } else if (window.portfolioEngine?.charlie) {
-              window.portfolioEngine.charlie.triggerSectionEscort(targetEl, sectionTitle);
+            const executeScrollAndEscort = () => {
+              const headerOffset = 70;
+              const elPos = targetEl.getBoundingClientRect().top;
+              const offsetPos = elPos + window.pageYOffset - headerOffset;
+              window.scrollTo({
+                top: offsetPos,
+                behavior: 'smooth'
+              });
+
+              // Trigger Charlie Companion Flight & Escort!
+              if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+                window.portfolioCharlie.triggerSectionEscort(targetEl, sectionTitle);
+              } else if (window.portfolioEngine?.charlie) {
+                window.portfolioEngine.charlie.triggerSectionEscort(targetEl, sectionTitle);
+              }
+            };
+
+            // If terminal is in full screen mode, restore first, then animate and scroll!
+            const terminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+            const isFullscreen = (terminal && terminal.classList.contains('is-fullscreen')) || document.body.classList.contains('charlie-fullscreen-active');
+            if (isFullscreen && typeof window.toggleCharlieFullscreen === 'function') {
+              window.toggleCharlieFullscreen(false);
+              setTimeout(executeScrollAndEscort, 120);
+            } else {
+              executeScrollAndEscort();
             }
             return;
           }
@@ -7125,8 +7145,12 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         profileReturnBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
+          // Instant jump to top before exiting full screen, so it doesn't show the old section position and then scroll up!
+          window.scrollTo(0, 0);
           setTerminalFullscreen(false);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          requestAnimationFrame(() => {
+            window.scrollTo(0, 0);
+          });
         });
       }
 
@@ -7201,11 +7225,29 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       }
 
       // Expose globally for convenience
-      window.toggleCharlieFullscreen = toggleTerminalFullscreen;
+      window.toggleCharlieFullscreen = (forceState) => {
+        if (typeof forceState === 'boolean') {
+          setTerminalFullscreen(forceState);
+        } else {
+          toggleTerminalFullscreen();
+        }
+      };
       window.toggleCharlieSidebar = toggleSidebar;
     }
 
     initCharlieTerminalControls();
+
+    // Return to top/first page when navigating from CV, Charlie Lab, or when back button is used
+    window.addEventListener('pageshow', (event) => {
+      try {
+        const returnTop = sessionStorage.getItem('portfolio_return_top');
+        const fromCvOrLab = (document.referrer && (document.referrer.indexOf('cv.html') !== -1 || document.referrer.indexOf('charlie-lab.html') !== -1));
+        if (event.persisted || returnTop === 'true' || fromCvOrLab || window.location.hash === '#hero') {
+          sessionStorage.removeItem('portfolio_return_top');
+          window.scrollTo(0, 0);
+        }
+      } catch (e) {}
+    });
 
     // 3. Setup Floating Quick-Launcher for Charlie (AI)
     const floatingCharlieBtn = document.getElementById('floatingCharlieBtn');

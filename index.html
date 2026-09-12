@@ -23,10 +23,24 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=144" />
+  <link rel="stylesheet" href="style.css?v=145" />
 
-  <!-- Local Dev Environment Detection (Mobile Simulator active in local environments) -->
+  <!-- Navigation & Scroll Position Guard: Always land cleanly on the first page when returning from CV, Charlie Lab, or Full Screen -->
   <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    (function () {
+      try {
+        var returnTop = sessionStorage.getItem('portfolio_return_top');
+        var fromCvOrLab = (document.referrer && (document.referrer.indexOf('cv.html') !== -1 || document.referrer.indexOf('charlie-lab.html') !== -1));
+        if (returnTop === 'true' || fromCvOrLab || window.location.hash === '#hero') {
+          sessionStorage.removeItem('portfolio_return_top');
+          window.scrollTo(0, 0);
+        }
+      } catch (e) {}
+    })();
+
     (function () {
       var isLocal = (
         window.location.hostname === 'localhost' ||
@@ -1835,7 +1849,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=149"></script>
+  <script src="app.js?v=150"></script>
 </body>
 
 </html>
