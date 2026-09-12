@@ -6165,10 +6165,6 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
     function scrollStreamToBottom() {
       if (!aiChatStream) return;
       aiChatStream.scrollTop = aiChatStream.scrollHeight;
-      const lastChild = aiChatStream.lastElementChild;
-      if (lastChild && typeof lastChild.scrollIntoView === 'function') {
-        lastChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
     }
 
     let isGeneratingResponse = false;
@@ -7124,10 +7120,12 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         }
 
         setTimeout(() => {
-          scrollStreamToBottom();
-          const input = document.getElementById('aiInputField');
-          if (fullscreen && input) {
-            input.focus();
+          if (fullscreen) {
+            scrollStreamToBottom();
+            const input = document.getElementById('aiInputField');
+            if (input) {
+              input.focus({ preventScroll: true });
+            }
           }
           if (window.portfolioCharlie && typeof window.portfolioCharlie.onResize === 'function') {
             window.portfolioCharlie.onResize();
@@ -7146,6 +7144,11 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           e.preventDefault();
           e.stopPropagation();
 
+          // 0. Blur any focused element (like inputs or buttons) so browser accessibility doesn't auto-scroll
+          if (document.activeElement && typeof document.activeElement.blur === 'function') {
+            document.activeElement.blur();
+          }
+
           // 1. Force instant scroll mode so the browser cannot animate a smooth scroll
           document.documentElement.classList.add('instant-scroll');
 
@@ -7156,19 +7159,34 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           setTerminalFullscreen(false);
 
           // 4. Instantly place viewport directly at the first page top (0, 0)
-          window.scrollTo(0, 0);
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-
-          requestAnimationFrame(() => {
+          const lockTop = () => {
             window.scrollTo(0, 0);
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
-            setTimeout(() => {
-              terminal.style.transition = '';
-              document.documentElement.classList.remove('instant-scroll');
-            }, 80);
-          });
+          };
+          lockTop();
+
+          // 5. Explicitly trigger Charlie to dock to his floating button
+          if (typeof window.returnCharlieToDock === 'function') {
+            window.returnCharlieToDock();
+          } else if (window.portfolioEngine?.charlie) {
+            const floatingBtn = document.getElementById('floatingCharlieBtn');
+            const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+            window.portfolioEngine.charlie.triggerDock(dockRect.left + dockRect.width / 2, dockRect.top + dockRect.height / 2);
+          }
+
+          // Multiple frames of scroll locking to guarantee zero layout shift or back-scrolling
+          requestAnimationFrame(lockTop);
+          setTimeout(lockTop, 50);
+          setTimeout(lockTop, 120);
+          setTimeout(lockTop, 200);
+          setTimeout(lockTop, 350);
+
+          setTimeout(() => {
+            lockTop();
+            terminal.style.transition = '';
+            document.documentElement.classList.remove('instant-scroll');
+          }, 400);
         });
       }
 
