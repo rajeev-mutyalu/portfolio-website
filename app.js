@@ -4633,7 +4633,12 @@
     };
     let charlieConversationHistory = [];
 
-    const CHARLIE_SYSTEM_GROUNDING_PROMPT = `You are "Cyber Charlie", an advanced, highly intelligent AI companion and VFX & GenAI systems mascot on Rajeev Mutyalu's official portfolio website.
+    const CHARLIE_SYSTEM_GROUNDING_PROMPT = `You are "Cyber Charlie", Rajeev's AI Assistant — an advanced, highly intelligent AI companion and VFX & GenAI systems mascot on Rajeev Mutyalu's official portfolio website.
+
+CORE IDENTITY RULE:
+- Whenever the user asks "Who are you?", "Who am I speaking to?", "What is your name?", "Who is this?", "Tell me about yourself", or similar identity questions:
+  You MUST ALWAYS explicitly identify yourself as: "I am Cyber Charlie, Rajeev's AI Assistant!" (or "You're speaking to Cyber Charlie, Rajeev's AI Assistant!").
+  State that you are here to guide them through Rajeev Mutyalu's 20+ year production engineering career, Oscar-winning VFX & GenAI systems (1917, RRR, Mufasa), architectures (OpenUSD, MCP, n8n, On-Premise LLMs), as well as answer general questions and technical inquiries.
 
 INTELLIGENCE CAPABILITIES & SCOPE:
 1. FULL-SPECTRUM GENERAL INTELLIGENCE (WORLD KNOWLEDGE):
@@ -4685,13 +4690,64 @@ INTELLIGENCE CAPABILITIES & SCOPE:
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
 
-      // Code blocks
-      safe = safe.replace(/```([a-z0-9_-]*)\n([\s\S]*?)```/gi, (match, lang, code) => {
-        return `<pre class="ai-code-block" style="background:rgba(0,0,0,0.5);border:1px solid rgba(56,189,248,0.3);border-radius:6px;padding:8px 12px;overflow-x:auto;font-family:monospace;font-size:0.75rem;margin:8px 0;"><code>${code.trim()}</code></pre>`;
+      // Code & text blocks with dedicated Copy Block button
+      safe = safe.replace(/```([a-z0-9_-]*)[ \t]*\r?\n([\s\S]*?)```/gi, (match, rawLang, code) => {
+        const cleanCode = code.trim();
+        const langLower = (rawLang || '').toLowerCase().trim();
+        
+        // Smart label detection (identifies email drafts, templates, json, python, bash, etc.)
+        let displayLabel = 'BLOCK';
+        let icon = '📋';
+        if (langLower.includes('mail') || /subject:|^dear\s|best\s+regards|sincerely/im.test(cleanCode)) {
+          displayLabel = 'EMAIL TEMPLATE';
+          icon = '✉️';
+        } else if (langLower === 'python' || langLower === 'py') {
+          displayLabel = 'PYTHON';
+          icon = '🐍';
+        } else if (langLower === 'javascript' || langLower === 'js') {
+          displayLabel = 'JAVASCRIPT';
+          icon = '⚡';
+        } else if (langLower === 'json') {
+          displayLabel = 'JSON';
+          icon = '📦';
+        } else if (langLower === 'bash' || langLower === 'sh' || langLower === 'shell') {
+          displayLabel = 'TERMINAL / BASH';
+          icon = '💻';
+        } else if (langLower === 'html' || langLower === 'xml') {
+          displayLabel = 'HTML';
+          icon = '🌐';
+        } else if (langLower === 'css') {
+          displayLabel = 'CSS';
+          icon = '🎨';
+        } else if (langLower) {
+          displayLabel = langLower.toUpperCase();
+          icon = '📄';
+        } else {
+          displayLabel = 'CODE / TEXT';
+          icon = '📄';
+        }
+
+        return `<div class="ai-code-wrapper">` +
+          `<div class="ai-code-header">` +
+            `<span class="ai-code-lang"><span class="ai-code-lang-icon">${icon}</span> ${displayLabel}</span>` +
+            `<button type="button" class="ai-code-copy-btn" title="Copy only this block to clipboard" aria-label="Copy ${displayLabel}">` +
+              `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">` +
+                `<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>` +
+                `<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>` +
+              `</svg>` +
+              `<span>Copy Block</span>` +
+            `</button>` +
+          `</div>` +
+          `<pre class="ai-code-block"><code>${cleanCode}</code></pre>` +
+        `</div>`;
       });
 
       // Inline code
-      safe = safe.replace(/`([^`]+)`/g, '<code style="background:rgba(0,0,0,0.4);border:1px solid rgba(56,189,248,0.25);border-radius:4px;padding:1px 5px;font-family:monospace;color:#38bdf8;">$1</code>');
+      safe = safe.replace(/`([^`]+)`/g, '<code class="ai-inline-code">$1</code>');
+
+      // Markdown headings: ### Heading or ## Heading
+      safe = safe.replace(/^###\s+(.+)$/gm, '<h5 class="ai-msg-subheading">$1</h5>');
+      safe = safe.replace(/^##\s+(.+)$/gm, '<h4 class="ai-msg-subheading">$1</h4>');
 
       // Bold
       safe = safe.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -6103,6 +6159,29 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
         }
       }
 
+      // 4e. Resilient "Who are you / Who am I speaking to / What is your name" Check
+      if (/\b(who\s+(are|r)\s+(you|u)|who\s+am\s+i\s+(talking|speaking)\s+to|who\s+is\s+this|what('?s|\s+is)\s+your\s+name|what\s+is\s+this\s+bot|who\s+are\s+you)\b/i.test(q)) {
+        return {
+          id: 'who_is_charlie',
+          title: "Rajeev's AI Assistant",
+          response: `🤖 <strong>I am Cyber Charlie, Rajeev's AI Assistant!</strong><br/><br/>
+I am an advanced interactive AI companion and VFX &amp; GenAI systems mascot engineered by <strong>Rajeev Mutyalu</strong> right here on his portfolio.<br/><br/>
+• <strong>What I can help you with:</strong><br/>
+&bull; <strong>20+ Years Studio Leadership:</strong> Proven track record across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning productions (<em>1917, RRR, Mufasa: The Lion King</em>).<br/>
+&bull; <strong>Technical Architectures:</strong> OpenUSD 2-tier sublayer composition, custom MCP servers, On-Premise private LLMs (Nous Hermes, Ollama), and zero-touch n8n studio automation.<br/>
+&bull; <strong>Live Open-World Intelligence:</strong> When switched to OpenAI mode in settings, I can also debug code, write email drafts, solve math, and answer general questions in real time!<br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>
+<a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Charlie Character Lab &rarr;</a>`,
+          followups: getDynamicFollowups([
+            'Who is Rajeev Mutyalu and why should we hire him?',
+            'Tell me about your AI certifications, accelerator credentials, and hackathons',
+            'Explain your OpenUSD VFX pipeline architecture',
+            'What is Model Context Protocol (MCP) and how is it used in production?'
+          ], 4)
+        };
+      }
+
       // 5. Standard Weighted Knowledge Base Search with Word Boundaries & Guardrails
       let bestMatch = null;
       let maxScore = 0;
@@ -6465,6 +6544,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             if (charIndex >= fullResponse.length) {
               clearInterval(typeInterval);
               contentEl.innerHTML = fullResponse;
+              if (typeof window.attachBlockCopyButtons === 'function') {
+                window.attachBlockCopyButtons(contentEl);
+              }
               scrollStreamToBottom();
 
               if (aiBotStatusPill) {
@@ -7699,8 +7781,75 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         }
       });
 
-      // --- 3. Copy Button for Charlie's Responses Only ---
+      // --- 3. Block Copy Buttons Helper (Wraps any unwrapped pre tags with header & copy button) ---
+      function attachBlockCopyButtons(container) {
+        if (!container) return;
+        const preElements = container.querySelectorAll('pre');
+        preElements.forEach(pre => {
+          if (pre.closest('.ai-code-wrapper')) return; // already wrapped
+          const wrapper = document.createElement('div');
+          wrapper.className = 'ai-code-wrapper';
+          
+          const header = document.createElement('div');
+          header.className = 'ai-code-header';
+          
+          const rawText = pre.textContent || '';
+          const isEmail = /subject:|^dear\s|best\s+regards|sincerely/im.test(rawText);
+          const label = isEmail ? 'EMAIL TEMPLATE' : 'CODE / TEXT';
+          const icon = isEmail ? '✉️' : '📄';
+
+          header.innerHTML = `
+            <span class="ai-code-lang"><span class="ai-code-lang-icon">${icon}</span> ${label}</span>
+            <button type="button" class="ai-code-copy-btn" title="Copy only this block to clipboard" aria-label="Copy ${label}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy Block</span>
+            </button>
+          `;
+          
+          pre.parentNode.insertBefore(wrapper, pre);
+          wrapper.appendChild(header);
+          wrapper.appendChild(pre);
+        });
+      }
+      window.attachBlockCopyButtons = attachBlockCopyButtons;
+
+      // --- 4. Copy Event Delegation (Dedicated Block Copy & Full Response Copy) ---
       document.addEventListener('click', (e) => {
+        // A. Dedicated Block Copy Button (copies ONLY the email template, code, or draft inside the block)
+        const codeCopyBtn = e.target.closest('.ai-code-copy-btn');
+        if (codeCopyBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const wrapper = codeCopyBtn.closest('.ai-code-wrapper');
+          if (!wrapper) return;
+          const codeEl = wrapper.querySelector('code') || wrapper.querySelector('pre');
+          if (!codeEl) return;
+
+          const textToCopy = (codeEl.textContent || codeEl.innerText || '').trim();
+          const onCopied = () => {
+            codeCopyBtn.classList.add('copied');
+            const span = codeCopyBtn.querySelector('span');
+            if (span) span.textContent = 'Copied!';
+            setTimeout(() => {
+              codeCopyBtn.classList.remove('copied');
+              if (span) span.textContent = 'Copy Block';
+            }, 1800);
+          };
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textToCopy).then(onCopied).catch(() => {
+              fallbackCopyText(textToCopy, onCopied);
+            });
+          } else {
+            fallbackCopyText(textToCopy, onCopied);
+          }
+          return;
+        }
+
+        // B. Full Response Copy Button (Charlie's Full Answer)
         const copyBtn = e.target.closest('.ai-msg-copy-btn');
         if (copyBtn) {
           e.preventDefault();
@@ -7710,9 +7859,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           const contentEl = botMsg.querySelector('.ai-msg-content');
           if (!contentEl) return;
 
-          // Clean text extraction: preserve line breaks, strip HTML markup
+          // Clean text extraction: preserve line breaks, strip headers/buttons & HTML markup
           const temp = document.createElement('div');
           temp.innerHTML = contentEl.innerHTML;
+          temp.querySelectorAll('.ai-code-header').forEach(h => h.remove());
           temp.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
           temp.querySelectorAll('p, div, li').forEach(el => el.prepend('\n'));
           const textToCopy = (temp.textContent || temp.innerText || '').trim();
