@@ -4418,15 +4418,15 @@
           { title: '1. Script & Storyboard', sub: 'Scene Breakdown & Intent' },
           { title: '2. Character & Env Assets', sub: 'Consistent Visual DNA / LORAs' },
           { title: '3. Prompt Studio', sub: 'Directorial Directives & Lenses' },
-          { title: '4. Generation Queue', sub: 'Veo / Kling / Seedance Dispatch', highlight: true },
+          { title: '4. Generation Queue', sub: 'Veo / Kling / ComfyUI / Seedance Dispatch', highlight: true },
           { title: '5. Latent Consistency', sub: 'Higgsfield & Temporal Flow' },
           { title: '6. Timeline Assembly', sub: 'Scene Sequencing & Cut' },
           { title: '7. Editorial Review', sub: 'Director Dailies & Approval' }
         ],
         description: '<strong>GenAI Prompt-to-Video Production Platform (Scene Weaver):</strong><br>' +
           '• <strong>Script & Visual Asset Foundation:</strong> Ingests screenplays and storyboards, establishing persistent visual identity for characters, environments, and stylistic DNA across multi-scene projects.<br>' +
-          '• <strong>Prompt Studio & Multi-Model Generation Queue:</strong> Translates cinematic directorial directives into optimized model payloads dispatched across frontier foundation video models (Google Veo, Kling AI, Seedance).<br>' +
-          '• <strong>Temporal Coherence & Editorial Review:</strong> Leverages latent consistency caching and Higgsfield models to eliminate character drift, assembling generated shots into an interactive editorial timeline ready for director dailies and final review.'
+          '• <strong>Prompt Studio & Multi-Model Generation Queue:</strong> Translates cinematic directorial directives into optimized model payloads dispatched across frontier foundation video models and node workflows (Google Veo, Kling AI, ComfyUI, Seedance).<br>' +
+          '• <strong>Temporal Coherence & Editorial Review:</strong> Leverages latent consistency caching, ComfyUI ControlNet pipelines, and Higgsfield models to eliminate character drift, assembling generated shots into an interactive editorial timeline ready for director dailies and final review.'
       }
     };
 
@@ -4573,13 +4573,13 @@ INTELLIGENCE CAPABILITIES & SCOPE:
    - Example: If asked about Sachin Tendulkar, deliver a great factual summary: "Sachin Tendulkar is the legendary Indian cricketer widely celebrated as the 'God of Cricket' and the 'Master Blaster'. He is the only player to score 100 international centuries, holds the record for the most runs in both Test and ODI cricket, and was pivotal in India winning the 2011 ICC Cricket World Cup..."
 
 2. RAJEEV MUTYALU'S VERIFIED PORTFOLIO (GROUND TRUTH REFERENCE):
-   - When asked specifically about Rajeev Mutyalu, hiring him, his career, VFX pipelines, OpenUSD, n8n automation, MCP, private LLMs, or conform ingest:
+   - When asked specifically about Rajeev Mutyalu, hiring him, his career, VFX pipelines, OpenUSD, n8n automation, MCP, private LLMs, ComfyUI, or conform ingest:
      Answer authoritatively, grounding yourself strictly in Rajeev's verified background:
      • Roles: AI Workflows Architect, Creative Technology Lead, and VFX & GenAI Systems Architect with 20+ years of proven production and R&D leadership.
      • Studio Pedigree: Astra Studios, Technicolor Group, and MPC Film.
      • Oscar-Winning & Landmark Productions: "1917" (Academy Award Winner), "RRR" (Academy Award Winner), "Mufasa: The Lion King" (Disney), "Back in Action" (Netflix), "Spaceman" (Netflix), "Prehistoric Planet" (Apple TV+ / BBC).
      • Global Leadership: Mentored 50+ engineers, pipeline TDs, and artists across international multi-site studios in London, Montreal, and Bengaluru.
-     • Core Architecture: OpenUSD 2-tier sublayer composition, Zero-Touch n8n Studio Automation, Model Context Protocol (MCP custom servers), On-Premise / Air-Gapped Private LLMs (Nous Hermes, Ollama, 4-bit GGUF), OpenTimelineIO & OpenColorIO conform pipelines, Studio.AI / Scene Weaver.
+     • Core Architecture: OpenUSD 2-tier sublayer composition, Zero-Touch n8n Studio Automation, Model Context Protocol (MCP custom servers), On-Premise / Air-Gapped Private LLMs (Nous Hermes, Ollama, 4-bit GGUF), OpenTimelineIO & OpenColorIO conform pipelines, Studio.AI / Scene Weaver, ComfyUI node workflows & ControlNet pipelines.
      • Cyber Charlie Character & Motion Lab (charlie-lab.html):
        An interactive character animation & physics playground built by Rajeev Mutyalu to test, inspect, and benchmark Cyber Charlie's procedural state machine and locomotion.
        - Built with pure HTML5 Canvas 2D procedural vector mathematics (zero raster sprites, zero bulky 3D engines, locked 60 FPS).
@@ -5233,7 +5233,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
       },
       {
         id: 'genai_video',
-        keywords: ['video', 'veo', 'google veo', 'kling', 'higgsfield', 'seedance', 'scene weaver', 'studio.ai', 'genai video', 'latent', 'firecrawl', 'generative video'],
+        keywords: ['video', 'veo', 'google veo', 'kling', 'comfyui', 'comfy ui', 'comfy', 'higgsfield', 'seedance', 'scene weaver', 'studio.ai', 'genai video', 'latent', 'firecrawl', 'generative video', 'controlnet', 'lora'],
         title: 'GenAI Video Production & Studio.AI (Scene Weaver)',
         intros: [
           '🎥 <strong>STUDIO.AI (SCENE WEAVER) // PROMPT-TO-VIDEO PLATFORM</strong>',
@@ -5242,19 +5242,20 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
         ],
         responses: [
           `• <strong>📌 What is it?</strong> An enterprise multi-model generative AI platform for feature film storyboarding, visual development, and shot synthesis.<br/>
-• <strong>🎯 Where is it used?</strong> Previsualization, concept ideation, multi-model prompt routing (Google Veo, Kling AI, Higgsfield), and web asset extraction via Firecrawl.<br/>
+• <strong>🎯 Where is it used?</strong> Previsualization, concept ideation, node-based ComfyUI workflows, multi-model prompt routing (Google Veo, Kling AI, Higgsfield), and web asset extraction via Firecrawl.<br/>
 • <strong>💡 Why is it used?</strong> Out-of-the-box video models produce inconsistent character faces, unstable wardrobe details, and non-standard color spaces.<br/>
-• <strong>🚀 How it helps production:</strong> Enforces character latent identity consistency across video shots, automates prompt generation from screenplays, and conformed outputs directly into OCIO/ACEScg for Nuke compositing.<br/><br/>
+• <strong>🚀 How it helps production:</strong> Enforces character latent identity consistency across video shots, automates prompt generation from screenplays, integrates ComfyUI ControlNet/IP-Adapter node pipelines, and conformed outputs directly into OCIO/ACEScg for Nuke compositing.<br/><br/>
 <a href="#architecture" data-arch-tab="genai" class="ai-section-link">✨ View GenAI Flow in Pipeline Visualizer &rarr;</a>`,
 
-          `• <strong>🎥 Scene Weaver: Solving Character Visual DNA Consistency:</strong><br/>
-• <strong>🧬 Persistent Latent Identity:</strong> Uses specialized reference vectors and LoRA embeddings so characters and environments remain identical across sequential camera shots.<br/>
-• <strong>🔄 Multi-Model Prompt Router:</strong> Automatically routes prompts to Google Veo for cinematic lighting, Kling for complex human dynamics, and Seedance for atmospheric FX.<br/>
+          `• <strong>🎥 Scene Weaver &amp; ComfyUI: Solving Character Visual DNA Consistency:</strong><br/>
+• <strong>🧬 Persistent Latent Identity:</strong> Uses specialized reference vectors, IP-Adapters, and ComfyUI LoRA node embeddings so characters and environments remain identical across sequential camera shots.<br/>
+• <strong>🔄 Multi-Model Prompt Router:</strong> Automatically routes prompts to Google Veo for cinematic lighting, Kling for complex human dynamics, ComfyUI for deterministic node control, and Seedance for atmospheric FX.<br/>
 • <strong>📦 Automated Color Conform:</strong> Transcodes 8-bit sRGB AI video generations into 16-bit float ACEScg EXRs with matching frame rates and editorial handles.<br/><br/>
 <a href="#architecture" data-arch-tab="genai" class="ai-section-link">✨ Inspect Scene Weaver Architecture &rarr;</a>`,
 
           `• <strong>🎬 Script-to-Screenplay Automated Ideation:</strong><br/>
 • <strong>📜 Script Ingest:</strong> Ingests screenplays and storyboards, breaking text down into camera lens directives, lighting keys, and character blocking instructions.<br/>
+• <strong>🧩 ComfyUI Node Automation:</strong> Orchestrates custom node graphs with automated ControlNet depth, pose estimation, and style transfer.<br/>
 • <strong>🕷️ Firecrawl Ingest:</strong> Scrapes reference imagery and visual moodboards to establish stylistic DNA.<br/>
 • <strong>🚀 Seamless Nuke &amp; Editorial Turnover:</strong> Outputs conform cleanly into OTIO timelines for instant editorial review.<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
@@ -5908,7 +5909,7 @@ This activates Chrome/Edge/Safari/Firefox native responsive mode with precise to
 
       // 3f. Out-of-Scope / General Coding / Non-Portfolio Task Query Detection
       const hasRajeevExplicit = /\b(rajeev|muthyalu|mutyalu|his\s+background|his\s+career|hire\s+him|why\s+hire|about\s+rajeev)\b/i.test(q);
-      const hasPortfolioExplicit = /\b(portfolio|resume|cv|hiring|pedigree|studio\s+pedigree|openusd|usd|n8n|mcp|model\s+context|conform|aces|ocio|otio|scene\s*weaver|openclaw|nous\s*hermes|charlie|character\s*lab|charlie\s*lab|motion\s*lab)\b/i.test(q);
+      const hasPortfolioExplicit = /\b(portfolio|resume|cv|hiring|pedigree|studio\s+pedigree|openusd|usd|n8n|mcp|model\s+context|conform|aces|ocio|otio|scene\s*weaver|openclaw|nous\s*hermes|charlie|character\s*lab|charlie\s*lab|motion\s*lab|comfyui|comfy\s*ui)\b/i.test(q);
 
       const isCodingTask = (
         /\b(write|create|generate|implement|code|build|make|give\s+me|show\s+me)\s+(a|an|the|me|some)?\s*(python|bash|shell|js|javascript|c\+\+|sql|regex|script|code|function|program|class|algorithm|example|sample|snippet|tutorial|recursive|recursion|solution|app)\b/i.test(q)
@@ -6024,7 +6025,7 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
           if (regex.test(q)) {
             // Highly distinctive technical anchors get premium weighting over generic descriptors
             let weight = kw.length * 2;
-            if (['n8n', 'mcp', 'openusd', 'usd', 'pyside', 'pyside6', 'pyqt', 'otio', 'ocio', 'aces', 'charlie lab', 'character lab', 'motion lab'].includes(kw.toLowerCase())) {
+            if (['n8n', 'mcp', 'openusd', 'usd', 'pyside', 'pyside6', 'pyqt', 'otio', 'ocio', 'aces', 'charlie lab', 'character lab', 'motion lab', 'comfyui', 'comfy ui'].includes(kw.toLowerCase())) {
               weight = 25;
             } else if (kw.includes(' ')) {
               weight = kw.length * 3;
