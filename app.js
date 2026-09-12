@@ -7003,6 +7003,152 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
     initCharlieLlmSettings();
 
+    // 2c. Initialize Charlie Terminal Viewport Controls (Full Screen & Sidebar Collapse/Expand)
+    function initCharlieTerminalControls() {
+      const terminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+      if (!terminal) return;
+
+      const sidebarToggleBtn = document.getElementById('aiSidebarToggleBtn');
+      const sidebarCollapseBtn = document.getElementById('aiSidebarCollapseBtn');
+      const sidebarExpandTab = document.getElementById('aiSidebarExpandTab');
+      const panelToggleText = document.getElementById('aiPanelToggleText');
+
+      const maxBtn = document.getElementById('aiTerminalMaximizeBtn');
+      const maxText = document.getElementById('aiMaxToggleText');
+      const iconExpand = maxBtn ? maxBtn.querySelector('.ai-max-icon-expand') : null;
+      const iconCompress = maxBtn ? maxBtn.querySelector('.ai-max-icon-compress') : null;
+
+      // Update actual navbar height for seamless positioning
+      function updateNavHeightVar() {
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+          const rect = navbar.getBoundingClientRect();
+          const h = Math.round(rect.height) || 62;
+          document.documentElement.style.setProperty('--navbar-actual-height', `${h}px`);
+        }
+      }
+      updateNavHeightVar();
+      window.addEventListener('resize', updateNavHeightVar, { passive: true });
+
+      // --- 1. Left Panel (Sidebar) Collapse / Expand ---
+      function setSidebarCollapsed(collapsed) {
+        terminal.classList.toggle('sidebar-collapsed', collapsed);
+        if (sidebarToggleBtn) {
+          sidebarToggleBtn.classList.toggle('panel-closed', collapsed);
+          sidebarToggleBtn.title = collapsed ? 'Open Arsenal Directory (Left Panel)' : 'Close Arsenal Directory (Left Panel)';
+        }
+        if (panelToggleText) {
+          panelToggleText.textContent = collapsed ? 'Open Panel' : 'Panel';
+        }
+        try {
+          localStorage.setItem('charlie_sidebar_collapsed', collapsed ? 'true' : 'false');
+        } catch (e) {}
+
+        // Allow layout to recalculate, then scroll stream & re-anchor Charlie
+        setTimeout(() => {
+          scrollStreamToBottom();
+          if (window.portfolioCharlie && typeof window.portfolioCharlie.onResize === 'function') {
+            window.portfolioCharlie.onResize();
+          }
+        }, 150);
+      }
+
+      function toggleSidebar() {
+        const isCollapsed = terminal.classList.contains('sidebar-collapsed');
+        setSidebarCollapsed(!isCollapsed);
+      }
+
+      if (sidebarToggleBtn) {
+        sidebarToggleBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleSidebar();
+        });
+      }
+
+      if (sidebarCollapseBtn) {
+        sidebarCollapseBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setSidebarCollapsed(true);
+        });
+      }
+
+      if (sidebarExpandTab) {
+        sidebarExpandTab.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setSidebarCollapsed(false);
+        });
+      }
+
+      // Restore saved sidebar preference if available
+      try {
+        const savedCollapsed = localStorage.getItem('charlie_sidebar_collapsed');
+        if (savedCollapsed === 'true') {
+          setSidebarCollapsed(true);
+        }
+      } catch (e) {}
+
+      // --- 2. Full Screen Mode (Maximized Below Top Banner) ---
+      function setTerminalFullscreen(fullscreen) {
+        updateNavHeightVar();
+        terminal.classList.toggle('is-fullscreen', fullscreen);
+        document.body.classList.toggle('charlie-fullscreen-active', fullscreen);
+
+        if (maxBtn) {
+          maxBtn.classList.toggle('is-maximized', fullscreen);
+          maxBtn.title = fullscreen
+            ? 'Restore Terminal (Exit Full Screen Mode - Esc)'
+            : 'Maximize Terminal Below Navigation Bar (Full Screen)';
+        }
+        if (maxText) {
+          maxText.textContent = fullscreen ? 'Restore' : 'Full Screen';
+        }
+        if (iconExpand && iconCompress) {
+          iconExpand.style.display = fullscreen ? 'none' : 'block';
+          iconCompress.style.display = fullscreen ? 'block' : 'none';
+        }
+
+        setTimeout(() => {
+          scrollStreamToBottom();
+          const input = document.getElementById('aiInputField');
+          if (fullscreen && input) {
+            input.focus();
+          }
+          if (window.portfolioCharlie && typeof window.portfolioCharlie.onResize === 'function') {
+            window.portfolioCharlie.onResize();
+          }
+        }, 120);
+      }
+
+      function toggleTerminalFullscreen() {
+        const isFullscreen = terminal.classList.contains('is-fullscreen');
+        setTerminalFullscreen(!isFullscreen);
+      }
+
+      if (maxBtn) {
+        maxBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleTerminalFullscreen();
+        });
+      }
+
+      // Pressing Esc exits full screen
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && terminal.classList.contains('is-fullscreen')) {
+          setTerminalFullscreen(false);
+        }
+      });
+
+      // Expose globally for convenience
+      window.toggleCharlieFullscreen = toggleTerminalFullscreen;
+      window.toggleCharlieSidebar = toggleSidebar;
+    }
+
+    initCharlieTerminalControls();
+
     // 3. Setup Floating Quick-Launcher for Charlie (AI)
     const floatingCharlieBtn = document.getElementById('floatingCharlieBtn');
 

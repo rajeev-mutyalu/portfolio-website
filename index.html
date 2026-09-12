@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=141" />
+  <link rel="stylesheet" href="style.css?v=142" />
 
   <!-- Local Dev Environment Detection (Mobile Simulator active in local environments) -->
   <script>
@@ -495,6 +495,14 @@
           <span>charlie-ai --session=assistant-console [LOCAL-KB]</span>
         </div>
         <div class="ai-bot-header-actions">
+          <button type="button" class="ai-bot-sidebar-toggle-btn" id="aiSidebarToggleBtn"
+            title="Toggle Arsenal Directory (Left Panel)" aria-label="Toggle Left Panel">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+            <span class="ai-panel-text" id="aiPanelToggleText">Panel</span>
+          </button>
           <button type="button" class="ai-bot-llm-btn" id="aiLlmConfigBtn"
             title="Configure AI Model / Connect OpenAI Key" aria-label="OpenAI Model Settings">
             <span class="ai-llm-icon">🧠</span>
@@ -508,6 +516,22 @@
           </button>
           <a href="charlie-lab.html" target="_blank" class="ai-bot-lab-link"
             title="Open Interactive Cyber Charlie Character &amp; Motion Lab">🧪 Character Lab</a>
+          <button type="button" class="ai-bot-maximize-btn" id="aiTerminalMaximizeBtn"
+            title="Maximize Terminal Below Navigation Bar (Full Screen)" aria-label="Maximize Terminal">
+            <svg class="ai-max-icon-expand" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+            <svg class="ai-max-icon-compress" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:none;">
+              <polyline points="4 14 10 14 10 20"></polyline>
+              <polyline points="20 10 14 10 14 4"></polyline>
+              <line x1="14" y1="10" x2="21" y2="3"></line>
+              <line x1="10" y1="14" x2="3" y2="21"></line>
+            </svg>
+            <span class="ai-max-text" id="aiMaxToggleText">Full Screen</span>
+          </button>
         </div>
       </div>
 
@@ -541,8 +565,16 @@
         <!-- Left Sidebar (1/4th): Technical Arsenal Knowledge Topics -->
         <aside class="ai-bot-sidebar">
           <div class="ai-sidebar-header">
-            <span class="ai-sidebar-title">⚡ ARSENAL DIRECTORY</span>
-            <span class="ai-sidebar-count">13 Categories</span>
+            <div class="ai-sidebar-header-info">
+              <span class="ai-sidebar-title">⚡ ARSENAL DIRECTORY</span>
+              <span class="ai-sidebar-count">13 Categories</span>
+            </div>
+            <button type="button" class="ai-sidebar-collapse-btn" id="aiSidebarCollapseBtn"
+              title="Close Arsenal Panel" aria-label="Close Arsenal Panel">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
           </div>
           <div class="ai-sidebar-nav">
             <button type="button" class="ai-sidebar-btn"
@@ -613,6 +645,16 @@
 
         <!-- Right Main Viewport (3/4th): Live Stream & Input Form -->
         <main class="ai-bot-main">
+          <!-- Sidebar Re-Open Tab (visible when sidebar is closed) -->
+          <button type="button" class="ai-sidebar-expand-tab" id="aiSidebarExpandTab"
+            title="Open Arsenal Directory (Left Panel)" aria-label="Open Left Panel">
+            <span class="ai-tab-icon">⚡</span>
+            <span class="ai-tab-text">Arsenal Directory</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+
           <!-- Conversation Stream -->
           <div class="ai-chat-stream" id="aiChatStream">
             <!-- Initial Welcome Message from Bot -->
@@ -1787,7 +1829,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=146"></script>
+  <script src="app.js?v=147"></script>
 </body>
 
 </html>
