@@ -6715,6 +6715,146 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       });
     }
 
+    // 2a-2. Voice Dictation Microphone Controller (Web Speech API)
+    function initCharlieVoiceDictation() {
+      const micBtn = document.getElementById('aiChatMicBtn');
+      const input = document.getElementById('aiInputField');
+      const form = document.getElementById('aiChatForm');
+      const inputWrapper = micBtn ? micBtn.closest('.ai-input-wrapper') : null;
+      if (!micBtn || !input) return;
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        micBtn.title = 'Voice Dictation (Not supported in this browser - Use Chrome/Edge/Safari)';
+        micBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          alert('Voice dictation is supported in Chrome, Edge, Safari, and modern mobile browsers. Please type your query in this browser.');
+        });
+        return;
+      }
+
+      let recognition = null;
+      let isListening = false;
+      let autoSubmitTimeout = null;
+
+      try {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = navigator.language || 'en-US';
+      } catch (err) {
+        console.warn('SpeechRecognition init error:', err);
+      }
+
+      if (!recognition) return;
+
+      const originalPlaceholder = input.getAttribute('placeholder') || '';
+
+      function startListening() {
+        if (isGeneratingResponse) return;
+        if (window.portfolioEngine?.isEnabled) return;
+        try {
+          recognition.start();
+        } catch (e) {
+          console.warn('SpeechRecognition start failed:', e);
+        }
+      }
+
+      function stopListening() {
+        try {
+          recognition.stop();
+        } catch (e) {}
+      }
+
+      recognition.onstart = () => {
+        isListening = true;
+        micBtn.classList.add('is-listening');
+        micBtn.title = 'Listening... Click to stop dictation';
+        if (inputWrapper) inputWrapper.classList.add('mic-active');
+        input.setAttribute('placeholder', '🎙️ Listening... Speak your question now...');
+
+        // Audio feedback chime
+        try {
+          if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function' && !window.portfolioSoundEngine.isMuted) {
+            window.portfolioSoundEngine.playLaserDeflect();
+          }
+        } catch (e) {}
+
+        // Charlie Mascot reaction: perk antenna & add sparks
+        if (window.portfolioCharlie && typeof window.portfolioCharlie.addSparks === 'function') {
+          window.portfolioCharlie.face = 'sprint';
+          window.portfolioCharlie.addSparks(window.portfolioCharlie.x, window.portfolioCharlie.y, '#38bdf8', 14);
+        }
+      };
+
+      recognition.onresult = (event) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+
+        const currentText = finalTranscript || interimTranscript;
+        if (currentText) {
+          input.value = currentText;
+        }
+
+        // When a final sentence is recognized, prepare auto-submit after a comfortable 1000ms pause
+        if (finalTranscript) {
+          if (autoSubmitTimeout) clearTimeout(autoSubmitTimeout);
+          autoSubmitTimeout = setTimeout(() => {
+            if (isListening) stopListening();
+            if (input.value.trim() && !isGeneratingResponse) {
+              if (form) {
+                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+              }
+            }
+          }, 1000);
+        }
+      };
+
+      recognition.onerror = (event) => {
+        console.warn('SpeechRecognition error:', event.error);
+        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+          alert('Microphone access was denied. Please allow microphone permissions in your browser address bar to dictate questions.');
+        }
+        cleanupState();
+      };
+
+      recognition.onend = () => {
+        cleanupState();
+      };
+
+      function cleanupState() {
+        isListening = false;
+        micBtn.classList.remove('is-listening');
+        micBtn.title = 'Dictate question with Microphone (Click to Speak)';
+        if (inputWrapper) inputWrapper.classList.remove('mic-active');
+        input.setAttribute('placeholder', originalPlaceholder);
+        input.focus({ preventScroll: true });
+      }
+
+      micBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (autoSubmitTimeout) clearTimeout(autoSubmitTimeout);
+        if (isListening) {
+          stopListening();
+        } else {
+          startListening();
+        }
+      });
+    }
+
+    initCharlieVoiceDictation();
+
     // 3. Setup "Disable Game to Use Bot" Button on Chatbot Lockout Overlay
     const disableGameBtn = document.getElementById('aiDisableGameBtn');
     if (disableGameBtn) {

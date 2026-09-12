@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=149" />
+  <link rel="stylesheet" href="style.css?v=150" />
 
   <!-- Navigation & Scroll Position Guard: Always land cleanly on the first page when returning from CV, Charlie Lab, or Full Screen -->
   <script>
@@ -753,6 +753,15 @@
               <input type="text" class="ai-input-field" id="aiInputField"
                 placeholder="Ask about AI Certifications, OpenUSD, Conform Ingest, MCP, On-Prem LLMs, n8n, or Why Hire Rajeev..."
                 autocomplete="off" spellcheck="false" />
+              <button type="button" class="ai-mic-btn" id="aiChatMicBtn"
+                title="Dictate question with Microphone (Click to Speak)" aria-label="Voice Dictation">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                  <line x1="12" y1="19" x2="12" y2="23"></line>
+                  <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+              </button>
             </div>
             <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send Technical Query">
               <span>Send</span>
@@ -1859,7 +1868,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=154"></script>
+  <script src="app.js?v=155"></script>
 </body>
 
 </html>
