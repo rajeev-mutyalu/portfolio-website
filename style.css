@@ -3584,53 +3584,54 @@ body.in-simulator #floatingCharlieBtn {
   }
 }
 
-/* 1/4th and 3/4th Division Grid with Smooth Panel Collapse */
+/* 1/4th and 3/4th Division Split with Ultra-Smooth Hardware-Accelerated Panel Slide */
 .ai-bot-body-split {
-  display: grid;
-  grid-template-columns: 270px 1fr;
+  display: flex;
+  flex-direction: row;
   min-height: 380px;
   max-height: min(60vh, 500px);
   background: rgba(5, 8, 17, 0.7);
-  transition: grid-template-columns 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  position: relative;
 }
 
-/* Left Sidebar (1/4th) */
+/* Left Sidebar (270px width) */
 .ai-bot-sidebar {
+  width: 270px;
+  min-width: 270px;
+  max-width: 270px;
+  flex-shrink: 0;
   background: rgba(8, 13, 26, 0.96);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   padding: 12px 10px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  overflow-x: hidden;
   max-height: min(60vh, 500px);
   scrollbar-width: thin;
-  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), padding 0.25s ease, opacity 0.2s ease, visibility 0.2s ease;
+  box-sizing: border-box;
+  transform: translate3d(0, 0, 0);
+  transition: margin-left 0.32s cubic-bezier(0.2, 0.9, 0.2, 1),
+              opacity 0.26s cubic-bezier(0.2, 0.9, 0.2, 1);
+  will-change: margin-left, opacity;
 }
 
-/* Left Panel Collapsed State */
-.ai-bot-terminal.sidebar-collapsed .ai-bot-body-split {
-  grid-template-columns: 0px 1fr !important;
-}
-
+/* Left Panel Collapsed State: Liquid drawer slide without squishing text */
 .ai-bot-terminal.sidebar-collapsed .ai-bot-sidebar {
-  width: 0 !important;
-  min-width: 0 !important;
-  max-width: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: hidden !important;
-  border-right: none !important;
+  margin-left: -270px !important;
   opacity: 0 !important;
-  visibility: hidden !important;
   pointer-events: none !important;
 }
 
 .ai-sidebar-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 6px 8px 10px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
 .ai-sidebar-title {
@@ -3766,34 +3767,54 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 }
 
 .ai-sidebar-expand-tab {
-  display: none;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  margin: 10px 16px 0 16px;
-  align-self: flex-start;
-  background: rgba(14, 22, 42, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.32);
+  height: 0;
+  max-height: 0;
+  padding: 0 10px;
+  margin: 0 16px;
+  border: 1px solid transparent;
+  background: rgba(14, 22, 42, 0.9);
   border-radius: 6px;
   color: #38bdf8;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  align-self: flex-start;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: max-height 0.3s cubic-bezier(0.2, 0.9, 0.2, 1),
+              height 0.3s cubic-bezier(0.2, 0.9, 0.2, 1),
+              margin 0.3s cubic-bezier(0.2, 0.9, 0.2, 1),
+              padding 0.3s cubic-bezier(0.2, 0.9, 0.2, 1),
+              opacity 0.25s ease,
+              border-color 0.25s ease,
+              background 0.2s ease,
+              transform 0.2s ease;
+  transform: translateY(-4px);
+  flex-shrink: 0;
 }
 
 .ai-sidebar-expand-tab:hover {
   background: rgba(56, 189, 248, 0.2);
   border-color: #38bdf8;
   color: #ffffff;
-  transform: translateX(2px);
+  transform: translateY(0) scale(1.02);
 }
 
 .ai-bot-terminal.sidebar-collapsed .ai-sidebar-expand-tab {
-  display: inline-flex;
-  animation: msgFadeIn 0.25s ease forwards;
+  height: 28px;
+  max-height: 36px;
+  padding: 4px 10px;
+  margin: 10px 16px 2px 16px;
+  opacity: 1;
+  pointer-events: auto;
+  border-color: rgba(56, 189, 248, 0.32);
+  transform: translateY(0);
 }
 
 .ai-sidebar-nav {
@@ -3849,9 +3870,11 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 .ai-bot-main {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 0%;
   min-width: 0;
   background: rgba(6, 10, 20, 0.6);
+  overflow: hidden;
+  position: relative;
 }
 
 .ai-chat-stream {
@@ -4541,21 +4564,32 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 /* Mobile Responsiveness for AI Terminal Side Panel Split */
 @media (max-width: 860px) {
   .ai-bot-body-split {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   .ai-bot-sidebar {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 0;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    max-height: 160px;
+    max-height: 180px;
     padding: 10px;
+    transition: max-height 0.32s cubic-bezier(0.2, 0.9, 0.2, 1),
+                opacity 0.26s ease,
+                padding 0.32s ease;
   }
 
   .ai-bot-terminal.sidebar-collapsed .ai-bot-sidebar {
-    display: none !important;
+    margin-left: 0 !important;
     max-height: 0 !important;
-    padding: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
     border-bottom: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
   }
 
   .ai-sidebar-nav {

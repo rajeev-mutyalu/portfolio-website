@@ -7059,13 +7059,6 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         try {
           localStorage.setItem('charlie_sidebar_collapsed', collapsed ? 'true' : 'false');
         } catch (e) {}
-
-        setTimeout(() => {
-          scrollStreamToBottom();
-          if (window.portfolioCharlie && typeof window.portfolioCharlie.onResize === 'function') {
-            window.portfolioCharlie.onResize();
-          }
-        }, 150);
       }
 
       function toggleSidebar() {
