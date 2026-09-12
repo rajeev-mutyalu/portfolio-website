@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cyber Charlie Character Lab — Motion &amp; Expression Showcase</title>
-  <meta name="description" content="Interactive Animation & Expression Lab for Charlie AI: Run cycle, walk cycle, jump, 3-hit knife slash, and cartoon hit reactions." />
+  <meta name="description"
+    content="Interactive Animation & Expression Lab for Charlie AI: Run cycle, walk cycle, jump, 3-hit knife slash, and cartoon hit reactions." />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
 
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <meta name="theme-color" content="#06080e" />
@@ -57,6 +61,7 @@
       z-index: 0;
       opacity: 0.35;
     }
+
     .glow-cyan {
       top: -100px;
       left: -100px;
@@ -64,6 +69,7 @@
       height: 450px;
       background: radial-gradient(circle, var(--accent-cyan), transparent 70%);
     }
+
     .glow-violet {
       bottom: -100px;
       right: -100px;
@@ -105,6 +111,7 @@
       cursor: default;
       user-select: none;
     }
+
     .lab-badge {
       font-family: var(--font-mono);
       font-size: 0.72rem;
@@ -116,6 +123,7 @@
       border-radius: 6px;
       letter-spacing: 0.05em;
     }
+
     .lab-title {
       font-family: var(--font-display);
       font-size: 1.15rem;
@@ -130,6 +138,7 @@
       align-items: center;
       gap: 10px;
     }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -144,34 +153,41 @@
       border: 1px solid transparent;
       font-family: var(--font-sans);
     }
+
     .btn-ghost {
       background: rgba(255, 255, 255, 0.05);
       border-color: rgba(255, 255, 255, 0.14);
       color: #cbd5e1;
     }
+
     .btn-ghost:hover {
       background: rgba(255, 255, 255, 0.1);
       color: #fff;
     }
+
     .btn-primary {
       background: linear-gradient(135deg, #00f2fe 0%, #2563eb 100%);
       color: #040813;
       font-weight: 700;
       box-shadow: 0 0 16px rgba(0, 242, 254, 0.4);
     }
+
     .btn-primary:hover {
       box-shadow: 0 0 24px rgba(0, 242, 254, 0.6);
       transform: translateY(-1px);
     }
+
     .btn-secondary {
       background: rgba(255, 255, 255, 0.08);
       border-color: rgba(255, 255, 255, 0.18);
       color: #e2e8f0;
     }
+
     .btn-secondary:hover {
       background: rgba(255, 255, 255, 0.14);
       color: #fff;
     }
+
     .btn-glitter {
       background: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%);
       color: #040813;
@@ -180,6 +196,7 @@
       box-shadow: 0 0 16px rgba(245, 158, 11, 0.55), 0 0 28px rgba(255, 215, 0, 0.35);
       text-shadow: none;
     }
+
     .btn-glitter:hover {
       background: linear-gradient(135deg, #fff3a1 0%, #fbbf24 50%, #b45309 100%);
       box-shadow: 0 0 24px rgba(245, 158, 11, 0.85), 0 0 36px rgba(255, 215, 0, 0.55);
@@ -245,12 +262,14 @@
       user-select: none;
       z-index: 10;
     }
+
     .hud-left-stack {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 6px;
     }
+
     .hud-chip {
       font-family: var(--font-mono);
       font-size: 0.75rem;
@@ -264,6 +283,7 @@
       gap: 6px;
       color: #94a3b8;
     }
+
     .hud-chip.hud-hint-chip {
       background: rgba(4, 7, 16, 0.85);
       border-color: rgba(0, 242, 254, 0.35);
@@ -271,19 +291,23 @@
       margin-left: auto;
       align-self: flex-start;
     }
+
     @media (max-width: 640px) {
       .stage-hud {
         flex-direction: column;
         gap: 8px;
       }
+
       .hud-chip.hud-hint-chip {
         margin-left: 0;
         align-self: stretch;
       }
     }
+
     .hud-chip strong {
       color: var(--accent-cyan);
     }
+
     .hud-dot {
       width: 6px;
       height: 6px;
@@ -292,9 +316,19 @@
       box-shadow: 0 0 8px var(--accent-emerald);
       animation: pulseDot 1.5s infinite;
     }
+
     @keyframes pulseDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.8);
+      }
     }
 
     /* Quick Action Strip below stage */
@@ -339,12 +373,14 @@
       transition: all 0.2s ease;
       font-family: var(--font-sans);
     }
+
     .action-btn:hover {
       background: rgba(0, 242, 254, 0.12);
       border-color: var(--accent-cyan);
       color: #fff;
       box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
     }
+
     .action-btn.active {
       background: rgba(0, 242, 254, 0.2);
       border-color: var(--accent-cyan);
@@ -372,12 +408,14 @@
       border-color: rgba(244, 63, 94, 0.4);
       color: #fda4af;
     }
+
     .action-btn.btn-bonk:hover {
       background: rgba(244, 63, 94, 0.2);
       border-color: var(--accent-rose);
       color: #fff;
       box-shadow: 0 0 16px rgba(244, 63, 94, 0.35);
     }
+
     .action-trigger-btn.btn-bonk.active {
       background: rgba(244, 63, 94, 0.26);
       border-color: var(--accent-rose);
@@ -420,11 +458,13 @@
       padding: 16px;
       overflow: hidden;
     }
+
     #cardAiLifecycle .button-stack {
       display: flex;
       flex-direction: column;
       gap: 7px;
     }
+
     #cardAiLifecycle #chatStatusText {
       margin-top: 6px !important;
       max-height: 70px;
@@ -437,17 +477,21 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(0, 242, 254, 0.45) rgba(0, 242, 254, 0.05);
     }
+
     #cardAiLifecycle #chatStatusText::-webkit-scrollbar {
       width: 4px;
     }
+
     #cardAiLifecycle #chatStatusText::-webkit-scrollbar-track {
       background: rgba(0, 242, 254, 0.05);
       border-radius: 4px;
     }
+
     #cardAiLifecycle #chatStatusText::-webkit-scrollbar-thumb {
       background: rgba(0, 242, 254, 0.4);
       border-radius: 4px;
     }
+
     #cardAiLifecycle #chatStatusText::-webkit-scrollbar-thumb:hover {
       background: rgba(0, 242, 254, 0.85);
     }
@@ -459,6 +503,7 @@
       flex-direction: column;
       padding: 16px;
     }
+
     #cardVisorLed .face-grid {
       flex: 1;
       display: grid;
@@ -466,6 +511,7 @@
       grid-template-rows: repeat(3, 1fr);
       gap: 6px;
     }
+
     #cardVisorLed .face-btn {
       padding: 5px 3px;
       justify-content: center;
@@ -506,21 +552,25 @@
       flex-direction: column;
       padding: 12px 16px;
     }
+
     #cardMotionTweaks h3,
     #cardTelemetry h3 {
       margin-bottom: 8px;
       padding-bottom: 6px;
     }
+
     #cardMotionTweaks .tweaks-slider-stack {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
+
     #cardMotionTweaks .slider-row {
       margin-bottom: 0;
       gap: 3px;
     }
+
     #cardTelemetry .telemetry-box {
       flex: 1;
       display: flex;
@@ -531,7 +581,9 @@
       font-size: 0.71rem;
       line-height: 1.35;
     }
+
     @media (max-width: 1024px) {
+
       .quick-actions-bar,
       #cardAiLifecycle,
       #cardVisorLed,
@@ -541,6 +593,7 @@
         min-height: 170px;
       }
     }
+
     .slider-label {
       display: flex;
       justify-content: space-between;
@@ -548,10 +601,12 @@
       font-size: 0.72rem;
       color: #94a3b8;
     }
+
     .slider-label span:last-child {
       color: var(--accent-cyan);
       font-weight: 700;
     }
+
     input[type="range"] {
       -webkit-appearance: none;
       width: 100%;
@@ -560,6 +615,7 @@
       background: rgba(255, 255, 255, 0.12);
       outline: none;
     }
+
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 16px;
@@ -577,6 +633,7 @@
       grid-template-rows: repeat(3, 1fr);
       gap: 6px;
     }
+
     .face-btn {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -594,17 +651,20 @@
       transition: all 0.2s ease;
       overflow: hidden;
     }
+
     .face-btn:hover {
       background: rgba(0, 242, 254, 0.15);
       border-color: var(--accent-cyan);
       color: #fff;
     }
+
     .face-btn.active {
       background: rgba(0, 242, 254, 0.25);
       border-color: var(--accent-cyan);
       color: var(--accent-cyan);
       box-shadow: 0 0 12px rgba(0, 242, 254, 0.35);
     }
+
     .face-preview {
       font-size: 0.74rem;
       white-space: nowrap !important;
@@ -612,6 +672,7 @@
       letter-spacing: -0.3px;
       display: inline-block;
     }
+
     .face-tag {
       font-size: 0.62rem;
       text-transform: uppercase;
@@ -629,14 +690,17 @@
       padding: 10px;
       line-height: 1.6;
     }
+
     .telemetry-box strong {
       color: #e2e8f0;
     }
+
     .telemetry-val {
       color: var(--accent-cyan);
     }
   </style>
 </head>
+
 <body>
   <div class="ambient-glow glow-cyan"></div>
   <div class="ambient-glow glow-violet"></div>
@@ -647,32 +711,37 @@
       <div class="lab-logo">
         <span class="lab-badge">CHARLIE LAB v1.0</span>
         <span class="lab-title">
-          <svg width="22" height="22" viewBox="0 0 36 36" fill="none" style="vertical-align: -4px; display: inline-block; margin-right: 6px;">
-            <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
-            <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
-            <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
-            <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
-            <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
-            <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
-            <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
-            <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
-            <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
-            <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
-            <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <svg width="22" height="22" viewBox="0 0 36 36" fill="none"
+            style="vertical-align: -4px; display: inline-block; margin-right: 6px;">
+            <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+            <circle cx="18" cy="3" r="2.8" fill="#00f2fe" />
+            <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2" />
+            <circle cx="3" cy="20" r="2.2" fill="#00f2fe" />
+            <circle cx="33" cy="20" r="2.2" fill="#00f2fe" />
+            <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)"
+              stroke-width="1" />
+            <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe" />
+            <circle cx="14" cy="17.5" r="0.9" fill="#ffffff" />
+            <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe" />
+            <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff" />
+            <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none" />
           </svg>Cyber Charlie: Character &amp; Motion Lab
         </span>
       </div>
 
       <div class="lab-nav-actions">
         <a href="index.html" class="btn btn-ghost">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
           <span>Portfolio</span>
         </a>
         <a href="cv.html" class="btn btn-ghost"><span>View CV</span></a>
         <button type="button" class="btn btn-primary" id="spawnCometBtn">
           <span>☄️ Spawn Test Comet</span>
         </button>
-        <button type="button" class="btn btn-glitter" id="spawnGlitterBtn" title="Spawn a Rare Celestial Glitter Comet (Catch/shatter to activate 5.5s Holo-Shield!)">
+        <button type="button" class="btn btn-glitter" id="spawnGlitterBtn"
+          title="Spawn a Rare Celestial Glitter Comet (Catch/shatter to activate 5.5s Holo-Shield!)">
           <span>✨ Spawn Glitter Comet</span>
         </button>
         <button type="button" class="btn btn-secondary" id="btnLabSound" title="Toggle Lab Sound Effects (SFX)">
@@ -685,7 +754,7 @@
 
   <!-- Main Showcase Grid -->
   <main class="lab-main">
-    
+
     <!-- Left Stage Canvas Column -->
     <div class="stage-container">
       <div class="canvas-card">
@@ -695,7 +764,8 @@
             <div class="hud-chip">MODE: <strong id="hudMode">IDLE BOB</strong></div>
             <div class="hud-chip">SLICED COMETS: <strong id="hudSlices">0</strong></div>
           </div>
-          <div class="hud-chip hud-hint-chip"><span>💡 Move mouse to direct Charlie &bull; Click to Trigger 3-Hit Blade Slash!</span></div>
+          <div class="hud-chip hud-hint-chip"><span>💡 Move mouse to direct Charlie &bull; Click to Trigger 3-Hit Blade
+              Slash!</span></div>
         </div>
 
         <canvas id="stageCanvas"></canvas>
@@ -706,41 +776,55 @@
         <!-- Line 1: Locomotion Stance & Combat/Movement Stunts -->
         <div class="quick-line quick-line-top">
           <!-- Locomotion Stance Modes (Base Movement: Exactly one always active) -->
-          <button type="button" class="action-btn loco-btn active" id="btnIdle" data-mode="idle" title="Combat Idle: Hover &amp; Bob while following cursor">🧘 Idle</button>
-          <button type="button" class="action-btn loco-btn" id="btnWalk" data-mode="walk" title="Walk: Articulated Stride towards cursor">🚶 Walk</button>
-          <button type="button" class="action-btn loco-btn" id="btnRun" data-mode="run" title="Sprint: Supersonic Run towards cursor">🏃 Sprint</button>
+          <button type="button" class="action-btn loco-btn active" id="btnIdle" data-mode="idle"
+            title="Combat Idle: Hover &amp; Bob while following cursor">🧘 Idle</button>
+          <button type="button" class="action-btn loco-btn" id="btnWalk" data-mode="walk"
+            title="Walk: Articulated Stride towards cursor">🚶 Walk</button>
+          <button type="button" class="action-btn loco-btn" id="btnRun" data-mode="run"
+            title="Sprint: Supersonic Run towards cursor">🏃 Sprint</button>
 
           <!-- Visual Vertical Separator between Base Locomotion State and Action Triggers -->
           <div class="quick-divider" title="Current Locomotion Mode | Action Stunts"></div>
 
           <!-- Action Triggers: Combat & Movement Stunts -->
-          <button type="button" class="action-btn action-trigger-btn" id="btnJump" data-action="jump" title="Aerial 360° Somersault Flip">🦘 Jump Flip</button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnSlash" data-action="slash" title="Astra Plasma Blade 4-Phase Combo Slash">🗡️ 3-Hit Slash</button>
-          <button type="button" class="action-btn action-trigger-btn btn-bonk" id="btnBonk" data-action="bonk" title="Comet Bonk Stun Simulation">💥 Comet Bonk!</button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnDizzy" data-action="dizzy" title="Dizzy Wobble &amp; Orbiting Stars">😵 Dizzy</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnJump" data-action="jump"
+            title="Aerial 360° Somersault Flip">🦘 Jump Flip</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnSlash" data-action="slash"
+            title="Astra Plasma Blade 4-Phase Combo Slash">🗡️ 3-Hit Slash</button>
+          <button type="button" class="action-btn action-trigger-btn btn-bonk" id="btnBonk" data-action="bonk"
+            title="Comet Bonk Stun Simulation">💥 Comet Bonk!</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnDizzy" data-action="dizzy"
+            title="Dizzy Wobble &amp; Orbiting Stars">😵 Dizzy</button>
         </div>
 
         <!-- Line 2: AI Companion Modes, Victory, Vertical Separator & Laboratory System Controls -->
         <div class="quick-line quick-line-bottom">
           <!-- Companion & AI Action Stunts -->
-          <button type="button" class="action-btn action-trigger-btn" id="btnThinking" data-action="thinking" title="AI Agent Thinking with Holographic Gear">🤔 Thinking</button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnWriting" data-action="writing" title="AI Agent Writing Answer on Holographic Pad">✍️ Writing Ans</button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnWaiting" data-action="waiting" title="Restful Chatbot Companion Mode">
-            <svg width="15" height="15" viewBox="0 0 36 36" fill="none" style="vertical-align: -2px; display: inline-block; margin-right: 3px;">
-              <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
-              <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
-              <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
-              <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
-              <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
-              <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
-              <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
-              <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
-              <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
-              <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
-              <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <button type="button" class="action-btn action-trigger-btn" id="btnThinking" data-action="thinking"
+            title="AI Agent Thinking with Holographic Gear">🤔 Thinking</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnWriting" data-action="writing"
+            title="AI Agent Writing Answer on Holographic Pad">✍️ Writing Ans</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnWaiting" data-action="waiting"
+            title="Restful Chatbot Companion Mode">
+            <svg width="15" height="15" viewBox="0 0 36 36" fill="none"
+              style="vertical-align: -2px; display: inline-block; margin-right: 3px;">
+              <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+              <circle cx="18" cy="3" r="2.8" fill="#00f2fe" />
+              <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2" />
+              <circle cx="3" cy="20" r="2.2" fill="#00f2fe" />
+              <circle cx="33" cy="20" r="2.2" fill="#00f2fe" />
+              <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)"
+                stroke-width="1" />
+              <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe" />
+              <circle cx="14" cy="17.5" r="0.9" fill="#ffffff" />
+              <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe" />
+              <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff" />
+              <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round"
+                fill="none" />
             </svg>Chat Mascot
           </button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnVictory" data-action="victory" title="Celebratory Victory Spin &amp; Joy Sparks">🌟 Victory</button>
+          <button type="button" class="action-btn action-trigger-btn" id="btnVictory" data-action="victory"
+            title="Celebratory Victory Spin &amp; Joy Sparks">🌟 Victory</button>
 
           <!-- Vertical Separator after Victory -->
           <div class="quick-divider" title="Victory | System Controls"></div>
@@ -760,11 +844,13 @@
       <div class="control-card" id="cardMotionTweaks">
         <h3 style="display: flex; align-items: center; justify-content: space-between;">
           <span><span>⚙️</span> Motion &amp; Scale Tweaks</span>
-          <button type="button" class="btn btn-ghost" id="btnResetTweaks" title="Reset Scale, Speed &amp; Glow to Defaults" style="padding: 3px 9px; font-size: 0.72rem; gap: 4px; border-radius: 6px; border-color: rgba(255,255,255,0.18);">
+          <button type="button" class="btn btn-ghost" id="btnResetTweaks"
+            title="Reset Scale, Speed &amp; Glow to Defaults"
+            style="padding: 3px 9px; font-size: 0.72rem; gap: 4px; border-radius: 6px; border-color: rgba(255,255,255,0.18);">
             <span>🔄 Reset</span>
           </button>
         </h3>
-        
+
         <div class="tweaks-slider-stack">
           <div class="slider-row">
             <div class="slider-label">
@@ -795,23 +881,27 @@
 
     <!-- Right Control Deck -->
     <aside class="control-deck">
-      
+
       <!-- AI Assistant & Chatbot Life Cycle Simulator -->
-      <div class="control-card" id="cardAiLifecycle" style="border-color: rgba(0, 242, 254, 0.45); background: linear-gradient(180deg, rgba(8, 16, 32, 0.95), rgba(4, 8, 18, 0.95)); box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);">
+      <div class="control-card" id="cardAiLifecycle"
+        style="border-color: rgba(0, 242, 254, 0.45); background: linear-gradient(180deg, rgba(8, 16, 32, 0.95), rgba(4, 8, 18, 0.95)); box-shadow: 0 0 20px rgba(0, 242, 254, 0.1);">
         <h3>
-          <span style="display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; margin-right: 5px;">
+          <span
+            style="display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; margin-right: 5px;">
             <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
-              <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round"/>
-              <circle cx="18" cy="3" r="2.8" fill="#00f2fe"/>
-              <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2"/>
-              <circle cx="3" cy="20" r="2.2" fill="#00f2fe"/>
-              <circle cx="33" cy="20" r="2.2" fill="#00f2fe"/>
-              <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)" stroke-width="1"/>
-              <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
-              <circle cx="14" cy="17.5" r="0.9" fill="#ffffff"/>
-              <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe"/>
-              <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff"/>
-              <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+              <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+              <circle cx="18" cy="3" r="2.8" fill="#00f2fe" />
+              <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2" />
+              <circle cx="3" cy="20" r="2.2" fill="#00f2fe" />
+              <circle cx="33" cy="20" r="2.2" fill="#00f2fe" />
+              <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)"
+                stroke-width="1" />
+              <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe" />
+              <circle cx="14" cy="17.5" r="0.9" fill="#ffffff" />
+              <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe" />
+              <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff" />
+              <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round"
+                fill="none" />
             </svg>
           </span>AI Assistant Life Cycle
         </h3>
@@ -819,25 +909,31 @@
           Test Charlie's chatbot life states &amp; the bottom-right dock &harr; game deploy leap:
         </p>
         <div class="button-stack" style="display: flex; flex-direction: column; gap: 10px;">
-          <button type="button" class="btn btn-primary" id="btnSimulateChat" style="width: 100%; justify-content: center;">
+          <button type="button" class="btn btn-primary" id="btnSimulateChat"
+            style="width: 100%; justify-content: center;">
             <span>💬 Simulate "Ask Charlie" Query</span>
           </button>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <button type="button" class="action-btn" id="btnDeployGame" style="justify-content: center; font-size: 0.74rem;">
+            <button type="button" class="action-btn" id="btnDeployGame"
+              style="justify-content: center; font-size: 0.74rem;">
               <span>🚀 Deploy to Game</span>
             </button>
-            <button type="button" class="action-btn" id="btnRecallDock" style="justify-content: center; font-size: 0.74rem;">
+            <button type="button" class="action-btn" id="btnRecallDock"
+              style="justify-content: center; font-size: 0.74rem;">
               <span>📥 Recall to Dock</span>
             </button>
           </div>
-          <button type="button" class="action-btn" id="btnSpontaneousTest" style="width: 100%; justify-content: center; font-size: 0.74rem; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
+          <button type="button" class="action-btn" id="btnSpontaneousTest"
+            style="width: 100%; justify-content: center; font-size: 0.74rem; border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">
             <span>🎲 Test 1-Min Random Move (Jump/Bonk/Dizzy/Victory)</span>
           </button>
-          <button type="button" class="action-btn" id="btnTestEscort" style="width: 100%; justify-content: center; font-size: 0.74rem; border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+          <button type="button" class="action-btn" id="btnTestEscort"
+            style="width: 100%; justify-content: center; font-size: 0.74rem; border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
             <span>🚀 Test Section Escort &rarr; Victory &rarr; Dock Dash</span>
           </button>
         </div>
-        <div id="chatStatusText" style="margin-top: 6px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,242,254,0.08); padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); text-align: left; max-height: 70px; overflow-y: auto; overflow-x: hidden; box-sizing: border-box;">
+        <div id="chatStatusText"
+          style="margin-top: 6px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,242,254,0.08); padding: 7px 10px; border-radius: 6px; border: 1px solid rgba(0,242,254,0.2); text-align: left; max-height: 70px; overflow-y: auto; overflow-x: hidden; box-sizing: border-box;">
           Status: Ready for testing
         </div>
       </div>
@@ -923,7 +1019,7 @@
         this.isMuted = false;
         try {
           this.isMuted = localStorage.getItem('charlie_lab_sfx_muted') === 'true';
-        } catch (e) {}
+        } catch (e) { }
       }
 
       init() {
@@ -939,7 +1035,7 @@
       ensureContext() {
         this.init();
         if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume().catch(() => {});
+          this.ctx.resume().catch(() => { });
         }
       }
 
@@ -947,7 +1043,7 @@
         this.isMuted = muted;
         try {
           localStorage.setItem('charlie_lab_sfx_muted', muted ? 'true' : 'false');
-        } catch (e) {}
+        } catch (e) { }
       }
 
       toggleMute() {
@@ -972,7 +1068,7 @@
           gain.connect(this.ctx.destination);
           osc.start(now);
           osc.stop(now + 0.10);
-        } catch (e) {}
+        } catch (e) { }
       }
 
       playLaserDeflect() {
@@ -992,7 +1088,7 @@
           gain.connect(this.ctx.destination);
           osc.start(now);
           osc.stop(now + 0.12);
-        } catch (e) {}
+        } catch (e) { }
       }
 
       playComboDing() {
@@ -1012,7 +1108,7 @@
           gain.connect(this.ctx.destination);
           osc.start(now);
           osc.stop(now + 0.24);
-        } catch (e) {}
+        } catch (e) { }
       }
 
       playJump() {
@@ -1032,7 +1128,7 @@
           gain.connect(this.ctx.destination);
           osc.start(now);
           osc.stop(now + 0.24);
-        } catch (e) {}
+        } catch (e) { }
       }
 
       playBonk() {
@@ -1052,7 +1148,7 @@
           gain.connect(this.ctx.destination);
           osc.start(now);
           osc.stop(now + 0.20);
-        } catch (e) {}
+        } catch (e) { }
       }
 
       playDizzy() {
@@ -1075,7 +1171,7 @@
           gain.connect(this.ctx.destination);
           osc.start(now);
           osc.stop(now + 0.60);
-        } catch (e) {}
+        } catch (e) { }
       }
 
       playFanfare() {
@@ -1099,7 +1195,7 @@
             osc.start(start);
             osc.stop(start + 0.50);
           });
-        } catch (e) {}
+        } catch (e) { }
       }
     }
 
@@ -1289,7 +1385,7 @@
     if (spawnGlitterBtn) {
       spawnGlitterBtn.addEventListener('click', () => {
         comets.push(new TestComet(canvas.clientWidth / 2 + (Math.random() - 0.5) * 200, -20, true));
-        try { sound.playLaserDeflect(); } catch(e) {}
+        try { sound.playLaserDeflect(); } catch (e) { }
       });
     }
 
@@ -2305,7 +2401,7 @@
           elbowR = -0.85;
           customKnifeAngle = 0.43;
         }
-        
+
         // --- WALK CYCLE ---
         else if (this.state === 'walk') {
           const w = this.animTimer * 2.2;
@@ -3771,7 +3867,7 @@
 
             const responseFull = queryItem.a;
             let charIdx = 0;
-            
+
             chatTypeInterval = setInterval(() => {
               if (charIdx < responseFull.length) {
                 const curText = responseFull.substring(0, charIdx + 1);
@@ -4019,4 +4115,5 @@
 
   </script>
 </body>
+
 </html>

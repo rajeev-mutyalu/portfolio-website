@@ -99,7 +99,7 @@
         setTimeout(updateMobileOrientationState, 60);
         setTimeout(updateMobileOrientationState, 200);
       });
-    } catch (e) {}
+    } catch (e) { }
   }
   document.addEventListener('DOMContentLoaded', updateMobileOrientationState);
 
@@ -308,7 +308,7 @@
         if (typeof window.portfolioSoundEngine?.playJump === 'function') {
           window.portfolioSoundEngine.playJump();
         }
-      } catch (err) {}
+      } catch (err) { }
       this.syncHudFace('[^_-]');
     }
 
@@ -324,7 +324,7 @@
         if (typeof window.portfolioSoundEngine?.playFanfare === 'function') {
           window.portfolioSoundEngine.playFanfare();
         }
-      } catch (err) {}
+      } catch (err) { }
     }
 
     triggerBonk() {
@@ -341,7 +341,7 @@
         if (typeof window.portfolioSoundEngine?.playBonk === 'function') {
           window.portfolioSoundEngine.playBonk();
         }
-      } catch (err) {}
+      } catch (err) { }
     }
 
     triggerDizzy() {
@@ -356,7 +356,7 @@
         if (typeof window.portfolioSoundEngine?.playDizzy === 'function') {
           window.portfolioSoundEngine.playDizzy();
         }
-      } catch (err) {}
+      } catch (err) { }
     }
 
     handleCometBonk(cx, cy) {
@@ -514,7 +514,7 @@
         if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
           window.portfolioSoundEngine.playLaserDeflect();
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     triggerSectionEscort(targetEl, sectionName) {
@@ -581,7 +581,7 @@
         if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
           window.portfolioSoundEngine.playLaserDeflect();
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     triggerReturnDash(startX, startY, targetX, targetY) {
@@ -615,7 +615,7 @@
         if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
           window.portfolioSoundEngine.playLaserDeflect();
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     getChatWritingCenter() {
@@ -899,7 +899,7 @@
             if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
               window.portfolioSoundEngine.playComboDing();
             }
-          } catch (e) {}
+          } catch (e) { }
         }
         if (this.jumpTimer >= this.jumpMax) {
           this.state = 'idle';
@@ -1103,7 +1103,7 @@
               if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
                 window.portfolioSoundEngine.playComboDing();
               }
-            } catch (e) {}
+            } catch (e) { }
             if (typeof this.onDashComplete === 'function') {
               const cb = this.onDashComplete;
               this.onDashComplete = null;
@@ -1121,7 +1121,7 @@
               if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
                 window.portfolioSoundEngine.playComboDing();
               }
-            } catch (e) {}
+            } catch (e) { }
           } else {
             if (this.isGameModeDeploy) {
               this.state = 'slash';
@@ -2689,7 +2689,7 @@
         if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
           window.portfolioSoundEngine.playLaserDeflect();
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     update() {
@@ -2830,7 +2830,7 @@
                   if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function') {
                     window.portfolioSoundEngine.playLaserDeflect();
                   }
-                } catch (e) {}
+                } catch (e) { }
               }
             }
           }
@@ -3271,7 +3271,7 @@
     ensureContext() {
       this.init();
       if (this.ctx && this.ctx.state === 'suspended') {
-        this.ctx.resume().catch(() => {});
+        this.ctx.resume().catch(() => { });
       }
     }
 
@@ -3294,7 +3294,7 @@
       this.ensureContext();
       if (!this.ctx) return;
       if (this.ctx.state === 'suspended') {
-        this.ctx.resume().catch(() => {});
+        this.ctx.resume().catch(() => { });
       }
 
       const now = this.ctx.currentTime;
@@ -3390,7 +3390,7 @@
       this.ensureContext();
       if (!this.ctx) return;
       if (this.ctx.state === 'suspended') {
-        this.ctx.resume().catch(() => {});
+        this.ctx.resume().catch(() => { });
       }
 
       const now = this.ctx.currentTime;
@@ -3535,7 +3535,7 @@
         gain.connect(this.sfxGain);
         osc.start(now);
         osc.stop(now + 0.13);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     playComboDing() {
@@ -3555,7 +3555,7 @@
         gain.connect(this.sfxGain);
         osc.start(now);
         osc.stop(now + 0.22);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 3. Ambient Cosmic Background Music for Comets Falling
@@ -3572,7 +3572,7 @@
       const playBgmStep = () => {
         if (!this.isPlayingBGM || !this.ctx) return;
         if (this.ctx.state === 'suspended') {
-          this.ctx.resume().catch(() => {});
+          this.ctx.resume().catch(() => { });
         }
 
         if (!this.isMuted) {
@@ -4310,7 +4310,7 @@
       window.isChatAudioMuted = isMuted;
       try {
         localStorage.setItem('portfolio_audio_muted', isMuted ? 'true' : 'false');
-      } catch (e) {}
+      } catch (e) { }
       if (scoreboard) {
         scoreboard.setMessage(isMuted ? 'Audio muted. Silent stealth mode! 🤫' : 'Audio online! Synth BGM & FX active! 🔊');
       }
@@ -4339,7 +4339,7 @@
       if (localStorage.getItem('portfolio_audio_muted') === 'true') {
         setPortfolioAudioMute(true);
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // 5. Setup Floating FX Preset Switcher
     if (fxToggleBtn && fxPanel) {
@@ -4513,8 +4513,8 @@
 
       document.addEventListener('click', (e) => {
         if (mobileNavDrawer.classList.contains('open') &&
-            !mobileNavDrawer.contains(e.target) &&
-            !mobileNavToggle.contains(e.target)) {
+          !mobileNavDrawer.contains(e.target) &&
+          !mobileNavToggle.contains(e.target)) {
           setDrawerOpen(false);
         }
       });
@@ -4522,8 +4522,8 @@
       // Prevent background touch scrolling outside the drawer while open without breaking body scroll coordinates
       document.addEventListener('touchmove', (e) => {
         if (mobileNavDrawer.classList.contains('open') &&
-            !mobileNavDrawer.contains(e.target) &&
-            !mobileNavToggle.contains(e.target)) {
+          !mobileNavDrawer.contains(e.target) &&
+          !mobileNavToggle.contains(e.target)) {
           e.preventDefault();
         }
       }, { passive: false });
@@ -5704,7 +5704,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
       if (!aiBotStatusPill) return;
       const pulse = aiBotStatusPill.querySelector('.ai-status-pulse');
       const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-      
+
       if (isThinking) {
         if (pulse) pulse.classList.add('pulse-thinking');
         if (text) text.textContent = 'ANALYZING PROMPT SEMANTICS [LOCAL-KB]...';
@@ -5808,17 +5808,17 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
               <span class="ai-followup-label">Explore Next:</span>
               <div class="ai-followup-chips">
                 ${match.followups.map(f => {
-                  let queryText = f;
-                  if (f.startsWith('🛑')) queryText = 'turn off game mode';
-                  else if (f.startsWith('🔇')) queryText = 'mute sound';
-                  else if (f.startsWith('🔊')) queryText = 'unmute sound';
-                  else if (f.startsWith('⚡')) queryText = 'switch fx to solar';
-                  else if (f.startsWith('🌌')) queryText = 'switch fx to aurora';
-                  else if (f.startsWith('💎')) queryText = 'switch fx to diamond';
-                  else if (f.startsWith('☄️')) queryText = 'switch fx to comet';
-                  else if (f.startsWith('🎮')) queryText = 'turn on game mode';
-                  return `<button type="button" class="ai-followup-btn" data-query="${escapeHtml(queryText)}">${escapeHtml(f)}</button>`;
-                }).join('')}
+            let queryText = f;
+            if (f.startsWith('🛑')) queryText = 'turn off game mode';
+            else if (f.startsWith('🔇')) queryText = 'mute sound';
+            else if (f.startsWith('🔊')) queryText = 'unmute sound';
+            else if (f.startsWith('⚡')) queryText = 'switch fx to solar';
+            else if (f.startsWith('🌌')) queryText = 'switch fx to aurora';
+            else if (f.startsWith('💎')) queryText = 'switch fx to diamond';
+            else if (f.startsWith('☄️')) queryText = 'switch fx to comet';
+            else if (f.startsWith('🎮')) queryText = 'turn on game mode';
+            return `<button type="button" class="ai-followup-btn" data-query="${escapeHtml(queryText)}">${escapeHtml(f)}</button>`;
+          }).join('')}
               </div>
             </div>
           `;
@@ -6424,7 +6424,7 @@ I am operating as a high-speed <strong>offline local knowledge engine</strong> d
               if (typeof frame.contentWindow.updateMobileOrientationState === 'function') {
                 frame.contentWindow.updateMobileOrientationState();
               }
-            } catch (err) {}
+            } catch (err) { }
           }
         });
       }
