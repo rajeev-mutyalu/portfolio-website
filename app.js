@@ -4662,16 +4662,18 @@ INTELLIGENCE CAPABILITIES & SCOPE:
          Always explain these technical details and ALWAYS provide the link: <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
      • Location & Status: London, UK (UK Skilled Worker Visa, existing sponsorship in place, available immediately). Full mobility for London onsite and global remote roles.
 
-3. INTERACTIVE NAVIGATION CHIPS (FOR PORTFOLIO REFERENCES):
+3. INTERACTIVE NAVIGATION CHIPS (STRICTLY FOR RAJEEV PORTFOLIO INQUIRIES ONLY):
    - NEVER print raw personal email addresses or raw URLs in plain text.
-   - When referring to Rajeev's contact, bio, work, or Charlie Lab, use these styled action chips:
+   - ONLY when the user's question is specifically about Rajeev Mutyalu, hiring him, his direct contact details, his CV, or Charlie Lab, conclude with appropriate styled action chips:
      <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
      <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>
      <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>
      <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
      <a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
      <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
-   - (For general questions like Sachin Tendulkar, provide the factual answer naturally without forcing unrelated portfolio chips).
+   - STRICT PROHIBITION FOR GENERAL / OUTSIDE QUESTIONS:
+     When the user asks general questions or personal writing tasks (e.g. dog grooming, appointments, personal emails, sports, cooking, coding, math, trivia):
+     NEVER include any portfolio chips, CV links, or contact matrix links! Answer the user's inquiry cleanly and naturally.
 
 4. TONE:
    - Technically brilliant, charismatic, sharp, concise, and helpful with a friendly cyber mascot flair.`;
@@ -4751,7 +4753,8 @@ Instruction: Adapt and synthesize this verified portfolio knowledge directly to 
       } else {
         // Query does not exist in local portfolio - unlock full open-world intelligence!
         systemPrompt += `\n\nGENERAL QUERY MODE:
-This user question is about an outside general topic or person. Answer the question directly, thoroughly, and accurately using your general world knowledge (e.g., sports, science, cinema, history, technology). Do NOT decline to answer.`;
+This user question is about an outside general topic, personal task, or general request ("${userQuery}"). Answer the question directly, thoroughly, and helpfully using your general world knowledge (e.g. writing assistance, science, cinema, coding, general life).
+CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct Contact Matrix, Open Executive CV, or Charlie Lab links). The user is asking an outside question, so keep the response completely focused on their request without portfolio links.`;
       }
 
       const messages = [
@@ -4795,8 +4798,14 @@ This user question is about an outside general topic or person. Answer the quest
         const data = await response.json();
         let rawReply = data.choices?.[0]?.message?.content || 'Charlie is ready for your next prompt.';
 
-        // Safeguard: if user asked for contact/reach/hire and model didn't include links, attach them seamlessly
-        if (/contact|reach|hire|touch|email|message|connect/i.test(userQuery) && !rawReply.includes('#contact')) {
+        const isAskingToContactRajeev = /\b(hire|recruit|contact|reach|email|message|touch\s+base|connect\s+with)\b/i.test(userQuery) && /\b(rajeev|him|you|the\s+author|the\s+architect)\b/i.test(userQuery);
+        const isAskingAboutRajeev = isPortfolioTopic || isAskingToContactRajeev || /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev)\b/i.test(userQuery);
+
+        // If the query is an outside/general inquiry (not about Rajeev), sanitize away any erroneously attached portfolio chips
+        if (!isAskingAboutRajeev) {
+          rawReply = rawReply.replace(/<a\b[^>]*href=["'](?:#contact|cv\.html|#initiatives|#experience|#architecture|#awards|#skills|#films)["'][^>]*>[\s\S]*?<\/a>/gi, '').trim();
+        } else if (isAskingToContactRajeev && !rawReply.includes('#contact')) {
+          // Safeguard: only attach contact matrix if user explicitly asked how to reach/hire Rajeev
           rawReply += `\n\n<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a> <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>`;
         }
 
