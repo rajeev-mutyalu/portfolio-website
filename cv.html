@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=135" />
+  <link rel="stylesheet" href="style.css?v=136" />
   <style>
     /* Critical Dual-View Print / Screen Isolation (prevents CSS caching bugs) */
     .print-only {
@@ -35,6 +35,39 @@
       }
       .screen-only {
         display: none !important;
+      }
+      .cv-contact-matrix {
+        grid-template-columns: 0.95fr 1.25fr 1.05fr !important;
+        gap: 4px 12px !important;
+        padding: 6px 12px !important;
+      }
+      .cv-contact-item {
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+      }
+    }
+
+    /* Keep LinkedIn and Contact items on a single line */
+    .cv-contact-matrix {
+      grid-template-columns: 0.95fr 1.25fr 1.05fr !important;
+      gap: 12px 20px !important;
+      padding: 16px 20px !important;
+    }
+    .cv-contact-item {
+      flex-wrap: nowrap !important;
+      white-space: nowrap !important;
+    }
+    @media screen and (max-width: 820px) {
+      .cv-contact-matrix {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+    @media screen and (max-width: 580px) {
+      .cv-contact-matrix {
+        grid-template-columns: 1fr !important;
+      }
+      .cv-contact-item {
+        flex-wrap: wrap !important;
       }
     }
   </style>
