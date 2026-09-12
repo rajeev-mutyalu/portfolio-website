@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=145" />
+  <link rel="stylesheet" href="style.css?v=146" />
 
   <!-- Navigation & Scroll Position Guard: Always land cleanly on the first page when returning from CV, Charlie Lab, or Full Screen -->
   <script>
@@ -32,11 +32,21 @@
     }
     (function () {
       try {
-        var returnTop = sessionStorage.getItem('portfolio_return_top');
-        var fromCvOrLab = (document.referrer && (document.referrer.indexOf('cv.html') !== -1 || document.referrer.indexOf('charlie-lab.html') !== -1));
-        if (returnTop === 'true' || fromCvOrLab || window.location.hash === '#hero') {
+        var returnTop = (sessionStorage.getItem('portfolio_return_top') === 'true');
+        var ref = document.referrer || '';
+        var fromCvOrLab = (ref.indexOf('cv.html') !== -1 || ref.indexOf('charlie-lab.html') !== -1);
+        if (returnTop || fromCvOrLab || window.location.hash === '#hero' || window.location.search.indexOf('top=1') !== -1) {
           sessionStorage.removeItem('portfolio_return_top');
+          document.documentElement.classList.add('instant-scroll');
           window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.addEventListener('DOMContentLoaded', function () {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            setTimeout(function () {
+              document.documentElement.classList.remove('instant-scroll');
+            }, 120);
+          });
         }
       } catch (e) {}
     })();
@@ -1849,7 +1859,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=150"></script>
+  <script src="app.js?v=151"></script>
 </body>
 
 </html>

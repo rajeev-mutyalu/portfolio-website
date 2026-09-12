@@ -51,6 +51,12 @@ html {
   scroll-padding-top: 64px;
 }
 
+html.instant-scroll,
+html.instant-scroll *,
+html.instant-scroll body {
+  scroll-behavior: auto !important;
+}
+
 body:not(.cv-body) {
   padding-top: 56px;
 }

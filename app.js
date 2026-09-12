@@ -7140,16 +7140,34 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         setTerminalFullscreen(!isFullscreen);
       }
 
-      // Profile button: Exits maximize mode and returns back to the first page (Profile)
+      // Profile button: Exits maximize mode and returns directly to the first page (Profile) without resizing animation or scrolling
       if (profileReturnBtn) {
         profileReturnBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          // Instant jump to top before exiting full screen, so it doesn't show the old section position and then scroll up!
-          window.scrollTo(0, 0);
+
+          // 1. Force instant scroll mode so the browser cannot animate a smooth scroll
+          document.documentElement.classList.add('instant-scroll');
+
+          // 2. Disable transition on terminal so it doesn't visibly resize or shrink
+          terminal.style.transition = 'none';
+
+          // 3. Exit full screen
           setTerminalFullscreen(false);
+
+          // 4. Instantly place viewport directly at the first page top (0, 0)
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+
           requestAnimationFrame(() => {
             window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            setTimeout(() => {
+              terminal.style.transition = '';
+              document.documentElement.classList.remove('instant-scroll');
+            }, 80);
           });
         });
       }
