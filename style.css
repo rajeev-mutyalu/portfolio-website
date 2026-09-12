@@ -3859,6 +3859,7 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   min-height: 250px;
   max-height: min(48vh, 420px);
   overflow-y: auto;
+  scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -3879,7 +3880,7 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   display: flex !important;
   flex-direction: row;
   gap: 12px;
-  max-width: 94%;
+  max-width: min(89%, calc(100% - 58px));
   animation: msgFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: normal;
   overflow: visible !important;
@@ -4567,6 +4568,10 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
     min-height: 320px;
     max-height: 400px;
     padding: 14px;
+  }
+
+  .ai-message {
+    max-width: 94%;
   }
 }
 
