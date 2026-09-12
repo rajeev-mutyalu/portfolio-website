@@ -6715,7 +6715,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       });
     }
 
-    // 2a-2. Voice Dictation Microphone Controller (Web Speech API)
+    // 2a-2. Voice Dictation Controller: OpenAI Whisper Flow + Web Speech API Fallback
     function initCharlieVoiceDictation() {
       const micBtn = document.getElementById('aiChatMicBtn');
       const input = document.getElementById('aiInputField');
@@ -6725,118 +6725,321 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-      if (!SpeechRecognition) {
-        micBtn.title = 'Voice Dictation (Not supported in this browser - Use Chrome/Edge/Safari)';
-        micBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          alert('Voice dictation is supported in Chrome, Edge, Safari, and modern mobile browsers. Please type your query in this browser.');
-        });
-        return;
-      }
-
-      let recognition = null;
       let isListening = false;
+      let isTranscribing = false;
       let autoSubmitTimeout = null;
-
-      try {
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = true;
-        recognition.lang = navigator.language || 'en-US';
-      } catch (err) {
-        console.warn('SpeechRecognition init error:', err);
-      }
-
-      if (!recognition) return;
-
       const originalPlaceholder = input.getAttribute('placeholder') || '';
 
-      function startListening() {
-        if (isGeneratingResponse) return;
-        if (window.portfolioEngine?.isEnabled) return;
+      // Check if user has an active OpenAI API key configured
+      function getOpenAiKey() {
+        return (charlieAiConfig.apiKey || localStorage.getItem('charlie_openai_key') || '').trim();
+      }
+
+      function updateMicTooltip() {
+        const key = getOpenAiKey();
+        if (key) {
+          micBtn.title = 'Dictate question with OpenAI Whisper-1 (Click to Speak)';
+        } else {
+          micBtn.title = 'Dictate question with Microphone (Click to Speak)';
+        }
+      }
+      updateMicTooltip();
+
+      // MediaRecorder state for Whisper Flow
+      let mediaRecorder = null;
+      let audioChunks = [];
+      let activeStream = null;
+      let audioContext = null;
+      let analyser = null;
+      let silenceCheckInterval = null;
+      let lastSpeechTime = 0;
+
+      // Web Speech API fallback instance
+      let nativeRecognition = null;
+      if (SpeechRecognition) {
         try {
-          recognition.start();
+          nativeRecognition = new SpeechRecognition();
+          nativeRecognition.continuous = false;
+          nativeRecognition.interimResults = true;
+          nativeRecognition.lang = navigator.language || 'en-US';
         } catch (e) {
-          console.warn('SpeechRecognition start failed:', e);
+          console.warn('Native speech recognition init failed:', e);
         }
       }
 
-      function stopListening() {
+      // --- 1. Whisper Flow Execution ---
+      async function startWhisperRecording() {
         try {
-          recognition.stop();
-        } catch (e) {}
+          activeStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        } catch (err) {
+          console.warn('Microphone access denied:', err);
+          alert('Microphone access was denied. Please allow microphone permissions in your browser address bar.');
+          cleanupState();
+          return;
+        }
+
+        audioChunks = [];
+        let mimeType = 'audio/webm';
+        if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+          mimeType = 'audio/webm;codecs=opus';
+        } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+          mimeType = 'audio/mp4';
+        }
+
+        try {
+          mediaRecorder = new MediaRecorder(activeStream, { mimeType });
+        } catch (e) {
+          mediaRecorder = new MediaRecorder(activeStream);
+        }
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            audioChunks.push(e.data);
+          }
+        };
+
+        mediaRecorder.onstop = async () => {
+          clearInterval(silenceCheckInterval);
+          if (activeStream) {
+            activeStream.getTracks().forEach(track => track.stop());
+            activeStream = null;
+          }
+          if (audioContext && audioContext.state !== 'closed') {
+            try { audioContext.close(); } catch (e) {}
+          }
+
+          if (audioChunks.length === 0) {
+            cleanupState();
+            return;
+          }
+
+          const audioBlob = new Blob(audioChunks, { type: mimeType });
+          await transcribeWithWhisper(audioBlob);
+        };
+
+        mediaRecorder.start(250);
+        onRecordingStarted(true);
+
+        // Smart Silence Detection via Web Audio API
+        try {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            audioContext = new AudioContextClass();
+            const source = audioContext.createMediaStreamSource(activeStream);
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 512;
+            source.connect(analyser);
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            lastSpeechTime = Date.now();
+            let speechDetected = false;
+
+            silenceCheckInterval = setInterval(() => {
+              if (!isListening || !mediaRecorder || mediaRecorder.state !== 'recording') {
+                clearInterval(silenceCheckInterval);
+                return;
+              }
+              analyser.getByteFrequencyData(dataArray);
+              let sum = 0;
+              for (let i = 0; i < bufferLength; i++) {
+                sum += dataArray[i];
+              }
+              const averageVolume = sum / bufferLength;
+
+              if (averageVolume > 12) {
+                lastSpeechTime = Date.now();
+                speechDetected = true;
+              } else if (speechDetected && (Date.now() - lastSpeechTime > 1800)) {
+                // User spoke and then paused for 1.8 seconds -> Auto-finish recording!
+                clearInterval(silenceCheckInterval);
+                stopListening();
+              }
+            }, 100);
+          }
+        } catch (e) {
+          console.warn('AudioAnalyser silence detection setup failed:', e);
+        }
       }
 
-      recognition.onstart = () => {
+      async function transcribeWithWhisper(audioBlob) {
+        const apiKey = getOpenAiKey();
+        if (!apiKey) {
+          cleanupState();
+          return;
+        }
+
+        isTranscribing = true;
+        micBtn.classList.remove('is-listening');
+        micBtn.classList.add('is-transcribing');
+        if (inputWrapper) {
+          inputWrapper.classList.remove('mic-active');
+          inputWrapper.classList.add('whisper-transcribing');
+        }
+        input.setAttribute('placeholder', '⚡ Transcribing with Whisper-1...');
+        input.value = '';
+
+        try {
+          const formData = new FormData();
+          const ext = audioBlob.type.includes('mp4') ? 'mp4' : 'webm';
+          formData.append('file', audioBlob, `speech.${ext}`);
+          formData.append('model', 'whisper-1');
+          formData.append('language', 'en');
+          formData.append('prompt', 'Rajeev Mutyalu, VFX Pipeline Architect, OpenUSD v3, Astra VFX, OTIO, OCIO ACES 1.3, n8n studio automation, Model Context Protocol, MCP, PySide, ComfyUI, Studio.AI, Nous Hermes, Ollama, 1917, RRR, Mufasa, Lion King');
+
+          const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiKey}`
+            },
+            body: formData
+          });
+
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Whisper API HTTP ${response.status}`);
+          }
+
+          const result = await response.json();
+          const transcribedText = (result.text || '').trim();
+
+          if (transcribedText) {
+            input.value = transcribedText;
+            try {
+              if (typeof window.portfolioSoundEngine?.playComboDing === 'function') {
+                window.portfolioSoundEngine.playComboDing();
+              }
+            } catch (e) {}
+
+            // Auto-submit question to Charlie after smooth 300ms confirmation
+            setTimeout(() => {
+              if (form && input.value.trim() && !isGeneratingResponse) {
+                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+              }
+            }, 300);
+          }
+        } catch (err) {
+          console.error('Whisper Transcription Error:', err);
+          alert(`Whisper transcription notice: ${err.message || 'API error'}. Please verify your OpenAI key in settings.`);
+        } finally {
+          cleanupState();
+        }
+      }
+
+      // --- 2. Native Web Speech Fallback Flow ---
+      function startNativeRecognition() {
+        if (!nativeRecognition) {
+          alert('Voice dictation is supported in Chrome, Edge, Safari, and modern mobile browsers. Please type your query in this browser.');
+          return;
+        }
+
+        nativeRecognition.onstart = () => {
+          onRecordingStarted(false);
+        };
+
+        nativeRecognition.onresult = (event) => {
+          let interimTranscript = '';
+          let finalTranscript = '';
+
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript;
+            } else {
+              interimTranscript += transcript;
+            }
+          }
+
+          const currentText = finalTranscript || interimTranscript;
+          if (currentText) {
+            input.value = currentText;
+          }
+
+          if (finalTranscript) {
+            if (autoSubmitTimeout) clearTimeout(autoSubmitTimeout);
+            autoSubmitTimeout = setTimeout(() => {
+              if (isListening) stopListening();
+              if (input.value.trim() && !isGeneratingResponse) {
+                if (form) {
+                  form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                }
+              }
+            }, 900);
+          }
+        };
+
+        nativeRecognition.onerror = (event) => {
+          console.warn('Native speech error:', event.error);
+          if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+            alert('Microphone access was denied. Please allow microphone permissions in your browser address bar.');
+          }
+          cleanupState();
+        };
+
+        nativeRecognition.onend = () => {
+          cleanupState();
+        };
+
+        try {
+          nativeRecognition.start();
+        } catch (e) {
+          console.warn('Native recognition start failed:', e);
+        }
+      }
+
+      function onRecordingStarted(isWhisper) {
         isListening = true;
         micBtn.classList.add('is-listening');
-        micBtn.title = 'Listening... Click to stop dictation';
+        micBtn.title = isWhisper ? 'Whisper is recording... Click to transcribe' : 'Listening... Click to stop dictation';
         if (inputWrapper) inputWrapper.classList.add('mic-active');
-        input.setAttribute('placeholder', '🎙️ Listening... Speak your question now...');
+        input.setAttribute('placeholder', isWhisper ? '🎙️ Whisper Recording... Speak your question (Click mic to transcribe)' : '🎙️ Listening... Speak your question now...');
 
-        // Audio feedback chime
         try {
           if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function' && !window.portfolioSoundEngine.isMuted) {
             window.portfolioSoundEngine.playLaserDeflect();
           }
         } catch (e) {}
 
-        // Charlie Mascot reaction: perk antenna & add sparks
         if (window.portfolioCharlie && typeof window.portfolioCharlie.addSparks === 'function') {
           window.portfolioCharlie.face = 'sprint';
           window.portfolioCharlie.addSparks(window.portfolioCharlie.x, window.portfolioCharlie.y, '#38bdf8', 14);
         }
-      };
+      }
 
-      recognition.onresult = (event) => {
-        let interimTranscript = '';
-        let finalTranscript = '';
+      function startListening() {
+        if (isGeneratingResponse || isTranscribing) return;
+        if (window.portfolioEngine?.isEnabled) return;
 
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          const transcript = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            finalTranscript += transcript;
-          } else {
-            interimTranscript += transcript;
-          }
+        const openAiKey = getOpenAiKey();
+        if (openAiKey && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          startWhisperRecording();
+        } else {
+          startNativeRecognition();
         }
+      }
 
-        const currentText = finalTranscript || interimTranscript;
-        if (currentText) {
-          input.value = currentText;
+      function stopListening() {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          try {
+            mediaRecorder.stop();
+          } catch (e) {}
+        } else if (nativeRecognition) {
+          try {
+            nativeRecognition.stop();
+          } catch (e) {}
         }
-
-        // When a final sentence is recognized, prepare auto-submit after a comfortable 1000ms pause
-        if (finalTranscript) {
-          if (autoSubmitTimeout) clearTimeout(autoSubmitTimeout);
-          autoSubmitTimeout = setTimeout(() => {
-            if (isListening) stopListening();
-            if (input.value.trim() && !isGeneratingResponse) {
-              if (form) {
-                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-              }
-            }
-          }, 1000);
-        }
-      };
-
-      recognition.onerror = (event) => {
-        console.warn('SpeechRecognition error:', event.error);
-        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-          alert('Microphone access was denied. Please allow microphone permissions in your browser address bar to dictate questions.');
-        }
-        cleanupState();
-      };
-
-      recognition.onend = () => {
-        cleanupState();
-      };
+      }
 
       function cleanupState() {
         isListening = false;
+        isTranscribing = false;
         micBtn.classList.remove('is-listening');
-        micBtn.title = 'Dictate question with Microphone (Click to Speak)';
-        if (inputWrapper) inputWrapper.classList.remove('mic-active');
+        micBtn.classList.remove('is-transcribing');
+        updateMicTooltip();
+        if (inputWrapper) {
+          inputWrapper.classList.remove('mic-active');
+          inputWrapper.classList.remove('whisper-transcribing');
+        }
         input.setAttribute('placeholder', originalPlaceholder);
         input.focus({ preventScroll: true });
       }
@@ -6844,6 +7047,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       micBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (isTranscribing) return;
         if (autoSubmitTimeout) clearTimeout(autoSubmitTimeout);
         if (isListening) {
           stopListening();
