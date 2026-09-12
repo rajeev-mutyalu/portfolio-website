@@ -4809,14 +4809,11 @@ This user question is about an outside general topic or person. Answer the quest
           charlieConversationHistory = charlieConversationHistory.slice(-8);
         }
 
+        // In Live Mode: only show 'Explore Next' if the query matched verified Local KB / portfolio knowledge.
+        // If the question was not related to Rajeev or his profile (general outside knowledge), suppress 'Explore Next'.
         const dynamicFollowups = (isPortfolioTopic && matchedKnowledge && Array.isArray(matchedKnowledge.followups) && matchedKnowledge.followups.length > 0)
           ? matchedKnowledge.followups
-          : [
-            'Who is Rajeev Mutyalu and why should we hire him?',
-            'Explain your OpenUSD VFX pipeline architecture',
-            'Tell me about your AI certifications, accelerator credentials, and hackathons',
-            'How does zero-touch n8n studio automation orchestrate pipelines?'
-          ];
+          : [];
 
         return {
           id: 'openai_live',
