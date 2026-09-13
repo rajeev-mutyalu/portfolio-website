@@ -5808,7 +5808,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
       let systemPrompt = CHARLIE_SYSTEM_GROUNDING_PROMPT;
 
       // Determine if query is asking about Rajeev, his career, CV, companies, projects, or Charlie Lab
-      const isExplicitAboutRajeevOrPortfolio = /\b(rajeev|mutyalu|muthyalu|cv|resume|career|degree|education|university|college|b\.?tech|graduat|award|fellowship|certificat|hackathon|outskill|company|companies|studio|studios|employer|employers|1917|rrr|mufasa|lion\s*king|spaceman|prehistoric|back\s*in\s*action|charlie\s*lab|character\s*lab|motion\s*lab|locomotion|oled|visor|synth|synthesizer|reviewtool|pronuke|meshroom|rpm|nuke\s*bridge|tessa|tractor|avfoundation|openusd|usd|n8n|mcp|model\s*context|conform|ingest|turnover|aces|ocio|otio|comfyui|studio\.ai|scene\s*weaver|nous\s*hermes|ollama|game\s*mode|comet\s*cascade|hire|recruiting|contact)\b/i.test(userQuery);
+      const isExplicitAboutRajeevOrPortfolio = /\b(rajeev|mutyalu|muthyalu|cv|resume|career|degree|education|university|college|b\.?tech|graduat|award|fellowship|certificat|hackathon|outskill|company|companies|studio|studios|employer|employers|1917|rrr|mufasa|lion\s*king|spaceman|prehistoric|back\s*in\s*action|charlie|cyber\s*charlie|charlie\s*lab|character\s*lab|motion\s*lab|locomotion|oled|visor|synth|synthesizer|reviewtool|pronuke|meshroom|rpm|nuke\s*bridge|tessa|tractor|avfoundation|openusd|usd|n8n|mcp|model\s*context|conform|ingest|turnover|aces|ocio|otio|comfyui|studio\.ai|scene\s*weaver|nous\s*hermes|ollama|game\s*mode|comet\s*cascade|hire|recruiting|contact)\b/i.test(userQuery);
 
       const isPortfolioTopic = Boolean(
         (matchedKnowledge && matchedKnowledge.id && matchedKnowledge.id !== 'fallback' && matchedKnowledge.id !== 'out_of_scope')
@@ -5925,8 +5925,8 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         const data = await response.json();
         let rawReply = data.choices?.[0]?.message?.content || 'Charlie is ready for your next prompt.';
 
-        // Strictly determine if the user query is asking about Rajeev, his hiring, career, or portfolio
-        const isExplicitlyAboutRajeev = /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev|compan(y|ies)|studio(s)?|career\s+timeline|timeline|work\s+history|employers?)\b/i.test(userQuery)
+        // Strictly determine if the user query is asking about Rajeev, his hiring, career, Charlie, or portfolio
+        const isExplicitlyAboutRajeev = /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev|compan(y|ies)|studio(s)?|career\s+timeline|timeline|work\s+history|employers?|charlie|cyber\s*charlie)\b/i.test(userQuery)
           || (/\b(hire|recruit|contact|reach|get\s+in\s+touch\s+with)\b/i.test(userQuery) && /\b(rajeev|muthyalu|mutyalu)\b/i.test(userQuery))
           || (isPortfolioTopic && !/\b(grooming|dog|appointment|pet|recipe|weather|joke|story|general|doc|docs|email\s+to|write\s+an?\s+email|send\s+an?\s+email)\b/i.test(userQuery));
 
@@ -6788,7 +6788,9 @@ You can download Rajeev's authentic executive portrait directly for event lineup
         id: 'charlie_lab',
         title: 'Cyber Charlie Character & Motion Lab',
         keywords: [
-          'charlie lab', 'character lab', 'motion lab', 'cyber charlie lab',
+          'charlie', 'cyber charlie', 'who is charlie', 'who is cyber charlie', 'what is charlie',
+          'charlie lab', 'charlie-lab', 'character lab', 'motion lab', 'cyber charlie lab',
+          'link to charlie lab', 'where is charlie lab', 'open charlie lab',
           'how did charlie lab built', 'how charlie lab was built', 'how was charlie lab built',
           'how charlie was built', 'how was charlie built', 'how charlie built', 'how you built charlie',
           'how did you build charlie', 'how did you built charlie', 'charlie canvas', 'charlie engine',
@@ -6809,6 +6811,8 @@ The <strong>Cyber Charlie Character Lab</strong> (<code>charlie-lab.html</code>)
 • <strong>Interactive Sandbox Controls:</strong> Real-time dials for scale, animation playback speed, neon glow intensity, state selection, and a chat delivery simulation matrix.<br/><br/>
 🚀 <strong>LAUNCH CHARLIE LAB:</strong><br/>
 <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a><br/><br/>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
+<a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`
         ],
         followupPool: [
@@ -7280,7 +7284,14 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
       }
 
       // 4d. Resilient Cyber Charlie Character Lab Check
-      if (/\b(charlie\s*lab|character\s*lab|motion\s*lab|how\s+(was|did|is)\s+charlie(\s*lab)?\s*(built|made|created|engineered|coded)|how\s+charlie\s*lab\s*built|how\s+charlie\s*(was\s*)?built|how\s+you\s*(built|made)\s*charlie|how\s+did\s+you\s*(build|make)\s*charlie)\b/i.test(q) || q === 'charlie lab' || q === 'character lab' || q === 'motion lab' || q === 'lab') {
+      if (
+        /\b(charlie\s*lab|charlie-lab|character\s*lab|motion\s*lab|where\s+is\s+charlie\s*lab|link\s+to\s+charlie(\s*lab)?|open\s+charlie(\s*lab)?|how\s+(was|did|is)\s+charlie(\s*lab)?\s*(built|made|created|engineered|coded)|how\s+charlie\s*lab\s*built|how\s+charlie\s*(was\s*)?built|how\s+you\s*(built|made)\s*charlie|how\s+did\s+you\s*(build|make)\s*charlie)\b/i.test(q)
+        || q === 'charlie lab'
+        || q === 'charlie-lab'
+        || q === 'character lab'
+        || q === 'motion lab'
+        || q === 'lab'
+      ) {
         const labItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'charlie_lab');
         if (labItem) {
           const chosenIntro = getRandomItem(labItem.intros);
@@ -7294,23 +7305,41 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
         }
       }
 
-      // 4e. Resilient "Who are you / Who am I speaking to / What is your name" Check
-      if (/\b(who\s+(are|r)\s+(you|u)|who\s+am\s+i\s+(talking|speaking)\s+to|who\s+is\s+this|what('?s|\s+is)\s+your\s+name|what\s+is\s+this\s+bot|who\s+are\s+you)\b/i.test(q)) {
+      // 4e. Resilient "Who is Charlie / Who are you / Who am I speaking to / What is your name" Check
+      if (
+        /\b(who\s+(is|si)\s+(cyber\s*)?charlie|what\s+is\s+(cyber\s*)?charlie|tell\s+me\s+about\s+(cyber\s*)?charlie|about\s+(cyber\s*)?charlie|meet\s+charlie|charlie\s+ai|who\s+(are|r)\s+(you|u)|who\s+am\s+i\s+(talking|speaking)\s+to|who\s+is\s+this|what('?s|\s+is)\s+your\s+name|what\s+is\s+this\s+bot|who\s+are\s+you)\b/i.test(q)
+        || q === 'charlie'
+        || q === 'cyber charlie'
+        || q === 'who is charlie'
+        || q === 'who is charlie?'
+        || q === 'what is charlie'
+        || q === 'what is charlie?'
+        || q === 'tell me about charlie'
+        || q === 'about charlie'
+      ) {
         return {
           id: 'who_is_charlie',
-          title: "Rajeev's AI Assistant",
-          response: `🤖 <strong>I am Cyber Charlie, Rajeev's AI Assistant!</strong><br/><br/>
-I am an advanced interactive AI companion and VFX &amp; GenAI systems mascot engineered by <strong>Rajeev Mutyalu</strong> right here on his portfolio.<br/><br/>
-• <strong>What I can help you with:</strong><br/>
-&bull; <strong>20+ Years Studio Leadership:</strong> Proven track record across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning productions (<em>1917, RRR, Mufasa: The Lion King</em>).<br/>
-&bull; <strong>Technical Architectures:</strong> OpenUSD 2-tier sublayer composition, custom MCP servers, On-Premise private LLMs (Nous Hermes, Ollama), and zero-touch n8n studio automation.<br/>
-&bull; <strong>Live Open-World Intelligence:</strong> When switched to OpenAI mode in settings, I can also debug code, write email drafts, solve math, and answer general questions in real time!<br/><br/>
+          title: "Cyber Charlie (AI Assistant & Mascot)",
+          response: `🤖 <strong>I am Cyber Charlie, Rajeev Mutyalu's AI Companion &amp; Systems Mascot!</strong><br/><br/>
+I was engineered from the ground up by <strong>Rajeev Mutyalu</strong> right here on this portfolio as an interactive demonstration of real-time computer graphics, procedural state machines, and generative AI systems.<br/><br/>
+• <strong>🧪 How Cyber Charlie Was Built:</strong><br/>
+&bull; <strong>Pure HTML5 Canvas 2D Vector Mathematics:</strong> 100% code-driven with <em>zero raster sprite sheets</em> and zero bulky WebGL/Three.js dependencies. Every antenna curve, OLED visor, chassis plate, plasma dagger, and stardust particle burst is procedurally rendered in 2D trigonometric math at a locked <strong>60 FPS</strong>.<br/>
+&bull; <strong>8-State Locomotion Rig:</strong> Deterministic transitions between <code>Idle Floating</code>, <code>Sprint</code>, <code>Walk</code>, <code>360° Somersault Jump</code>, <code>3-Hit Plasma Dagger Slash</code>, <code>Cartoon Bonk Reactions</code>, <code>Dizzy Wobble</code>, <code>Shield Deflection</code>, and <code>Victory Twirl</code>.<br/>
+&bull; <strong>Procedural OLED Visor:</strong> 8 reactive emotional facial expressions (Happy, Sprint, Battle, Thinking, Writing, Dizzy, Shocked, Wink) driven by parametric cyan vector curves.<br/>
+&bull; <strong>Synthesized Web Audio API:</strong> Dynamic sound FX (laser deflects, jumps, combat slashes, and combo chimes) generated entirely in code using Web Audio oscillator nodes—requiring <em>zero audio asset downloads</em>.<br/><br/>
+• <strong>🎯 What I Can Help You With:</strong><br/>
+&bull; <strong>20+ Years VFX &amp; GenAI Leadership:</strong> Deep architectural insight across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning productions (<em>1917, RRR, Mufasa: The Lion King</em>).<br/>
+&bull; <strong>Production Architectures:</strong> OpenUSD 2-tier sublayer composition, custom MCP servers, On-Premise private LLMs (Nous Hermes, Ollama), and zero-touch n8n studio automation.<br/>
+&bull; <strong>Dual-Engine Intelligence:</strong> Running 100% offline in Local KB mode, or with live open-world intelligence when connected to your OpenAI API key in settings.<br/><br/>
+<a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
-<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>
-<a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Charlie Character Lab &rarr;</a>`,
+<a href="#experience" class="ai-section-link">⏳ View 20-Year Career Timeline &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`,
           followups: getDynamicFollowups([
+            'Tell me about Cyber Charlie Character & Motion Lab',
             'Who is Rajeev Mutyalu and why should we hire him?',
-            'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons',
+            'What companies has Rajeev worked for throughout his 20-year career?',
             'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
             'What is Model Context Protocol (MCP) and how is it used in production?'
           ], 4)
@@ -7371,6 +7400,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 💡 <em><strong>Want answers on any general topic (sports, science, cinema, code)?</strong> Connect your OpenAI API key in <a href="javascript:void(0)" class="ai-section-link" onclick="document.getElementById('aiLlmConfigBtn')?.click()">🧠 AI Engine Settings</a> to give Cyber Charlie full open-world intelligence!</em><br/><br/>
 <em>In the meantime, ask me about Rajeev's core expertise:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
+• <strong>🧪 Cyber Charlie Lab:</strong> <a href="charlie-lab.html" target="_blank" class="ai-section-link" style="display:inline-block; margin-top:2px;">Open Charlie Lab 🧪</a><br/>
 • <strong>📸 High-Res Portrait:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Download Rajeev high resolution profile photo" style="display:inline-block; margin-top:2px;">Download HD Photo</a><br/>
 • <strong>📜 AI Certifications &amp; Credentials:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about Rajeev's AI certifications, accelerator credentials, and hackathons" style="display:inline-block; margin-top:2px;">AI Generalist &amp; Hackathon</a><br/>
 • <strong>🏆 Leadership &amp; Film Credits:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about Rajeev's 20-year engineering leadership and mentorship background" style="display:inline-block; margin-top:2px;">Leadership &amp; Tenures</a><br/>
@@ -7381,6 +7411,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 • <strong>🎬 OpenUSD Pipeline:</strong> Non-destructive 2-tier sublayer composition<br/>
 • <strong>📦 Conform Ingest &amp; VFX I/O:</strong> Editorial turnovers, DI discrepancy reporting &amp; OTIO<br/>
 • <strong>⚡ Zero-Touch n8n Automation:</strong> Inbound &amp; reverse webhooks for render dispatch<br/><br/>
+<a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Charlie Character Lab &rarr;</a>
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`,
         followups: getDynamicFollowups([
           'Download Rajeev high resolution profile photo',
