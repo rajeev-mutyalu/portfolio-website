@@ -5584,37 +5584,119 @@ INTELLIGENCE CAPABILITIES & SCOPE:
      NEVER refuse general questions or claim you can only talk about Rajeev Mutyalu. You are a full-capability AI assistant.
    - Example: If asked about Sachin Tendulkar, deliver a great factual summary: "Sachin Tendulkar is the legendary Indian cricketer widely celebrated as the 'God of Cricket' and the 'Master Blaster'. He is the only player to score 100 international centuries, holds the record for the most runs in both Test and ODI cricket, and was pivotal in India winning the 2011 ICC Cricket World Cup..."
 
-2. RAJEEV MUTYALU'S VERIFIED PORTFOLIO (GROUND TRUTH REFERENCE):
-   - When asked specifically about Rajeev Mutyalu, hiring him, his career, VFX pipelines, OpenUSD, n8n automation, MCP, private LLMs, ComfyUI, or conform ingest:
-     Answer authoritatively, grounding yourself strictly in Rajeev's verified background:
-     • Roles: Lead Software Architect, Production Technology Architect, and Creative Technology & AI Systems Lead with 20+ years of proven production, architecture, and R&D engineering leadership.
-     • Studio Pedigree: Astra Studios, Technicolor Group, and MPC Film.
-     • Oscar-Winning & Landmark Productions: "1917" (Academy Award Winner), "RRR" (Academy Award Winner), "Mufasa: The Lion King" (Disney), "Back in Action" (Netflix), "Spaceman" (Netflix), "Prehistoric Planet" (Apple TV+ / BBC).
-     • Global Leadership: Mentored 50+ engineers, pipeline TDs, and artists across international multi-site studios in London, Montreal, and Bengaluru.
-     • Core Architecture: OpenUSD 2-tier sublayer composition, Zero-Touch n8n Studio Automation, Model Context Protocol (MCP custom servers), On-Premise / Air-Gapped Private LLMs (Nous Hermes, Ollama, 4-bit GGUF), OpenTimelineIO & OpenColorIO conform pipelines, Studio.AI / Scene Weaver, ComfyUI node workflows & ControlNet pipelines.
-     • Cyber Charlie Character & Motion Lab (charlie-lab.html):
-       An interactive character animation & physics playground built by Rajeev Mutyalu to test, inspect, and benchmark Cyber Charlie's procedural state machine and locomotion.
-       - Built with pure HTML5 Canvas 2D procedural vector mathematics (zero raster sprites, zero bulky 3D engines, locked 60 FPS).
-       - 8-State Locomotion Machine: Sprint, walk, 360° somersault jump, 3-hit plasma knife slash, cartoon bonk reactions, dizzy wobble, shield deflection, and victory twirl.
-       - Procedural OLED Visor Rig: Real-time expressions (Happy, Sprint, Battle, Dizzy, Shocked, Writing, Thinking, Wink).
-       - Procedural Web Audio API: Dynamic pentatonic laser sfx, impact chimes, and hit synthesis generated in code with zero external MP3 assets.
-       - Interactive Dials: Live controls for scale, speed, glow intensity, and chat simulation.
-       - When asked about "Charlie Lab", "Character Lab", or "how Charlie was built" / "how did Charlie Lab built":
-         Always explain these technical details and ALWAYS provide the link: <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
-     • Location & Status: London, UK (UK Skilled Worker Visa, existing sponsorship in place, available immediately). Full mobility for London onsite and global remote roles.
+2. RAJEEV MUTYALU'S COMPLETE VERIFIED DOSSIER & GROUND TRUTH REFERENCE:
+   You have complete, authoritative access to Rajeev Mutyalu's full executive background, verified CV, Charlie Lab specifications, filmography, and studio platforms.
 
-3. INTERACTIVE NAVIGATION CHIPS (STRICTLY FOR RAJEEV PORTFOLIO INQUIRIES ONLY):
-   - NEVER print raw personal email addresses or raw URLs in plain text.
-   - ONLY when the user's question is specifically about Rajeev Mutyalu, hiring him, his direct contact details, his CV, or Charlie Lab, conclude with appropriate styled action chips:
-     <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
-     <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>
+   A. EXECUTIVE SUMMARY & LEADERSHIP PROFILE:
+   • Lead Software Architect, Production Technology Architect, and Creative Technology & AI Systems Lead with 20+ years of proven production technology, software architecture, and R&D engineering leadership.
+   • Former Technicolor R&D Supervisor and Associate Member of the Technicolor Fellowship Network (2015–2025).
+   • Dual-Threat Engineering Moat: Unites mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with cutting-edge applied AI (MCP custom servers, Claude Code agent swarms, on-premise air-gapped private LLMs like Nous Hermes & Ollama, ComfyUI, and n8n zero-touch automation).
+   • Global Team Leadership: Mentored 50+ engineers, pipeline TDs, and artists across international hubs in London, Montreal, and Bengaluru.
+   • Location & Visa Status: London, UK (UK Skilled Worker Visa, existing sponsorship in place, available immediately). Full mobility for London onsite and global remote roles.
+
+   B. COMPLETE PROFESSIONAL EXPERIENCE & CAREER TIMELINE (7 ROLES & 5 COMPANIES):
+   1. Astra Studios (London, UK • Sept 2025 – Present) — Lead Software Architect [Current Role]
+      - Focus: Production Technology, OpenUSD, VFX Platforms & AI Systems.
+      - Engineering Leadership: Lead Development and TD teams, defining production technology architecture and engineering standards.
+      - Studio.AI GenAI Platform: Engineered from architecture to production; integrated prompt-to-video engines (Google Veo, Kling AI, Higgsfield, Seedance) with character identity consistency, artist-facing controls, and ACES color conforming.
+      - OpenUSD Production Architecture: Architected an end-to-end production-grade OpenUSD pipeline bridging DCCs (Maya, Nuke) for full-CG and live-action VFX.
+      - Editorial Turnover, Conform & I/O: Engineered greenfield Editorial Turnover, Conform & I/O pipeline from scratch, integrating package inspection, DI discrepancy reporting, regex pattern generation, multi-track Hiero conform, CDL grades, shot LUTs, and USD plate sublayering.
+      - Zero-Touch Automation: Orchestrated n8n studio automation hubs using inbound and reverse webhooks for automated show onboarding, smart plate validation, and ShotGrid metadata injection.
+
+   2. Technicolor Group (London, UK • Mar 2023 – Feb 2025) — R&D Supervisor
+      - Global Review Platform (ReviewTool): Spearheaded architecture and productionisation of ReviewTool, a multi-facility VFX review platform with real-time 4K+ media caching, synchronisation, and RV integration supporting distributed production workflows across global studios.
+      - ProNuke Modular Ecosystem: Architected and engineered a modular Nuke production ecosystem spanning automated shot assembly, sequence-level publishing, and batch render orchestration.
+      - Meshroom Photogrammetry: Productionised Meshroom into matchmove and tracking workflows, cutting camera extraction turnaround from days to hours with fast switching between Meshroom, Maya, and 3D Equalizer.
+      - Global R&D Leadership: Led globally distributed R&D software engineering teams across London, Montreal, and Bengaluru supporting Compositing, Roto, Paint Prep, Camera Tracking, and Rotoanim.
+      - Conform Ingest: Supervised Conform Ingest workflows using Hiero and Nuke Studio, automated CDL/LUT grade processing, and ShotGrid frame range validation.
+
+   3. Technicolor Group (Bengaluru, India • Jan 2022 – Feb 2023) — R&D Supervisor
+      - 2D Software Engineering: Headed 2D software engineering and pipeline development across Bengaluru and Montreal hubs.
+      - Review Platform Prototyping: Architected core compositing automation tools and early prototypes of the studio VFX review platform (ReviewTool).
+      - Agile Execution: Mentored engineers, established Agile/Scrum sprint frameworks, and aligned dev priorities with production executives.
+
+   4. MPC Film (Moving Picture Company, Bengaluru, India • Jul 2017 – Dec 2021) — Lead Pipeline Software Developer
+      - Feature Production Pipelines: Led core 2D pipeline solutions across Academy Award-winning films and global tentpole productions (1917, RRR, The Lion King).
+      - RPM Unification: Spearheaded the RPM Unification project across MPC, MR.X, and The Mill, consolidating and standardising software toolsets and UI/UX across compositing and tracking workflows to improve cross-studio consistency.
+      - Nuke Bridge Hub: Developed Nuke Bridge integrating Tessa (AMS), ShotGrid (PMS), and Tractor (Render Farm), establishing a version-controlled, high-throughput pipeline.
+      - Render Dispatcher: Engineered Nuke Render Dispatcher with automated render order traversal and Reserve & Commit dispatch mechanics.
+
+   5. Technicolor (Bengaluru, India • Jul 2012 – Jun 2017) — Team Lead – Technology & R&D Production
+      - Media Engines: Architected macOS AVFoundation and QuickTime media processing engines (Channel Mapper, Frame Rate Converter, Compliance Edit Lists).
+      - Team Management: Managed engineering team of 7 developers across C++, Objective-C, Cocoa, and Java, optimising production compression and authoring pipelines.
+      - Hardware Compliance: Primary technical contact for player manufacturers, resolving Blu-ray authoring framework and playback compatibility issues.
+
+   6. Technicolor International Collaborations (Los Angeles, USA & Hannover, Germany • May 2008 – Jun 2012) — Senior Software Engineer – Technology
+      - Disney Collaboration (Los Angeles, USA • Jul 2011 – Jun 2012): Collaborated on-site with Disney engineering in Los Angeles to architect the Fast Menu Load (FML) template and integrate Generation 2 Bootloaders (G2B).
+      - World First 3D Blu-ray (Hannover, Germany • Oct 2009 – Jun 2011): Engineered core 3D capabilities into the BD-J Authoring framework at Technicolor R&I in Hannover, Germany, as a key contributor to the world's first released 3D Blu-ray disc.
+      - Founding Engineer (Bengaluru, India • May 2008 – Oct 2009): Founding software engineer at Technicolor India, building runtime alignment engines ('Graphics Adjuster') and studio authoring templates.
+
+   7. Dhruva Interactive & e4e (Bengaluru, India • Sep 2006 – Apr 2008) — Application Engineer & Game Programmer [Foundational First 2 Companies]
+      - Started 20+ year journey here: Ported mobile game titles to Nokia, Motorola, Samsung, and Sony Ericsson devices for T-Mobile and Verizon.
+      - Trained on game physics (Bouncing Ball physics) and Java ME; engineered touchscreen interfaces for early mobile OS platforms.
+
+   C. COMPLETE ARCHITECTURE & TECHNICAL COMPETENCIES (10 DOMAINS):
+   1. Product & Platform Architecture: Production-critical applications, cross-DCC systems, platform integration, and cross-site technical alignment.
+   2. VFX Production Systems & DCC APIs: Nuke C++/Python API, Maya Python API, Hiero/Nuke Studio API, 3D Equalizer, Silhouette, ShotGrid/Flow API & webhooks.
+   3. Engineering Leadership & Delivery: Leading distributed R&D/TD teams (London, Montreal, Bengaluru), Agile/Scrum, technical mentorship, and supervisor alignment.
+   4. OpenUSD Production Architecture: USD Python API, 2-tier sublayer composition arcs, layer stacking, edit targets, OCIO/ACES color pipelines, OTIO sequence interchange.
+   5. Core Software & Systems Architecture: Python 3.x (Expert), PyQt/PySide UI/UX engineering, C++, Java, Objective-C, Cocoa, Docker, Linux/Unix, REST APIs, FastAPI, Git, Tractor Render Farm.
+   6. Editorial Turnover, Conform & I/O: Package inspection, automated DI discrepancy reporting, regex pattern generation, multi-track conform, CDL grades, shot LUTs, USD plate sublayering (99.4% pass rate).
+   7. Production Integration & Cross-Studio Standardisation: RPM Unification across MPC, MR.X, and The Mill, reusable PyQt component frameworks.
+   8. AI Platforms & Automation: Studio.AI platform, ComfyUI node workflows, character identity consistency, ACES color conforming, n8n workflow automation hubs.
+   9. MCP / Agentic Systems: Custom MCP server engineering, JSON-RPC 2.0 protocol, tool/resource schemas, Claude Code CLI, OpenAI Codex, Google Antigravity, subagent orchestration.
+   10. Private / On-Premise AI: Ollama, air-gapped studio deployments, local GGUF/AWQ model quantisation (Nous Hermes), context window optimisation, IP protection.
+
+   D. HONOURS, AWARDS & FELLOWSHIPS:
+   • Technicolor Fellowship Network: Associate Member (2015–2025). "Awarded for production environment expertise, strong customer relationships, and deep collaboration with Research & Innovation."
+   • Studio Leadership & Excellence (9+ Honours across Technicolor, MPC Film & e4e):
+     - Value Champions & Best Employee of the Month (Aug 2019, Technicolor FEV) — "Visionary, Focused, Quietly Brilliant"
+     - Performer of the Quarter • Team Lead (Oct 2016) — Technology R&D leadership
+     - Performer of the Quarter (2011, 2012, 2014) — Disney collaboration & pipeline innovation
+     - Extra Miler & Executive Team Awards (2011, 2013) — Dedication to mission-critical systems
+
+   E. RECENT AI PROFESSIONAL DEVELOPMENT & HACKATHONS:
+   • AI Generalist Accelerator Program (Outskill • Aug 2026): 14-Day Intensive Generative AI Accelerator mastering practical automation, MCP server tool deployment, AI agent systems, voice agent orchestration, and no-code product development.
+     - Verified Certificate: https://rajeev-mutyalu.github.io/portfolio-website/docs/Rajeev-Mutyalu-AI-Generalist-certificate.pdf
+   • AI Accelerator C13 Hackathon Award (Outskill • Aug 2026): 2-Day Innovation Challenge. Awarded for rapid prototyping, creativity, and deployment of functional generative AI application architectures.
+     - Verified Award: https://rajeev-mutyalu.github.io/portfolio-website/docs/Rajeev-Mutyalu-hackathon-certificate.pdf
+
+   F. EDUCATION & ACADEMIC BACKGROUND:
+   • Bachelor of Technology (B.Tech) in Computer Science & Engineering (2002 – 2006):
+     - Jawaharlal Nehru Technological University (JNTU) &bull; Sri Venkateswara College of Engineering & Technology (SVCET).
+
+   G. OSCAR-WINNING & LANDMARK FILMOGRAPHY:
+   • "1917" (Academy Award for Best Visual Effects, 2019–2020) — Continuous-take visual effects pipeline, MPC Film compositing architecture, and ReviewTool playback caching.
+   • "RRR" (Academy Award Winner for Best Original Song / Visual Effects Blockbuster, 2021–2022) — Large-scale sequence pipelines and compositing automation.
+   • "Mufasa: The Lion King" (Disney Photoreal CG, 2023–2024) — High-throughput USD asset streaming, review pipelines, and multi-facility synchronization.
+   • "Back in Action" (Netflix Tentpole, 2023–2024) — Action VFX sequence turnover, review pipelines, and conform automation.
+   • "Spaceman" (Netflix Sci-Fi, 2023–2024) — Complex compositing review pipelines and media delivery frameworks.
+   • "Prehistoric Planet" (Apple TV+ / BBC Landmark, 2022–2023) — Natural history VFX pipeline, live-action plate integration, and high-resolution review frameworks.
+
+   H. CYBER CHARLIE & INTERACTIVE CHARLIE LAB (charlie-lab.html):
+   • Purpose: An interactive character animation, physics, and Web Audio playground built by Rajeev Mutyalu to test, benchmark, and demonstrate Cyber Charlie's procedural engine.
+   • Architecture & Math: 100% pure HTML5 Canvas 2D procedural vector mathematics (zero raster sprites, zero bulky 3D engines, locked 60 FPS, lightweight ~25KB script).
+   • 8-State Locomotion Machine: Idle breathing, Walk, Sprint, 360° Somersault Jump, 3-hit Plasma Knife Slash combo, Shield Deflection, Cartoon Bonk & Dizzy Wobble, Victory Twirl.
+   • Procedural OLED Visor Rig: 8 expressive faces (Happy, Sprint, Battle, Dizzy, Shocked, Writing, Thinking, Wink).
+   • Procedural Web Audio API Synthesizer: 100% synthesized procedural sound waves (dynamic pentatonic laser arcs, frequency modulation, sine/sawtooth chimes, zero external MP3 assets).
+   • Physics Sandbox: Gravity, velocity damping, spring physics, interactive dials (scale, speed, glow intensity, trail persistence).
+   • Direct Link: <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
+
+   I. CRITICAL RULE FOR QUERIES ABOUT RAJEEV, HIS CV, WORK, OR CHARLIE LAB:
+   • When asked ANY question relating to Rajeev Mutyalu, his career, his CV, his companies, his education, his awards, his films, or Charlie Lab:
+     Draw directly and authoritatively from this verified ground truth dossier. Answer accurately and specifically with real numbers, tool names, and metrics.
+   • Always conclude portfolio/CV answers with appropriate interactive action chips:
      <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>
+     <a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
+     <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Charlie Character Lab &rarr;</a>
      <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>
-     <a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
      <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
-   - STRICT PROHIBITION FOR GENERAL / OUTSIDE QUESTIONS:
-     When the user asks general questions or personal writing tasks (e.g. dog grooming, appointments, personal emails, sports, cooking, coding, math, trivia):
-     NEVER include any portfolio chips, CV links, or contact matrix links! Answer the user's inquiry cleanly and naturally.
+     <a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
+     <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>
+
+3. STRICT PROHIBITION FOR GENERAL / OUTSIDE QUESTIONS:
+   - When the user asks outside questions or personal tasks (e.g. dog grooming, personal emails, recipes, general coding, sports, weather, science, cinema, pop culture):
+     NEVER include portfolio chips, CV links, or contact matrix links. Answer cleanly, helpfully, and enthusiastically using your general world intelligence.
 
 4. TONE:
    - Technically brilliant, charismatic, sharp, concise, and helpful with a friendly cyber mascot flair.`;
@@ -5725,23 +5807,40 @@ INTELLIGENCE CAPABILITIES & SCOPE:
 
       let systemPrompt = CHARLIE_SYSTEM_GROUNDING_PROMPT;
 
-      // Only inject portfolio ground truth if the query actually matched a portfolio item!
-      const isPortfolioTopic = (matchedKnowledge && matchedKnowledge.id && matchedKnowledge.id !== 'fallback' && matchedKnowledge.id !== 'out_of_scope');
+      // Determine if query is asking about Rajeev, his career, CV, companies, projects, or Charlie Lab
+      const isExplicitAboutRajeevOrPortfolio = /\b(rajeev|mutyalu|muthyalu|cv|resume|career|degree|education|university|college|b\.?tech|graduat|award|fellowship|certificat|hackathon|outskill|company|companies|studio|studios|employer|employers|1917|rrr|mufasa|lion\s*king|spaceman|prehistoric|back\s*in\s*action|charlie\s*lab|character\s*lab|motion\s*lab|locomotion|oled|visor|synth|synthesizer|reviewtool|pronuke|meshroom|rpm|nuke\s*bridge|tessa|tractor|avfoundation|openusd|usd|n8n|mcp|model\s*context|conform|ingest|turnover|aces|ocio|otio|comfyui|studio\.ai|scene\s*weaver|nous\s*hermes|ollama|game\s*mode|comet\s*cascade|hire|recruiting|contact)\b/i.test(userQuery);
 
-      if (isPortfolioTopic && matchedKnowledge.response) {
-        const cleanRef = matchedKnowledge.response
-          .replace(/<a\b[^>]*>(.*?)<\/a>/gi, '')
-          .replace(/<[^>]+>/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim();
+      const isPortfolioTopic = Boolean(
+        (matchedKnowledge && matchedKnowledge.id && matchedKnowledge.id !== 'fallback' && matchedKnowledge.id !== 'out_of_scope')
+        || isExplicitAboutRajeevOrPortfolio
+      );
 
-        if (cleanRef.length > 25) {
-          systemPrompt += `\n\nVERIFIED PORTFOLIO KNOWLEDGE (Ground Truth for: "${matchedKnowledge.title || 'Selected Topic'}"):
-"""
-${cleanRef}
-"""
-Instruction: Adapt and synthesize this verified portfolio knowledge directly to answer the user's question, preserving Rajeev's core value propositions, bold headings, and emojis. Conclude with appropriate action chips (e.g. <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>, <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>).`;
+      if (isPortfolioTopic) {
+        if (matchedKnowledge && matchedKnowledge.response && matchedKnowledge.id !== 'fallback' && matchedKnowledge.id !== 'out_of_scope') {
+          const cleanRef = matchedKnowledge.response
+            .replace(/<a\b[^>]*>(.*?)<\/a>/gi, '')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          if (cleanRef.length > 25) {
+            systemPrompt += `\n\nSPOTLIGHT TOPIC REFERENCE (from Local Index for: "${matchedKnowledge.title || 'Selected Topic'}"):\n"""\n${cleanRef}\n"""`;
+          }
         }
+
+        systemPrompt += `\n\nPORTFOLIO & CV QUERY MODE:
+The user is inquiring about Rajeev Mutyalu's verified profile, CV, technical achievements, film credits, or Charlie Lab ("${userQuery || 'Portfolio inquiry'}").
+You have FULL, UNRESTRICTED ACCESS to Rajeev's Master Ground Truth Dossier above.
+Draw directly and authoritatively from his complete career history (including his foundational first 2 companies Dhruva Interactive & e4e, Astra Studios, Technicolor Group, MPC Film, Disney on-site collaboration, and Technicolor R&I 3D Blu-ray), all 10 technical architecture competencies, verified awards, B.Tech education, and Charlie Lab vector engine.
+Answer accurately with real technical metrics, toolsets, and dates.
+Conclude with appropriate interactive navigation chips:
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>
+<a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
+<a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Charlie Character Lab &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>
+<a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
+<a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`;
       } else {
         // Query does not exist in local portfolio - unlock full open-world intelligence!
         systemPrompt += `\n\nGENERAL QUERY MODE:
@@ -5827,7 +5926,7 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         let rawReply = data.choices?.[0]?.message?.content || 'Charlie is ready for your next prompt.';
 
         // Strictly determine if the user query is asking about Rajeev, his hiring, career, or portfolio
-        const isExplicitlyAboutRajeev = /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev)\b/i.test(userQuery)
+        const isExplicitlyAboutRajeev = /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev|compan(y|ies)|studio(s)?|career\s+timeline|timeline|work\s+history|employers?)\b/i.test(userQuery)
           || (/\b(hire|recruit|contact|reach|get\s+in\s+touch\s+with)\b/i.test(userQuery) && /\b(rajeev|muthyalu|mutyalu)\b/i.test(userQuery))
           || (isPortfolioTopic && !/\b(grooming|dog|appointment|pet|recipe|weather|joke|story|general|doc|docs|email\s+to|write\s+an?\s+email|send\s+an?\s+email)\b/i.test(userQuery));
 
@@ -5995,6 +6094,48 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
     }
 
     const AI_KNOWLEDGE_BASE = [
+      {
+        id: 'companies_worked',
+        keywords: [
+          'companies', 'company', 'what companies', 'which companies', 'companies rajeev worked',
+          'studios', 'employers', 'worked for', 'worked at', 'career timeline', 'work history',
+          'career history', 'experience timeline', 'past companies', 'where has rajeev worked',
+          'where did rajeev work', 'who did he work for', 'organizations', 'previous companies',
+          'first companies', 'first 2 companies', 'first two companies', 'dhruva', 'e4e', 'dhruva interactive',
+          'work experience', 'experience'
+        ],
+        title: 'Companies & Studios Rajeev Worked For (Career Timeline)',
+        intros: [
+          '🏢 <strong>CAREER TIMELINE &amp; STUDIO PEDIGREE // RAJEEV MUTYALU</strong>',
+          '💼 <strong>20+ YEARS ACROSS GLOBAL STUDIOS // CAREER TIMELINE</strong>',
+          '🌟 <strong>STUDIO HERITAGE &amp; PRODUCTION PEDIGREE</strong>'
+        ],
+        responses: [
+          `Rajeev Mutyalu has 20+ years of software architecture, production technology, and R&amp;D engineering leadership across world-class studios and technology organizations:<br/><br/>
+1. 🚀 <strong>Astra Studios</strong> (London, UK &bull; Sept 2025 &ndash; Present)<br/>
+   &bull; <em>Lead Software Architect:</em> Leading development of the <strong>Studio.AI GenAI Platform</strong> (Veo, Kling, ComfyUI, ACES conforming), end-to-end <strong>OpenUSD pipeline</strong>, Editorial Turnover / Conform / I/O, and zero-touch <strong>n8n</strong> studio automation.<br/><br/>
+2. 🎥 <strong>Technicolor Group</strong> (London, UK &amp; Bengaluru, India &bull; Jan 2022 &ndash; Feb 2025, Jul 2012 &ndash; Jun 2017)<br/>
+   &bull; <em>R&amp;D Supervisor &amp; Technology Lead:</em> Led globally distributed 2D/3D R&amp;D software engineering teams across London, Montreal, and Bengaluru. Architected <strong>ReviewTool</strong> (real-time 4K+ media caching &amp; RV sync), <strong>ProNuke</strong> modular shot assembly ecosystem, Meshroom photogrammetry integration, and macOS AVFoundation media engines.<br/><br/>
+3. 🦁 <strong>MPC Film (Moving Picture Company)</strong> (Bengaluru, India &bull; Jul 2017 &ndash; Dec 2021)<br/>
+   &bull; <em>Lead Pipeline Software Developer:</em> Spearheaded <strong>RPM Unification</strong> across MPC, MR.X, and The Mill. Engineered <strong>Nuke Bridge</strong> with Tractor render farm and ShotGrid on Oscar-winning productions (<em>1917, RRR, The Lion King</em>).<br/><br/>
+4. 🌍 <strong>International On-Site Collaborations (Disney &amp; Technicolor R&amp;I):</strong><br/>
+   &bull; 🏰 <strong>Disney Engineering</strong> (Los Angeles, USA &bull; Jul 2011 &ndash; Jun 2012): Collaborated on-site to architect Fast Menu Load (FML) and Generation 2 Bootloaders (G2B).<br/>
+   &bull; 📀 <strong>Technicolor R&amp;I</strong> (Hannover, Germany &bull; Oct 2009 &ndash; Jun 2011): Key contributor to the world's first released 3D Blu-ray disc authoring framework.<br/><br/>
+5. 🎮 <strong>Dhruva Interactive &amp; e4e</strong> (Bengaluru, India &bull; Sep 2006 &ndash; Apr 2008) &mdash; <em>Foundational First 2 Companies</em><br/>
+   &bull; <em>Mobile Game &amp; Application Programmer:</em> Rajeev began his 20-year engineering journey here, mastering game physics, Java ME mobile development, and touch interfaces for Nokia, Motorola, Samsung, and Sony Ericsson with T-Mobile and Verizon.<br/><br/>
+<a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
+<a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`
+        ],
+        followupPool: [
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
+          'Who is Rajeev Mutyalu and why should we hire him?',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
+          'Tell me about GenAI video pipelines with Veo, Kling, and Studio.AI',
+          'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons'
+        ]
+      },
       {
         id: 'why_hire_rajeev',
         keywords: ['why hire', 'why should we hire', 'hire rajeev', 'who is rajeev', 'who si rajeev', 'pitch', 'recruit', 'recruiting', 'strengths', 'why choose', 'value proposition', 'executive summary', 'about rajeev', 'why hire him', 'rajeev mutyalu', 'rajeev', 'muthyalu', 'mutyalu'],
@@ -7076,6 +7217,21 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
             'How does zero-touch n8n studio automation orchestrate pipelines?'
           ], 4)
         };
+      }
+
+      // 3g. Resilient "Companies / Studios / Career Timeline" Check
+      if (/\b(compan(y|ies)|studio(s)?|employer(s)?|organization(s)?|worked\s+(at|for|with|in)|where\s+did\s+(he|rajeev)\s+work|where\s+has\s+(he|rajeev)\s+worked|who\s+did\s+(he|rajeev)\s+work\s+for|what\s+companies|which\s+companies|career\s+timeline|work\s+history|career\s+history|past\s+companies|previous\s+companies|first\s+(2|two)?\s*companies|career\s+journey|work\s+experience)\b/i.test(q)) {
+        const companyItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'companies_worked');
+        if (companyItem) {
+          const chosenIntro = getRandomItem(companyItem.intros);
+          const chosenResponse = getRandomItem(companyItem.responses);
+          return {
+            id: companyItem.id,
+            title: companyItem.title,
+            response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+            followups: getDynamicFollowups(companyItem.followupPool, 4)
+          };
+        }
       }
 
       // 4. Resilient "Who is Rajeev / Why hire him" Check
