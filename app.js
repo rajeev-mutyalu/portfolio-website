@@ -7586,16 +7586,36 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         startTypingSequence();
       }
 
+      // Check for image & document attachments
+      const hasImageAttachments = (attachments || []).some(a => !a.isDoc);
+      const hasDocAttachments = (attachments || []).some(a => a.isDoc);
+      const hasAnyAttachments = Boolean(hasImageAttachments || hasDocAttachments);
+
+      // Check if user's prompt explicitly asks about Rajeev or his portfolio
+      const isExplicitPortfolioMention = trimmedQuery ? /\b(rajeev|mutyalu|muthyalu|usd|pipeline|n8n|mcp|conform|ingest|turnover|charlie|cv|resume|hire|filmography|technicolor|mpc|astra|1917|mufasa|rrr|reviewtool)\b/i.test(trimmedQuery) : false;
+
       // 4. Strict Dual-Engine Dispatch:
       // In Local KB mode: Strictly stay offline & never contact OpenAI!
       // In OpenAI mode: Ground with portfolio if portfolio query, or answer general questions with open-world intelligence
-      const localMatch = matchQueryToKnowledge(trimmedQuery || 'Attached image inspection');
-      const isPortfolioQuery = (localMatch && localMatch.id !== 'fallback' && localMatch.id !== 'out_of_scope');
-      const isLiveOpenAi = (charlieAiConfig.mode === 'openai' && charlieAiConfig.apiKey && charlieAiConfig.apiKey.trim().length > 0);
+      let localMatch = null;
+      if (trimmedQuery) {
+        localMatch = matchQueryToKnowledge(trimmedQuery);
+      } else if (!hasAnyAttachments) {
+        localMatch = matchQueryToKnowledge('');
+      } else {
+        localMatch = { id: 'attachment_analysis', title: 'Attachment Analysis', response: '', followups: [] };
+      }
 
-      // Check for image attachments in non-vision models (Local KB or o1-mini)
-      const hasImageAttachments = (attachments || []).some(a => !a.isDoc);
-      const hasDocAttachments = (attachments || []).some(a => a.isDoc);
+      // A query is only treated as portfolio-specific if it's not a generic fallback/out-of-scope,
+      // and if an attachment is present, only if the user explicitly asks about Rajeev or his work.
+      const isPortfolioQuery = Boolean(
+        localMatch &&
+        localMatch.id !== 'fallback' &&
+        localMatch.id !== 'out_of_scope' &&
+        localMatch.id !== 'attachment_analysis' &&
+        (!hasAnyAttachments || isExplicitPortfolioMention)
+      );
+      const isLiveOpenAi = (charlieAiConfig.mode === 'openai' && charlieAiConfig.apiKey && charlieAiConfig.apiKey.trim().length > 0);
 
       if (hasImageAttachments && (!isLiveOpenAi || charlieAiConfig.model === 'o1-mini')) {
         const thinkingDelay = 450;
