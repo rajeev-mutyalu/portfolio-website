@@ -5228,10 +5228,12 @@
       let dragStartX = 0;
       let dragStartY = 0;
 
-      canvasWrap.addEventListener('mousedown', (e) => {
+      const onMouseDown = (e) => {
         if (!isSnippingActive) return;
-        if (confirmBtn && confirmBtn.contains(e.target)) return;
+        const topbar = document.querySelector('.ai-snipper-topbar');
+        if (topbar && topbar.contains(e.target)) return;
         if (e.button !== 0) return; // Left click only
+        e.preventDefault();
 
         isDragging = true;
         dragStartX = e.clientX;
@@ -5246,7 +5248,10 @@
           selection.style.width = '0px';
           selection.style.height = '0px';
         }
-      });
+      };
+
+      canvasWrap.addEventListener('mousedown', onMouseDown);
+      overlay.addEventListener('mousedown', onMouseDown);
 
       window.addEventListener('mousemove', (e) => {
         if (!isSnippingActive || !isDragging) return;
@@ -5301,7 +5306,11 @@
         isDragging = false;
 
         const scrim = document.getElementById('aiSnipperScrim');
-        if (!snipperCurrentCrop || snipperCurrentCrop.width < 15 || snipperCurrentCrop.height < 15) {
+        if (snipperCurrentCrop && snipperCurrentCrop.width >= 20 && snipperCurrentCrop.height >= 20) {
+          // Authentic Windows Snipping Tool: Releasing mouse instantly captures and uploads to chat!
+          commitScreenSnip(snipperCurrentCrop);
+        } else {
+          // If accidental click or tiny drag, clear and allow re-dragging
           if (selection) selection.classList.add('hidden');
           if (scrim) scrim.classList.remove('hidden');
           snipperCurrentCrop = null;
