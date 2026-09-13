@@ -749,14 +749,33 @@
               <!-- Row 2: Bottom Actions Bar -->
               <div class="ai-input-row-bottom">
                 <div class="ai-input-row-bottom-left">
-                  <!-- Image Attachment Button -->
-                  <button type="button" class="ai-attach-btn" id="aiAttachBtn" title="Attach image (PNG, JPG, WEBP) or paste from clipboard (Ctrl+V)" aria-label="Attach image">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                  </button>
-                  <input type="file" id="aiFileInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>
+                  <!-- Attachment Button & Popover Menu (Images / Documents) -->
+                  <div class="ai-attach-wrap" id="aiAttachWrap">
+                    <button type="button" class="ai-attach-btn" id="aiAttachBtn" aria-expanded="false" aria-haspopup="true" title="Add attachments (Images or Documents)" aria-label="Add attachments">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                      </svg>
+                    </button>
+                    <div class="ai-attach-menu hidden" id="aiAttachMenu" role="menu" aria-label="Attachment Options">
+                      <button type="button" class="ai-attach-menu-item" id="aiAttachImagesOpt" role="menuitem">
+                        <span class="ai-attach-menu-icon">🖼️</span>
+                        <div class="ai-attach-menu-meta">
+                          <span class="ai-attach-menu-title">Upload Images</span>
+                          <span class="ai-attach-menu-sub">PNG, JPG, WEBP, GIF</span>
+                        </div>
+                      </button>
+                      <button type="button" class="ai-attach-menu-item" id="aiAttachDocsOpt" role="menuitem">
+                        <span class="ai-attach-menu-icon">📄</span>
+                        <div class="ai-attach-menu-meta">
+                          <span class="ai-attach-menu-title">Upload Documents</span>
+                          <span class="ai-attach-menu-sub">Excel, PPT, Word, PDF, CSV, TXT</span>
+                        </div>
+                      </button>
+                    </div>
+                    <input type="file" id="aiImageFileInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>
+                    <input type="file" id="aiDocFileInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.tsv,.json,.md,.xml,.log,.py,.js" multiple hidden>
+                  </div>
 
                   <!-- Model Selector Pill -->
                   <div class="ai-model-selector-wrap" id="aiModelSelectorWrap">

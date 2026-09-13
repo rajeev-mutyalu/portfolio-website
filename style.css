@@ -4566,6 +4566,93 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   flex-wrap: wrap;
 }
 
+/* Attachment Wrapper & Popover Menu (Images / Documents) */
+.ai-attach-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ai-attach-menu {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  min-width: 220px;
+  background: rgba(10, 16, 28, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(56, 189, 248, 0.15);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: attachMenuPop 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes attachMenuPop {
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.ai-attach-menu.hidden {
+  display: none !important;
+}
+
+.ai-attach-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #e2e8f0;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.ai-attach-menu-item:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  transform: translateX(2px);
+}
+
+.ai-attach-menu-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ai-attach-menu-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ai-attach-menu-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.2;
+}
+
+.ai-attach-menu-item:hover .ai-attach-menu-title {
+  color: #38bdf8;
+}
+
+.ai-attach-menu-sub {
+  font-size: 0.66rem;
+  color: #94a3b8;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+}
+
 /* Image Attachment Button */
 .ai-attach-btn {
   display: inline-flex;
@@ -4593,6 +4680,76 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   background: rgba(16, 185, 129, 0.15);
   border-color: rgba(16, 185, 129, 0.4);
   color: #34d399;
+}
+
+/* Document Chip Styling in Attachment Tray */
+.ai-attachment-chip.is-doc {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.ai-attachment-doc-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.ai-attachment-chip.doc-excel {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.ai-attachment-chip.doc-excel .ai-attachment-doc-icon {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.ai-attachment-chip.doc-ppt {
+  border-color: rgba(249, 115, 22, 0.4);
+}
+.ai-attachment-chip.doc-ppt .ai-attachment-doc-icon {
+  background: rgba(249, 115, 22, 0.2);
+}
+
+.ai-attachment-chip.doc-pdf {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+.ai-attachment-chip.doc-pdf .ai-attachment-doc-icon {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.ai-attachment-chip.doc-word {
+  border-color: rgba(59, 130, 246, 0.4);
+}
+.ai-attachment-chip.doc-word .ai-attachment-doc-icon {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.ai-attachment-chip.doc-csv,
+.ai-attachment-chip.doc-text {
+  border-color: rgba(0, 242, 254, 0.4);
+}
+.ai-attachment-chip.doc-csv .ai-attachment-doc-icon,
+.ai-attachment-chip.doc-text .ai-attachment-doc-icon {
+  background: rgba(0, 242, 254, 0.18);
+}
+
+/* Document badge in chat stream */
+.ai-msg-doc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.74rem;
+  color: #38bdf8;
+  margin-bottom: 6px;
 }
 
 /* Session Memory Telemetry Meter */

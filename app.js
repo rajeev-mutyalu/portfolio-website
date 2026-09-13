@@ -4781,7 +4781,7 @@
       }
 
       if (stagedAttachments.length >= 4) {
-        showChatTelemetryToast('⚠️ Max 4 image attachments per prompt.');
+        showChatTelemetryToast('⚠️ Max 4 attachments per prompt.');
         return;
       }
 
@@ -4793,6 +4793,7 @@
           const processed = await compressImageClientSide(file);
           stagedAttachments.push({
             id: 'att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+            isDoc: false,
             ...processed
           });
         } catch (err) {
@@ -4804,7 +4805,119 @@
       if (typeof adjustAiInputHeight === 'function') {
         adjustAiInputHeight();
       }
-      showChatTelemetryToast(`Attached ${stagedAttachments.length} image${stagedAttachments.length > 1 ? 's' : ''}.`);
+      showChatTelemetryToast(`Attached ${stagedAttachments.length} item${stagedAttachments.length > 1 ? 's' : ''}.`);
+    }
+
+    // =========================================================================
+    // 8a-2. Document Ingestion Pipeline (Excel, PPT, Word, PDF, CSV, TXT)
+    // =========================================================================
+    function getDocumentMeta(filename) {
+      const ext = (filename.split('.').pop() || '').toLowerCase();
+      if (['xlsx', 'xls', 'xlsm'].includes(ext)) {
+        return { docType: 'excel', icon: '📊', label: 'Excel Spreadsheet', className: 'doc-excel' };
+      }
+      if (['pptx', 'ppt', 'pps'].includes(ext)) {
+        return { docType: 'ppt', icon: '📑', label: 'PowerPoint Deck', className: 'doc-ppt' };
+      }
+      if (ext === 'pdf') {
+        return { docType: 'pdf', icon: '📄', label: 'PDF Document', className: 'doc-pdf' };
+      }
+      if (['docx', 'doc', 'rtf'].includes(ext)) {
+        return { docType: 'word', icon: '📝', label: 'Word Document', className: 'doc-word' };
+      }
+      if (['csv', 'tsv'].includes(ext)) {
+        return { docType: 'csv', icon: '📈', label: 'CSV / Data Table', className: 'doc-csv' };
+      }
+      return { docType: 'text', icon: '📄', label: 'Document / Code', className: 'doc-text' };
+    }
+
+    function readDocumentText(file) {
+      return new Promise((resolve) => {
+        const meta = getDocumentMeta(file.name);
+        const reader = new FileReader();
+        const ext = (file.name.split('.').pop() || '').toLowerCase();
+        const isTextFormat = ['csv', 'tsv', 'txt', 'json', 'md', 'xml', 'log', 'py', 'js', 'html', 'css', 'sql', 'sh', 'yaml', 'yml'].includes(ext);
+
+        if (isTextFormat) {
+          reader.onload = (e) => {
+            const rawText = (e.target.result || '').toString();
+            const safeContent = rawText.slice(0, 16000);
+            resolve({
+              content: safeContent,
+              isPartial: rawText.length > 16000
+            });
+          };
+          reader.onerror = () => resolve({ content: `[Could not read text for ${file.name}]` });
+          reader.readAsText(file);
+        } else {
+          // Binary office formats (.xlsx, .pptx, .docx, .pdf):
+          // Perform safe in-browser ASCII/XML string extraction
+          reader.onload = (e) => {
+            try {
+              const buffer = e.target.result;
+              const uint8 = new Uint8Array(buffer);
+              let rawStr = '';
+              const limit = Math.min(uint8.length, 140000);
+              for (let i = 0; i < limit; i++) {
+                const code = uint8[i];
+                if ((code >= 32 && code <= 126) || code === 10 || code === 13) {
+                  rawStr += String.fromCharCode(code);
+                } else if (rawStr.length && rawStr[rawStr.length - 1] !== ' ') {
+                  rawStr += ' ';
+                }
+              }
+
+              // Extract readable alphanumeric chunks
+              const words = rawStr.match(/[A-Za-z0-9_.,:;?!@#$%&*()\-+=\/]{2,}/g) || [];
+              const meaningful = words.slice(0, 1200).join(' ');
+
+              resolve({
+                content: meaningful.length > 50
+                  ? `[Parsed contents for ${meta.label}: ${file.name}]\n${meaningful}`
+                  : `[Attached ${meta.label}: ${file.name} (${Math.round(file.size / 1024)}KB) - binary structure ready for analysis]`
+              });
+            } catch (err) {
+              resolve({
+                content: `[Attached ${meta.label}: ${file.name} (${Math.round(file.size / 1024)}KB)]`
+              });
+            }
+          };
+          reader.onerror = () => resolve({ content: `[Attached document: ${file.name}]` });
+          reader.readAsArrayBuffer(file);
+        }
+      });
+    }
+
+    async function stageDocumentFiles(fileList) {
+      if (!fileList || fileList.length === 0) return;
+      if (stagedAttachments.length >= 4) {
+        showChatTelemetryToast('⚠️ Max 4 attachments per prompt.');
+        return;
+      }
+
+      showChatTelemetryToast('⚡ Ingesting document...');
+      for (const file of fileList) {
+        if (stagedAttachments.length >= 4) break;
+        const meta = getDocumentMeta(file.name);
+        const parsed = await readDocumentText(file);
+        stagedAttachments.push({
+          id: 'doc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+          isDoc: true,
+          docType: meta.docType,
+          icon: meta.icon,
+          label: meta.label,
+          className: meta.className,
+          name: file.name,
+          size: file.size,
+          textContent: parsed.content || ''
+        });
+      }
+
+      renderAttachmentTray();
+      if (typeof adjustAiInputHeight === 'function') {
+        adjustAiInputHeight();
+      }
+      showChatTelemetryToast(`Attached ${stagedAttachments.length} item${stagedAttachments.length > 1 ? 's' : ''}.`);
     }
 
     function renderAttachmentTray() {
@@ -4825,6 +4938,15 @@
 
       tray.innerHTML = stagedAttachments.map(att => {
         const sizeKb = Math.round(att.size / 1024);
+        if (att.isDoc) {
+          return `
+            <div class="ai-attachment-chip is-doc ${att.className || ''}" data-id="${att.id}">
+              <span class="ai-attachment-doc-icon">${att.icon || '📄'}</span>
+              <span class="ai-attachment-name" title="${escapeHtml(att.name)}">${escapeHtml(att.name)} (${sizeKb}KB)</span>
+              <button type="button" class="ai-attachment-remove" data-remove-id="${att.id}" title="Remove file" aria-label="Remove file">&times;</button>
+            </div>
+          `;
+        }
         return `
           <div class="ai-attachment-chip" data-id="${att.id}">
             <img src="${att.dataUrl}" class="ai-attachment-thumb" alt="${escapeHtml(att.name)}" />
@@ -4856,8 +4978,10 @@
     function clearAttachments() {
       stagedAttachments = [];
       renderAttachmentTray();
-      const fileInput = document.getElementById('aiFileInput');
-      if (fileInput) fileInput.value = '';
+      const imgInput = document.getElementById('aiImageFileInput');
+      const docInput = document.getElementById('aiDocFileInput');
+      if (imgInput) imgInput.value = '';
+      if (docInput) docInput.value = '';
     }
 
     function updateSendButtonState() {
@@ -5088,12 +5212,24 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         recent.forEach(m => messages.push(m));
       }
 
-      // Multimodal Vision Assembly: Support both pure text and image_url attachments
-      if (attachments && attachments.length > 0) {
+      // Separate image attachments and document attachments
+      const imageAttachments = (attachments || []).filter(a => !a.isDoc && a.dataUrl);
+      const docAttachments = (attachments || []).filter(a => a.isDoc);
+
+      let documentContext = '';
+      if (docAttachments.length > 0) {
+        documentContext = docAttachments.map(d => {
+          return `\n\n[ATTACHED FILE: "${d.name}" (${d.label || 'Document'})]\n"""\n${d.textContent || '(Empty content)'}\n"""`;
+        }).join('');
+      }
+
+      const effectiveUserText = ((userQuery || (imageAttachments.length > 0 ? 'Please inspect and analyze the attached image(s).' : 'Please analyze the attached document(s).')) + documentContext).trim();
+
+      if (imageAttachments.length > 0) {
         const visionPayload = [
-          { type: 'text', text: userQuery || 'Please inspect and analyze the attached image(s).' }
+          { type: 'text', text: effectiveUserText }
         ];
-        attachments.forEach(att => {
+        imageAttachments.forEach(att => {
           visionPayload.push({
             type: 'image_url',
             image_url: {
@@ -5104,7 +5240,7 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         });
         messages.push({ role: 'user', content: visionPayload });
       } else {
-        messages.push({ role: 'user', content: userQuery });
+        messages.push({ role: 'user', content: effectiveUserText });
       }
 
       const controller = new AbortController();
@@ -6727,11 +6863,21 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       if (hasAttachments) {
         attachmentsHtml = `
           <div class="ai-msg-attachments">
-            ${attachments.map(att => `
-              <div class="ai-msg-img-preview" title="${escapeHtml(att.name || 'Attachment')}">
-                <img src="${att.dataUrl}" alt="${escapeHtml(att.name || 'Attachment')}" />
-              </div>
-            `).join('')}
+            ${attachments.map(att => {
+              if (att.isDoc) {
+                return `
+                  <div class="ai-msg-doc-badge" title="${escapeHtml(att.name)}">
+                    <span>${att.icon || '📄'}</span>
+                    <span>${escapeHtml(att.name)} (${Math.round(att.size / 1024)}KB)</span>
+                  </div>
+                `;
+              }
+              return `
+                <div class="ai-msg-img-preview" title="${escapeHtml(att.name || 'Attachment')}">
+                  <img src="${att.dataUrl}" alt="${escapeHtml(att.name || 'Attachment')}" />
+                </div>
+              `;
+            }).join('')}
           </div>
         `;
       }
@@ -7102,7 +7248,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const isLiveOpenAi = (charlieAiConfig.mode === 'openai' && charlieAiConfig.apiKey && charlieAiConfig.apiKey.trim().length > 0);
 
       // Check for image attachments in non-vision models (Local KB or o1-mini)
-      if (hasAttachments && (!isLiveOpenAi || charlieAiConfig.model === 'o1-mini')) {
+      const hasImageAttachments = (attachments || []).some(a => !a.isDoc);
+      const hasDocAttachments = (attachments || []).some(a => a.isDoc);
+
+      if (hasImageAttachments && (!isLiveOpenAi || charlieAiConfig.model === 'o1-mini')) {
         const thinkingDelay = 450;
         activeDeliveryTimeout = setTimeout(() => {
           activeDeliveryTimeout = null;
@@ -7123,11 +7272,13 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (typingDiv) {
           const authorSpan = typingDiv.querySelector('.ai-msg-author span');
           if (authorSpan) {
-            authorSpan.textContent = hasAttachments
+            authorSpan.textContent = hasImageAttachments
               ? `analyzing image with OpenAI [${charlieAiConfig.model}]...`
-              : (isPortfolioQuery
-                ? `querying OpenAI [${charlieAiConfig.model}] with Portfolio Grounding...`
-                : `querying OpenAI [${charlieAiConfig.model}] for Outside Knowledge...`);
+              : (hasDocAttachments
+                ? `analyzing document with OpenAI [${charlieAiConfig.model}]...`
+                : (isPortfolioQuery
+                  ? `querying OpenAI [${charlieAiConfig.model}] with Portfolio Grounding...`
+                  : `querying OpenAI [${charlieAiConfig.model}] for Outside Knowledge...`));
           }
         }
 
@@ -7319,20 +7470,68 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       });
     }
 
-    // Attachment Button & Hidden File Input Listeners
+    // Attachment Button & Popover Menu Controller (Images / Documents)
+    const aiAttachWrap = document.getElementById('aiAttachWrap');
     const aiAttachBtn = document.getElementById('aiAttachBtn');
-    const aiFileInput = document.getElementById('aiFileInput');
+    const aiAttachMenu = document.getElementById('aiAttachMenu');
+    const aiImageFileInput = document.getElementById('aiImageFileInput');
+    const aiDocFileInput = document.getElementById('aiDocFileInput');
+    const aiAttachImagesOpt = document.getElementById('aiAttachImagesOpt');
+    const aiAttachDocsOpt = document.getElementById('aiAttachDocsOpt');
     const aiInputCard = document.getElementById('aiInputCard');
 
-    if (aiAttachBtn && aiFileInput) {
+    if (aiAttachBtn && aiAttachMenu) {
       aiAttachBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        aiFileInput.click();
+        e.stopPropagation();
+        const isClosed = aiAttachMenu.classList.contains('hidden');
+        // Close model dropdown if open
+        const modelMenu = document.getElementById('aiModelDropdownMenu');
+        if (modelMenu) modelMenu.classList.add('hidden');
+
+        aiAttachMenu.classList.toggle('hidden', !isClosed);
+        aiAttachBtn.setAttribute('aria-expanded', isClosed ? 'true' : 'false');
       });
 
-      aiFileInput.addEventListener('change', (e) => {
-        if (e.target.files && e.target.files.length > 0) {
-          stageImageFiles(e.target.files);
+      if (aiAttachImagesOpt && aiImageFileInput) {
+        aiAttachImagesOpt.addEventListener('click', (e) => {
+          e.preventDefault();
+          aiAttachMenu.classList.add('hidden');
+          aiAttachBtn.setAttribute('aria-expanded', 'false');
+          aiImageFileInput.click();
+        });
+      }
+
+      if (aiAttachDocsOpt && aiDocFileInput) {
+        aiAttachDocsOpt.addEventListener('click', (e) => {
+          e.preventDefault();
+          aiAttachMenu.classList.add('hidden');
+          aiAttachBtn.setAttribute('aria-expanded', 'false');
+          aiDocFileInput.click();
+        });
+      }
+
+      if (aiImageFileInput) {
+        aiImageFileInput.addEventListener('change', (e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            stageImageFiles(e.target.files);
+          }
+        });
+      }
+
+      if (aiDocFileInput) {
+        aiDocFileInput.addEventListener('change', (e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            stageDocumentFiles(e.target.files);
+          }
+        });
+      }
+
+      // Close attachment menu when clicking outside or pressing Escape
+      document.addEventListener('click', (e) => {
+        if (aiAttachWrap && !aiAttachWrap.contains(e.target)) {
+          aiAttachMenu.classList.add('hidden');
+          aiAttachBtn.setAttribute('aria-expanded', 'false');
         }
       });
     }
@@ -7356,7 +7555,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       });
     }
 
-    // Drag & Drop Image Files onto the Input Card
+    // Drag & Drop Image and Document Files onto the Input Card
     if (aiInputCard) {
       ['dragenter', 'dragover'].forEach(evt => {
         aiInputCard.addEventListener(evt, (e) => {
@@ -7375,10 +7574,12 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       aiInputCard.addEventListener('drop', (e) => {
         const files = e.dataTransfer?.files;
         if (files && files.length > 0) {
-          const imgFiles = Array.from(files).filter(f => f.type && f.type.startsWith('image/'));
-          if (imgFiles.length > 0) {
-            stageImageFiles(imgFiles);
-          }
+          const fileArr = Array.from(files);
+          const imgFiles = fileArr.filter(f => f.type && f.type.startsWith('image/'));
+          const docFiles = fileArr.filter(f => !(f.type && f.type.startsWith('image/')));
+
+          if (imgFiles.length > 0) stageImageFiles(imgFiles);
+          if (docFiles.length > 0) stageDocumentFiles(docFiles);
         }
       });
     }
