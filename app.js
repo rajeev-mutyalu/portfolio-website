@@ -5807,8 +5807,8 @@ INTELLIGENCE CAPABILITIES & SCOPE:
 
       let systemPrompt = CHARLIE_SYSTEM_GROUNDING_PROMPT;
 
-      // Determine if query is asking about Rajeev, his career, CV, companies, projects, or Charlie Lab
-      const isExplicitAboutRajeevOrPortfolio = /\b(rajeev|mutyalu|muthyalu|cv|resume|career|degree|education|university|college|b\.?tech|graduat|award|fellowship|certificat|hackathon|outskill|company|companies|studio|studios|employer|employers|1917|rrr|mufasa|lion\s*king|spaceman|prehistoric|back\s*in\s*action|charlie|cyber\s*charlie|charlie\s*lab|character\s*lab|motion\s*lab|locomotion|oled|visor|synth|synthesizer|reviewtool|pronuke|meshroom|rpm|nuke\s*bridge|tessa|tractor|avfoundation|openusd|usd|n8n|mcp|model\s*context|conform|ingest|turnover|aces|ocio|otio|comfyui|studio\.ai|scene\s*weaver|nous\s*hermes|ollama|game\s*mode|comet\s*cascade|hire|recruiting|contact)\b/i.test(userQuery);
+      // Determine if query is asking about Rajeev, his career, CV, companies, projects, Charlie Lab, or Charlie identity/build
+      const isExplicitAboutRajeevOrPortfolio = /\b(rajeev|mutyalu|muthyalu|cv|resume|career|degree|education|university|college|b\.?tech|graduat|award|fellowship|certificat|hackathon|outskill|company|companies|studio|studios|employer|employers|1917|rrr|mufasa|lion\s*king|spaceman|prehistoric|back\s*in\s*action|charlie|cyber\s*charlie|charlie\s*lab|character\s*lab|motion\s*lab|locomotion|oled|visor|synth|synthesizer|reviewtool|pronuke|meshroom|rpm|nuke\s*bridge|tessa|tractor|avfoundation|openusd|usd|n8n|mcp|model\s*context|conform|ingest|turnover|aces|ocio|otio|comfyui|studio\.ai|scene\s*weaver|nous\s*hermes|ollama|game\s*mode|comet\s*cascade|hire|recruiting|contact|who\s+are\s+you|who\s+is\s+charlie|who\s+built?\s+you|who\s+made\s+you|who\s+created\s+you|how\s+you\s+got\s+build|how\s+did\s+you\s+got\s+build|how\s+were\s+you\s+built|how\s+was\s+charlie\s+built)\b/i.test(userQuery);
 
       const isPortfolioTopic = Boolean(
         (matchedKnowledge && matchedKnowledge.id && matchedKnowledge.id !== 'fallback' && matchedKnowledge.id !== 'out_of_scope')
@@ -5926,7 +5926,7 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         let rawReply = data.choices?.[0]?.message?.content || 'Charlie is ready for your next prompt.';
 
         // Strictly determine if the user query is asking about Rajeev, his hiring, career, Charlie, or portfolio
-        const isExplicitlyAboutRajeev = /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev|compan(y|ies)|studio(s)?|career\s+timeline|timeline|work\s+history|employers?|charlie|cyber\s*charlie)\b/i.test(userQuery)
+        const isExplicitlyAboutRajeev = /\b(rajeev|muthyalu|mutyalu|his\s+cv|his\s+resume|why\s+hire|about\s+rajeev|compan(y|ies)|studio(s)?|career\s+timeline|timeline|work\s+history|employers?|charlie|cyber\s*charlie|who\s+are\s+you|who\s+is\s+charlie|who\s+built?\s+you|who\s+made\s+you|who\s+created\s+you|how\s+you\s+got\s+build|how\s+did\s+you\s+got\s+build|how\s+were\s+you\s+built|how\s+was\s+charlie\s+built)\b/i.test(userQuery)
           || (/\b(hire|recruit|contact|reach|get\s+in\s+touch\s+with)\b/i.test(userQuery) && /\b(rajeev|muthyalu|mutyalu)\b/i.test(userQuery))
           || (isPortfolioTopic && !/\b(grooming|dog|appointment|pet|recipe|weather|joke|story|general|doc|docs|email\s+to|write\s+an?\s+email|send\s+an?\s+email)\b/i.test(userQuery));
 
@@ -6853,7 +6853,9 @@ The <strong>Cyber Charlie Character Lab</strong> (<code>charlie-lab.html</code>)
     }
 
     function matchQueryToKnowledge(query) {
-      const q = query.toLowerCase().trim();
+      const raw = (query || '').trim();
+      const q = raw.toLowerCase();
+      const cleanQ = q.replace(/[\s?!.,;:_~#*`"']+/g, ' ').trim();
 
       // 1. Audio Mute / Unmute Interactive Control
       const isMute = /\b(mute(\s+sound|\s+audio|\s+music|\s+bgm)?|silence|turn\s+off\s+sound|turn\s+off\s+audio|disable\s+sound|stop\s+audio|sound\s+off|audio\s+off)\b/i.test(q);
@@ -7180,7 +7182,7 @@ This activates Chrome/Edge/Safari/Firefox native responsive mode with precise to
 
       // 3f. Out-of-Scope / General Coding / Non-Portfolio Task Query Detection
       const hasRajeevExplicit = /\b(rajeev|muthyalu|mutyalu|his\s+background|his\s+career|hire\s+him|why\s+hire|about\s+rajeev)\b/i.test(q);
-      const hasPortfolioExplicit = /\b(portfolio|resume|cv|hiring|pedigree|studio\s+pedigree|openusd|usd|n8n|mcp|model\s+context|conform|aces|ocio|otio|scene\s*weaver|openclaw|nous\s*hermes|charlie|character\s*lab|charlie\s*lab|motion\s*lab|comfyui|comfy\s*ui)\b/i.test(q);
+      const hasPortfolioExplicit = /\b(portfolio|resume|cv|hiring|pedigree|studio\s+pedigree|openusd|usd|n8n|mcp|model\s+context|conform|aces|ocio|otio|scene\s*weaver|openclaw|nous\s*hermes|charlie|character\s*lab|charlie\s*lab|motion\s*lab|comfyui|comfy\s*ui|built\s+you|build\s+you|make\s+you|made\s+you|created\s+you|who\s+are\s+you|how\s+were\s+you|how\s+you\s+got\s+build|how\s+did\s+you)\b/i.test(q);
 
       const isCodingTask = (
         /\b(write|create|generate|implement|code|build|make|give\s+me|show\s+me)\s+(a|an|the|me|some)?\s*(python|bash|shell|js|javascript|c\+\+|sql|regex|script|code|function|program|class|algorithm|example|sample|snippet|tutorial|recursive|recursion|solution|app)\b/i.test(q)
@@ -7283,14 +7285,58 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
         }
       }
 
-      // 4d. Resilient Cyber Charlie Character Lab Check
+      // 4d-1. Resilient "Who built you / Who build you / Who made you / Who is your creator" Check
       if (
-        /\b(charlie\s*lab|charlie-lab|character\s*lab|motion\s*lab|where\s+is\s+charlie\s*lab|link\s+to\s+charlie(\s*lab)?|open\s+charlie(\s*lab)?|how\s+(was|did|is)\s+charlie(\s*lab)?\s*(built|made|created|engineered|coded)|how\s+charlie\s*lab\s*built|how\s+charlie\s*(was\s*)?built|how\s+you\s*(built|made)\s*charlie|how\s+did\s+you\s*(build|make)\s*charlie)\b/i.test(q)
-        || q === 'charlie lab'
-        || q === 'charlie-lab'
-        || q === 'character lab'
-        || q === 'motion lab'
-        || q === 'lab'
+        /\b(who\s+(built?|created?|made|designed|programmed|coded|engineered|developed)\s+(you|u|charlie|this(\s*bot)?)|who\s+is\s+your\s+(creator|maker|author|developer|designer|architect|engineer|father|parent)|who\s+owns\s+(you|u|charlie)|who\s+invented\s+(you|u|charlie)|who\s+is\s+behind\s+(you|charlie))\b/i.test(q)
+        || cleanQ === 'who built you'
+        || cleanQ === 'who build you'
+        || cleanQ === 'who made you'
+        || cleanQ === 'who created you'
+        || cleanQ === 'who designed you'
+        || cleanQ === 'who coded you'
+        || cleanQ === 'who programmed you'
+      ) {
+        return {
+          id: 'who_built_charlie',
+          title: "Engineered by Rajeev Mutyalu",
+          response: `🤖 <strong>Rajeev Mutyalu built, designed, and engineered me!</strong><br/><br/>
+I was created by <strong>Rajeev Mutyalu</strong> right here on his portfolio as both an interactive AI companion and a real-time technical showcase of his 20+ years of software architecture, visual effects engineering, and applied Generative AI systems.<br/><br/>
+• <strong>About My Creator, Rajeev Mutyalu:</strong><br/>
+&bull; <strong>20+ Years Production Leadership:</strong> Lead Software Architect &amp; former Technicolor R&amp;D Supervisor with Oscar-winning credits (<em>1917, RRR, Mufasa: The Lion King</em>).<br/>
+&bull; <strong>Dual-Threat Engineering Moat:</strong> Unites core studio infrastructure (OpenUSD, Python/PySide, ACES color pipelines, Conform Ingest) with modern agentic AI (custom MCP tool binding, on-premise private LLMs like Nous Hermes &amp; Ollama, and zero-touch n8n automations).<br/>
+&bull; <strong>Charlie Engine:</strong> Rajeev coded my entire visual rig in pure HTML5 Canvas 2D vector mathematics (60 FPS, 0 sprites) with procedural locomotion, reactive OLED facial expressions, and a Web Audio synthesizer.<br/><br/>
+<a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Rajeev's Executive CV &amp; Bio &rarr;</a>
+<a href="#experience" class="ai-section-link">⏳ View 20-Year Career Timeline &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>
+<a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`,
+          followups: getDynamicFollowups([
+            'How was Cyber Charlie built and animated?',
+            'Who is Rajeev Mutyalu and why should we hire him?',
+            'What companies has Rajeev worked for throughout his 20-year career?',
+            'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
+            'What is Model Context Protocol (MCP) and how is it used in production?'
+          ], 4)
+        };
+      }
+
+      // 4d-2. Resilient "How you got build / How were you built / How Charlie was built / Charlie Lab" Check
+      if (
+        /\b(how\s+(did\s+)?(you|u|charlie|this\s*bot)\s+(got\s+|get\s+|were\s+|was\s+)?(built?|made|created|engineered|coded|developed)|how\s+(were|are|was|is)\s+(you|u|charlie|this\s*bot)\s*(built?|made|created|engineered|coded)|how\s+you\s+(got\s+|were\s+)?(built?|made)|how\s+did\s+rajeev\s+(build|make|create|engineer|code)\s*(you|charlie)|how\s+does\s+(charlie|this\s*bot)\s+work|how\s+do\s+you\s+work|tech\s*stack\s+of\s+(charlie|you|this\s*bot)|charlie\s*(tech\s*)?architecture|charlie\s*lab|charlie-lab|character\s*lab|motion\s*lab|where\s+is\s+charlie\s*lab|link\s+to\s+charlie(\s*lab)?|open\s+charlie(\s*lab)?|how\s+charlie\s*lab\s*built|how\s+you\s*(built|made)\s*charlie|how\s+did\s+you\s*(build|make)\s*charlie)\b/i.test(q)
+        || cleanQ === 'how you got build'
+        || cleanQ === 'how did you got build'
+        || cleanQ === 'how you got built'
+        || cleanQ === 'how did you get built'
+        || cleanQ === 'how were you built'
+        || cleanQ === 'how are you built'
+        || cleanQ === 'how was charlie built'
+        || cleanQ === 'how is charlie built'
+        || cleanQ === 'how charlie was built'
+        || cleanQ === 'charlie lab'
+        || cleanQ === 'charlie-lab'
+        || cleanQ === 'character lab'
+        || cleanQ === 'motion lab'
+        || cleanQ === 'lab'
       ) {
         const labItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'charlie_lab');
         if (labItem) {
@@ -7305,17 +7351,19 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
         }
       }
 
-      // 4e. Resilient "Who is Charlie / Who are you / Who am I speaking to / What is your name" Check
+      // 4e. Resilient "Who are you / Who is Charlie / Who am I speaking to / What is your name" Check
       if (
-        /\b(who\s+(is|si)\s+(cyber\s*)?charlie|what\s+is\s+(cyber\s*)?charlie|tell\s+me\s+about\s+(cyber\s*)?charlie|about\s+(cyber\s*)?charlie|meet\s+charlie|charlie\s+ai|who\s+(are|r)\s+(you|u)|who\s+am\s+i\s+(talking|speaking)\s+to|who\s+is\s+this|what('?s|\s+is)\s+your\s+name|what\s+is\s+this\s+bot|who\s+are\s+you)\b/i.test(q)
-        || q === 'charlie'
-        || q === 'cyber charlie'
-        || q === 'who is charlie'
-        || q === 'who is charlie?'
-        || q === 'what is charlie'
-        || q === 'what is charlie?'
-        || q === 'tell me about charlie'
-        || q === 'about charlie'
+        /\b(who\s+(are|r)\s+(you|u)|who\s+am\s+i\s+(talking|speaking)\s+to|who\s+is\s+this|what('?s|\s+is)\s+your\s+name|what\s+is\s+this\s+bot|who\s+is\s+(cyber\s*)?charlie|what\s+is\s+(cyber\s*)?charlie|tell\s+me\s+about\s+(cyber\s*)?charlie|about\s+(cyber\s*)?charlie|meet\s+charlie|charlie\s+ai)\b/i.test(q)
+        || cleanQ === 'who are you'
+        || cleanQ === 'who are u'
+        || cleanQ === 'who is charlie'
+        || cleanQ === 'who is cyber charlie'
+        || cleanQ === 'what is charlie'
+        || cleanQ === 'tell me about charlie'
+        || cleanQ === 'about charlie'
+        || cleanQ === 'who is this'
+        || cleanQ === 'charlie'
+        || cleanQ === 'cyber charlie'
       ) {
         return {
           id: 'who_is_charlie',
