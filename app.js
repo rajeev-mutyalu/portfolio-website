@@ -4696,6 +4696,208 @@
     };
     let charlieConversationHistory = [];
 
+    // =========================================================================
+    // 8a-1. Multimodal Attachment System & Session Context Memory Manager
+    // =========================================================================
+    let stagedAttachments = [];
+
+    function showChatTelemetryToast(msg, duration = 2800) {
+      let toast = document.getElementById('aiTelemetryToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'aiTelemetryToast';
+        toast.style.cssText = 'position:absolute;bottom:78px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,0.96);border:1px solid rgba(56,189,248,0.45);color:#e2e8f0;padding:6px 14px;border-radius:20px;font-family:var(--font-mono, "JetBrains Mono", monospace);font-size:0.75rem;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.6);pointer-events:none;transition:opacity 0.25s ease;opacity:0;white-space:nowrap;backdrop-filter:blur(8px);';
+        const terminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+        if (terminal) terminal.appendChild(toast);
+        else document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      clearTimeout(toast._timeout);
+      toast._timeout = setTimeout(() => {
+        toast.style.opacity = '0';
+      }, duration);
+    }
+
+    function compressImageClientSide(file, maxDim = 1280, quality = 0.85) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = (e) => {
+          const rawUrl = e.target.result;
+          const img = new Image();
+          img.onerror = reject;
+          img.onload = () => {
+            let { width, height } = img;
+            if (width <= maxDim && height <= maxDim && file.size < 250000) {
+              resolve({
+                name: file.name || 'image.png',
+                size: file.size,
+                type: file.type || 'image/jpeg',
+                dataUrl: rawUrl
+              });
+              return;
+            }
+
+            if (width > height) {
+              if (width > maxDim) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              }
+            } else {
+              if (height > maxDim) {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+            resolve({
+              name: file.name || 'image.jpg',
+              size: Math.round(compressedDataUrl.length * 0.75),
+              type: 'image/jpeg',
+              dataUrl: compressedDataUrl
+            });
+          };
+          img.src = rawUrl;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function stageImageFiles(fileList) {
+      const allowed = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+      const incoming = Array.from(fileList).filter(f => allowed.includes(f.type) || f.type.startsWith('image/'));
+
+      if (incoming.length === 0) {
+        showChatTelemetryToast('⚠️ Please attach images (PNG, JPG, WEBP, GIF).');
+        return;
+      }
+
+      if (stagedAttachments.length >= 4) {
+        showChatTelemetryToast('⚠️ Max 4 image attachments per prompt.');
+        return;
+      }
+
+      showChatTelemetryToast('⚡ Optimizing image client-side...');
+
+      for (const file of incoming) {
+        if (stagedAttachments.length >= 4) break;
+        try {
+          const processed = await compressImageClientSide(file);
+          stagedAttachments.push({
+            id: 'att_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+            ...processed
+          });
+        } catch (err) {
+          console.warn('[Cyber Charlie] Image optimization error:', err);
+        }
+      }
+
+      renderAttachmentTray();
+      if (typeof adjustAiInputHeight === 'function') {
+        adjustAiInputHeight();
+      }
+      showChatTelemetryToast(`Attached ${stagedAttachments.length} image${stagedAttachments.length > 1 ? 's' : ''}.`);
+    }
+
+    function renderAttachmentTray() {
+      const tray = document.getElementById('aiAttachmentTray');
+      const attachBtn = document.getElementById('aiAttachBtn');
+      if (!tray) return;
+
+      if (stagedAttachments.length === 0) {
+        tray.classList.add('hidden');
+        tray.innerHTML = '';
+        if (attachBtn) attachBtn.classList.remove('has-attachments');
+        updateSendButtonState();
+        return;
+      }
+
+      tray.classList.remove('hidden');
+      if (attachBtn) attachBtn.classList.add('has-attachments');
+
+      tray.innerHTML = stagedAttachments.map(att => {
+        const sizeKb = Math.round(att.size / 1024);
+        return `
+          <div class="ai-attachment-chip" data-id="${att.id}">
+            <img src="${att.dataUrl}" class="ai-attachment-thumb" alt="${escapeHtml(att.name)}" />
+            <span class="ai-attachment-name" title="${escapeHtml(att.name)}">${escapeHtml(att.name)} (${sizeKb}KB)</span>
+            <button type="button" class="ai-attachment-remove" data-remove-id="${att.id}" title="Remove image" aria-label="Remove image">&times;</button>
+          </div>
+        `;
+      }).join('');
+
+      tray.querySelectorAll('.ai-attachment-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute('data-remove-id');
+          removeAttachment(id);
+        });
+      });
+
+      updateSendButtonState();
+    }
+
+    function removeAttachment(id) {
+      stagedAttachments = stagedAttachments.filter(a => a.id !== id);
+      renderAttachmentTray();
+      if (typeof adjustAiInputHeight === 'function') {
+        adjustAiInputHeight();
+      }
+    }
+
+    function clearAttachments() {
+      stagedAttachments = [];
+      renderAttachmentTray();
+      const fileInput = document.getElementById('aiFileInput');
+      if (fileInput) fileInput.value = '';
+    }
+
+    function updateSendButtonState() {
+      const sendBtn = document.getElementById('aiSendBtn');
+      const inputField = document.getElementById('aiInputField');
+      if (!sendBtn) return;
+      const hasText = inputField && inputField.value.trim().length > 0;
+      const hasAtt = stagedAttachments && stagedAttachments.length > 0;
+      sendBtn.classList.toggle('has-input', Boolean(hasText || hasAtt));
+    }
+
+    function updateMemoryMeter() {
+      const memMeter = document.getElementById('aiMemMeter');
+      const memFill = document.getElementById('aiMemFill');
+      const memText = document.getElementById('aiMemText');
+      if (!memMeter || !memFill || !memText) return;
+
+      const turns = charlieConversationHistory.length;
+      const textLength = charlieConversationHistory.reduce((acc, m) => {
+        return acc + (typeof m.content === 'string' ? m.content.length : 150);
+      }, 0);
+
+      const memoryScore = Math.min(100, Math.max(0, Math.round((turns * 6) + (textLength / 60))));
+
+      memFill.style.width = `${memoryScore}%`;
+      memText.textContent = `${memoryScore}/100`;
+
+      memMeter.classList.remove('mem-normal', 'mem-warn', 'mem-critical');
+      if (memoryScore >= 80) {
+        memMeter.classList.add('mem-critical');
+        memMeter.setAttribute('title', `Session Context: ${memoryScore}/100 used (${memoryScore}%). Critical capacity! Oldest turns auto-roll (FIFO) to prevent overflow. Click to reset.`);
+      } else if (memoryScore >= 50) {
+        memMeter.classList.add('mem-warn');
+        memMeter.setAttribute('title', `Session Context: ${memoryScore}/100 used (${memoryScore}%). Moderate context. Click to reset memory.`);
+      } else {
+        memMeter.classList.add('mem-normal');
+        memMeter.setAttribute('title', `Session Context: ${memoryScore}/100 used (${memoryScore}%). Optimal capacity. Click to reset memory.`);
+      }
+    }
+
     const CHARLIE_SYSTEM_GROUNDING_PROMPT = `You are "Cyber Charlie", Rajeev's AI Assistant — an advanced, highly intelligent AI companion and VFX & GenAI systems mascot on Rajeev Mutyalu's official portfolio website.
 
 CORE IDENTITY RULE:
@@ -4843,7 +5045,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
       return safe;
     }
 
-    async function fetchOpenAiResponse(userQuery, matchedKnowledge = null, abortSignal = null) {
+    async function fetchOpenAiResponse(userQuery, matchedKnowledge = null, abortSignal = null, attachments = []) {
       const apiKey = charlieAiConfig.apiKey ? charlieAiConfig.apiKey.trim() : '';
       const model = charlieAiConfig.model || 'gpt-4o-mini';
 
@@ -4873,7 +5075,7 @@ Instruction: Adapt and synthesize this verified portfolio knowledge directly to 
       } else {
         // Query does not exist in local portfolio - unlock full open-world intelligence!
         systemPrompt += `\n\nGENERAL QUERY MODE:
-This user question is about an outside general topic, personal task, or general request ("${userQuery}"). Answer the question directly, thoroughly, and helpfully using your general world knowledge (e.g. writing assistance, science, cinema, coding, general life).
+This user question is about an outside general topic, personal task, or general request ("${userQuery || 'Attached image analysis'}"). Answer the question directly, thoroughly, and helpfully using your general world knowledge (e.g. vision analysis, writing assistance, science, cinema, coding, general life).
 CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct Contact Matrix, Open Executive CV, or Charlie Lab links). The user is asking an outside question, so keep the response completely focused on their request without portfolio links.`;
       }
 
@@ -4886,7 +5088,24 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         recent.forEach(m => messages.push(m));
       }
 
-      messages.push({ role: 'user', content: userQuery });
+      // Multimodal Vision Assembly: Support both pure text and image_url attachments
+      if (attachments && attachments.length > 0) {
+        const visionPayload = [
+          { type: 'text', text: userQuery || 'Please inspect and analyze the attached image(s).' }
+        ];
+        attachments.forEach(att => {
+          visionPayload.push({
+            type: 'image_url',
+            image_url: {
+              url: att.dataUrl,
+              detail: 'auto'
+            }
+          });
+        });
+        messages.push({ role: 'user', content: visionPayload });
+      } else {
+        messages.push({ role: 'user', content: userQuery });
+      }
 
       const controller = new AbortController();
       if (abortSignal) {
@@ -4945,12 +5164,19 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
           formattedHtml = formattedHtml.replace(/<a\b[^>]*class=["']ai-section-link["'][^>]*>[\s\S]*?<\/a>/gi, '').trim();
         }
 
-        // Keep chat history clean of HTML action chips so OpenAI in-context learning is never polluted by them
+        // Keep chat history clean of HTML action chips and keep image payloads lightweight for future turns
         const historyReply = rawReply.replace(/<a\b[^>]*class=["']ai-section-link["'][^>]*>[\s\S]*?<\/a>/gi, '').trim();
-        charlieConversationHistory.push({ role: 'user', content: userQuery });
+        const historyUserPrompt = (attachments && attachments.length > 0)
+          ? `${userQuery || 'Analyze attached image'} [Attached Image: ${attachments.map(a => a.name).join(', ')}]`
+          : userQuery;
+
+        charlieConversationHistory.push({ role: 'user', content: historyUserPrompt });
         charlieConversationHistory.push({ role: 'assistant', content: historyReply });
-        if (charlieConversationHistory.length > 8) {
-          charlieConversationHistory = charlieConversationHistory.slice(-8);
+        if (charlieConversationHistory.length > 10) {
+          charlieConversationHistory = charlieConversationHistory.slice(-10);
+        }
+        if (typeof updateMemoryMeter === 'function') {
+          updateMemoryMeter();
         }
 
         // In Live Mode: only show 'Explore Next' if the query matched verified Local KB / portfolio knowledge.
@@ -6482,12 +6708,13 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       }
     }
 
-    function renderBotResponse(query) {
-      if (!aiChatStream || !query) return;
+    function renderBotResponse(query, attachments = []) {
+      if (!aiChatStream || (!query && (!attachments || attachments.length === 0))) return;
       if (isGeneratingResponse) return; // Do NOT allow selecting other questions while generation is in progress!
 
-      const trimmedQuery = query.trim();
-      if (!trimmedQuery) return;
+      const trimmedQuery = (query || '').trim();
+      const hasAttachments = (attachments && attachments.length > 0);
+      if (!trimmedQuery && !hasAttachments) return;
 
       // Lock all questions, chips, and input fields during active generation & animation
       setChatGeneratingLock(true);
@@ -6495,6 +6722,20 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       // 1. Append User Message (Theme-Aligned Sleek Terminal User Prompt)
       const userMsgDiv = document.createElement('div');
       userMsgDiv.className = 'ai-message ai-user-msg user-message';
+
+      let attachmentsHtml = '';
+      if (hasAttachments) {
+        attachmentsHtml = `
+          <div class="ai-msg-attachments">
+            ${attachments.map(att => `
+              <div class="ai-msg-img-preview" title="${escapeHtml(att.name || 'Attachment')}">
+                <img src="${att.dataUrl}" alt="${escapeHtml(att.name || 'Attachment')}" />
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
       userMsgDiv.innerHTML = `
         <div class="ai-msg-avatar ai-user-avatar" title="Visitor / Technical Recruiter">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -6513,7 +6754,8 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             </button>
             <div class="ai-msg-author ai-user-author">You <span>[Terminal Prompt]</span></div>
           </div>
-          <div class="ai-msg-content">${escapeHtml(trimmedQuery)}</div>
+          ${attachmentsHtml}
+          ${trimmedQuery ? `<div class="ai-msg-content">${escapeHtml(trimmedQuery)}</div>` : ''}
         </div>
       `;
       aiChatStream.appendChild(userMsgDiv);
@@ -6855,21 +7097,41 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       // 4. Strict Dual-Engine Dispatch:
       // In Local KB mode: Strictly stay offline & never contact OpenAI!
       // In OpenAI mode: Ground with portfolio if portfolio query, or answer general questions with open-world intelligence
-      const localMatch = matchQueryToKnowledge(trimmedQuery);
+      const localMatch = matchQueryToKnowledge(trimmedQuery || 'Attached image inspection');
       const isPortfolioQuery = (localMatch && localMatch.id !== 'fallback' && localMatch.id !== 'out_of_scope');
       const isLiveOpenAi = (charlieAiConfig.mode === 'openai' && charlieAiConfig.apiKey && charlieAiConfig.apiKey.trim().length > 0);
+
+      // Check for image attachments in non-vision models (Local KB or o1-mini)
+      if (hasAttachments && (!isLiveOpenAi || charlieAiConfig.model === 'o1-mini')) {
+        const thinkingDelay = 450;
+        activeDeliveryTimeout = setTimeout(() => {
+          activeDeliveryTimeout = null;
+          if (!isGeneratingResponse) return;
+          const visionNotice = {
+            id: 'vision_notice',
+            title: 'Image Attachment Notice',
+            response: `🖼️ <strong>Image Attachment Received</strong><br><br>Charlie's <strong>Local Knowledge Base</strong> (and reasoning model <code>o1-mini</code>) run in high-efficiency text mode.<br><br>To inspect diagrams, UI screenshots, or production art with full multimodal vision, please switch to <strong><code>gpt-4o</code></strong> or <strong><code>gpt-4o-mini</code></strong> in the bottom model selector (with your OpenAI API key connected).` + (trimmedQuery ? `<br><br><div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;margin-top:10px;"><strong>Answering your question:</strong><br>${localMatch.response}</div>` : ''),
+            followups: localMatch.followups || []
+          };
+          if (typeof updateMemoryMeter === 'function') updateMemoryMeter();
+          executeCharlieTextDelivery(visionNotice);
+        }, thinkingDelay);
+        return;
+      }
 
       if (isLiveOpenAi) {
         if (typingDiv) {
           const authorSpan = typingDiv.querySelector('.ai-msg-author span');
           if (authorSpan) {
-            authorSpan.textContent = isPortfolioQuery
-              ? `querying OpenAI [${charlieAiConfig.model}] with Portfolio Grounding...`
-              : `querying OpenAI [${charlieAiConfig.model}] for Outside Knowledge...`;
+            authorSpan.textContent = hasAttachments
+              ? `analyzing image with OpenAI [${charlieAiConfig.model}]...`
+              : (isPortfolioQuery
+                ? `querying OpenAI [${charlieAiConfig.model}] with Portfolio Grounding...`
+                : `querying OpenAI [${charlieAiConfig.model}] for Outside Knowledge...`);
           }
         }
 
-        fetchOpenAiResponse(trimmedQuery, isPortfolioQuery ? localMatch : null, activeAbortController?.signal)
+        fetchOpenAiResponse(trimmedQuery, isPortfolioQuery ? localMatch : null, activeAbortController?.signal, attachments)
           .then((openAiResult) => {
             if (!isGeneratingResponse) return; // User stopped mid-flight
             executeCharlieTextDelivery(openAiResult);
@@ -6890,6 +7152,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         activeDeliveryTimeout = setTimeout(() => {
           activeDeliveryTimeout = null;
           if (!isGeneratingResponse) return;
+          if (typeof updateMemoryMeter === 'function') updateMemoryMeter();
           executeCharlieTextDelivery(localMatch);
         }, thinkingDelay);
       }
@@ -7004,7 +7267,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         aiInputField.style.overflowY = 'hidden';
       }
 
-      if (aiSendBtn) {
+      if (typeof updateSendButtonState === 'function') {
+        updateSendButtonState();
+      } else if (aiSendBtn) {
         aiSendBtn.classList.toggle('has-input', aiInputField.value.trim().length > 0);
       }
     };
@@ -7024,13 +7289,18 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         }
         if (window.portfolioEngine?.isEnabled) return; // Chatbot paused while Game Mode is active
         const q = aiInputField.value.trim();
-        if (!q) return;
+        const hasAtt = stagedAttachments && stagedAttachments.length > 0;
+        if (!q && !hasAtt) return;
+
+        const attachedToSend = [...stagedAttachments];
+        clearAttachments();
+
         aiInputField.value = '';
         aiInputField.style.height = '26px';
         aiInputField.style.overflowY = 'hidden';
         if (aiSendBtn) aiSendBtn.classList.remove('has-input');
         document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
-        renderBotResponse(q);
+        renderBotResponse(q, attachedToSend);
       });
 
       aiInputField.addEventListener('keydown', (e) => {
@@ -7047,6 +7317,95 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           }
         }
       });
+    }
+
+    // Attachment Button & Hidden File Input Listeners
+    const aiAttachBtn = document.getElementById('aiAttachBtn');
+    const aiFileInput = document.getElementById('aiFileInput');
+    const aiInputCard = document.getElementById('aiInputCard');
+
+    if (aiAttachBtn && aiFileInput) {
+      aiAttachBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        aiFileInput.click();
+      });
+
+      aiFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+          stageImageFiles(e.target.files);
+        }
+      });
+    }
+
+    // Clipboard Paste Listener: Intercept pasted images (Ctrl+V) directly on the input field
+    if (aiInputField) {
+      aiInputField.addEventListener('paste', (e) => {
+        const items = (e.clipboardData || window.clipboardData)?.items;
+        if (!items) return;
+        const imgFiles = [];
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type && items[i].type.startsWith('image/')) {
+            const file = items[i].getAsFile();
+            if (file) imgFiles.push(file);
+          }
+        }
+        if (imgFiles.length > 0) {
+          e.preventDefault();
+          stageImageFiles(imgFiles);
+        }
+      });
+    }
+
+    // Drag & Drop Image Files onto the Input Card
+    if (aiInputCard) {
+      ['dragenter', 'dragover'].forEach(evt => {
+        aiInputCard.addEventListener(evt, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          aiInputCard.classList.add('drag-over');
+        });
+      });
+      ['dragleave', 'drop'].forEach(evt => {
+        aiInputCard.addEventListener(evt, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          aiInputCard.classList.remove('drag-over');
+        });
+      });
+      aiInputCard.addEventListener('drop', (e) => {
+        const files = e.dataTransfer?.files;
+        if (files && files.length > 0) {
+          const imgFiles = Array.from(files).filter(f => f.type && f.type.startsWith('image/'));
+          if (imgFiles.length > 0) {
+            stageImageFiles(imgFiles);
+          }
+        }
+      });
+    }
+
+    // Session Memory Meter Click / Reset Action
+    const aiMemMeter = document.getElementById('aiMemMeter');
+    if (aiMemMeter) {
+      aiMemMeter.addEventListener('click', () => {
+        if (charlieConversationHistory.length === 0) {
+          showChatTelemetryToast('Session memory is clean (0/100).');
+          return;
+        }
+        charlieConversationHistory = [];
+        updateMemoryMeter();
+        showChatTelemetryToast('🧹 Session memory cleared. Context fresh.');
+      });
+      aiMemMeter.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          aiMemMeter.click();
+        }
+      });
+    }
+
+    // Initialize Memory Gauge on load
+    if (typeof updateMemoryMeter === 'function') {
+      updateMemoryMeter();
     }
 
     // Global Esc shortcut to cancel generation mid-way

@@ -737,21 +737,44 @@
               <!-- Row 1: Top Expanding Textarea -->
               <div class="ai-input-row-top">
                 <textarea class="ai-input-field" id="aiInputField" rows="1"
-                  placeholder="Ask anything, @ to mention, / for actions..."
+                  placeholder="Ask anything, @ to mention, / for actions... (Attach images or Ctrl+V)"
                   autocomplete="off" spellcheck="false"></textarea>
+              </div>
+
+              <!-- Staged Image Attachments Tray -->
+              <div class="ai-attachment-tray hidden" id="aiAttachmentTray" aria-label="Staged image attachments">
+                <!-- Staged thumbnail chips rendered dynamically -->
               </div>
 
               <!-- Row 2: Bottom Actions Bar -->
               <div class="ai-input-row-bottom">
-                <div class="ai-model-selector-wrap" id="aiModelSelectorWrap">
-                  <button type="button" class="ai-model-pill-btn" id="aiModelPillBtn" aria-expanded="false" aria-haspopup="true" title="Select AI Engine / Model">
-                    <span class="ai-model-pill-label" id="aiModelPillLabel">Local KB</span>
-                    <svg class="ai-model-pill-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="18 15 12 9 6 15"></polyline>
+                <div class="ai-input-row-bottom-left">
+                  <!-- Image Attachment Button -->
+                  <button type="button" class="ai-attach-btn" id="aiAttachBtn" title="Attach image (PNG, JPG, WEBP) or paste from clipboard (Ctrl+V)" aria-label="Attach image">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
                   </button>
-                  <div class="ai-model-dropdown-menu hidden" id="aiModelDropdownMenu" role="menu">
-                    <!-- Populated dynamically based on cached key state -->
+                  <input type="file" id="aiFileInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>
+
+                  <!-- Model Selector Pill -->
+                  <div class="ai-model-selector-wrap" id="aiModelSelectorWrap">
+                    <button type="button" class="ai-model-pill-btn" id="aiModelPillBtn" aria-expanded="false" aria-haspopup="true" title="Select AI Engine / Model">
+                      <span class="ai-model-pill-label" id="aiModelPillLabel">Local KB</span>
+                      <svg class="ai-model-pill-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                      </svg>
+                    </button>
+                    <div class="ai-model-dropdown-menu hidden" id="aiModelDropdownMenu" role="menu">
+                      <!-- Populated dynamically based on cached key state -->
+                    </div>
+                  </div>
+
+                  <!-- Session Memory Context Telemetry Meter -->
+                  <div class="ai-mem-meter" id="aiMemMeter" role="status" tabindex="0" title="Session Context: 0/100 used (0%). Older turns auto-roll (FIFO). Click to reset memory.">
+                    <span class="ai-mem-bar" aria-hidden="true"><span class="ai-mem-fill" id="aiMemFill" style="width: 0%"></span></span>
+                    <span class="ai-mem-text" id="aiMemText">0/100</span>
                   </div>
                 </div>
 
