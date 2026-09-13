@@ -10371,26 +10371,29 @@ body.is-local-build .floating-sim-trigger:active {
   top: 18px;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  max-width: 860px;
+  width: auto;
+  max-width: min(94vw, 1100px);
   z-index: 1000003;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background: rgba(10, 15, 29, 0.94);
-  border: 1px solid rgba(0, 242, 254, 0.4);
-  border-radius: 30px;
+  background: rgba(10, 15, 29, 0.96);
+  border: 1px solid rgba(0, 242, 254, 0.45);
+  border-radius: 40px;
   padding: 8px 18px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 242, 254, 0.25);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  box-sizing: border-box;
 }
 
 .ai-snipper-topbar-left {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .ai-snipper-badge {
@@ -10404,6 +10407,7 @@ body.is-local-build .floating-sim-trigger:active {
   padding: 3px 10px;
   letter-spacing: 0.5px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .ai-snipper-hint {
@@ -10419,7 +10423,8 @@ body.is-local-build .floating-sim-trigger:active {
 .ai-snipper-topbar-right {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .ai-snipper-btn {
