@@ -2748,8 +2748,6 @@ body.in-simulator #floatingCharlieBtn {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   gap: 12px;
   flex-wrap: nowrap;
-  position: relative;
-  z-index: 120;
 }
 
 .ai-bot-dots {
@@ -4563,15 +4561,16 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 
 .ai-bot-game-lockout {
   position: absolute;
-  top: 48px;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  inset: 0;
   width: 100%;
-  height: calc(100% - 48px);
-  z-index: 90;
+  height: 100%;
+  z-index: 100;
   background: #03060f;
-  /* 100% solid obsidian black - completely covers the chat viewport while keeping header accessible */
+  /* 100% solid obsidian black - completely covers the full chat window */
   border-radius: inherit;
   display: flex;
   flex-direction: column;
@@ -4588,38 +4587,6 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-}
-
-.ai-lockout-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 4px;
-}
-
-.ai-lockout-restore-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #e2e8f0;
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ai-lockout-restore-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(56, 189, 248, 0.45);
-  color: #38bdf8;
-  transform: translateY(-1px);
 }
 
 .ai-game-lockout-card {

@@ -7378,26 +7378,6 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       });
     }
 
-    const lockoutRestoreBtn = document.getElementById('aiLockoutRestoreBtn');
-    if (lockoutRestoreBtn) {
-      lockoutRestoreBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof window.togglePortfolioGameMode === 'function') {
-          window.togglePortfolioGameMode(false);
-        }
-        if (typeof window.restoreCharlieTerminalFullscreen === 'function') {
-          window.restoreCharlieTerminalFullscreen();
-        }
-        const profileBtn = document.getElementById('aiProfileReturnBtn');
-        if (profileBtn) {
-          profileBtn.click();
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      });
-    }
-
     // 2b. Initialize Charlie Dual-Engine Controller & Settings Modal (BYOK)
     function initCharlieLlmSettings() {
       const llmBtn = document.getElementById('aiLlmConfigBtn');
