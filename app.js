@@ -4176,10 +4176,47 @@
         return;
       }
 
+      function exitCharlieTerminalFullscreen() {
+        const charlieTerminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+        if (charlieTerminal) {
+          charlieTerminal.classList.remove('is-fullscreen');
+        }
+        document.body.classList.remove('charlie-fullscreen-active');
+        const maxBtn = document.getElementById('aiTerminalMaximizeBtn');
+        if (maxBtn) {
+          maxBtn.classList.remove('is-maximized');
+          maxBtn.title = 'Maximize Terminal Below Navigation Bar (Full Screen)';
+        }
+        const maxText = document.getElementById('aiMaxToggleText');
+        if (maxText) {
+          maxText.textContent = 'Full Screen';
+        }
+        const iconExpand = maxBtn ? maxBtn.querySelector('.ai-max-icon-expand') : null;
+        const iconCompress = maxBtn ? maxBtn.querySelector('.ai-max-icon-compress') : null;
+        if (iconExpand && iconCompress) {
+          iconExpand.style.display = 'block';
+          iconCompress.style.display = 'none';
+        }
+        if (window.portfolioCharlie && typeof window.portfolioCharlie.onResize === 'function') {
+          window.portfolioCharlie.onResize();
+        }
+      }
+      window.exitCharlieTerminalFullscreen = exitCharlieTerminalFullscreen;
+      window.restoreCharlieTerminalFullscreen = exitCharlieTerminalFullscreen;
+
       const isNowEnabled = (typeof forceState === 'boolean') ? forceState : !engine.isEnabled;
       engine.toggleState(isNowEnabled);
 
       if (isNowEnabled) {
+        // "turn on game should restore":
+        // If Charlie was in full screen, turning ON the game MUST RESTORE (exit full screen)!
+        // This ensures the full-screen terminal does not cover the page and block the chat with no possibility to go back and play the game!
+        const charlieTerminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+        const isFullscreen = (charlieTerminal && charlieTerminal.classList.contains('is-fullscreen')) || document.body.classList.contains('charlie-fullscreen-active');
+        if (isFullscreen) {
+          exitCharlieTerminalFullscreen();
+        }
+
         document.body.classList.add('combat-cursor-active');
         soundEngine.ensureContext();
         soundEngine.startBGM();
@@ -4194,14 +4231,20 @@
         }
 
         // Charlie Supersonic Cyber Dash: directly to Cursor!
-        // Game Mode unconditionally overrides everything
         const targetX = (engine.mouse && engine.mouse.x > 0) ? engine.mouse.x : (window.innerWidth / 2);
         const targetY = (engine.mouse && engine.mouse.y > 0) ? engine.mouse.y : (window.innerHeight / 2);
 
-        // Lockout the chatbot & show that Charlie is busy destroying comets
-        const charlieTerminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+        // Lockout the chatbot in normal section view so Charlie is visibly deployed into combat,
+        // with instant "Disable Game to Use Bot" and "Return to Profile" buttons
         if (charlieTerminal) {
           charlieTerminal.classList.add('game-mode-lockout');
+        }
+        const maxBtn = document.getElementById('aiTerminalMaximizeBtn');
+        if (maxBtn) {
+          maxBtn.disabled = true;
+          maxBtn.classList.add('disabled-in-game');
+          maxBtn.setAttribute('aria-disabled', 'true');
+          maxBtn.title = 'Full screen is disabled while Cosmic Game Mode is active';
         }
         const aiInput = document.getElementById('aiInputField');
         if (aiInput) {
@@ -4239,15 +4282,29 @@
         if (missionToast) missionToast.classList.add('hidden');
         syncCharlieGameModeChips(false);
 
-        // Unlock the chatbot & restore normal state
+        // "turn off game should restore":
+        // If Charlie was in full screen, turning off game also restores terminal!
         const charlieTerminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+        const isFullscreen = (charlieTerminal && charlieTerminal.classList.contains('is-fullscreen')) || document.body.classList.contains('charlie-fullscreen-active');
+        if (isFullscreen) {
+          exitCharlieTerminalFullscreen();
+        }
+
+        // Unlock the chatbot & restore normal state
         if (charlieTerminal) {
           charlieTerminal.classList.remove('game-mode-lockout');
+        }
+        const maxBtn = document.getElementById('aiTerminalMaximizeBtn');
+        if (maxBtn) {
+          maxBtn.disabled = false;
+          maxBtn.classList.remove('disabled-in-game');
+          maxBtn.removeAttribute('aria-disabled');
+          maxBtn.title = 'Maximize Terminal Below Navigation Bar (Full Screen)';
         }
         const aiInput = document.getElementById('aiInputField');
         if (aiInput) {
           aiInput.disabled = false;
-          aiInput.placeholder = 'Ask about AI Certifications, OpenUSD, Conform Ingest, MCP, On-Prem LLMs, n8n, or Why Hire Rajeev...';
+          aiInput.placeholder = 'Ask about Architecture, Production Technology, OpenUSD, Agentic AI, Studio Automation, or Why Hire Rajeev...';
         }
         const aiSend = document.getElementById('aiSendBtn');
         if (aiSend) aiSend.disabled = false;
@@ -4652,7 +4709,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
 2. RAJEEV MUTYALU'S VERIFIED PORTFOLIO (GROUND TRUTH REFERENCE):
    - When asked specifically about Rajeev Mutyalu, hiring him, his career, VFX pipelines, OpenUSD, n8n automation, MCP, private LLMs, ComfyUI, or conform ingest:
      Answer authoritatively, grounding yourself strictly in Rajeev's verified background:
-     • Roles: AI Workflows Architect, Creative Technology Lead, and VFX & GenAI Systems Architect with 20+ years of proven production and R&D leadership.
+     • Roles: Lead Software Architect, Production Technology Architect, and Creative Technology & AI Systems Lead with 20+ years of proven production, architecture, and R&D engineering leadership.
      • Studio Pedigree: Astra Studios, Technicolor Group, and MPC Film.
      • Oscar-Winning & Landmark Productions: "1917" (Academy Award Winner), "RRR" (Academy Award Winner), "Mufasa: The Lion King" (Disney), "Back in Action" (Netflix), "Spaceman" (Netflix), "Prehistoric Planet" (Apple TV+ / BBC).
      • Global Leadership: Mentored 50+ engineers, pipeline TDs, and artists across international multi-site studios in London, Montreal, and Bengaluru.
@@ -5028,7 +5085,7 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
           '🚀 <strong>HIGH-LEVERAGE CAPABILITY BRIEF // RAJEEV MUTYALU</strong>'
         ],
         responses: [
-          `<strong>📌 20-Year Production Pedigree:</strong> AI Workflows Architect &bull; Creative Technology Lead &bull; VFX &amp; GenAI Systems Architect with 20+ years of proven R&amp;D leadership across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning blockbuster productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
+          `<strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &bull; Production Technology Architect &bull; Creative Technology &amp; AI Systems Lead with 20+ years of proven engineering leadership across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning blockbuster productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
 • <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London, Montreal, and Bengaluru.<br/>
 • <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bengaluru under strict Hollywood delivery deadlines.<br/><br/>
@@ -7298,7 +7355,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
     initCharlieVoiceDictation();
 
-    // 3. Setup "Disable Game to Use Bot" Button on Chatbot Lockout Overlay
+    // 3. Setup "Disable Game to Use Bot" & "Return to Profile" Buttons on Chatbot Lockout Overlay
     const disableGameBtn = document.getElementById('aiDisableGameBtn');
     if (disableGameBtn) {
       disableGameBtn.addEventListener('click', (e) => {
@@ -7306,6 +7363,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         e.stopPropagation();
         if (typeof window.togglePortfolioGameMode === 'function') {
           window.togglePortfolioGameMode(false);
+        }
+        if (typeof window.restoreCharlieTerminalFullscreen === 'function') {
+          window.restoreCharlieTerminalFullscreen();
         }
         setTimeout(() => {
           const input = document.getElementById('aiInputField');
@@ -7315,6 +7375,26 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             setTimeout(() => input.classList.remove('input-pulse-highlight'), 1200);
           }
         }, 300);
+      });
+    }
+
+    const lockoutRestoreBtn = document.getElementById('aiLockoutRestoreBtn');
+    if (lockoutRestoreBtn) {
+      lockoutRestoreBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof window.togglePortfolioGameMode === 'function') {
+          window.togglePortfolioGameMode(false);
+        }
+        if (typeof window.restoreCharlieTerminalFullscreen === 'function') {
+          window.restoreCharlieTerminalFullscreen();
+        }
+        const profileBtn = document.getElementById('aiProfileReturnBtn');
+        if (profileBtn) {
+          profileBtn.click();
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       });
     }
 
@@ -7676,7 +7756,17 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       } catch (e) {}
 
       // --- 2. Full Screen Mode (Maximized Below Top Banner) ---
+      function isGameModeCombatActive() {
+        return terminal.classList.contains('game-mode-lockout') ||
+          (window.portfolioEngine && window.portfolioEngine.isEnabled) ||
+          document.body.classList.contains('combat-cursor-active');
+      }
+
       function setTerminalFullscreen(fullscreen) {
+        if (fullscreen && isGameModeCombatActive()) {
+          // Full screen is strictly disabled when game mode is on and chat is disabled!
+          return;
+        }
         updateNavHeightVar();
         terminal.classList.toggle('is-fullscreen', fullscreen);
         document.body.classList.toggle('charlie-fullscreen-active', fullscreen);
@@ -7709,7 +7799,14 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         }, 120);
       }
 
+      window.restoreCharlieTerminalFullscreen = () => setTerminalFullscreen(false);
+      window.setCharlieFullscreen = setTerminalFullscreen;
+
       function toggleTerminalFullscreen() {
+        if (isGameModeCombatActive()) {
+          // Game mode active & chat disabled: cannot enter full screen!
+          return;
+        }
         const isFullscreen = terminal.classList.contains('is-fullscreen');
         setTerminalFullscreen(!isFullscreen);
       }
@@ -7768,9 +7865,19 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       // Maximize / Restore button: Toggles fullscreen; Restore just reduces size and stays in chat window
       if (maxBtn) {
+        if (isGameModeCombatActive()) {
+          maxBtn.disabled = true;
+          maxBtn.classList.add('disabled-in-game');
+          maxBtn.setAttribute('aria-disabled', 'true');
+          maxBtn.title = 'Full screen is disabled while Cosmic Game Mode is active';
+        }
+
         maxBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
+          if (maxBtn.disabled || isGameModeCombatActive()) {
+            return;
+          }
           toggleTerminalFullscreen();
         });
       }
