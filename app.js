@@ -4888,6 +4888,15 @@
       });
     }
 
+    function readFileDataUrl(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    }
+
     async function stageDocumentFiles(fileList) {
       if (!fileList || fileList.length === 0) return;
       if (stagedAttachments.length >= 4) {
@@ -4900,15 +4909,18 @@
         if (stagedAttachments.length >= 4) break;
         const meta = getDocumentMeta(file.name);
         const parsed = await readDocumentText(file);
+        const dataUrl = await readFileDataUrl(file);
         stagedAttachments.push({
           id: 'doc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
           isDoc: true,
           docType: meta.docType,
+          type: file.type || 'application/octet-stream',
           icon: meta.icon,
           label: meta.label,
           className: meta.className,
           name: file.name,
           size: file.size,
+          dataUrl: dataUrl,
           textContent: parsed.content || ''
         });
       }
@@ -4940,27 +4952,47 @@
         const sizeKb = Math.round(att.size / 1024);
         if (att.isDoc) {
           return `
-            <div class="ai-attachment-chip is-doc ${att.className || ''}" data-id="${att.id}">
+            <div class="ai-attachment-chip is-doc ${att.className || ''}" data-id="${att.id}" role="button" tabindex="0" title="Click to preview & download ${escapeHtml(att.name)}">
               <span class="ai-attachment-doc-icon">${att.icon || '📄'}</span>
-              <span class="ai-attachment-name" title="${escapeHtml(att.name)}">${escapeHtml(att.name)} (${sizeKb}KB)</span>
+              <span class="ai-attachment-name">${escapeHtml(att.name)} (${sizeKb}KB)</span>
               <button type="button" class="ai-attachment-remove" data-remove-id="${att.id}" title="Remove file" aria-label="Remove file">&times;</button>
             </div>
           `;
         }
         return `
-          <div class="ai-attachment-chip" data-id="${att.id}">
+          <div class="ai-attachment-chip" data-id="${att.id}" role="button" tabindex="0" title="Click to preview & download ${escapeHtml(att.name)}">
             <img src="${att.dataUrl}" class="ai-attachment-thumb" alt="${escapeHtml(att.name)}" />
-            <span class="ai-attachment-name" title="${escapeHtml(att.name)}">${escapeHtml(att.name)} (${sizeKb}KB)</span>
+            <span class="ai-attachment-name">${escapeHtml(att.name)} (${sizeKb}KB)</span>
             <button type="button" class="ai-attachment-remove" data-remove-id="${att.id}" title="Remove image" aria-label="Remove image">&times;</button>
           </div>
         `;
       }).join('');
 
+      // Remove button listener
       tray.querySelectorAll('.ai-attachment-remove').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           const id = btn.getAttribute('data-remove-id');
           removeAttachment(id);
+        });
+      });
+
+      // Attachment chip click listener (opens popup preview & download)
+      tray.querySelectorAll('.ai-attachment-chip').forEach(chip => {
+        const triggerPreview = (e) => {
+          if (e.target.closest('.ai-attachment-remove')) return;
+          const id = chip.getAttribute('data-id');
+          const targetAtt = stagedAttachments.find(a => a.id === id);
+          if (targetAtt && typeof openAttachmentViewer === 'function') {
+            openAttachmentViewer(targetAtt);
+          }
+        };
+        chip.addEventListener('click', triggerPreview);
+        chip.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            triggerPreview(e);
+          }
         });
       });
 
@@ -5367,6 +5399,170 @@
     }
 
     initScreenSnipper();
+
+    // =========================================================================
+    // 8a-4. Multimodal Attachment Lightbox Viewer & Download System
+    // =========================================================================
+    let currentViewedAttachment = null;
+
+    function openAttachmentViewer(att) {
+      if (!att) return;
+      currentViewedAttachment = att;
+
+      const modal = document.getElementById('aiAttModal');
+      const modalIcon = document.getElementById('aiAttModalIcon');
+      const modalTitle = document.getElementById('aiAttModalTitle');
+      const modalType = document.getElementById('aiAttModalType');
+      const modalSize = document.getElementById('aiAttModalSize');
+      const modalBody = document.getElementById('aiAttModalBody');
+
+      if (!modal || !modalBody) return;
+
+      const sizeKb = Math.round((att.size || 0) / 1024);
+      if (modalIcon) modalIcon.textContent = att.icon || (att.isDoc ? '📄' : '🖼️');
+      if (modalTitle) modalTitle.textContent = att.name || 'Attachment Preview';
+      if (modalType) {
+        if (att.isDoc) {
+          modalType.textContent = (att.label || 'DOCUMENT').toUpperCase();
+        } else {
+          const mime = (att.type || 'image').replace('image/', '').toUpperCase();
+          modalType.textContent = mime || 'IMAGE';
+        }
+      }
+      if (modalSize) modalSize.textContent = `${sizeKb} KB`;
+
+      // Render content inside modal body
+      if (!att.isDoc) {
+        // High-resolution image preview with click-to-zoom
+        modalBody.innerHTML = `
+          <div class="ai-att-preview-image-wrap">
+            <img src="${att.dataUrl}" class="ai-att-preview-img" id="aiAttPreviewImg" alt="${escapeHtml(att.name || 'Preview')}" title="Click to zoom in / fit" />
+          </div>
+        `;
+        const img = document.getElementById('aiAttPreviewImg');
+        if (img) {
+          img.addEventListener('click', () => {
+            img.classList.toggle('is-zoomed');
+          });
+        }
+      } else {
+        // Document preview
+        const ext = ((att.name || '').split('.').pop() || '').toLowerCase();
+        const isPdf = ext === 'pdf' || (att.type && att.type.includes('pdf'));
+        const isOffice = ['xlsx', 'xls', 'docx', 'doc', 'pptx', 'ppt'].includes(ext);
+
+        if (isPdf && att.dataUrl) {
+          modalBody.innerHTML = `
+            <div class="ai-att-preview-pdf-wrap">
+              <iframe src="${att.dataUrl}" class="ai-att-preview-iframe" title="${escapeHtml(att.name)}"></iframe>
+            </div>
+          `;
+        } else if (isOffice || !att.textContent) {
+          modalBody.innerHTML = `
+            <div class="ai-att-preview-binary-card">
+              <div class="ai-att-binary-icon">${att.icon || '📑'}</div>
+              <h4 class="ai-att-binary-name">${escapeHtml(att.name)}</h4>
+              <p class="ai-att-binary-desc">${att.label || 'Document'} &bull; ${sizeKb} KB</p>
+              ${att.textContent ? `<pre class="ai-att-extracted-preview">${escapeHtml(att.textContent)}</pre>` : ''}
+              <button type="button" class="ai-att-modal-btn download" id="aiAttCardDownloadBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Download ${escapeHtml(att.name)}</span>
+              </button>
+            </div>
+          `;
+          const cardBtn = document.getElementById('aiAttCardDownloadBtn');
+          if (cardBtn) {
+            cardBtn.addEventListener('click', () => downloadAttachmentFile(att));
+          }
+        } else {
+          // Text / Code / CSV / Markdown content
+          modalBody.innerHTML = `
+            <div class="ai-att-preview-doc-wrap">
+              <div class="ai-att-doc-meta-strip">
+                <span>FORMAT: <strong>${ext.toUpperCase() || 'TEXT'}</strong></span>
+                <span>CONTENT: <strong>${(att.textContent || '').length.toLocaleString()} characters</strong></span>
+              </div>
+              <pre class="ai-att-doc-code"><code>${escapeHtml(att.textContent)}</code></pre>
+            </div>
+          `;
+        }
+      }
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAttachmentViewer() {
+      const modal = document.getElementById('aiAttModal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+      const modalBody = document.getElementById('aiAttModalBody');
+      if (modalBody) modalBody.innerHTML = '';
+      currentViewedAttachment = null;
+      document.body.style.overflow = '';
+    }
+
+    function downloadAttachmentFile(att) {
+      const target = att || currentViewedAttachment;
+      if (!target) return;
+
+      let downloadUrl = target.dataUrl;
+      let revokeNeeded = false;
+
+      if (!downloadUrl && target.textContent) {
+        const mime = target.type || 'text/plain;charset=utf-8';
+        const blob = new Blob([target.textContent], { type: mime });
+        downloadUrl = URL.createObjectURL(blob);
+        revokeNeeded = true;
+      }
+
+      if (!downloadUrl) {
+        showChatTelemetryToast('⚠️ Could not generate download payload.');
+        return;
+      }
+
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = target.name || 'attachment';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      if (revokeNeeded) {
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
+      }
+      showChatTelemetryToast(`⬇️ Downloading "${target.name || 'attachment'}"...`);
+    }
+
+    function initAttachmentViewer() {
+      const modal = document.getElementById('aiAttModal');
+      const backdrop = document.getElementById('aiAttModalBackdrop');
+      const closeBtn = document.getElementById('aiAttModalCloseBtn');
+      const downloadBtn = document.getElementById('aiAttModalDownloadBtn');
+
+      if (backdrop) backdrop.addEventListener('click', closeAttachmentViewer);
+      if (closeBtn) closeBtn.addEventListener('click', closeAttachmentViewer);
+      if (downloadBtn) {
+        downloadBtn.addEventListener('click', () => {
+          if (currentViewedAttachment) {
+            downloadAttachmentFile(currentViewedAttachment);
+          }
+        });
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeAttachmentViewer();
+        }
+      });
+    }
+
+    initAttachmentViewer();
 
     const CHARLIE_SYSTEM_GROUNDING_PROMPT = `You are "Cyber Charlie", Rajeev's AI Assistant — an advanced, highly intelligent AI companion and VFX & GenAI systems mascot on Rajeev Mutyalu's official portfolio website.
 
@@ -7209,18 +7405,26 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       if (hasAttachments) {
         attachmentsHtml = `
           <div class="ai-msg-attachments">
-            ${attachments.map(att => {
+            ${attachments.map((att, idx) => {
               if (att.isDoc) {
                 return `
-                  <div class="ai-msg-doc-badge" title="${escapeHtml(att.name)}">
+                  <div class="ai-msg-doc-badge" data-att-idx="${idx}" role="button" tabindex="0" title="Click to preview & download ${escapeHtml(att.name)}">
                     <span>${att.icon || '📄'}</span>
                     <span>${escapeHtml(att.name)} (${Math.round(att.size / 1024)}KB)</span>
                   </div>
                 `;
               }
               return `
-                <div class="ai-msg-img-preview" title="${escapeHtml(att.name || 'Attachment')}">
+                <div class="ai-msg-img-preview" data-att-idx="${idx}" role="button" tabindex="0" title="Click to preview & download ${escapeHtml(att.name || 'Attachment')}">
                   <img src="${att.dataUrl}" alt="${escapeHtml(att.name || 'Attachment')}" />
+                  <div class="ai-msg-img-overlay" title="Preview & Download">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M15 3h6v6"></path>
+                      <path d="M9 21H3v-6"></path>
+                      <path d="M21 3l-7 7"></path>
+                      <path d="M3 21l7-7"></path>
+                    </svg>
+                  </div>
                 </div>
               `;
             }).join('')}
@@ -7250,6 +7454,28 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           ${trimmedQuery ? `<div class="ai-msg-content">${escapeHtml(trimmedQuery)}</div>` : ''}
         </div>
       `;
+
+      if (hasAttachments) {
+        userMsgDiv.querySelectorAll('[data-att-idx]').forEach(el => {
+          const idx = parseInt(el.getAttribute('data-att-idx'), 10);
+          const att = attachments[idx];
+          if (att) {
+            const triggerPreview = () => {
+              if (typeof openAttachmentViewer === 'function') {
+                openAttachmentViewer(att);
+              }
+            };
+            el.addEventListener('click', triggerPreview);
+            el.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                triggerPreview();
+              }
+            });
+          }
+        });
+      }
+
       aiChatStream.appendChild(userMsgDiv);
       scrollStreamToBottom();
 
