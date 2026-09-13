@@ -1915,12 +1915,14 @@
         <span class="cv-footer-hint">💡 Both CV versions include Rajeev's complete 20+ year filmography (<em>1917</em>, <em>RRR</em>, <em>Mufasa</em>), engineering leadership history, and 1-click ATS-clean exports.</span>
       </footer>
     </div>
-  <!-- Fullscreen Screen Snipping Tool Overlay -->
+  </div>
+
+  <!-- Fullscreen Screen Snipping Tool Overlay (Windows Snipping Tool Experience) -->
   <div class="ai-snipper-overlay hidden" id="aiSnipperOverlay" role="dialog" aria-modal="true" aria-label="Screen Snipping Tool">
     <header class="ai-snipper-topbar">
       <div class="ai-snipper-topbar-left">
         <span class="ai-snipper-badge">📸 SCREEN SNIPPER</span>
-        <span class="ai-snipper-hint">Click &amp; drag crosshair over any error, terminal, or code window. Press <strong>Esc</strong> to cancel.</span>
+        <span class="ai-snipper-hint">Click &amp; drag crosshair to cut out any error, code, or window. Press <strong>Esc</strong> to cancel.</span>
       </div>
       <div class="ai-snipper-topbar-right">
         <button type="button" class="ai-snipper-btn" id="aiSnipFullBtn" title="Capture the entire captured screen/window">Capture Full Screen</button>
@@ -1929,16 +1931,17 @@
     </header>
     <div class="ai-snipper-canvas-wrap" id="aiSnipperCanvasWrap">
       <canvas id="aiSnipperCanvas"></canvas>
+      <div class="ai-snipper-scrim" id="aiSnipperScrim"></div>
       <div class="ai-snipper-selection hidden" id="aiSnipperSelection">
         <span class="ai-snipper-dimensions" id="aiSnipperDims">0 × 0</span>
         <div class="ai-snipper-floating-actions">
-          <button type="button" class="ai-snipper-confirm-btn" id="aiSnipConfirmBtn">✓ Snip to Chat</button>
+          <button type="button" class="ai-snipper-confirm-btn" id="aiSnipConfirmBtn">✓ Snip to Chat (Enter)</button>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="app.js?v=164"></script>
+  <script src="app.js?v=165"></script>
 </body>
 
 </html>

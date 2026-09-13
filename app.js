@@ -5065,13 +5065,24 @@
         video.muted = true;
         video.srcObject = stream;
 
-        await new Promise((resolve, reject) => {
-          video.onloadedmetadata = () => {
-            video.play().then(resolve).catch(resolve);
+        await new Promise((resolve) => {
+          let resolved = false;
+          const done = () => {
+            if (!resolved) {
+              resolved = true;
+              resolve();
+            }
           };
-          video.onerror = reject;
-          setTimeout(resolve, 1500); // Fallback safety
+          video.onloadeddata = done;
+          video.oncanplay = done;
+          video.onloadedmetadata = () => {
+            video.play().then(done).catch(done);
+          };
+          setTimeout(done, 1200);
         });
+
+        // Tiny delay to ensure GPU frame buffer is populated
+        await new Promise(r => setTimeout(r, 120));
 
         // Capture frame onto raw canvas at native monitor resolution
         snipperRawWidth = video.videoWidth || window.screen.width || 1920;
@@ -5098,12 +5109,14 @@
       const overlay = document.getElementById('aiSnipperOverlay');
       const canvas = document.getElementById('aiSnipperCanvas');
       const selection = document.getElementById('aiSnipperSelection');
+      const scrim = document.getElementById('aiSnipperScrim');
       if (!overlay || !canvas || !snipperRawCanvas) return;
 
       isSnippingActive = true;
       snipperDragStart = null;
       snipperCurrentCrop = null;
       if (selection) selection.classList.add('hidden');
+      if (scrim) scrim.classList.remove('hidden');
 
       // Draw onto visible modal canvas
       canvas.width = snipperRawWidth;
@@ -5119,8 +5132,10 @@
     function closeSnipperOverlay() {
       const overlay = document.getElementById('aiSnipperOverlay');
       const selection = document.getElementById('aiSnipperSelection');
+      const scrim = document.getElementById('aiSnipperScrim');
       if (overlay) overlay.classList.add('hidden');
       if (selection) selection.classList.add('hidden');
+      if (scrim) scrim.classList.remove('hidden');
       isSnippingActive = false;
       snipperDragStart = null;
       snipperCurrentCrop = null;
@@ -5223,6 +5238,9 @@
         dragStartY = e.clientY;
         snipperCurrentCrop = null;
 
+        const scrim = document.getElementById('aiSnipperScrim');
+        if (scrim) scrim.classList.add('hidden');
+
         if (selection) {
           selection.classList.add('hidden');
           selection.style.width = '0px';
@@ -5252,6 +5270,9 @@
 
         if (selection && (width > 5 || height > 5)) {
           selection.classList.remove('hidden');
+          const scrim = document.getElementById('aiSnipperScrim');
+          if (scrim) scrim.classList.add('hidden');
+
           selection.style.left = `${minX - wrapRect.left}px`;
           selection.style.top = `${minY - wrapRect.top}px`;
           selection.style.width = `${width}px`;
@@ -5279,8 +5300,10 @@
         if (!isSnippingActive || !isDragging) return;
         isDragging = false;
 
-        if (snipperCurrentCrop && (snipperCurrentCrop.width < 15 || snipperCurrentCrop.height < 15)) {
+        const scrim = document.getElementById('aiSnipperScrim');
+        if (!snipperCurrentCrop || snipperCurrentCrop.width < 15 || snipperCurrentCrop.height < 15) {
           if (selection) selection.classList.add('hidden');
+          if (scrim) scrim.classList.remove('hidden');
           snipperCurrentCrop = null;
         }
       });
