@@ -43,12 +43,13 @@
 
   window.isRotatedMobileLandscape = function () {
     const isLandscape = (window.innerWidth > window.innerHeight);
-    const isSmallHeight = (window.innerHeight <= 550);
-    const isMobileDim = (Math.min(window.innerWidth, window.innerHeight) <= 500) ||
+    const isSmallHeight = (window.innerHeight <= 650);
+    const isMobileDim = (Math.min(window.innerWidth, window.innerHeight) <= 600) ||
       (window.matchMedia && (
-        window.matchMedia('(max-height: 550px) and (orientation: landscape)').matches ||
-        window.matchMedia('(pointer: coarse) and (max-height: 550px)').matches ||
-        window.matchMedia('(max-device-width: 956px) and (orientation: landscape)').matches
+        window.matchMedia('(max-height: 650px) and (orientation: landscape)').matches ||
+        window.matchMedia('(orientation: landscape) and (max-width: 1024px) and (max-height: 700px)').matches ||
+        window.matchMedia('(pointer: coarse) and (max-height: 650px)').matches ||
+        window.matchMedia('(max-device-width: 1024px) and (orientation: landscape)').matches
       ));
     return isLandscape && (isSmallHeight || isMobileDim);
   };
@@ -4568,6 +4569,11 @@
         mobileNavDrawer.classList.toggle('open', isOpen);
         mobileNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         mobileNavToggle.querySelector('.nav-bar-icon').innerHTML = isOpen ? '&times;' : '&#9776;';
+
+        const cvElements = mobileNavDrawer.querySelectorAll('.mobile-nav-cv-header, .mobile-nav-cv-track, .cv-highlight-link, a[href*="cv.html"]');
+        cvElements.forEach(el => {
+          el.style.display = 'none';
+        });
       }
 
       mobileNavToggle.addEventListener('click', (e) => {
@@ -4731,7 +4737,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
      <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
      <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>
      <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>
-     <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
+     <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>
      <a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
      <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
    - STRICT PROHIBITION FOR GENERAL / OUTSIDE QUESTIONS:
@@ -5089,7 +5095,7 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
 • <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London, Montreal, and Bengaluru.<br/>
 • <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bengaluru under strict Hollywood delivery deadlines.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>
 <a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
@@ -5103,7 +5109,7 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 • <strong>🏆 Production Heritage:</strong> Trusted technical leader on landmark VFX and animation sequences for Disney, Warner Bros, Universal, and Netflix.<br/><br/>
 <a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
 <a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
-<a href="#initiatives" class="ai-section-link">🚀 Inspect Technical Arsenal &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Inspect Technical Capabilities &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`,
 
           `<strong>🚀 Immediate Production ROI &amp; Engineering Velocity:</strong><br/>
@@ -5148,7 +5154,7 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 • <strong>🎬 20-Year Evolution:</strong> Started in the early 2000s mastering traditional computer graphics, 3D modeling, and editorial plate conform, evolving into a Lead Architect across Oscar-winning tentpole films and landmark productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
 • <strong>💎 The Dual-Threat Moat:</strong> Equally at home debugging low-level C++/Python OpenUSD composition arcs on Linux render clusters as he is designing cutting-edge agentic workflows, MCP servers, and local quantized LLMs.<br/>
 • <strong>⌨️ Studio Craftsmanship:</strong> Passionate about clean code, ultra-responsive developer tooling, sub-second terminal latency, and optimizing studio pipelines down to the millisecond.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Full Executive CV &amp; Bio &rarr;</a>`,
 
           `• <strong>🛠️ Engineering Purist:</strong> Obsessed with clean, robust code architecture, sub-second terminal latency, and zero-defect deployments.<br/>
@@ -5186,7 +5192,7 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 • <strong>🎯 Where is it used?</strong> Connected directly to DCC applications (Maya, Houdini Solaris, Nuke), ShotGrid/Flow Production databases, file systems, and render farm queues.<br/>
 • <strong>💡 Why is it used?</strong> LLMs inherently lack direct access to proprietary studio databases and internal file systems. MCP creates a secure, sandboxed bridge without writing custom API glue code for every new AI model.<br/>
 • <strong>🚀 How it helps production:</strong> Enables AI agents to query live shot statuses, check asset dependencies, inspect USD stage composition arcs, and validate frames directly from natural language prompts with strict read-only security gates.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 View MCP in Technical Arsenal &rarr;</a>`,
+<a href="#initiatives" class="ai-section-link">🚀 View MCP in Technical Capabilities &rarr;</a>`,
 
           `• <strong>🛡️ Sandboxed Security &amp; Air-Gapped Tool Binding:</strong><br/>
 In visual effects, allowing cloud AI direct write access to storage is a critical security risk. Rajeev's MCP architecture enforces strict token-based read-only gates and schema validation.<br/>
@@ -5224,14 +5230,14 @@ MCP acts as the nervous system connecting autonomous coding agents (Claude Code,
 • <strong>🎯 Where is it used?</strong> Full-stack pipeline engineering, UI development, API refactoring, test suite synthesis, and automated CI/CD workflows.<br/>
 • <strong>💡 Why is it used?</strong> Eliminates repetitive manual boilerplate typing, allowing the Lead Architect to focus 100% on high-level system topology, data schemas, security boundaries, and edge cases.<br/>
 • <strong>🚀 How it helps production:</strong> Accelerates feature delivery, tool prototyping, and bug remediation by <strong>5x–10x</strong> while enforcing enterprise code quality through automated test gates and human-in-the-loop architectural supervision.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Agentic Stack in Arsenal &rarr;</a>`,
+<a href="#initiatives" class="ai-section-link">🚀 Explore Agentic Stack &rarr;</a>`,
 
           `• <strong>🏗️ Architectural Supervision vs. Boilerplate Typing:</strong><br/>
 Vibe coding in enterprise engineering is not haphazard guessing — it is the disciplined orchestration of AI subagent swarms against rigorous engineering specifications.<br/>
 • <strong>🔒 Quality Control Loops:</strong> Every agentic output is backed by automated static analysis, lint verification, and unit test suites before merging.<br/>
 • <strong>⚡ 10x Feature Velocity:</strong> Complex PyQt/PySide GUIs, FastAPI microservices, and database connectors that previously took weeks are scaffolded, refined, and hardened in hours.<br/>
 • <strong>💎 Strategic Moat:</strong> Frees senior architects to solve deep mathematical and scalability challenges while agents handle mechanical implementation details.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 View Agentic Workflows in Arsenal &rarr;</a>`,
+<a href="#initiatives" class="ai-section-link">🚀 View Agentic Workflows &rarr;</a>`,
 
           `• <strong>🤖 Subagent Swarms &amp; Antigravity Tooling:</strong><br/>
 Rajeev utilizes state-of-the-art agentic tools including Google Antigravity, Claude Code, and custom subagent orchestration pipelines.<br/>
@@ -5261,7 +5267,7 @@ Rajeev utilizes state-of-the-art agentic tools including Google Antigravity, Cla
 • <strong>🎯 Where is it used?</strong> Private studio GPU compute nodes, local artist workstations, Ollama, and high-throughput vLLM inference clusters.<br/>
 • <strong>💡 Why is it used?</strong> Movie studios have strict non-disclosure security requirements prohibiting proprietary scripts, prompts, and unreleased assets from reaching public cloud APIs.<br/>
 • <strong>🚀 How it helps production:</strong> Reduces model GPU memory footprint by <strong>60%–75%</strong> while maintaining 98%+ reasoning precision. Delivers sub-50ms token generation locally with <strong>zero cloud data leakage</strong>.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🔒 View On-Premise LLMs in Arsenal &rarr;</a>`,
+<a href="#initiatives" class="ai-section-link">🔒 View On-Premise LLMs &rarr;</a>`,
 
           `• <strong>🛡️ Strict Studio Non-Disclosure Compliance:</strong><br/>
 Hollywood MPAA and TPN (Trusted Partner Network) security standards mandate that confidential pre-release content must never leave studio perimeter firewalls.<br/>
@@ -5386,7 +5392,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 • <strong>🔍 Automated Plate QC:</strong> Validates frame padding, aspect ratios, and EXR compression headers before artists even open their DCCs.<br/>
 • <strong>📊 Production ROI:</strong> Reduces shot turnover turnaround time from hours to under 60 seconds.<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>`
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`
         ],
         followupPool: [
           'How does your Conform Ingest and editorial turnover pipeline work?',
@@ -5415,7 +5421,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 • <strong>⚡ WebRTC Streaming:</strong> Full-duplex bidirectional audio streaming engineered with Retell AI and Vapi for zero perceptible latency.<br/>
 • <strong>📅 Cal.ai Automated Scheduling:</strong> Voice agents automatically query production calendar availabilities and book supervisory review sessions directly.<br/>
 • <strong>🎯 Hands-Free Studio Workflow:</strong> VFX Supervisors can query shot delivery ETAs, farm render bottlenecks, and artist allocations entirely through voice during dailies sessions.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 View Voice AI in Arsenal &rarr;</a>`,
+<a href="#initiatives" class="ai-section-link">🚀 View Voice AI &rarr;</a>`,
 
           `• <strong>🔊 Conversational Telephony &amp; Studio Assistants:</strong><br/>
 • <strong>🧠 Dynamic Tool Ingestion:</strong> Connects voice LLMs to live studio APIs (ShotGrid, render farm queues) via function calling.<br/>
@@ -5459,7 +5465,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 • <strong>🕷️ Firecrawl Ingest:</strong> Scrapes reference imagery and visual moodboards to establish stylistic DNA.<br/>
 • <strong>🚀 Seamless Nuke &amp; Editorial Turnover:</strong> Outputs conform cleanly into OTIO timelines for instant editorial review.<br/><br/>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>`
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`
         ],
         followupPool: [
           'Explain your OpenUSD VFX pipeline architecture',
@@ -5482,13 +5488,13 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 • <strong>🎯 Where is it used?</strong> In-DCC artist tools (Maya, Houdini, Nuke), standalone desktop review applications, and studio backend microservices.<br/>
 • <strong>💡 Why is it used?</strong> Artists require responsive, multi-threaded desktop user interfaces that handle large datasets without freezing or crashing DCC viewports.<br/>
 • <strong>🚀 How it helps production:</strong> 20+ years of architecting scalable, rock-solid desktop tools and modular Python libraries supporting hundreds of active studio artists across London and Bengaluru with zero downtime.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🐍 View Core Systems in Arsenal &rarr;</a>`,
+<a href="#initiatives" class="ai-section-link">🐍 View Core Systems &rarr;</a>`,
 
           `• <strong>💻 High-Performance PySide Desktop Tools:</strong><br/>
 • <strong>🧵 Multi-Threaded Architecture:</strong> Offloads heavy I/O, hash computations, and thumbnail rendering to background QThread workers to ensure zero UI freeze.<br/>
 • <strong>📦 Modular Python Packages:</strong> Architected centralized Python packages distributed via Rez/Venv across global studio facilities.<br/>
 • <strong>🐳 Microservices &amp; Containers:</strong> Deploys FastAPI services inside lightweight Docker containers on Linux for asset validation and transcode dispatch.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🐍 Inspect Python Systems in Arsenal &rarr;</a>`,
+<a href="#initiatives" class="ai-section-link">🐍 Inspect Python Systems &rarr;</a>`,
 
           `• <strong>🚀 20 Years of Mission-Critical Code Reliability:</strong><br/>
 • <strong>🧪 Rigorous Automated Testing:</strong> Pytest suites, continuous integration, and strict PEP 8 / type annotation standards.<br/>
@@ -5747,7 +5753,7 @@ The <strong>Cyber Charlie Character Lab</strong> (<code>charlie-lab.html</code>)
 • <strong>Interactive Sandbox Controls:</strong> Real-time dials for scale, animation playback speed, neon glow intensity, state selection, and a chat delivery simulation matrix.<br/><br/>
 🚀 <strong>LAUNCH CHARLIE LAB:</strong><br/>
 <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a><br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Arsenal &rarr;</a>`
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`
         ],
         followupPool: [
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
@@ -6138,7 +6144,7 @@ This activates Chrome/Edge/Safari/Firefox native responsive mode with precise to
           id: 'out_of_scope',
           title: 'Out of Scope for Local KB [Live LLM Required]',
           response: `<div class="ai-fallback-badge">🔒 OUT OF SCOPE // OFFLINE LOCAL-KB MODE</div>
-I am currently operating in <strong>Offline Local-KB Mode</strong>, which is strictly indexed to answer questions about <strong>Rajeev Mutyalu</strong>, his 20+ years of engineering leadership, and his <strong>VFX &amp; GenAI Technical Arsenal</strong>.<br/><br/>
+I am currently operating in <strong>Offline Local-KB Mode</strong>, which is strictly indexed to answer questions about <strong>Rajeev Mutyalu</strong>, his 20+ years of engineering leadership, and his <strong>VFX &amp; GenAI Technical Capabilities</strong>.<br/><br/>
 ⚠️ <strong>Outside Request:</strong> <em>"${cleanQuery}"</em> requires live code generation, algorithm explanation, or general world knowledge outside Rajeev's portfolio database.<br/><br/>
 💡 <strong>How to get this answered:</strong><br/>
 Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.getElementById('aiLlmConfigBtn')?.click()"><strong>🧠 LOCAL KB ⚙️</strong></a> in the top-right header and switch to <strong>Live LLM (OpenAI)</strong> with your API key. In Live mode, I can write recursive functions, debug code, explain complex algorithms, and answer any general question in real time!<br/><br/>
@@ -6290,7 +6296,7 @@ I am an advanced interactive AI companion and VFX &amp; GenAI systems mascot eng
         id: 'fallback',
         title: 'Telemetry Notice: Offline Local-KB Scope [v1.0.5]',
         response: `${getRandomItem(fallbackIntros)}
-I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes Rajeev Mutyalu's verified VFX &amp; GenAI technical arsenal.<br/><br/>
+I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes Rajeev Mutyalu's verified VFX &amp; GenAI technical capabilities.<br/><br/>
 💡 <em><strong>Want answers on any general topic (sports, science, cinema, code)?</strong> Connect your OpenAI API key in <a href="javascript:void(0)" class="ai-section-link" onclick="document.getElementById('aiLlmConfigBtn')?.click()">🧠 AI Engine Settings</a> to give Cyber Charlie full open-world intelligence!</em><br/><br/>
 <em>In the meantime, ask me about Rajeev's core expertise:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
@@ -6304,7 +6310,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 • <strong>🎬 OpenUSD Pipeline:</strong> Non-destructive 2-tier sublayer composition<br/>
 • <strong>📦 Conform Ingest &amp; VFX I/O:</strong> Editorial turnovers, DI discrepancy reporting &amp; OTIO<br/>
 • <strong>⚡ Zero-Touch n8n Automation:</strong> Inbound &amp; reverse webhooks for render dispatch<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Full Technical Arsenal &rarr;</a>`,
+<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`,
         followups: getDynamicFollowups([
           'Download Rajeev high resolution profile photo',
           'Tell me about your AI certifications, accelerator credentials, and hackathons',
@@ -6875,6 +6881,17 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         aiInputField.value = '';
         document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
         renderBotResponse(q);
+      });
+
+      aiInputField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if (aiChatForm.requestSubmit) {
+            aiChatForm.requestSubmit();
+          } else {
+            aiChatForm.dispatchEvent(new Event('submit', { cancelable: true }));
+          }
+        }
       });
     }
 
@@ -7718,7 +7735,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         });
       }
 
-      // Quick tab inside chat area re-opens Arsenal Directory
+      // Quick tab inside chat area re-opens Capabilities Directory
       if (sidebarExpandTab) {
         sidebarExpandTab.addEventListener('click', (e) => {
           e.preventDefault();
@@ -8019,6 +8036,40 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
     // 3. Setup Floating Quick-Launcher for Charlie (AI)
     const floatingCharlieBtn = document.getElementById('floatingCharlieBtn');
 
+    function scrollToCharlieTerminal() {
+      const terminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+      if (!terminal) return;
+
+      const navOffset = 76;
+      const bottomClearance = 10; // Tight, clean 10px gap below the widget card
+      const section = document.getElementById('ai-assistant');
+
+      const termRect = terminal.getBoundingClientRect();
+      const termBottom = termRect.bottom + window.pageYOffset;
+      const sectionTop = section
+        ? section.getBoundingClientRect().top + window.pageYOffset - navOffset
+        : termRect.top + window.pageYOffset - navOffset;
+
+      // Directly frame the position where the bottom of the widget is completely visible
+      const bottomTarget = (termBottom + bottomClearance) - window.innerHeight;
+      const targetScroll = Math.max(sectionTop, bottomTarget);
+
+      window.scrollTo({
+        top: Math.max(0, Math.round(targetScroll)),
+        behavior: 'smooth'
+      });
+
+      setTimeout(() => {
+        const input = document.getElementById('aiInputField');
+        if (input) {
+          input.focus({ preventScroll: true });
+          input.classList.add('input-pulse-highlight');
+          setTimeout(() => input.classList.remove('input-pulse-highlight'), 1200);
+        }
+      }, 350);
+    }
+    window.scrollToCharlieTerminal = scrollToCharlieTerminal;
+
     if (floatingCharlieBtn) {
       floatingCharlieBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -8029,23 +8080,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (typeof window.deployCharlieToAiSection === 'function') {
           window.deployCharlieToAiSection();
         }
-        const targetSection = document.getElementById('ai-assistant') || document.getElementById('charlie') || document.querySelector('.ai-bot-terminal');
-        if (targetSection) {
-          const navOffset = 76; // Clean scroll clearance so "Meet Charlie — Rajeev's AI Assistant" header is fully visible
-          const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset - navOffset;
-          window.scrollTo({
-            top: Math.max(0, sectionTop),
-            behavior: 'smooth'
-          });
-        }
-        setTimeout(() => {
-          const input = document.getElementById('aiInputField');
-          if (input) {
-            input.focus({ preventScroll: true });
-            input.classList.add('input-pulse-highlight');
-            setTimeout(() => input.classList.remove('input-pulse-highlight'), 1200);
-          }
-        }, 350);
+        scrollToCharlieTerminal();
       });
     }
 
@@ -8129,8 +8164,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       }, { passive: true });
 
       // Connect top navbar & mobile drawer quick-links to trigger fly-out proactively
-      document.querySelectorAll('a[href="#ai-assistant"]').forEach(link => {
-        link.addEventListener('click', () => {
+      document.querySelectorAll('a[href="#ai-assistant"], a[href="#charlie"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          scrollToCharlieTerminal();
           setTimeout(() => {
             deployToSection();
           }, 150);
@@ -8186,6 +8223,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const overlay = document.getElementById('mobileSimOverlay');
       const stage = document.getElementById('mobileSimStage');
       const stageInner = document.getElementById('simStageInner');
+      const devicesWrap = document.getElementById('simDevicesWrap');
       const chassis = document.getElementById('mobilePhoneChassis');
       const frame = document.getElementById('mobileSimFrame');
       const ipadChassis = document.getElementById('mobileIpadChassis');
@@ -8198,14 +8236,17 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const floatingTrigger = document.getElementById('floatingSimTrigger');
       const presetBtns = document.querySelectorAll('.sim-preset-btn');
 
+      const phonePill = document.getElementById('phoneChassisPill') || (chassis ? chassis.querySelector('.sim-device-header-pill') : null);
+      const ipadPill = document.getElementById('ipadChassisPill') || (ipadChassis ? ipadChassis.querySelector('.sim-device-header-pill') : null);
+
       if (!overlay || !chassis || !frame) return;
 
       const DEVICE_PRESETS = {
-        iphone: { name: 'iPhone 16 Pro Max', width: 440, height: 956, radius: '56px' },
-        duo: { name: 'Apple Duo (iPhone + iPad)', isDuo: true, width: 440, height: 956, ipadWidth: 768, ipadHeight: 1024, radius: '56px', ipadRadius: '36px' },
-        pixel: { name: 'Pixel 8', width: 412, height: 915, radius: '50px' },
-        compact: { name: 'Compact (SE)', width: 375, height: 667, radius: '44px' },
-        tablet: { name: 'Tablet (768px)', width: 768, height: 1024, radius: '36px' }
+        iphone: { name: 'iPhone 16 Pro Max', label: 'iPhone 16 Pro Max', width: 440, height: 956, radius: '56px' },
+        duo: { name: 'Apple Duo', phoneLabel: 'iPhone 16 Pro Max', ipadLabel: 'iPad Pro / Air', isDuo: true, width: 440, height: 956, ipadWidth: 768, ipadHeight: 1024, radius: '56px', ipadRadius: '36px' },
+        pixel: { name: 'Pixel 8', label: 'Pixel 8', width: 412, height: 915, radius: '50px' },
+        compact: { name: 'Compact (SE)', label: 'Compact (SE)', width: 375, height: 667, radius: '44px' },
+        tablet: { name: 'Tablet (768px)', label: 'iPad Pro / Air', width: 768, height: 1024, radius: '36px' }
       };
 
       const simState = {
@@ -8232,16 +8273,22 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           chassis.style.borderRadius = preset.radius;
           chassis.setAttribute('data-device', 'iphone');
           chassis.setAttribute('data-orientation', simState.isLandscape ? 'landscape' : 'portrait');
+          if (phonePill) {
+            phonePill.innerHTML = `iPhone 16 Pro Max (${phoneW} &times; ${phoneH})`;
+          }
 
           // iPad companion dimensions
+          const ipadW = simState.isLandscape ? preset.ipadHeight : preset.ipadWidth;
+          const ipadH = simState.isLandscape ? preset.ipadWidth : preset.ipadHeight;
           if (ipadChassis) {
-            const ipadW = simState.isLandscape ? preset.ipadHeight : preset.ipadWidth;
-            const ipadH = simState.isLandscape ? preset.ipadWidth : preset.ipadHeight;
             ipadChassis.style.width = `${ipadW}px`;
             ipadChassis.style.height = `${ipadH}px`;
             ipadChassis.style.borderRadius = preset.ipadRadius;
             ipadChassis.setAttribute('data-device', 'ipad');
             ipadChassis.setAttribute('data-orientation', simState.isLandscape ? 'landscape' : 'portrait');
+            if (ipadPill) {
+              ipadPill.innerHTML = `iPad Pro / Air (${ipadW} &times; ${ipadH})`;
+            }
           }
 
           // Load iPad frame if needed
@@ -8252,7 +8299,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           }
 
           if (liveDim) {
-            liveDim.innerHTML = `Phone: ${phoneW}&times;${phoneH} &bull; iPad: ${preset.ipadWidth}&times;${preset.ipadHeight} px (Apple Duo)`;
+            liveDim.innerHTML = `iPhone: ${phoneW}&times;${phoneH} &bull; iPad: ${ipadW}&times;${ipadH} px`;
           }
         } else {
           if (stage) stage.classList.remove('duo-active');
@@ -8267,6 +8314,11 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           chassis.setAttribute('data-device', simState.device);
           chassis.setAttribute('data-orientation', simState.isLandscape ? 'landscape' : 'portrait');
 
+          if (phonePill) {
+            const deviceTitle = preset.label || preset.name;
+            phonePill.innerHTML = `${deviceTitle} (${w} &times; ${h})`;
+          }
+
           if (liveDim) {
             liveDim.innerHTML = `${w} &times; ${h} px (${simState.isLandscape ? 'Landscape' : 'Portrait'})`;
           }
@@ -8276,29 +8328,59 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       }
 
       function updateChassisScale() {
-        if (!stage) return;
-        const target = stageInner || chassis;
-        if (!target) return;
+        if (!stage || !stageInner) return;
 
-        if (simState.zoom !== 'auto') {
-          const val = parseFloat(simState.zoom);
-          target.style.transform = `scale(${val})`;
-          return;
+        const currentZoom = zoomSelect ? zoomSelect.value : (simState.zoom || 'auto');
+        simState.zoom = currentZoom;
+
+        const preset = DEVICE_PRESETS[simState.device] || DEVICE_PRESETS.iphone;
+        const isLand = !!simState.isLandscape;
+        let naturalW = 0;
+        let naturalH = 0;
+
+        if (preset.isDuo) {
+          const phoneW = isLand ? preset.height : preset.width;
+          const phoneH = isLand ? preset.width : preset.height;
+          const ipadW = isLand ? preset.ipadHeight : preset.ipadWidth;
+          const ipadH = isLand ? preset.ipadWidth : preset.ipadHeight;
+          naturalW = phoneW + 48 + ipadW;
+          naturalH = Math.max(phoneH, ipadH) + 42;
+        } else {
+          const w = isLand ? preset.height : preset.width;
+          const h = isLand ? preset.width : preset.height;
+          naturalW = w;
+          naturalH = h + 42;
         }
 
-        // Auto-fit calculation
-        const stageW = stage.clientWidth - 48;
-        const stageH = stage.clientHeight - 48;
-        const targetW = target.offsetWidth || (simState.device === 'duo' ? 1280 : chassis.offsetWidth);
-        const targetH = target.offsetHeight || (simState.device === 'duo' ? 1024 : chassis.offsetHeight);
-
-        if (stageW > 0 && stageH > 0 && targetW > 0 && targetH > 0) {
-          const scaleX = stageW / targetW;
-          const scaleY = stageH / targetH;
-          const fitScale = Math.min(scaleX, scaleY, 1.0);
-          target.style.transform = `scale(${fitScale.toFixed(3)})`;
+        let scale = 1.0;
+        if (currentZoom !== 'auto') {
+          const val = parseFloat(currentZoom);
+          if (!isNaN(val) && val > 0) {
+            scale = val;
+          }
         } else {
-          target.style.transform = 'scale(1)';
+          // Auto-fit calculation: calculate optimal scale to fit natural dimensions inside stage
+          const stageW = Math.max(stage.clientWidth - 48, 200);
+          const stageH = Math.max(stage.clientHeight - 48, 200);
+          const scaleX = stageW / naturalW;
+          const scaleY = stageH / naturalH;
+          scale = Math.min(scaleX, scaleY, 1.0);
+        }
+
+        const scaledW = Math.round(naturalW * scale);
+        const scaledH = Math.round(naturalH * scale);
+
+        // StageInner layout box matches scaled footprint exactly so flexbox centering never overflows or clips
+        stageInner.style.width = `${scaledW}px`;
+        stageInner.style.height = `${scaledH}px`;
+        stageInner.style.transform = 'none';
+
+        if (devicesWrap) {
+          devicesWrap.style.width = `${naturalW}px`;
+          devicesWrap.style.height = `${naturalH}px`;
+          devicesWrap.style.transform = `scale(${scale.toFixed(4)})`;
+        } else {
+          stageInner.style.transform = `scale(${scale.toFixed(4)})`;
         }
       }
 
@@ -8319,7 +8401,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
                 const maxDst = dstDoc.scrollHeight - dstWin.innerHeight;
                 if (maxSrc > 0 && maxDst > 0) {
                   const ratio = srcWin.scrollY / maxSrc;
-                  dstWin.scrollTo(0, ratio * maxDst);
+                  dstWin.scrollTo({ top: ratio * maxDst, behavior: 'auto' });
                 }
               }
             } catch (err) { }
@@ -8328,13 +8410,30 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         } catch (err) { }
       }
 
+      function syncFramesOrientation() {
+        [frame, ipadFrame].forEach(f => {
+          if (f && f.contentWindow) {
+            try {
+              if (f.contentDocument && f.contentDocument.body) {
+                f.contentDocument.body.classList.toggle('is-rotated-mobile', !!simState.isLandscape);
+              }
+              if (typeof f.contentWindow.updateMobileOrientationState === 'function') {
+                f.contentWindow.updateMobileOrientationState();
+              }
+            } catch (err) { }
+          }
+        });
+      }
+
       if (frame) {
         frame.addEventListener('load', () => {
+          syncFramesOrientation();
           if (ipadFrame) bindFrameScrollSync(frame, ipadFrame);
         });
       }
       if (ipadFrame) {
         ipadFrame.addEventListener('load', () => {
+          syncFramesOrientation();
           if (frame) bindFrameScrollSync(ipadFrame, frame);
         });
       }
@@ -8343,6 +8442,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         simState.isOpen = true;
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+
+        if (zoomSelect) {
+          simState.zoom = zoomSelect.value || 'auto';
+        }
 
         // Load iframe if not loaded yet
         if (!simState.hasLoadedOnce || frame.getAttribute('src') === 'about:blank') {
@@ -8356,6 +8459,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         // Recalculate scale after display transition
         setTimeout(updateChassisScale, 60);
         setTimeout(updateChassisScale, 200);
+        setTimeout(syncFramesOrientation, 150);
       }
 
       function closeSimulator() {
@@ -8382,6 +8486,12 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             presetBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             updateChassisDimensions();
+            [60, 180, 320].forEach(delay => {
+              setTimeout(() => {
+                syncFramesOrientation();
+                updateChassisScale();
+              }, delay);
+            });
           }
         });
       });
@@ -8392,14 +8502,12 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           e.stopPropagation();
           simState.isLandscape = !simState.isLandscape;
           updateChassisDimensions();
-          [frame, ipadFrame].forEach(f => {
-            if (f && f.contentWindow) {
-              try {
-                if (typeof f.contentWindow.updateMobileOrientationState === 'function') {
-                  f.contentWindow.updateMobileOrientationState();
-                }
-              } catch (err) { }
-            }
+          syncFramesOrientation();
+          [50, 150, 320, 500].forEach(delay => {
+            setTimeout(() => {
+              syncFramesOrientation();
+              updateChassisScale();
+            }, delay);
           });
         });
       }

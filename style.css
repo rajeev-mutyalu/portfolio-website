@@ -1340,6 +1340,41 @@ body.in-simulator #floatingCharlieBtn {
   width: 100%;
 }
 
+.mobile-nav-group-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  text-transform: uppercase;
+  padding: 0.45rem 0.25rem 0.15rem;
+  opacity: 0.85;
+}
+
+/* 📱 Since "View CV" is already prominently visible in the top navbar across all mobile/tablet screens, remove CV Tracks from the hamburger drawer */
+.mobile-nav-drawer .mobile-nav-cv-header,
+.mobile-nav-drawer .mobile-nav-cv-track,
+.mobile-nav-drawer .cv-highlight-link,
+.mobile-nav-drawer a[href*="cv.html"] {
+  display: none !important;
+}
+
+.mobile-nav-drawer .mobile-nav-sections-header {
+  border-top: none !important;
+  margin-top: 0 !important;
+  padding-top: 0.25rem !important;
+}
+
+.mobile-nav-link.cv-highlight-link {
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  background: rgba(56, 189, 248, 0.06) !important;
+}
+
+.mobile-nav-link.cv-highlight-link:hover {
+  border-color: rgba(56, 189, 248, 0.6) !important;
+  background: rgba(56, 189, 248, 0.14) !important;
+}
+
 .mobile-nav-link {
   color: var(--text-primary);
   text-decoration: none;
@@ -2717,10 +2752,12 @@ body.in-simulator #floatingCharlieBtn {
 #charlie,
 .ai-bot-terminal {
   scroll-margin-top: 76px;
+  scroll-margin-bottom: 10px;
 }
 
 .ai-bot-terminal {
-  max-width: 1040px;
+  max-width: 1200px;
+  width: 100%;
   margin: 1rem auto 0 auto;
   background: rgba(5, 8, 17, 0.95);
   border: 1px solid rgba(56, 189, 248, 0.3);
@@ -3588,8 +3625,9 @@ body.in-simulator #floatingCharlieBtn {
 .ai-bot-body-split {
   display: flex;
   flex-direction: row;
-  min-height: 380px;
-  max-height: min(60vh, 500px);
+  height: 650px;
+  min-height: 650px;
+  max-height: 650px;
   background: rgba(5, 8, 17, 0.7);
   overflow: hidden;
   position: relative;
@@ -3608,7 +3646,8 @@ body.in-simulator #floatingCharlieBtn {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: min(60vh, 500px);
+  height: 650px;
+  max-height: 650px;
   scrollbar-width: thin;
   box-sizing: border-box;
   transform: translate3d(0, 0, 0);
@@ -3708,13 +3747,23 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 .ai-bot-terminal.is-fullscreen .ai-bot-main {
   height: 100% !important;
   min-height: 0 !important;
+  max-height: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
 }
 
 .ai-bot-terminal.is-fullscreen .ai-chat-stream {
-  height: 100% !important;
+  height: auto !important;
   min-height: 0 !important;
   max-height: none !important;
-  flex: 1 1 auto !important;
+  flex: 1 1 0% !important;
+  overflow-y: auto !important;
+}
+
+.ai-bot-terminal.is-fullscreen .ai-chat-input-bar {
+  margin-top: auto !important;
+  flex-shrink: 0 !important;
 }
 
 .ai-bot-sidebar::-webkit-scrollbar {
@@ -3872,6 +3921,8 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   flex-direction: column;
   flex: 1 1 0%;
   min-width: 0;
+  height: 650px;
+  max-height: 650px;
   background: rgba(6, 10, 20, 0.6);
   overflow: hidden;
   position: relative;
@@ -3879,15 +3930,14 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 
 .ai-chat-stream {
   padding: 16px 20px;
-  min-height: 250px;
-  max-height: min(48vh, 420px);
+  flex: 1 1 0%;
+  min-height: 0;
   overflow-y: auto;
   scrollbar-gutter: stable;
   display: flex;
   flex-direction: column;
   gap: 16px;
   scroll-behavior: smooth;
-  flex: 1;
 }
 
 .ai-chat-stream::-webkit-scrollbar {
@@ -4223,11 +4273,12 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 }
 
 .ai-followup-label {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-family: var(--font-mono);
-  color: #f59e0b;
+  color: #38bdf8;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .ai-followup-chips {
@@ -4237,42 +4288,53 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 }
 
 .ai-followup-btn {
-  background: rgba(245, 158, 11, 0.08);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  border-radius: 5px;
-  color: #fde68a;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 6px;
+  color: #e0f2fe;
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: 600;
-  padding: 4px 9px;
+  font-weight: 500;
+  padding: 4px 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: left;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .ai-followup-btn:hover {
-  background: rgba(245, 158, 11, 0.2);
-  border-color: #f59e0b;
+  background: rgba(0, 242, 254, 0.18);
+  border-color: #00f2fe;
   color: #ffffff;
   transform: translateY(-1px);
+  box-shadow: 0 2px 12px rgba(0, 242, 254, 0.3);
+}
+
+.ai-followup-btn:active {
+  transform: translateY(0);
+  background: rgba(0, 242, 254, 0.28);
 }
 
 .ai-chat-input-bar {
   display: flex;
+  align-items: stretch;
   gap: 8px;
   padding: 12px 18px;
   background: rgba(10, 15, 30, 0.95);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
 }
 
 .ai-input-wrapper {
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(56, 189, 248, 0.25);
   border-radius: var(--radius-sm, 6px);
-  padding: 0 12px;
+  padding: 8px 12px;
+  min-height: 74px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -4287,6 +4349,9 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   font-weight: 700;
   margin-right: 8px;
   font-size: 0.9rem;
+  line-height: 1.5;
+  padding-top: 1px;
+  user-select: none;
 }
 
 .ai-input-field {
@@ -4297,12 +4362,19 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   color: #ffffff;
   font-size: 0.86rem;
   font-family: var(--font-main, 'Plus Jakarta Sans', sans-serif);
-  padding: 10px 0;
+  padding: 1px 0;
+  line-height: 1.5;
+  height: 60px;
+  min-height: 60px;
+  max-height: 60px;
+  resize: none;
+  scrollbar-width: thin;
 }
 
 .ai-input-field::placeholder {
   color: #64748b;
   font-size: 0.82rem;
+  line-height: 1.5;
   transition: color 0.2s ease;
 }
 
@@ -4321,6 +4393,7 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   padding: 0;
   transition: all 0.2s ease;
   margin-left: 4px;
+  margin-top: 1px;
   flex-shrink: 0;
 }
 
@@ -4414,21 +4487,34 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   border: 1px solid rgba(0, 242, 254, 0.5);
   border-radius: var(--radius-sm, 6px);
   color: #050811;
-  font-weight: 700;
-  font-size: 0.82rem;
-  padding: 0 16px;
+  width: 58px;
+  min-width: 58px;
+  height: 78px;
+  min-height: 78px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  padding: 0;
   cursor: pointer;
-  box-shadow: 0 3px 12px rgba(0, 242, 254, 0.35);
+  box-shadow: 0 3px 14px rgba(0, 242, 254, 0.35);
   transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-bottom: 0;
 }
 
 .ai-send-btn:hover {
   background: linear-gradient(135deg, #26f5ff 0%, #3b82f6 100%);
-  box-shadow: 0 4px 18px rgba(0, 242, 254, 0.55);
+  box-shadow: 0 4px 20px rgba(0, 242, 254, 0.6);
   transform: translateY(-1px);
+}
+
+.ai-send-icon {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.ai-send-btn:hover .ai-send-icon {
+  transform: translateY(-2px);
 }
 
 /* While AI Generation & Upward Delivery is in progress: Lock all question options & inputs */
@@ -4832,8 +4918,8 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   }
 
   .ai-chat-stream {
-    min-height: 320px;
-    max-height: 400px;
+    min-height: 423px;
+    max-height: 530px;
     padding: 14px;
   }
 
@@ -5248,9 +5334,10 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 /* =========================================================================
    🚫 Completely Remove Charlie & AI Assistant from Rotated Mobile (Landscape) & Simulator
    ========================================================================= */
-@media (max-height: 550px) and (orientation: landscape),
-(pointer: coarse) and (max-height: 550px),
-(max-device-width: 956px) and (orientation: landscape) {
+@media (max-height: 650px) and (orientation: landscape),
+(orientation: landscape) and (max-width: 1024px) and (max-height: 700px),
+(pointer: coarse) and (max-height: 650px) and (orientation: landscape),
+(max-device-width: 1024px) and (orientation: landscape) {
 
   #ai-assistant,
   section#ai-assistant,
@@ -5374,8 +5461,13 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
     display: none !important;
   }
 
-  /* 📱 In rotated mobile mode (landscape), "Get in Touch" is already visible outside the menu in the top navbar, so hide from drawer */
-  .mobile-nav-drawer .mobile-nav-link[href="#contact"] {
+  /* 📱 In rotated mobile mode (landscape), "Get in Touch" and "View CV" are already visible outside the menu in the top navbar, so remove CV Tracks & Get in Touch from drawer */
+  .mobile-nav-drawer .mobile-nav-link[href="#contact"],
+  .mobile-nav-drawer .mobile-nav-group-title,
+  .mobile-nav-drawer .mobile-nav-cv-header,
+  .mobile-nav-drawer .mobile-nav-cv-track,
+  .mobile-nav-drawer .cv-highlight-link,
+  .mobile-nav-drawer a[href*="cv.html"] {
     display: none !important;
   }
 
@@ -5467,8 +5559,16 @@ body.in-simulator .shatter-popup {
   border: none !important;
 }
 
-/* 📱 Rotated mobile mode helper: hide Get in Touch in drawer when visible outside in top navbar */
-body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-link[href="#contact"] {
+/* 📱 Rotated mobile mode helper: hide Get in Touch and CV Tracks in drawer when visible outside in top navbar */
+body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-link[href="#contact"],
+body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-group-title,
+body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-cv-header,
+body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-cv-track,
+body.is-rotated-mobile .mobile-nav-drawer .cv-highlight-link,
+body.is-rotated-mobile .mobile-nav-drawer a[href*="cv.html"],
+body.is-rotated-mobile #mobileNavDrawer .mobile-nav-cv-header,
+body.is-rotated-mobile #mobileNavDrawer .mobile-nav-cv-track,
+body.is-rotated-mobile #mobileNavDrawer a[href*="cv.html"] {
   display: none !important;
 }
 
@@ -7798,8 +7898,27 @@ body.in-simulator .cv-topbar .btn-primary svg {
   #cometCanvas,
   .ambient-glow,
   .mobile-nav-toggle,
-  .mobile-nav-drawer {
+  .mobile-nav-drawer,
+  #floatingCharlieBtn,
+  .floating-charlie-btn,
+  #floatingSimTrigger,
+  .floating-sim-trigger,
+  #mobileSimOverlay,
+  .mobile-sim-overlay,
+  .accessibility-btn,
+  .accessibility-widget,
+  button[title*="Charlie"],
+  button[title*="Chat"],
+  button[title*="Accessibility"],
+  [class*="floating"],
+  [id*="floating"],
+  [class*="accessibility"],
+  [id*="accessibility"],
+  [class*="widget-floating"],
+  [id*="widget-floating"] {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
   }
 
   .print-only {
@@ -8349,8 +8468,19 @@ body.in-simulator .cv-topbar .btn-primary svg {
     visibility: hidden !important;
   }
 
-  .cv-divider,
-  hr {
+  .cv-page-break-divider {
+    display: block !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    visibility: hidden !important;
+  }
+
+  .cv-divider:not(.cv-page-break-divider),
+  hr:not(.cv-page-break-divider) {
     display: none !important;
     height: 0 !important;
     margin: 0 !important;
@@ -8358,6 +8488,52 @@ body.in-simulator .cv-topbar .btn-primary svg {
     border: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
+  }
+
+  /* Ensure all 7 experience roles fit precisely on Page 2 in Print */
+  .cv-section-experience {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .cv-section-experience .cv-timeline-rail {
+    gap: 4px !important;
+  }
+
+  .cv-section-experience .cv-timeline-item {
+    margin-bottom: 5px !important;
+  }
+
+  .cv-section-experience .cv-job {
+    padding: 4.5px 8.5px !important;
+  }
+
+  .cv-section-experience .cv-job-header {
+    margin-bottom: 2px !important;
+  }
+
+  .cv-section-experience .cv-job-title {
+    font-size: 8.8pt !important;
+    margin-bottom: 1px !important;
+  }
+
+  .cv-section-experience .cv-company-location {
+    font-size: 7.0pt !important;
+  }
+
+  .cv-section-experience .cv-job-period {
+    font-size: 6.5pt !important;
+    padding: 1px 4px !important;
+  }
+
+  .cv-section-experience .cv-bullet-list {
+    font-size: 7.0pt !important;
+    line-height: 1.28 !important;
+    padding-left: 12px !important;
+  }
+
+  .cv-section-experience .cv-bullet-list li {
+    margin-bottom: 1.5px !important;
   }
 }
 
@@ -8694,6 +8870,7 @@ body.is-local-build .floating-sim-trigger:active {
 
 /* Photorealistic Phone Chassis */
 .mobile-phone-chassis {
+  flex-shrink: 0;
   position: relative;
   background: #080c14;
   border: 11px solid #1e293b;
@@ -8836,16 +9013,30 @@ body.is-local-build .floating-sim-trigger:active {
    📱 Apple Duo Simulator: Side-by-Side Dual Device Harness (iPhone + iPad)
    ========================================================================== */
 .sim-stage-inner {
+  margin: auto;
+  position: relative;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
-  transform-origin: center center;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), gap 0.3s ease;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.mobile-sim-stage.duo-active .sim-stage-inner {
+.sim-devices-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  min-width: max-content;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   gap: 48px;
+  padding-top: 42px;
+  box-sizing: border-box;
+  transform-origin: 0 0;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Device Label Pill */
@@ -8868,6 +9059,83 @@ body.is-local-build .floating-sim-trigger:active {
   white-space: nowrap;
   pointer-events: none;
   z-index: 25;
+}
+
+/* Front Camera Dot for non-iPhone devices */
+.chassis-camera-dot {
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9px;
+  height: 9px;
+  background: radial-gradient(circle at 35% 35%, #1e3a8a, #020617);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 15;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Device-Specific Chassis Adaptations */
+.mobile-phone-chassis[data-device="tablet"] {
+  border-radius: 36px !important;
+  border-width: 12px !important;
+}
+
+.mobile-phone-chassis[data-device="tablet"] .phone-screen-wrapper {
+  border-radius: 26px !important;
+}
+
+.mobile-phone-chassis[data-device="tablet"] .phone-dynamic-island {
+  display: none !important;
+}
+
+.mobile-phone-chassis[data-device="tablet"] .chassis-button {
+  display: none !important;
+}
+
+.mobile-phone-chassis[data-device="tablet"] .chassis-camera-dot {
+  display: block;
+}
+
+.mobile-phone-chassis[data-device="tablet"] .phone-home-indicator {
+  width: 220px !important;
+}
+
+.mobile-phone-chassis[data-device="pixel"] {
+  border-radius: 50px !important;
+}
+
+.mobile-phone-chassis[data-device="pixel"] .phone-dynamic-island {
+  display: none !important;
+}
+
+.mobile-phone-chassis[data-device="pixel"] .chassis-btn-silent {
+  display: none !important;
+}
+
+.mobile-phone-chassis[data-device="pixel"] .chassis-camera-dot {
+  display: block;
+}
+
+.mobile-phone-chassis[data-device="compact"] {
+  border-radius: 44px !important;
+}
+
+.mobile-phone-chassis[data-device="compact"] .phone-dynamic-island {
+  display: none !important;
+}
+
+.mobile-phone-chassis[data-device="compact"] .chassis-camera-dot {
+  display: block;
+}
+
+/* Landscape adaptations for camera dot */
+.mobile-phone-chassis[data-orientation="landscape"] .chassis-camera-dot {
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
 }
 
 /* iPad Companion Chassis */
@@ -9266,7 +9534,7 @@ body.is-local-build .floating-sim-trigger:active {
 }
 
 .cv-highlight-link {
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: space-between;
   background: rgba(0, 242, 254, 0.06);

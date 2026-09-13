@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rajeev Mutyalu — Curriculum Vitae | AI Workflows Architect &amp; Creative Technology Lead</title>
+  <meta name="description"
+    content="Official Curriculum Vitae of Rajeev Mutyalu: AI Workflows Architect, Creative Technology Lead &amp; Systems Specialist bridging 20+ years of VFX production technology with Generative AI video platforms (Studio.AI, Google Veo, Kling AI, Higgsfield, Seedance, ComfyUI), OpenUSD systems, and studio automation." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta name="theme-color" content="#06080e" />
+
+  <link rel="stylesheet" href="style.css?v=152" />
+  <style>
+    .print-only { display: none !important; }
+    @media print {
+      .print-only { display: block !important; }
+      .screen-only { display: none !important; }
+      .cv-contact-matrix {
+        grid-template-columns: 0.95fr 1.25fr 1.05fr !important;
+        gap: 3px 10px !important;
+        padding: 4px 10px !important;
+      }
+      .cv-contact-item {
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+      }
+    }
+    .cv-contact-matrix {
+      grid-template-columns: 0.95fr 1.25fr 1.05fr !important;
+      gap: 12px 20px !important;
+      padding: 16px 20px !important;
+    }
+    .cv-contact-item {
+      flex-wrap: nowrap !important;
+      white-space: nowrap !important;
+    }
+    @media screen and (max-width: 820px) {
+      .cv-contact-matrix { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media screen and (max-width: 580px) {
+      .cv-contact-matrix { grid-template-columns: 1fr !important; }
+      .cv-contact-item { flex-wrap: wrap !important; }
+    }
+  </style>
+</head>
+
+<body class="cv-body cv-theme-dark">
+  <!-- Ambient Background Glows (Screen Only) -->
+  <div class="ambient-glow glow-top-left screen-only"></div>
+  <div class="ambient-glow glow-top-right screen-only"></div>
+
+  <!-- Top Action Toolbar (Screen Only) -->
+  <header class="cv-topbar screen-only">
+    <div class="cv-topbar-container">
+      <a href="index.html?top=1" class="btn btn-ghost btn-sm" title="Interactive Profile" aria-label="Interactive Profile">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        <span class="btn-text-full">Interactive Profile</span>
+        <span class="btn-text-short">Profile</span>
+      </a>
+
+      <div class="cv-topbar-actions">
+        <!-- 1-Click Copy ATS-Clean Resume Text -->
+        <button type="button" class="btn btn-secondary btn-sm" id="copyAtsBtn"
+          title="Copy ATS-Clean Plain Text Resume to Clipboard" aria-label="Copy ATS Text">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          <span id="copyAtsText"><span class="btn-text-full">📋 Copy ATS Text</span><span class="btn-text-short">📋 ATS</span></span>
+        </button>
+
+        <!-- Theme Mode Toggle -->
+        <button type="button" class="btn btn-secondary btn-sm" id="cvThemeToggle"
+          title="Switch to Plain White &amp; Black Mode" aria-label="Toggle Theme Mode">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+          <span id="cvThemeText"><span class="btn-text-full">📄 Switch to Plain B&amp;W</span><span class="btn-text-short">📄 B&amp;W</span></span>
+        </button>
+
+        <!-- Copy Email Action -->
+        <button type="button" class="btn btn-ghost btn-sm" id="copyContactBtn" title="Copy Email (mutyalu.rajeev@gmail.com)" aria-label="Copy Email">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+          <span id="copyBtnText"><span class="btn-text-full">Copy Email</span></span>
+        </button>
+
+        <!-- LinkedIn Action -->
+        <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" rel="noopener"
+          class="btn btn-ghost btn-sm" title="LinkedIn Profile" aria-label="LinkedIn Profile">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.2a1.66 1.66 0 0 0-1.66 1.66c0 .92.74 1.66 1.66 1.66.92 0 1.66-.74 1.66-1.66 0-.92-.74-1.66-1.66-1.66Z" />
+          </svg>
+          <span class="btn-text-full">LinkedIn</span>
+        </a>
+
+        <!-- Print / Save PDF Action -->
+        <button type="button" class="btn btn-primary btn-sm" id="printCvBtn"
+          title="Print CV or Save to PDF" aria-label="Print or Save PDF">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span class="btn-text-full">Print / Save PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main CV Document Wrapper -->
+  <main class="cv-page-wrapper">
+    <div class="cv-card">
+
+      <!-- =====================================================================
+           PAGE 1: EXECUTIVE HEADER & CONTACT MATRIX
+           ===================================================================== -->
+      <header class="cv-header">
+        <div class="cv-header-identity">
+          <div class="cv-avatar-wrap">
+            <span class="cv-avatar-link">
+              <img src="profile.jpg?v=22" alt="Rajeev Mutyalu" class="cv-avatar-img" />
+            </span>
+          </div>
+          <div class="cv-identity-text">
+            <h1 class="cv-name">Rajeev Mutyalu</h1>
+            <div class="cv-role-headline" id="cvRoleHeadline">
+              AI Workflows Architect &bull; Creative Technology Lead &bull; <span class="cv-accent-highlight">VFX &amp; GenAI Systems Architect</span>
+            </div>
+            <div class="cv-status-badges">
+              <span class="cv-chip cv-chip-cyan">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                  </polygon>
+                </svg>
+                <span>GenAI Production Systems &bull; Creative Workflows &bull; 1917 &bull; RRR &bull; Mufasa</span>
+              </span>
+              <span class="cv-chip cv-chip-emerald">
+                <span class="cv-dot pulse"></span> Former Technicolor R&amp;D Supervisor &bull; Technicolor Fellowship Network Associate Member
+              </span>
+              <span class="cv-chip cv-chip-amber">
+                UK Skilled Worker Visa &bull; Existing Sponsorship in Place &bull; Available Immediately
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Matrix (6 Symmetrical Items: 2 Rows x 3 Columns) -->
+        <div class="cv-contact-matrix">
+          <div class="cv-contact-item">
+            <span class="cv-contact-label">Location:</span>
+            <span class="cv-contact-val">London, United Kingdom</span>
+          </div>
+          <div class="cv-contact-item">
+            <span class="cv-contact-label">Phone:</span>
+            <a href="tel:+447827498399" class="cv-contact-link">+44 7827 498399</a>
+          </div>
+          <div class="cv-contact-item">
+            <span class="cv-contact-label">Email:</span>
+            <a href="mailto:mutyalu.rajeev@gmail.com" class="cv-contact-link">mutyalu.rajeev@gmail.com</a>
+          </div>
+          <div class="cv-contact-item">
+            <span class="cv-contact-label">Portfolio:</span>
+            <a href="https://rajeev-mutyalu.github.io/portfolio-website/" target="_blank" rel="noopener"
+              class="cv-contact-link">Portfolio ↗</a>
+          </div>
+          <div class="cv-contact-item">
+            <span class="cv-contact-label">LinkedIn:</span>
+            <a href="https://www.linkedin.com/in/rajeevmuthyalu/" target="_blank" rel="noopener"
+              class="cv-contact-link">linkedin.com/in/rajeevmuthyalu</a>
+          </div>
+          <div class="cv-contact-item">
+            <span class="cv-contact-label">GitHub:</span>
+            <a href="https://github.com/rajeev-mutyalu" target="_blank" rel="noopener"
+              class="cv-contact-link">github.com/rajeev-mutyalu</a>
+          </div>
+        </div>
+      </header>
+
+      <hr class="cv-divider" />
+
+      <!-- =====================================================================
+           PAGE 1: EXECUTIVE SUMMARY
+           ===================================================================== -->
+      <section class="cv-section">
+        <h2 class="cv-section-title">
+          <span class="cv-sec-icon">🎯</span> Executive Summary
+        </h2>
+        <div class="cv-summary-content">
+          <p class="cv-summary-text">
+            <strong>AI Workflows Architect, Creative Technology Lead and former Technicolor R&amp;D Supervisor</strong> with 20+ years of experience across VFX production technology, software architecture, creative engineering and global engineering leadership. Currently architecting Generative AI production systems at Astra Studios, including the <strong>Studio.AI platform</strong> integrating <strong>Google Veo, Kling AI, Higgsfield, Seedance and ComfyUI node workflows</strong> with character identity consistency, artist-facing controls and ACES colour conforming.
+          </p>
+          <p class="cv-summary-text">
+            Combines emerging generative video technology with established filmmaking workflows, DCC APIs including Nuke, Maya and Hiero, production-grade OpenUSD systems, event-driven automation and private AI infrastructure. Proven track record of taking emerging technologies from R&amp;D into production, including ReviewTool, ProNuke, Meshroom photogrammetry, Editorial Turnover / Conform systems and modern AI-enabled production workflows across major productions including <a href="https://www.imdb.com/title/tt8579674/" target="_blank" rel="noopener" class="cv-inline-link"><em>1917</em> (Academy Award for Best Visual Effects)</a>, <a href="https://www.imdb.com/title/tt8178634/" target="_blank" rel="noopener" class="cv-inline-link"><em>RRR</em></a>, <a href="https://www.imdb.com/title/tt13186482/" target="_blank" rel="noopener" class="cv-inline-link"><em>Mufasa: The Lion King</em></a>, <a href="https://www.imdb.com/title/tt21191806/" target="_blank" rel="noopener" class="cv-inline-link"><em>Back in Action</em></a>, <a href="https://www.imdb.com/title/tt11097384/" target="_blank" rel="noopener" class="cv-inline-link"><em>Spaceman</em></a>, and <a href="https://www.imdb.com/title/tt10324164/" target="_blank" rel="noopener" class="cv-inline-link"><em>Prehistoric Planet</em></a>. Associate Member of the Technicolor Fellowship Network Committee and recipient of 9+ studio leadership &amp; excellence awards.
+          </p>
+        </div>
+      </section>
+
+      <hr class="cv-divider" />
+
+      <!-- =====================================================================
+           PAGE 1: ARCHITECTURE & TECHNICAL COMPETENCIES (10 Cards)
+           ===================================================================== -->
+      <section class="cv-section" id="cvSkillsSection">
+        <h2 class="cv-section-title">
+          <span class="cv-sec-icon">⚡</span> Architecture &amp; Technical Competencies
+        </h2>
+
+        <div class="cv-skills-grid">
+
+          <!-- 1. Generative AI Platforms & Workflows -->
+          <div class="cv-skill-box cv-highlight-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-blue">Generative Video</span>
+              <h3>🎬 Generative AI Platforms &amp; Workflows</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>Generative AI Platforms:</strong> Google Veo, Kling AI, Higgsfield, Seedance and ComfyUI node workflows, latent consistency models.</li>
+              <li><strong>Productionisation:</strong> Studio.AI platform, controlled generation workflows supporting character and visual continuity, artist-facing controls and ACES colour conforming.</li>
+            </ul>
+          </div>
+
+          <!-- 2. AI Production Architecture -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-pink">AI Architecture</span>
+              <h3>🧠 AI Production Architecture</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>AI Production Architecture:</strong> Multi-model workflow integration, artist-facing controls, structured prompt routing, production ingest and editorial integration.</li>
+              <li><strong>Creative Production Systems:</strong> Connecting generative AI outputs with established VFX, review, colour and production workflows.</li>
+            </ul>
+          </div>
+
+          <!-- 3. Engineering Leadership & Delivery -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-orange">Leadership</span>
+              <h3>👥 Engineering Leadership &amp; Delivery</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>Team &amp; Technical Leadership:</strong> Leading R&amp;D software engineering, development, and TD teams across London, Montreal, and Bengaluru.</li>
+              <li><strong>Production Execution:</strong> Translating creative requirements into technical systems, taking R&amp;D technologies into production, Agile/Scrum delivery.</li>
+            </ul>
+          </div>
+
+          <!-- 4. VFX Production Systems & DCC APIs -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-teal">Production Systems</span>
+              <h3>🎥 VFX Production Systems &amp; DCC APIs</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>Review &amp; Assembly:</strong> ReviewTool (real-time 4K+ media caching &amp; multi-facility synchronisation), ProNuke modular shot assembly, Meshroom photogrammetry.</li>
+              <li><strong>DCC &amp; Studio APIs:</strong> Nuke C++/Python API, Maya Python API, Hiero / Nuke Studio Python API, ShotGrid Python API, 3D Equalizer, Silhouette.</li>
+            </ul>
+          </div>
+
+          <!-- 5. Agentic AI & MCP Systems -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-violet">Agentic &amp; MCP</span>
+              <h3>🔌 Agentic AI &amp; MCP Systems</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>Model Context Protocol:</strong> Custom MCP server engineering, JSON-RPC 2.0, tool/resource schemas and pipeline API binding.</li>
+              <li><strong>Agentic Workflows:</strong> Claude Code, OpenAI Codex, Google Antigravity, subagent orchestration, task decomposition and multi-step tool workflows.</li>
+            </ul>
+          </div>
+
+          <!-- 6. Private / On-Premise AI -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-amber">Private AI</span>
+              <h3>🔒 Private / On-Premise AI</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>Local Inference:</strong> Ollama, air-gapped studio inference, local private LLM deployments, GGUF / AWQ quantisation, context-window optimisation.</li>
+              <li><strong>Secure Endpoints:</strong> Secure internal AI endpoints designed to keep sensitive studio data within controlled infrastructure and reduce exposure to public AI services.</li>
+            </ul>
+          </div>
+
+          <!-- 7. OpenUSD Production Architecture -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-emerald">OpenUSD</span>
+              <h3>📦 OpenUSD Production Architecture</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>USD Architecture:</strong> OpenUSD (USD Python API, composition arcs, layer stacking, edit targets, sublayering), full-CG &amp; live-action shot pipelines.</li>
+              <li><strong>Colour &amp; Timeline Standards:</strong> OpenColorIO (OCIO), ACES colour pipeline, OpenTimelineIO (OTIO) sequence interchange.</li>
+            </ul>
+          </div>
+
+          <!-- 8. Editorial Turnover, Conform & I/O -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-coral">Conform &amp; I/O</span>
+              <h3>🎞️ Editorial Turnover, Conform &amp; I/O</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>Conform &amp; Turnover:</strong> Package inspection, automated DI discrepancy reporting, regex pattern generation, multi-track Hiero conform.</li>
+              <li><strong>Grade &amp; Asset Processing:</strong> CDL grades, shot LUT processing, frame range validation, USD plate sublayering.</li>
+            </ul>
+          </div>
+
+          <!-- 9. Core Software & Systems Architecture -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-cyan">Core Systems</span>
+              <h3>🐍 Core Software &amp; Systems Architecture</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>Languages &amp; UI:</strong> Python 3.x (Expert), PyQt / PySide (UI/UX engineering), C++, Java, Objective-C, Cocoa, shell scripting.</li>
+              <li><strong>Infrastructure:</strong> Docker, Linux/Unix environments, REST APIs, FastAPI, Git, Tractor render farm management &amp; dispatching.</li>
+            </ul>
+          </div>
+
+          <!-- 10. Production Automation & Integration -->
+          <div class="cv-skill-box">
+            <div class="cv-skill-header">
+              <span class="cv-skill-badge badge-lime">Automation</span>
+              <h3>⚡ Production Automation &amp; Integration</h3>
+            </div>
+            <ul class="cv-skill-list">
+              <li><strong>n8n Workflow Hub:</strong> Inbound webhooks, reverse webhooks, asynchronous event routing, production API synchronisation.</li>
+              <li><strong>Event Automation:</strong> Automated show onboarding, smart plate validation, automated ShotGrid metadata injection.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <hr class="cv-divider cv-page-break-divider" />
+
+      <!-- =====================================================================
+           PAGE 2: COMPLETE PROFESSIONAL EXPERIENCE (7 ROLES)
+           ===================================================================== -->
+      <section class="cv-section cv-section-experience">
+        <h2 class="cv-section-title">
+          <span class="cv-sec-icon">💼</span> Professional Experience
+        </h2>
+        <div class="cv-timeline-rail">
+
+          <!-- Role 1: Astra Studios -->
+          <div class="cv-timeline-item">
+            <div class="cv-job cv-job-highlight">
+              <div class="cv-job-header">
+                <div>
+                  <div class="cv-featured-pill">CURRENT LEADERSHIP ROLE</div>
+                  <h3 class="cv-job-title">Lead Software Architect</h3>
+                  <div class="cv-company-location">Astra Studios &bull; London, UK</div>
+                  <div class="cv-job-focus">Focus: Generative AI, Creative Systems &amp; Production Technology</div>
+                </div>
+                <div class="cv-job-period">Sep 2025 &ndash; Present</div>
+              </div>
+              <div class="cv-achievements">
+                <ul class="cv-bullet-list">
+                  <li><strong>Engineering &amp; Technical Leadership:</strong> Lead Development and TD teams, defining production technology architecture and engineering standards while working directly with artists, production, supervisors and leadership to translate creative requirements into scalable technical systems.</li>
+                  <li><strong>Studio.AI GenAI Platform &amp; Video Workflows:</strong> Engineered the Studio.AI generative platform from architecture to production, integrating prompt-to-video engines (Google Veo, Kling AI, Higgsfield, Seedance and ComfyUI node workflows) with character identity consistency, artist-facing controls, and ACES colour conforming.</li>
+                  <li><strong>Production VFX &amp; OpenUSD Pipeline:</strong> Architected an end-to-end production-grade OpenUSD pipeline bridging DCCs (Maya, Nuke) from modelling to compositing for full-CG and live-action VFX.</li>
+                  <li><strong>Editorial Turnover, Conform &amp; I/O:</strong> Engineered the studio's Editorial Turnover, Conform &amp; I/O pipeline from scratch, integrating turnover package inspection, automated DI discrepancy reporting, regex pattern generation, multi-track Hiero conform, CDL grades, shot LUTs, and USD plate sublayering.</li>
+                  <li><strong>Zero-Touch Studio Automation:</strong> Orchestrated zero-touch n8n studio automation hubs using inbound and reverse webhooks for automated show onboarding, smart plate validation, and ShotGrid metadata injection.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role 2: Technicolor Group (London) -->
+          <div class="cv-timeline-item">
+            <div class="cv-job">
+              <div class="cv-job-header">
+                <div>
+                  <h3 class="cv-job-title">R&amp;D Supervisor</h3>
+                  <div class="cv-company-location">Technicolor Group &bull; London, UK</div>
+                </div>
+                <div class="cv-job-period">Mar 2023 &ndash; Feb 2025</div>
+              </div>
+              <div class="cv-achievements">
+                <ul class="cv-bullet-list">
+                  <li><strong>Global Review Platform Architecture:</strong> Spearheaded the architecture and productionisation of ReviewTool, a studio-wide VFX review platform with real-time 4K+ media caching, multi-facility synchronisation and RV integration supporting distributed production workflows across global studios.</li>
+                  <li><strong>ProNuke Modular Ecosystem:</strong> Engineered ProNuke modular shot assembly with Gather UI for automated shot builds, Release UI for sequence-level publishing, and Batch Manager bulk render automation across global artist teams.</li>
+                  <li><strong>Meshroom Photogrammetry in Production:</strong> Productionised Meshroom into matchmove and tracking workflows, cutting camera extraction turnaround from days to hours with fast switching between Meshroom, Maya, and 3D Equalizer.</li>
+                  <li><strong>Global R&amp;D Leadership:</strong> Led globally distributed R&amp;D software engineering teams across London, Montreal, and Bengaluru supporting Compositing, Roto, Paint Prep, Camera Tracking, and Rotoanim departments.</li>
+                  <li><strong>Conform Ingest Automation:</strong> Supervised Conform Ingest workflows using Hiero and Nuke Studio, automated CDL and LUT grade processing, and ShotGrid frame range validation.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role 3: Technicolor Group (Bengaluru) -->
+          <div class="cv-timeline-item">
+            <div class="cv-job">
+              <div class="cv-job-header">
+                <div>
+                  <h3 class="cv-job-title">R&amp;D Supervisor</h3>
+                  <div class="cv-company-location">Technicolor Group &bull; Bengaluru, India</div>
+                </div>
+                <div class="cv-job-period">Jan 2022 &ndash; Feb 2023</div>
+              </div>
+              <div class="cv-achievements">
+                <ul class="cv-bullet-list">
+                  <li><strong>2D Software Engineering:</strong> Headed 2D software engineering and pipeline development across Bengaluru and Montreal hubs.</li>
+                  <li><strong>Review Platform Prototyping:</strong> Architected core compositing automation tools and early prototypes of the studio VFX review platform (ReviewTool).</li>
+                  <li><strong>Agile Execution:</strong> Mentored engineers, established Agile and Scrum sprint frameworks, and aligned dev priorities with production executives.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role 4: MPC Film -->
+          <div class="cv-timeline-item">
+            <div class="cv-job">
+              <div class="cv-job-header">
+                <div>
+                  <h3 class="cv-job-title">Lead Pipeline Software Developer</h3>
+                  <div class="cv-company-location">MPC Film &bull; Bengaluru, India</div>
+                </div>
+                <div class="cv-job-period">Jul 2017 &ndash; Dec 2021</div>
+              </div>
+              <div class="cv-achievements">
+                <ul class="cv-bullet-list">
+                  <li><strong>Landmark Production Pipelines:</strong> Led core 2D pipeline solutions across Academy Award-winning films and global tentpole productions (1917, RRR, The Lion King).</li>
+                  <li><strong>Cross-Studio Platform Standardisation:</strong> Spearheaded RPM Unification across MPC, MR.X and The Mill, consolidating and standardising software toolsets and UI/UX across compositing and tracking workflows to improve technical consistency across multiple studio environments.</li>
+                  <li><strong>Nuke Bridge Hub:</strong> Developed Nuke Bridge integrating Tessa (AMS), ShotGrid (PMS), and Tractor (Render Farm), establishing a version-controlled, high-throughput pipeline.</li>
+                  <li><strong>Render Dispatcher:</strong> Engineered the Nuke Render Dispatcher with automated render order traversal and Reserve &amp; Commit dispatch mechanics.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role 5: Technicolor R&D / Technology -->
+          <div class="cv-timeline-item">
+            <div class="cv-job">
+              <div class="cv-job-header">
+                <div>
+                  <h3 class="cv-job-title">Team Lead &ndash; Technology &amp; R&amp;D Production</h3>
+                  <div class="cv-company-location">Technicolor &bull; Bengaluru, India</div>
+                </div>
+                <div class="cv-job-period">Jul 2012 &ndash; Jun 2017</div>
+              </div>
+              <div class="cv-achievements">
+                <ul class="cv-bullet-list">
+                  <li><strong>Media Engines:</strong> Architected macOS AVFoundation and QuickTime media processing engines (Channel Mapper, Frame Rate Converter, Compliance Edit Lists).</li>
+                  <li><strong>Team Management:</strong> Managed an engineering team of 7 developers across C++, Objective-C, Cocoa, and Java, optimising production compression and authoring pipelines.</li>
+                  <li><strong>Hardware Compliance:</strong> Served as primary technical contact for player manufacturers, resolving Blu-ray authoring framework and playback compatibility issues.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role 6: Technicolor International Collaboration -->
+          <div class="cv-timeline-item">
+            <div class="cv-job">
+              <div class="cv-job-header">
+                <div>
+                  <h3 class="cv-job-title">Senior Software Engineer &ndash; Technology</h3>
+                  <div class="cv-company-location">Technicolor &bull; Bengaluru, India &bull; Los Angeles, USA &bull; Hannover, Germany</div>
+                </div>
+                <div class="cv-job-period">May 2008 &ndash; Jun 2012</div>
+              </div>
+              <div class="cv-achievements">
+                <ul class="cv-bullet-list">
+                  <li><strong>Disney Collaboration (Los Angeles):</strong> Collaborated on-site with Disney engineering in Los Angeles to architect the Fast Menu Load (FML) template and integrate Generation 2 Bootloaders (G2B).</li>
+                  <li><strong>World First 3D Blu-ray (Hannover):</strong> Engineered core 3D capabilities into the BD-J Authoring framework at Technicolor R&amp;I in Hannover, Germany, as a key contributor to the world's first released 3D Blu-ray disc.</li>
+                  <li><strong>Founding Engineer:</strong> Founding software engineer at Technicolor India, building runtime alignment engines ('Graphics Adjuster') and studio authoring templates.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role 7: e4e & Dhruva Interactive -->
+          <div class="cv-timeline-item">
+            <div class="cv-job">
+              <div class="cv-job-header">
+                <div>
+                  <h3 class="cv-job-title">Application Engineer &amp; Game Programmer</h3>
+                  <div class="cv-company-location">e4e &amp; Dhruva Interactive &bull; Bengaluru, India</div>
+                </div>
+                <div class="cv-job-period">Sep 2006 &ndash; Apr 2008</div>
+              </div>
+              <div class="cv-achievements">
+                <ul class="cv-bullet-list">
+                  <li>Ported mobile game titles to Nokia, Motorola, Samsung, and Sony Ericsson devices for T-Mobile and Verizon; engineered touchscreen interfaces for early mobile OS platforms.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <hr class="cv-divider cv-page-break-divider" />
+
+      <!-- =====================================================================
+           PAGE 3: EXCLUSIVELY SUPPORTING CREDENTIALS
+           ===================================================================== -->
+      <section class="cv-section cv-section-supporting">
+        <h2 class="cv-section-title">
+          <span class="cv-sec-icon">🏆</span> Honours, Awards &amp; Fellowship
+        </h2>
+        <div class="awards-grid" style="margin-top: 0.5rem;">
+          <!-- Fellowship Card (Left) -->
+          <div class="awards-card fellowship-theme">
+            <div class="awards-card-header">
+              <div class="awards-card-title-group">
+                <div class="card-icon icon-cyan" style="width: 32px; height: 32px; font-size: 1.0rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                    </path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 style="font-size: 0.95rem;">Technicolor Fellowship Network</h3>
+                  <div class="awards-card-subtitle" style="font-size: 0.74rem;">Associate Member &bull; Technicolor Group</div>
+                </div>
+              </div>
+              <span class="award-badge-pill pill-cyan">2015 &ndash; 2025</span>
+            </div>
+
+            <div class="awards-quote-box" style="font-size: 0.76rem; line-height: 1.4; margin: 0.4rem 0;">
+              &ldquo;Awarded for production environment expertise, strong customer relationships, and deep collaboration with Research &amp; Innovation&mdash;delivering a rare mix of creativity, pragmatism, and architectural stewardship.&rdquo;
+              <span class="awards-quote-author" style="font-size: 0.72rem;">&mdash; Fellowship Nomination Committee &bull; Mar 2015</span>
+            </div>
+
+            <div class="card-tags" style="margin-top: auto; display: flex; flex-wrap: wrap; gap: 0.3rem;">
+              <span class="pill" style="font-size: 0.68rem; padding: 0.12rem 0.45rem;">Fellowship Committee Election</span>
+              <span class="pill" style="font-size: 0.68rem; padding: 0.12rem 0.45rem;">R&amp;I Collaboration</span>
+              <span class="pill" style="font-size: 0.68rem; padding: 0.12rem 0.45rem;">Architectural Leadership</span>
+            </div>
+          </div>
+
+          <!-- Studio Excellence Awards Card (Right) -->
+          <div class="awards-card studio-theme">
+            <div class="awards-card-header">
+              <div class="awards-card-title-group">
+                <div class="card-icon icon-amber" style="width: 32px; height: 32px; font-size: 1.0rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="8" r="7"></circle>
+                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <h3 style="font-size: 0.95rem;">Studio Leadership &amp; Excellence</h3>
+                  <div class="awards-card-subtitle" style="font-size: 0.74rem;">9+ Honours &bull; Technicolor, MPC Film &amp; e4e</div>
+                </div>
+              </div>
+              <span class="award-badge-pill pill-amber">2008 &ndash; 2024</span>
+            </div>
+
+            <div class="awards-mini-list" style="margin: 0.4rem 0; gap: 0.35rem;">
+              <div class="awards-mini-item" style="font-size: 0.75rem; line-height: 1.35;">
+                <span class="award-item-icon">🏆</span>
+                <div><strong>Value Champions &amp; Best Employee of the Month (Aug 2019)</strong> &mdash; <em>Technicolor FEV</em></div>
+              </div>
+              <div class="awards-mini-item" style="font-size: 0.75rem; line-height: 1.35;">
+                <span class="award-item-icon">🎖️</span>
+                <div><strong>Performer of the Quarter &bull; Team Lead (Oct 2016)</strong> &mdash; <em>Technology R&amp;D leadership</em></div>
+              </div>
+              <div class="awards-mini-item" style="font-size: 0.75rem; line-height: 1.35;">
+                <span class="award-item-icon">⭐</span>
+                <div><strong>Performer of the Quarter (2011, 2012, 2014)</strong> &mdash; <em>Disney collaboration &amp; pipeline innovation</em></div>
+              </div>
+              <div class="awards-mini-item" style="font-size: 0.75rem; line-height: 1.35;">
+                <span class="award-item-icon">⚡</span>
+                <div><strong>Extra Miler &amp; Executive Team Awards (2011, 2013)</strong> &mdash; <em>DVD/Blu-ray software</em></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cv-divider" />
+
+      <!-- =====================================================================
+           PAGE 3: RECENT AI PROFESSIONAL DEVELOPMENT
+           ===================================================================== -->
+      <section class="cv-section">
+        <h2 class="cv-section-title">
+          <span class="cv-sec-icon">💡</span> Recent AI Professional Development
+        </h2>
+        <div class="cv-prof-dev-container" style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 0.4rem;">
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.25rem; font-size: 0.82rem;">
+              <div>
+                <strong>AI Generalist Accelerator Program</strong> &bull; <span style="color: #64748b;">Generative AI Business Applications, Outskill (Aug 2026)</span>
+              </div>
+              <a href="https://rajeev-mutyalu.github.io/portfolio-website/docs/Rajeev-Mutyalu-AI-Generalist-certificate.pdf" target="_blank" rel="noopener" style="font-size: 0.72rem; color: #0284c7; text-decoration: none; font-weight: 600;">
+                [View Certificate ↗]
+              </a>
+            </div>
+            <div style="font-size: 0.74rem; color: #475569; line-height: 1.35; margin-top: 0.15rem;">
+              Workflow automation (n8n), custom Model Context Protocol (MCP) tooling, agentic architectures, and prompt engineering.
+            </div>
+          </div>
+
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.25rem; font-size: 0.82rem;">
+              <div>
+                <strong>AI Accelerator C13 Hackathon</strong> &bull; <span style="color: #64748b;">2-Day Innovation Challenge, Outskill (Aug 2026)</span>
+              </div>
+              <a href="https://rajeev-mutyalu.github.io/portfolio-website/docs/Rajeev-Mutyalu-hackathon-certificate.pdf" target="_blank" rel="noopener" style="font-size: 0.72rem; color: #0284c7; text-decoration: none; font-weight: 600;">
+                [View Award ↗]
+              </a>
+            </div>
+            <div style="font-size: 0.74rem; color: #475569; line-height: 1.35; margin-top: 0.15rem;">
+              Rapid prototyping, agent system architecture, and production deployment of generative AI application workflows.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cv-divider" />
+
+      <!-- =====================================================================
+           PAGE 3: EDUCATION & ACADEMIC BACKGROUND
+           ===================================================================== -->
+      <section class="cv-section">
+        <h2 class="cv-section-title">
+          <span class="cv-sec-icon">🎓</span> Education &amp; Academic Background
+        </h2>
+        <div class="cv-education-grid">
+          <div class="cv-edu-card">
+            <div class="cv-edu-details">
+              <h3 class="cv-job-title">Bachelor of Technology (B.Tech) &bull; Computer Science &amp; Engineering</h3>
+              <div class="cv-edu-institution">Jawaharlal Nehru Technological University (JNTU) &bull; Sri Venkateswara College of Engineering &amp; Technology (SVCET)</div>
+            </div>
+            <div class="cv-edu-year">2002 &ndash; 2006</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Interactive Scripts (Screen Only) -->
+  <script>
+    const themeBtn = document.getElementById('cvThemeToggle');
+    const themeText = document.getElementById('cvThemeText');
+    const body = document.body;
+
+    function applyTheme(theme) {
+      if (theme === 'light') {
+        body.classList.add('cv-theme-light');
+        body.classList.remove('cv-theme-dark');
+        if (themeText) themeText.innerHTML = '<span class="btn-text-full">🌈 Switch to Colorful Mode</span><span class="btn-text-short">🌈 Colorful</span>';
+      } else {
+        body.classList.remove('cv-theme-light');
+        body.classList.add('cv-theme-dark');
+        if (themeText) themeText.innerHTML = '<span class="btn-text-full">📄 Switch to Plain B&amp;W</span><span class="btn-text-short">📄 B&amp;W</span>';
+      }
+    }
+    applyTheme('dark');
+
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        applyTheme(body.classList.contains('cv-theme-light') ? 'dark' : 'light');
+      });
+    }
+
+    // 📋 Robust Copy Helper (Works across https://, http://, and file:///)
+    function copyTextToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+      }
+      return fallbackCopy(text);
+    }
+
+    function fallbackCopy(text) {
+      return new Promise((resolve, reject) => {
+        try {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.left = '-9999px';
+          textarea.style.top = '-9999px';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          const successful = document.execCommand('copy');
+          document.body.removeChild(textarea);
+          if (successful) resolve();
+          else reject(new Error('execCommand copy failed'));
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    const printCvBtn = document.getElementById('printCvBtn');
+    if (printCvBtn) {
+      printCvBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const originalTitle = document.title;
+        document.title = 'Rajeev-Mutyalu-AI-GenAI-Systems-Architect-CV';
+        window.print();
+        setTimeout(() => { document.title = originalTitle; }, 1200);
+      });
+    }
+
+    const copyAtsBtn = document.getElementById('copyAtsBtn');
+    const copyAtsText = document.getElementById('copyAtsText');
+    if (copyAtsBtn) {
+      copyAtsBtn.addEventListener('click', () => {
+        const ats = `RAJEEV MUTYALU
+AI Workflows Architect & Creative Technology Lead | VFX & GenAI Systems Architect
+Location: London, United Kingdom | Phone: +44 7827 498399 | Email: mutyalu.rajeev@gmail.com
+Portfolio: https://rajeev-mutyalu.github.io/portfolio-website/
+LinkedIn: https://www.linkedin.com/in/rajeevmuthyalu/ | GitHub: https://github.com/rajeev-mutyalu
+UK Work Authorisation: UK Skilled Worker Visa • Existing Sponsorship in Place • Available Immediately
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+AI Workflows Architect, Creative Technology Lead and former Technicolor R&D Supervisor with 20+ years of experience across VFX production technology, software architecture, creative engineering and global engineering leadership. Currently architecting Generative AI production systems at Astra Studios, including the Studio.AI platform integrating Google Veo, Kling AI, Higgsfield, Seedance and ComfyUI node workflows with character identity consistency, artist-facing controls and ACES colour conforming.
+
+Combines emerging generative video technology with established filmmaking workflows, DCC APIs including Nuke, Maya and Hiero, production-grade OpenUSD systems, event-driven automation and private AI infrastructure. Proven track record of taking emerging technologies from R&D into production, including ReviewTool, ProNuke, Meshroom photogrammetry, Editorial Turnover / Conform systems and modern AI-enabled production workflows across major productions including 1917 (Academy Award for Best Visual Effects), RRR, Mufasa: The Lion King, Back in Action, Spaceman, and Prehistoric Planet. Associate Member of the Technicolor Fellowship Network Committee and recipient of 9+ studio leadership & excellence awards.
+
+================================================================================
+ARCHITECTURE & TECHNICAL COMPETENCIES
+================================================================================
+• Generative AI Platforms & Workflows: Google Veo, Kling AI, Higgsfield, Seedance and ComfyUI node workflows, latent consistency models; Studio.AI platform, controlled generation workflows supporting character and visual continuity, artist-facing controls, ACES colour conforming.
+• AI Production Architecture: Multi-model workflow integration, artist-facing controls, structured prompt routing, production ingest and editorial integration; Connecting generative AI outputs with established VFX, review, colour and production workflows.
+• Engineering Leadership & Delivery: Leading R&D software engineering, development, and TD teams across London, Montreal, Bengaluru; Translating creative requirements into technical systems, taking R&D technologies into production, Agile/Scrum delivery.
+• VFX Production Systems & DCC APIs: ReviewTool (real-time 4K+ media caching & multi-facility synchronisation), ProNuke modular shot assembly, Meshroom photogrammetry integration, Nuke C++/Python API, Maya Python API, Hiero / Nuke Studio Python API, ShotGrid Python API, 3D Equalizer, Silhouette.
+• Agentic AI & MCP Systems: Custom MCP server engineering, JSON-RPC 2.0 protocol implementation, tool & resource schemas, pipeline API binding; Claude Code, OpenAI Codex, Google Antigravity, subagent orchestration, task decomposition and multi-step tool workflows.
+• Private / On-Premise AI: Ollama, air-gapped studio inference, local private LLM deployments, GGUF / AWQ quantisation, context-window optimisation; Secure internal AI endpoints designed to keep sensitive studio data within controlled infrastructure and reduce exposure to public AI services.
+• OpenUSD Production Architecture: OpenUSD (USD Python API, composition arcs, layer stacking, edit targets, sublayering), full-CG & live-action shot pipelines, OpenColorIO (OCIO), ACES colour pipeline, OpenTimelineIO (OTIO) sequence interchange.
+• Editorial Turnover, Conform & I/O: Turnover package inspection, automated DI discrepancy reporting, regex pattern generation, multi-track Hiero / Nuke Studio conform, CDL grades, shot LUT processing, USD plate sublayering.
+• Core Software & Systems Architecture: Python 3.x (Expert), PyQt / PySide (UI/UX engineering), C++, Java, Objective-C, Cocoa, shell scripting, Docker, Linux/Unix, REST APIs, FastAPI, Git, Tractor render farm.
+• Production Automation & Integration: n8n workflow automation hub, inbound & reverse webhooks, asynchronous event routing, production API synchronisation, automated show onboarding, smart plate validation, automated ShotGrid metadata injection.
+
+================================================================================
+PROFESSIONAL EXPERIENCE
+================================================================================
+ASTRA STUDIOS — London, UK
+Lead Software Architect | Sep 2025 – Present
+Focus: Generative AI, Creative Systems & Production Technology
+• Engineering & Technical Leadership: Lead Development and TD teams, defining production technology architecture and engineering standards while working directly with artists, production, supervisors and leadership to translate creative requirements into scalable technical systems.
+• Studio.AI GenAI Platform & Video Workflows: Engineered the Studio.AI generative platform from architecture to production, integrating prompt-to-video engines (Google Veo, Kling AI, Higgsfield, Seedance and ComfyUI node workflows) with character identity consistency, artist-facing controls, and ACES colour conforming.
+• Production VFX & OpenUSD Pipeline: Architected an end-to-end production-grade OpenUSD pipeline bridging DCCs (Maya, Nuke) from modelling to compositing for full-CG and live-action VFX.
+• Editorial Turnover, Conform & I/O: Engineered the studio's Editorial Turnover, Conform & I/O pipeline from scratch, integrating turnover package inspection, automated DI discrepancy reporting, regex pattern generation, multi-track Hiero conform, CDL grades, shot LUTs, and USD plate sublayering.
+• Zero-Touch Studio Automation: Orchestrated zero-touch n8n studio automation hubs using inbound and reverse webhooks for automated show onboarding, smart plate validation, and ShotGrid metadata injection.
+
+TECHNICOLOR GROUP — London, UK
+R&D Supervisor | Mar 2023 – Feb 2025
+• Global Review Platform Architecture: Spearheaded the architecture and productionisation of ReviewTool, a studio-wide VFX review platform with real-time 4K+ media caching, multi-facility synchronisation and RV integration supporting distributed production workflows across global studios.
+• ProNuke Modular Ecosystem: Engineered ProNuke modular shot assembly with Gather UI for automated shot builds, Release UI for sequence-level publishing, and Batch Manager bulk render automation across global artist teams.
+• Meshroom Photogrammetry in Production: Productionised Meshroom into matchmove and tracking workflows, cutting camera extraction turnaround from days to hours with fast switching between Meshroom, Maya, and 3D Equalizer.
+• Global R&D Leadership: Led globally distributed R&D software engineering teams across London, Montreal, and Bengaluru supporting Compositing, Roto, Paint Prep, Camera Tracking, and Rotoanim departments.
+• Conform Ingest Automation: Supervised Conform Ingest workflows using Hiero and Nuke Studio, automated CDL and LUT grade processing, and ShotGrid frame range validation.
+
+TECHNICOLOR GROUP — Bengaluru, India
+R&D Supervisor | Jan 2022 – Feb 2023
+• 2D Software Engineering: Headed 2D software engineering and pipeline development across Bengaluru and Montreal hubs.
+• Review Platform Prototyping: Architected core compositing automation tools and early prototypes of the studio VFX review platform (ReviewTool).
+• Agile Execution: Mentored engineers, established Agile and Scrum sprint frameworks, and aligned dev priorities with production executives.
+
+MPC FILM — Bengaluru, India
+Lead Pipeline Software Developer | Jul 2017 – Dec 2021
+• Landmark Production Pipelines: Led core 2D pipeline solutions across Academy Award-winning films and global tentpole productions (1917, RRR, The Lion King).
+• Cross-Studio Platform Standardisation: Spearheaded RPM Unification across MPC, MR.X and The Mill, consolidating and standardising software toolsets and UI/UX across compositing and tracking workflows to improve technical consistency across multiple studio environments.
+• Nuke Bridge Hub: Developed Nuke Bridge integrating Tessa (AMS), ShotGrid (PMS), and Tractor (Render Farm), establishing a version-controlled, high-throughput pipeline.
+• Render Dispatcher: Engineered the Nuke Render Dispatcher with automated render order traversal and Reserve & Commit dispatch mechanics.
+
+TECHNICOLOR — Bengaluru, India
+Team Lead – Technology & R&D Production | Jul 2012 – Jun 2017
+• Media Engines: Architected macOS AVFoundation and QuickTime media processing engines (Channel Mapper, Frame Rate Converter, Compliance Edit Lists).
+• Team Management: Managed an engineering team of 7 developers across C++, Objective-C, Cocoa, and Java, optimising production compression and authoring pipelines.
+• Hardware Compliance: Primary technical contact for player manufacturers, resolving Blu-ray authoring framework and playback compatibility issues.
+
+TECHNICOLOR — Bengaluru, India / Los Angeles, USA / Hannover, Germany
+Senior Software Engineer – Technology | May 2008 – Jun 2012
+• Disney Collaboration (Los Angeles): Collaborated on-site with Disney engineering in Los Angeles to architect Fast Menu Load (FML) template and integrate Generation 2 Bootloaders (G2B).
+• World First 3D Blu-ray (Hannover): Engineered core 3D capabilities into BD-J Authoring framework at Technicolor R&I in Hannover, Germany, as a key contributor to the world's first released 3D Blu-ray disc.
+• Founding Engineer: Founding software engineer at Technicolor India, building runtime alignment engines ('Graphics Adjuster') and studio authoring templates.
+
+E4E & DHRUVA INTERACTIVE — Bengaluru, India
+Application Engineer & Game Programmer | Sep 2006 – Apr 2008
+• Ported mobile game titles to Nokia, Motorola, Samsung, and Sony Ericsson devices for T-Mobile and Verizon; engineered touchscreen interfaces for early mobile OS platforms.
+
+================================================================================
+MAJOR FILM & TENTPOLE CREDITS
+================================================================================
+• 1917 (2019) — Academy Award Winner: Best Visual Effects
+• RRR (2022) — Global Landmark Feature Production
+• Mufasa: The Lion King (2024) — Disney Live-Action Tentpole
+• Back in Action (2025) — Netflix Feature Production
+• Spaceman (2024) — Sci-Fi Feature Production
+• Prehistoric Planet (2022–2023) — Apple TV+ Natural History Landmark Series
+
+================================================================================
+HONOURS & FELLOWSHIPS
+================================================================================
+• Technicolor Fellowship Network: Associate Member, Technology & Innovation Network Committee (2015 – 2025)
+• Studio Leadership & Excellence: 9+ Honours across Technicolor, MPC Film & e4e (Best Employee of the Month, Performer of the Quarter, Extra Miler).
+
+================================================================================
+RECENT AI PROFESSIONAL DEVELOPMENT
+================================================================================
+• AI Generalist Accelerator Program — Outskill (Aug 2026)
+  Workflow automation (n8n), custom Model Context Protocol (MCP) tooling, agentic architectures, and prompt engineering.
+• AI Accelerator C13 Hackathon 2026 [2-Day Innovation Challenge] — Outskill (Aug 2026)
+  Rapid prototyping, agent system architecture, and production deployment of generative AI applications.
+
+================================================================================
+EDUCATION
+================================================================================
+Bachelor of Technology (B.Tech) in Computer Science & Engineering (2002 – 2006)
+Jawaharlal Nehru Technological University (JNTU) / SVCET
+`;
+        copyTextToClipboard(ats).then(() => {
+          copyAtsText.innerHTML = '<span class="btn-text-full">✅ Copied!</span><span class="btn-text-short">✅ Copied!</span>';
+          setTimeout(() => { copyAtsText.innerHTML = '<span class="btn-text-full">📋 Copy ATS Text</span><span class="btn-text-short">📋 ATS</span>'; }, 2500);
+        }).catch(err => {
+          console.error('Failed to copy ATS text:', err);
+        });
+      });
+    }
+
+    const copyContactBtn = document.getElementById('copyContactBtn');
+    if (copyContactBtn) {
+      copyContactBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        copyTextToClipboard('mutyalu.rajeev@gmail.com | +44 7827 498399').then(() => {
+          document.getElementById('copyBtnText').innerHTML = '<span class="btn-text-full">Copied!</span>';
+          setTimeout(() => { document.getElementById('copyBtnText').innerHTML = '<span class="btn-text-full">Copy Email</span>'; }, 2500);
+        }).catch(err => {
+          console.error('Failed to copy email:', err);
+        });
+      });
+    }
+  </script>
+</body>
+
+</html>

@@ -4013,12 +4013,12 @@
     if (btnTestEscort) {
       btnTestEscort.addEventListener('click', () => {
         if (chatStatusText) {
-          chatStatusText.innerHTML = '🚀 <strong>ESCORT FLIGHT!</strong> Charlie escorting user to <em>#Technical-Arsenal</em>...';
+          chatStatusText.innerHTML = '🚀 <strong>ESCORT FLIGHT!</strong> Charlie escorting user to <em>#Architecture-Capabilities</em>...';
         }
         sound.playJump();
         charlie.state = 'run';
         charlie.face = 'sprint';
-        charlie.setEmote('ESCORTING TO ARSENAL! 🚀', 110);
+        charlie.setEmote('ESCORTING TO CAPABILITIES! 🚀', 110);
         const startX = charlie.x > -200 ? charlie.x : canvas.clientWidth - 70;
         const startY = charlie.y > -200 ? charlie.y : canvas.clientHeight - 70;
         const destX = canvas.clientWidth * 0.70;
@@ -4041,7 +4041,7 @@
           } else {
             charlie.state = 'victory';
             charlie.face = 'victory';
-            charlie.setEmote('ARRIVED AT ARSENAL! 🌟', 90);
+            charlie.setEmote('ARRIVED AT CAPABILITIES! 🌟', 90);
             addSparks(charlie.x, charlie.y, '#f59e0b', 26);
             addSparks(charlie.x, charlie.y, '#00f2fe', 20);
             sound.playFanfare();

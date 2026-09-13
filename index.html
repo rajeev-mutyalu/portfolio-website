@@ -94,7 +94,7 @@
       </a>
 
       <nav class="nav-links">
-        <a href="#initiatives" class="nav-link">Arsenal</a>
+        <a href="#initiatives" class="nav-link">Capabilities</a>
         <a href="#architecture" class="nav-link">Architecture</a>
         <a href="#conform" class="nav-link">Turnover &amp; Conform</a>
         <a href="#films" class="nav-link">Credits</a>
@@ -148,15 +148,15 @@
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-content">
-        <div class="mobile-nav-group-title">CURRICULUM VITAE TRACKS</div>
-        <a href="cv.html?track=ai" class="mobile-nav-link cv-highlight-link">
+        <div class="mobile-nav-group-title mobile-nav-cv-header">CURRICULUM VITAE TRACKS</div>
+        <a href="cv.html?track=ai" class="mobile-nav-link cv-highlight-link mobile-nav-cv-track">
           <span>⚡ AI &amp; Creative Technology Systems</span>
         </a>
-        <a href="cv.html?track=vfx" class="mobile-nav-link cv-highlight-link">
+        <a href="cv.html?track=vfx" class="mobile-nav-link cv-highlight-link mobile-nav-cv-track">
           <span>🎬 Production Technology &amp; Architecture</span>
         </a>
-        <div class="mobile-nav-group-title">PORTFOLIO SECTIONS</div>
-        <a href="#initiatives" class="mobile-nav-link">🚀 Technical Arsenal &amp; AI Stack</a>
+        <div class="mobile-nav-group-title mobile-nav-sections-header">PORTFOLIO SECTIONS</div>
+        <a href="#initiatives" class="mobile-nav-link">🏛️ Architecture &amp; Capabilities</a>
         <a href="#architecture" class="mobile-nav-link">🎬 Architecture Flow</a>
         <a href="#conform" class="mobile-nav-link">📦 Conform Ingest</a>
         <a href="#films" class="mobile-nav-link">🏆 Credits &amp; Filmography</a>
@@ -228,7 +228,7 @@
     </div>
   </section>
 
-  <!-- Technical Arsenal & Core Innovations Hub -->
+  <!-- Architecture & Technical Capabilities Hub -->
   <section class="section-container" id="initiatives">
     <div class="section-header">
       <div class="tag-label"
@@ -486,7 +486,7 @@
     <div class="section-header">
       <div class="tag-label"
         style="background: rgba(56, 189, 248, 0.12); color: var(--accent-cyan); border-color: rgba(56, 189, 248, 0.35);">
-        Technical Arsenal Knowledge Base</div>
+        Architecture &amp; Capabilities Knowledge Base</div>
       <h2 class="section-title">Meet Charlie — Rajeev's AI Assistant</h2>
       <p class="section-desc">Interact with Charlie, my AI assistant. Ask in-depth questions about software architecture,
         production technology, OpenUSD, studio automation, AI systems, and engineering leadership: <strong>What it is</strong>,
@@ -572,12 +572,12 @@
       <!-- Main 2-Column Split: 1/4th Left Sidebar + 3/4th Right Chat Viewport -->
       <div class="ai-bot-body-split">
 
-        <!-- Left Sidebar (1/4th): Technical Arsenal Knowledge Topics -->
+        <!-- Left Sidebar (1/4th): Technical Capabilities Knowledge Topics -->
         <aside class="ai-bot-sidebar">
           <div class="ai-sidebar-header">
-            <span class="ai-sidebar-title">⚡ ARSENAL DIRECTORY</span>
+            <span class="ai-sidebar-title">⚡ CAPABILITIES DIRECTORY</span>
             <button type="button" class="ai-sidebar-collapse-btn" id="aiSidebarCollapseBtn"
-              title="Close Arsenal Directory" aria-label="Close Arsenal Directory">
+              title="Close Capabilities Directory" aria-label="Close Capabilities Directory">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                 <polyline points="15 18 9 12 15 6"></polyline>
               </svg>
@@ -654,9 +654,9 @@
         <main class="ai-bot-main">
           <!-- Sidebar Re-Open Tab (visible when sidebar is closed) -->
           <button type="button" class="ai-sidebar-expand-tab" id="aiSidebarExpandTab"
-            title="Open Arsenal Directory" aria-label="Open Arsenal Directory">
+            title="Open Capabilities Directory" aria-label="Open Capabilities Directory">
             <span class="ai-tab-icon">⚡</span>
-            <span class="ai-tab-text">Arsenal Directory</span>
+            <span class="ai-tab-text">Capabilities Directory</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
@@ -699,7 +699,7 @@
                   <strong>Lead Software Architect, Production Technology Architect &amp; AI Systems Lead</strong> with
                   structured deep dives across architecture, production platforms, studio automation, and technical
                   leadership.<br /><br />
-                  <em>Click any topic in the Arsenal Directory on the left, try the executive links below, or type
+                  <em>Click any topic in the Capabilities Directory on the left, try the executive links below, or type
                     your own question!</em>
                 </div>
                 <div class="ai-followup-container" id="aiWelcomeFollowups">
@@ -736,9 +736,9 @@
           <form class="ai-chat-input-bar" id="aiChatForm">
             <div class="ai-input-wrapper">
               <span class="ai-input-prefix">&gt;</span>
-              <input type="text" class="ai-input-field" id="aiInputField"
+              <textarea class="ai-input-field" id="aiInputField" rows="3"
                 placeholder="Ask about Architecture, Production Technology, OpenUSD, Agentic AI, Studio Automation, or Why Hire Rajeev..."
-                autocomplete="off" spellcheck="false" />
+                autocomplete="off" spellcheck="false"></textarea>
               <button type="button" class="ai-mic-btn" id="aiChatMicBtn"
                 title="Dictate question with Microphone (Click to Speak)" aria-label="Voice Dictation">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -749,11 +749,10 @@
                 </svg>
               </button>
             </div>
-            <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send Technical Query">
-              <span>Send</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send Technical Query" title="Send (Enter)">
+              <svg class="ai-send-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
               </svg>
             </button>
           </form>
@@ -1559,7 +1558,7 @@
                 <span class="ai-mode-status-dot"></span>
               </div>
               <div class="ai-mode-name">⚡ Local Knowledge Base</div>
-              <p class="ai-mode-desc">0ms instantaneous local response. Grounded directly in Rajeev's verified portfolio &amp; technical arsenal. Zero API key required.</p>
+              <p class="ai-mode-desc">Instantaneous local response. Grounded directly in Rajeev's verified portfolio &amp; technical capabilities. Zero API key required.</p>
             </div>
           </label>
 
@@ -1722,45 +1721,50 @@
     <!-- Simulator Center Stage with Realistic Device Chassis -->
     <div class="mobile-sim-stage" id="mobileSimStage">
       <div class="sim-stage-inner" id="simStageInner">
-        <!-- Device 1: iPhone 16 Pro Max Chassis -->
-        <div class="mobile-phone-chassis" id="mobilePhoneChassis" data-device="iphone" data-orientation="portrait">
-          <div class="sim-device-header-pill">iPhone 16 Pro Max</div>
-          <!-- Chassis Hardware Buttons -->
-          <div class="chassis-button chassis-btn-silent"></div>
-          <div class="chassis-button chassis-btn-vol-up"></div>
-          <div class="chassis-button chassis-btn-vol-down"></div>
-          <div class="chassis-button chassis-btn-power"></div>
+        <div class="sim-devices-wrap" id="simDevicesWrap">
+          <!-- Device 1: Primary Device Chassis -->
+          <div class="mobile-phone-chassis" id="mobilePhoneChassis" data-device="iphone" data-orientation="portrait">
+            <div class="sim-device-header-pill" id="phoneChassisPill">iPhone 16 Pro Max (440 &times; 956)</div>
+            <!-- Chassis Hardware Buttons -->
+            <div class="chassis-button chassis-btn-silent"></div>
+            <div class="chassis-button chassis-btn-vol-up"></div>
+            <div class="chassis-button chassis-btn-vol-down"></div>
+            <div class="chassis-button chassis-btn-power"></div>
 
-          <!-- Bezel & Screen Wrapper -->
-          <div class="phone-screen-wrapper">
-            <!-- Dynamic Island / Top Camera Notch -->
-            <div class="phone-dynamic-island" id="phoneDynamicIsland" title="Dynamic Island">
-              <div class="island-camera-lens"></div>
-              <div class="island-sensor"></div>
+            <!-- Bezel & Screen Wrapper -->
+            <div class="phone-screen-wrapper">
+              <!-- Dynamic Island / Top Camera Notch (for iPhone 16 Pro Max) -->
+              <div class="phone-dynamic-island" id="phoneDynamicIsland" title="Dynamic Island">
+                <div class="island-camera-lens"></div>
+                <div class="island-sensor"></div>
+              </div>
+
+              <!-- Front Camera Dot (for Pixel / Tablet / SE) -->
+              <div class="chassis-camera-dot" id="chassisCameraDot" title="Front Camera"></div>
+
+              <!-- Live Embedded Web View (Simulates 100% Mobile Viewport) -->
+              <iframe id="mobileSimFrame" class="mobile-sim-frame" title="Mobile Portfolio Preview"
+                src="about:blank"></iframe>
+
+              <!-- Home Indicator Touch Bar -->
+              <div class="phone-home-indicator"></div>
             </div>
-
-            <!-- Live Embedded Web View (Simulates 100% Mobile Viewport) -->
-            <iframe id="mobileSimFrame" class="mobile-sim-frame" title="Mobile Portfolio Preview"
-              src="about:blank"></iframe>
-
-            <!-- Home Indicator Touch Bar -->
-            <div class="phone-home-indicator"></div>
           </div>
-        </div>
 
-        <!-- Device 2: Apple iPad Companion Chassis (Apple Duo Mode) -->
-        <div class="mobile-phone-chassis mobile-ipad-chassis hidden" id="mobileIpadChassis" data-device="ipad" data-orientation="portrait">
-          <div class="sim-device-header-pill">iPad Pro / Air (768 &times; 1024)</div>
-          <div class="phone-screen-wrapper ipad-screen-wrapper">
-            <!-- iPad Top Center Camera Sensor -->
-            <div class="ipad-camera-dot" title="Front Camera"></div>
+          <!-- Device 2: Apple iPad Companion Chassis (Apple Duo Mode) -->
+          <div class="mobile-phone-chassis mobile-ipad-chassis hidden" id="mobileIpadChassis" data-device="ipad" data-orientation="portrait">
+            <div class="sim-device-header-pill" id="ipadChassisPill">iPad Pro / Air (768 &times; 1024)</div>
+            <div class="phone-screen-wrapper ipad-screen-wrapper">
+              <!-- iPad Top Center Camera Sensor -->
+              <div class="ipad-camera-dot" title="Front Camera"></div>
 
-            <!-- Live Embedded iPad Web View -->
-            <iframe id="mobileIpadFrame" class="mobile-sim-frame" title="iPad Portfolio Preview"
-              src="about:blank"></iframe>
+              <!-- Live Embedded iPad Web View -->
+              <iframe id="mobileIpadFrame" class="mobile-sim-frame" title="iPad Portfolio Preview"
+                src="about:blank"></iframe>
 
-            <!-- iPad Home Indicator -->
-            <div class="phone-home-indicator ipad-home-indicator"></div>
+              <!-- iPad Home Indicator -->
+              <div class="phone-home-indicator ipad-home-indicator"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1844,7 +1848,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=161"></script>
+  <script src="app.js?v=163"></script>
 </body>
 
 </html>
