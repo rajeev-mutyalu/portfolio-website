@@ -772,6 +772,13 @@
                           <span class="ai-attach-menu-sub">Excel, PPT, Word, PDF, CSV, TXT</span>
                         </div>
                       </button>
+                      <button type="button" class="ai-attach-menu-item" id="aiAttachSnipOpt" role="menuitem">
+                        <span class="ai-attach-menu-icon">📸</span>
+                        <div class="ai-attach-menu-meta">
+                          <span class="ai-attach-menu-title">Screen Snipping Tool</span>
+                          <span class="ai-attach-menu-sub">Drag-to-crop any screen, VSCode, or Terminal</span>
+                        </div>
+                      </button>
                     </div>
                     <input type="file" id="aiImageFileInput" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>
                     <input type="file" id="aiDocFileInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.tsv,.json,.md,.xml,.log,.py,.js" multiple hidden>
@@ -1907,6 +1914,27 @@
       <footer class="cv-modal-footer">
         <span class="cv-footer-hint">💡 Both CV versions include Rajeev's complete 20+ year filmography (<em>1917</em>, <em>RRR</em>, <em>Mufasa</em>), engineering leadership history, and 1-click ATS-clean exports.</span>
       </footer>
+    </div>
+  <!-- Fullscreen Screen Snipping Tool Overlay -->
+  <div class="ai-snipper-overlay hidden" id="aiSnipperOverlay" role="dialog" aria-modal="true" aria-label="Screen Snipping Tool">
+    <header class="ai-snipper-topbar">
+      <div class="ai-snipper-topbar-left">
+        <span class="ai-snipper-badge">📸 SCREEN SNIPPER</span>
+        <span class="ai-snipper-hint">Click &amp; drag crosshair over any error, terminal, or code window. Press <strong>Esc</strong> to cancel.</span>
+      </div>
+      <div class="ai-snipper-topbar-right">
+        <button type="button" class="ai-snipper-btn" id="aiSnipFullBtn" title="Capture the entire captured screen/window">Capture Full Screen</button>
+        <button type="button" class="ai-snipper-btn cancel" id="aiSnipCancelBtn" title="Cancel Snipping (Esc)">✕ Cancel (Esc)</button>
+      </div>
+    </header>
+    <div class="ai-snipper-canvas-wrap" id="aiSnipperCanvasWrap">
+      <canvas id="aiSnipperCanvas"></canvas>
+      <div class="ai-snipper-selection hidden" id="aiSnipperSelection">
+        <span class="ai-snipper-dimensions" id="aiSnipperDims">0 × 0</span>
+        <div class="ai-snipper-floating-actions">
+          <button type="button" class="ai-snipper-confirm-btn" id="aiSnipConfirmBtn">✓ Snip to Chat</button>
+        </div>
+      </div>
     </div>
   </div>
 

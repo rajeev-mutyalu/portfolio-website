@@ -5022,6 +5022,312 @@
       }
     }
 
+    // =========================================================================
+    // 8a-3. In-Browser Screen Snipping & Multi-Monitor Capture Engine
+    // =========================================================================
+    let snipperRawCanvas = null;
+    let snipperRawWidth = 0;
+    let snipperRawHeight = 0;
+    let isSnippingActive = false;
+    let snipperDragStart = null;
+    let snipperCurrentCrop = null;
+
+    async function startScreenSnipping() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+        showChatTelemetryToast('⚠️ Screen Capture API is not supported in this browser. Use Win+Shift+S.');
+        return;
+      }
+
+      showChatTelemetryToast('📸 Select any monitor or window to snip...');
+
+      let stream = null;
+      try {
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: {
+            cursor: 'always',
+            displaySurface: 'monitor'
+          },
+          audio: false
+        });
+      } catch (err) {
+        if (err.name !== 'NotAllowedError' && !err.message?.includes('Permission denied')) {
+          console.warn('[Screen Snipper] Capture prompt cancelled or error:', err);
+        }
+        return;
+      }
+
+      if (!stream) return;
+
+      try {
+        const video = document.createElement('video');
+        video.autoplay = true;
+        video.playsInline = true;
+        video.muted = true;
+        video.srcObject = stream;
+
+        await new Promise((resolve, reject) => {
+          video.onloadedmetadata = () => {
+            video.play().then(resolve).catch(resolve);
+          };
+          video.onerror = reject;
+          setTimeout(resolve, 1500); // Fallback safety
+        });
+
+        // Capture frame onto raw canvas at native monitor resolution
+        snipperRawWidth = video.videoWidth || window.screen.width || 1920;
+        snipperRawHeight = video.videoHeight || window.screen.height || 1080;
+
+        snipperRawCanvas = document.createElement('canvas');
+        snipperRawCanvas.width = snipperRawWidth;
+        snipperRawCanvas.height = snipperRawHeight;
+        const ctx = snipperRawCanvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, snipperRawWidth, snipperRawHeight);
+
+        // Terminate screen share tracks immediately
+        stream.getTracks().forEach(t => t.stop());
+
+        openSnipperOverlay();
+      } catch (err) {
+        console.error('[Screen Snipper] Error capturing display frame:', err);
+        stream.getTracks().forEach(t => t.stop());
+        showChatTelemetryToast('⚠️ Could not freeze screen frame.');
+      }
+    }
+
+    function openSnipperOverlay() {
+      const overlay = document.getElementById('aiSnipperOverlay');
+      const canvas = document.getElementById('aiSnipperCanvas');
+      const selection = document.getElementById('aiSnipperSelection');
+      if (!overlay || !canvas || !snipperRawCanvas) return;
+
+      isSnippingActive = true;
+      snipperDragStart = null;
+      snipperCurrentCrop = null;
+      if (selection) selection.classList.add('hidden');
+
+      // Draw onto visible modal canvas
+      canvas.width = snipperRawWidth;
+      canvas.height = snipperRawHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(snipperRawCanvas, 0, 0);
+
+      overlay.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      showChatTelemetryToast('📸 Drag crosshair over the area you want to snip.');
+    }
+
+    function closeSnipperOverlay() {
+      const overlay = document.getElementById('aiSnipperOverlay');
+      const selection = document.getElementById('aiSnipperSelection');
+      if (overlay) overlay.classList.add('hidden');
+      if (selection) selection.classList.add('hidden');
+      isSnippingActive = false;
+      snipperDragStart = null;
+      snipperCurrentCrop = null;
+      document.body.style.overflow = '';
+      if (aiInputField) aiInputField.focus({ preventScroll: true });
+    }
+
+    function commitScreenSnip(cropRect) {
+      if (!snipperRawCanvas) return;
+
+      const canvas = document.getElementById('aiSnipperCanvas');
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = snipperRawWidth / rect.width;
+      const scaleY = snipperRawHeight / rect.height;
+
+      let sourceX = 0;
+      let sourceY = 0;
+      let sourceW = snipperRawWidth;
+      let sourceH = snipperRawHeight;
+
+      if (cropRect && cropRect.width > 10 && cropRect.height > 10) {
+        sourceX = Math.max(0, Math.round((cropRect.left - rect.left) * scaleX));
+        sourceY = Math.max(0, Math.round((cropRect.top - rect.top) * scaleY));
+        sourceW = Math.min(snipperRawWidth - sourceX, Math.round(cropRect.width * scaleX));
+        sourceH = Math.min(snipperRawHeight - sourceY, Math.round(cropRect.height * scaleY));
+      }
+
+      if (sourceW <= 0 || sourceH <= 0) return;
+
+      // Render cropped rectangle to export canvas
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = sourceW;
+      exportCanvas.height = sourceH;
+      const expCtx = exportCanvas.getContext('2d');
+      expCtx.drawImage(snipperRawCanvas, sourceX, sourceY, sourceW, sourceH, 0, 0, sourceW, sourceH);
+
+      // Downscale if wider than 1280px to optimize tokens
+      let finalDataUrl = exportCanvas.toDataURL('image/jpeg', 0.88);
+      const maxDim = 1280;
+      if (sourceW > maxDim || sourceH > maxDim) {
+        let finalW = sourceW;
+        let finalH = sourceH;
+        if (sourceW > sourceH) {
+          finalH = Math.round((sourceH * maxDim) / sourceW);
+          finalW = maxDim;
+        } else {
+          finalW = Math.round((sourceW * maxDim) / sourceH);
+          finalH = maxDim;
+        }
+        const scaledCanvas = document.createElement('canvas');
+        scaledCanvas.width = finalW;
+        scaledCanvas.height = finalH;
+        const sCtx = scaledCanvas.getContext('2d');
+        sCtx.drawImage(exportCanvas, 0, 0, finalW, finalH);
+        finalDataUrl = scaledCanvas.toDataURL('image/jpeg', 0.88);
+      }
+
+      const timestamp = new Date().toLocaleTimeString().replace(/:/g, '-');
+      stagedAttachments.push({
+        id: 'snip_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+        isDoc: false,
+        name: `Screen_Snip_${timestamp}.jpg`,
+        size: Math.round(finalDataUrl.length * 0.75),
+        type: 'image/jpeg',
+        dataUrl: finalDataUrl
+      });
+
+      renderAttachmentTray();
+      if (typeof adjustAiInputHeight === 'function') {
+        adjustAiInputHeight();
+      }
+      closeSnipperOverlay();
+      showChatTelemetryToast('📸 Screen snip staged in chat.');
+    }
+
+    function initScreenSnipper() {
+      const overlay = document.getElementById('aiSnipperOverlay');
+      const canvasWrap = document.getElementById('aiSnipperCanvasWrap');
+      const canvas = document.getElementById('aiSnipperCanvas');
+      const selection = document.getElementById('aiSnipperSelection');
+      const dimsBadge = document.getElementById('aiSnipperDims');
+      const confirmBtn = document.getElementById('aiSnipConfirmBtn');
+      const fullBtn = document.getElementById('aiSnipFullBtn');
+      const cancelBtn = document.getElementById('aiSnipCancelBtn');
+      if (!overlay || !canvasWrap || !canvas) return;
+
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+
+      canvasWrap.addEventListener('mousedown', (e) => {
+        if (!isSnippingActive) return;
+        if (confirmBtn && confirmBtn.contains(e.target)) return;
+        if (e.button !== 0) return; // Left click only
+
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        snipperCurrentCrop = null;
+
+        if (selection) {
+          selection.classList.add('hidden');
+          selection.style.width = '0px';
+          selection.style.height = '0px';
+        }
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isSnippingActive || !isDragging) return;
+
+        const cRect = canvas.getBoundingClientRect();
+        const wrapRect = canvasWrap.getBoundingClientRect();
+
+        // Clamp to visible canvas boundaries
+        const curX = Math.max(cRect.left, Math.min(cRect.right, e.clientX));
+        const curY = Math.max(cRect.top, Math.min(cRect.bottom, e.clientY));
+        const startX = Math.max(cRect.left, Math.min(cRect.right, dragStartX));
+        const startY = Math.max(cRect.top, Math.min(cRect.bottom, dragStartY));
+
+        const minX = Math.min(startX, curX);
+        const maxX = Math.max(startX, curX);
+        const minY = Math.min(startY, curY);
+        const maxY = Math.max(startY, curY);
+
+        const width = maxX - minX;
+        const height = maxY - minY;
+
+        if (selection && (width > 5 || height > 5)) {
+          selection.classList.remove('hidden');
+          selection.style.left = `${minX - wrapRect.left}px`;
+          selection.style.top = `${minY - wrapRect.top}px`;
+          selection.style.width = `${width}px`;
+          selection.style.height = `${height}px`;
+
+          const scaleX = snipperRawWidth / (cRect.width || 1);
+          const scaleY = snipperRawHeight / (cRect.height || 1);
+          const nativeW = Math.round(width * scaleX);
+          const nativeH = Math.round(height * scaleY);
+
+          if (dimsBadge) {
+            dimsBadge.textContent = `${nativeW} × ${nativeH} px`;
+          }
+
+          snipperCurrentCrop = {
+            left: minX,
+            top: minY,
+            width: width,
+            height: height
+          };
+        }
+      });
+
+      window.addEventListener('mouseup', (e) => {
+        if (!isSnippingActive || !isDragging) return;
+        isDragging = false;
+
+        if (snipperCurrentCrop && (snipperCurrentCrop.width < 15 || snipperCurrentCrop.height < 15)) {
+          if (selection) selection.classList.add('hidden');
+          snipperCurrentCrop = null;
+        }
+      });
+
+      if (confirmBtn) {
+        confirmBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (snipperCurrentCrop) {
+            commitScreenSnip(snipperCurrentCrop);
+          } else {
+            commitScreenSnip(null);
+          }
+        });
+      }
+
+      if (fullBtn) {
+        fullBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          commitScreenSnip(null);
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeSnipperOverlay();
+        });
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (!isSnippingActive) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeSnipperOverlay();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (snipperCurrentCrop && snipperCurrentCrop.width > 15 && snipperCurrentCrop.height > 15) {
+            commitScreenSnip(snipperCurrentCrop);
+          } else {
+            commitScreenSnip(null);
+          }
+        }
+      });
+    }
+
+    initScreenSnipper();
+
     const CHARLIE_SYSTEM_GROUNDING_PROMPT = `You are "Cyber Charlie", Rajeev's AI Assistant — an advanced, highly intelligent AI companion and VFX & GenAI systems mascot on Rajeev Mutyalu's official portfolio website.
 
 CORE IDENTITY RULE:
@@ -7470,7 +7776,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       });
     }
 
-    // Attachment Button & Popover Menu Controller (Images / Documents)
+    // Attachment Button & Popover Menu Controller (Images / Documents / Screen Snipper)
     const aiAttachWrap = document.getElementById('aiAttachWrap');
     const aiAttachBtn = document.getElementById('aiAttachBtn');
     const aiAttachMenu = document.getElementById('aiAttachMenu');
@@ -7478,6 +7784,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
     const aiDocFileInput = document.getElementById('aiDocFileInput');
     const aiAttachImagesOpt = document.getElementById('aiAttachImagesOpt');
     const aiAttachDocsOpt = document.getElementById('aiAttachDocsOpt');
+    const aiAttachSnipOpt = document.getElementById('aiAttachSnipOpt');
     const aiInputCard = document.getElementById('aiInputCard');
 
     if (aiAttachBtn && aiAttachMenu) {
@@ -7508,6 +7815,15 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           aiAttachMenu.classList.add('hidden');
           aiAttachBtn.setAttribute('aria-expanded', 'false');
           aiDocFileInput.click();
+        });
+      }
+
+      if (aiAttachSnipOpt) {
+        aiAttachSnipOpt.addEventListener('click', (e) => {
+          e.preventDefault();
+          aiAttachMenu.classList.add('hidden');
+          aiAttachBtn.setAttribute('aria-expanded', 'false');
+          startScreenSnipping();
         });
       }
 
