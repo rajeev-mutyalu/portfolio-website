@@ -126,6 +126,7 @@
       this.state = 'waiting'; // idle, walk, run, jump, slash, bonk, dizzy, victory, thinking, writing, waiting, cyber_dash
       this.face = 'waiting';  // happy, battle, sprint, shocked, dizzy, sad, victory, wink, thinking, writing, waiting
       this.animTimer = 0;
+      this.isDockMini = false; // Set to true for miniature dock portal to suppress clipping emotes/jumps
       this.bonkTimer = 0;
       this.dizzyTimer = 0;
       this.dizzyAngle = 0;
@@ -296,6 +297,7 @@
     }
 
     triggerJump() {
+      if (this.isDockMini) return; // Never jump or clip inside the miniature 34px dock circle
       if (this.state === 'bonk' || this.state === 'dizzy') return;
       this.state = 'jump';
       this.jumpStartX = this.x;
@@ -1773,8 +1775,8 @@
         c.restore();
       }
 
-      // Floating Emote Speech Bubble
-      if (this.emoteTimer > 0 && this.emoteText) {
+      // Floating Emote Speech Bubble (Suppressed in miniature dock portal to prevent clipping)
+      if (this.emoteTimer > 0 && this.emoteText && !this.isDockMini) {
         c.save();
         c.translate(this.x, this.y - 44 * this.scale);
         const emoteAlpha = Math.min(1.0, this.emoteTimer / 15);
@@ -2355,6 +2357,7 @@
       if (this.dockCanvas) {
         this.dockCtx = this.dockCanvas.getContext('2d');
         this.dockCharlie = new CyberCharlie(36, 39, 0.55);
+        this.dockCharlie.isDockMini = true;
         this.dockCharlie.bladeGlowIntensity = 2.5;
         this.dockCharlie.state = 'waiting';
         this.dockCharlie.face = 'waiting';
@@ -3130,6 +3133,7 @@
         if (this.dockCanvas) {
           this.dockCtx = this.dockCanvas.getContext('2d');
           this.dockCharlie = new CyberCharlie(36, 39, 0.55);
+          this.dockCharlie.isDockMini = true;
           this.dockCharlie.bladeGlowIntensity = 2.5;
           this.dockCharlie.state = 'waiting';
           this.dockCharlie.face = 'waiting';
@@ -9573,7 +9577,8 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         e.preventDefault();
         e.stopPropagation();
         if (window.portfolioDockCharlie) {
-          window.portfolioDockCharlie.triggerJump();
+          // Play a clean, centered wink reaction without any speech bubble clipping or vertical jump cutoff
+          window.portfolioDockCharlie.face = 'wink';
         }
         if (typeof window.deployCharlieToAiSection === 'function') {
           window.deployCharlieToAiSection();
