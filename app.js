@@ -5001,24 +5001,32 @@
 
       const turns = charlieConversationHistory.length;
       const textLength = charlieConversationHistory.reduce((acc, m) => {
-        return acc + (typeof m.content === 'string' ? m.content.length : 150);
+        return acc + (typeof m.content === 'string' ? m.content.length : 200);
       }, 0);
 
-      const memoryScore = Math.min(100, Math.max(0, Math.round((turns * 6) + (textLength / 60))));
+      // Industry standard: 1 token ≈ 4 characters of text + 4 tokens envelope overhead per turn
+      const estimatedTokens = Math.max(0, Math.round(textLength / 4) + (turns * 4));
+      const maxTokens = 8192; // 8K Context Window
+      const pct = Math.min(100, Math.max(0, Math.round((estimatedTokens / maxTokens) * 100)));
 
-      memFill.style.width = `${memoryScore}%`;
-      memText.textContent = `${memoryScore}/100`;
+      memFill.style.width = `${pct}%`;
+
+      let tokenLabel = `${estimatedTokens} / 8K`;
+      if (estimatedTokens >= 1000) {
+        tokenLabel = `${(estimatedTokens / 1000).toFixed(1)}K / 8K`;
+      }
+      memText.textContent = tokenLabel;
 
       memMeter.classList.remove('mem-normal', 'mem-warn', 'mem-critical');
-      if (memoryScore >= 80) {
+      if (pct >= 85) {
         memMeter.classList.add('mem-critical');
-        memMeter.setAttribute('title', `Session Context: ${memoryScore}/100 used (${memoryScore}%). Critical capacity! Oldest turns auto-roll (FIFO) to prevent overflow. Click to reset.`);
-      } else if (memoryScore >= 50) {
+        memMeter.setAttribute('title', `Session Context: ${estimatedTokens} / 8K tokens (${pct}%). Critical capacity! Oldest turns auto-roll (FIFO) to prevent overflow. Click to reset memory.`);
+      } else if (pct >= 65) {
         memMeter.classList.add('mem-warn');
-        memMeter.setAttribute('title', `Session Context: ${memoryScore}/100 used (${memoryScore}%). Moderate context. Click to reset memory.`);
+        memMeter.setAttribute('title', `Session Context: ${estimatedTokens} / 8K tokens (${pct}%). Moderate context. Click to reset memory.`);
       } else {
         memMeter.classList.add('mem-normal');
-        memMeter.setAttribute('title', `Session Context: ${memoryScore}/100 used (${memoryScore}%). Optimal capacity. Click to reset memory.`);
+        memMeter.setAttribute('title', `Session Context: ${estimatedTokens} / 8K tokens (${pct}%). Optimal capacity. Click to reset memory.`);
       }
     }
 
@@ -5546,7 +5554,7 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
       ];
 
       if (Array.isArray(charlieConversationHistory)) {
-        const recent = charlieConversationHistory.slice(-4);
+        const recent = charlieConversationHistory.slice(-16);
         recent.forEach(m => messages.push(m));
       }
 
@@ -5646,8 +5654,8 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
 
         charlieConversationHistory.push({ role: 'user', content: historyUserPrompt });
         charlieConversationHistory.push({ role: 'assistant', content: historyReply });
-        if (charlieConversationHistory.length > 10) {
-          charlieConversationHistory = charlieConversationHistory.slice(-10);
+        if (charlieConversationHistory.length > 40) {
+          charlieConversationHistory = charlieConversationHistory.slice(-40);
         }
         if (typeof updateMemoryMeter === 'function') {
           updateMemoryMeter();
@@ -7937,7 +7945,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
     if (aiMemMeter) {
       aiMemMeter.addEventListener('click', () => {
         if (charlieConversationHistory.length === 0) {
-          showChatTelemetryToast('Session memory is clean (0/100).');
+          showChatTelemetryToast('Session memory is clean (0 / 8K tokens).');
           return;
         }
         charlieConversationHistory = [];
