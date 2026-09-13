@@ -4843,7 +4843,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
       return safe;
     }
 
-    async function fetchOpenAiResponse(userQuery, matchedKnowledge = null) {
+    async function fetchOpenAiResponse(userQuery, matchedKnowledge = null, abortSignal = null) {
       const apiKey = charlieAiConfig.apiKey ? charlieAiConfig.apiKey.trim() : '';
       const model = charlieAiConfig.model || 'gpt-4o-mini';
 
@@ -4889,6 +4889,13 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
       messages.push({ role: 'user', content: userQuery });
 
       const controller = new AbortController();
+      if (abortSignal) {
+        if (abortSignal.aborted) {
+          controller.abort();
+        } else {
+          abortSignal.addEventListener('abort', () => controller.abort());
+        }
+      }
       const timeoutId = setTimeout(() => controller.abort(), 22000);
 
       try {
@@ -6335,6 +6342,80 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
     let isGeneratingResponse = false;
     let chatGeneratingFailsafeTimeout = null;
+    let activeTypeInterval = null;
+    let activeDeliveryTimeout = null;
+    let activeAbortController = null;
+    let activeTypingDiv = null;
+    let activeBotMsgDiv = null;
+    let activeContentEl = null;
+
+    function stopCurrentGeneration() {
+      if (!isGeneratingResponse) return;
+
+      if (chatGeneratingFailsafeTimeout) {
+        clearTimeout(chatGeneratingFailsafeTimeout);
+        chatGeneratingFailsafeTimeout = null;
+      }
+
+      if (activeAbortController) {
+        try { activeAbortController.abort(); } catch (e) { }
+        activeAbortController = null;
+      }
+
+      if (activeDeliveryTimeout) {
+        clearTimeout(activeDeliveryTimeout);
+        activeDeliveryTimeout = null;
+      }
+
+      if (activeTypeInterval) {
+        clearInterval(activeTypeInterval);
+        activeTypeInterval = null;
+      }
+
+      if (activeTypingDiv && activeTypingDiv.parentNode) {
+        activeTypingDiv.parentNode.removeChild(activeTypingDiv);
+        activeTypingDiv = null;
+      }
+
+      if (activeBotMsgDiv && activeContentEl) {
+        const cursor = activeContentEl.querySelector('.typewriter-cursor');
+        if (cursor) cursor.remove();
+
+        const stopNotice = document.createElement('span');
+        stopNotice.className = 'ai-stopped-notice';
+        stopNotice.style.cssText = 'display:inline-block;margin-left:6px;font-size:0.75rem;color:#f87171;font-family:monospace;padding:1px 6px;background:rgba(239,68,68,0.12);border-radius:4px;border:1px solid rgba(239,68,68,0.3);';
+        stopNotice.textContent = '⏹ Generation Stopped';
+        activeContentEl.appendChild(stopNotice);
+        activeBotMsgDiv.style.transform = 'translateY(0px)';
+
+        if (typeof window.attachBlockCopyButtons === 'function') {
+          window.attachBlockCopyButtons(activeContentEl);
+        }
+      }
+
+      // Safeguard Charlie mascot states
+      if (window.portfolioCharlie) {
+        window.portfolioCharlie.isStationedAtBottom = false;
+        window.portfolioCharlie.state = 'idle';
+        window.portfolioCharlie.face = 'normal';
+        if (!window.portfolioEngine || !window.portfolioEngine.isEnabled) {
+          const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
+          window.portfolioCharlie.triggerReturnDash(window.portfolioCharlie.x, window.portfolioCharlie.y, homeAnchor.x, homeAnchor.y);
+        }
+      }
+      if (window.portfolioDockCharlie) {
+        window.portfolioDockCharlie.triggerWaiting();
+      }
+
+      setChatGeneratingLock(false);
+      setCharlieThinkingState(false);
+      scrollStreamToBottom();
+
+      if (aiInputField) {
+        aiInputField.disabled = false;
+        aiInputField.focus({ preventScroll: true });
+      }
+    }
 
     function setChatGeneratingLock(isLocked) {
       if (chatGeneratingFailsafeTimeout) {
@@ -6352,26 +6433,29 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           if (!aiInputField.getAttribute('data-orig-placeholder')) {
             aiInputField.setAttribute('data-orig-placeholder', aiInputField.placeholder || '');
           }
-          aiInputField.placeholder = 'Charlie is delivering your answer...';
+          aiInputField.placeholder = 'Charlie is delivering your answer... (Click Stop to cancel)';
         } else {
           const orig = aiInputField.getAttribute('data-orig-placeholder');
           if (orig) aiInputField.placeholder = orig;
         }
       }
       if (aiSendBtn) {
-        aiSendBtn.disabled = isGeneratingResponse;
+        // Stop button toggle: keep enabled so user can abort!
+        aiSendBtn.disabled = false;
+        aiSendBtn.classList.toggle('generating-stop-active', isGeneratingResponse);
+        aiSendBtn.setAttribute('title', isGeneratingResponse ? 'Stop Generation (Esc)' : 'Send (Enter)');
+        aiSendBtn.setAttribute('aria-label', isGeneratingResponse ? 'Stop Generation' : 'Send Technical Query');
       }
       document.querySelectorAll('.ai-sidebar-btn, .ai-followup-btn, .ai-topic-pill').forEach(btn => {
         btn.disabled = isGeneratingResponse;
         btn.setAttribute('aria-disabled', isGeneratingResponse ? 'true' : 'false');
       });
 
-      // Safety failsafe: automatically unlock after 8 seconds under all circumstances
+      // Safety failsafe: automatically unlock after 20 seconds under all circumstances
       if (isGeneratingResponse) {
         chatGeneratingFailsafeTimeout = setTimeout(() => {
-          setChatGeneratingLock(false);
-          setCharlieThinkingState(false);
-        }, 8000);
+          stopCurrentGeneration();
+        }, 20000);
       }
     }
 
@@ -6481,6 +6565,13 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         </svg>
       `;
 
+      // Track active generation handles for mid-way Stop
+      activeAbortController = new AbortController();
+      activeDeliveryTimeout = null;
+      activeTypeInterval = null;
+      activeBotMsgDiv = null;
+      activeContentEl = null;
+
       // 3. Append Typing Indicator Bubble
       const typingDiv = document.createElement('div');
       typingDiv.className = 'ai-message ai-bot-msg bot-message ai-typing-indicator';
@@ -6495,6 +6586,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           </div>
         </div>
       `;
+      activeTypingDiv = typingDiv;
       aiChatStream.appendChild(typingDiv);
       scrollStreamToBottom();
 
@@ -6503,6 +6595,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (typingDiv && typingDiv.parentNode) {
           typingDiv.parentNode.removeChild(typingDiv);
         }
+        activeTypingDiv = null;
 
         // Charlie enters Writing Mode with Triangular Lifecycle:
         // Point A (Mascot Anchor) -> Point B (Bottom-Center) -> Ascend while writing to Point C (Screen Center) -> Return to Point A!
@@ -6511,6 +6604,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
         const botMsgDiv = document.createElement('div');
         botMsgDiv.className = 'ai-message ai-bot-msg bot-message';
+        activeBotMsgDiv = botMsgDiv;
 
         let followupsHtml = '';
         if (match.followups && match.followups.length) {
@@ -6569,6 +6663,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         scrollStreamToBottom();
 
         const contentEl = botMsgDiv.querySelector('.ai-msg-content');
+        activeContentEl = contentEl;
         const fullResponse = match.response;
 
         const startTypingSequence = () => {
@@ -6616,6 +6711,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             // When writing animation at Point B completes:
             if (charIndex >= fullResponse.length) {
               clearInterval(typeInterval);
+              activeTypeInterval = null;
               contentEl.innerHTML = fullResponse;
               if (typeof window.attachBlockCopyButtons === 'function') {
                 window.attachBlockCopyButtons(contentEl);
@@ -6639,6 +6735,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
                 const endY = writeCenter.y;
 
                 const stepAscent = (now) => {
+                  if (!isGeneratingResponse) return; // User stopped mid-flight
                   const elapsed = now - ascentStart;
                   const textProgress = Math.min(1.0, elapsed / ascentDuration);
                   const textEase = 1 - Math.pow(1 - textProgress, 3); // easeOutCubic
@@ -6732,6 +6829,8 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               }
             }
           }, tickInterval);
+
+          activeTypeInterval = typeInterval;
         };
 
         if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
@@ -6770,11 +6869,15 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           }
         }
 
-        fetchOpenAiResponse(trimmedQuery, isPortfolioQuery ? localMatch : null)
+        fetchOpenAiResponse(trimmedQuery, isPortfolioQuery ? localMatch : null, activeAbortController?.signal)
           .then((openAiResult) => {
+            if (!isGeneratingResponse) return; // User stopped mid-flight
             executeCharlieTextDelivery(openAiResult);
           })
           .catch((err) => {
+            if (!isGeneratingResponse || err.name === 'AbortError' || err.message?.includes('aborted')) {
+              return; // Cleanly aborted by user
+            }
             console.warn('[Cyber Charlie] OpenAI Error, falling back to local KB:', err);
             const errNotice = `<div class="ai-conn-status error" style="margin-bottom:12px;padding:8px 12px;border-radius:6px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35);color:#f87171;font-family:monospace;font-size:0.75rem;">⚠️ <strong>OPENAI LIVE NOTICE:</strong> ${escapeHtml(err.message || 'Connection unavailable')} &bull; Fallback to Local KB active.</div>`;
             localMatch.response = errNotice + localMatch.response;
@@ -6784,7 +6887,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       } else {
         // Strict Local KB Mode: 100% offline execution, 0ms latency, never calls api.openai.com
         const thinkingDelay = Math.floor(Math.random() * 200) + 450;
-        setTimeout(() => {
+        activeDeliveryTimeout = setTimeout(() => {
+          activeDeliveryTimeout = null;
+          if (!isGeneratingResponse) return;
           executeCharlieTextDelivery(localMatch);
         }, thinkingDelay);
       }
@@ -6880,14 +6985,50 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       }
     });
 
+    // 2a-1. Dynamic Auto-Growing Textarea & Input Submission / Stop Controller
+    const adjustAiInputHeight = () => {
+      if (!aiInputField) return;
+      aiInputField.style.height = 'auto';
+      const mainContainer = document.querySelector('.ai-bot-main') || document.querySelector('.ai-bot-body-split') || document.querySelector('.ai-bot-terminal');
+      const containerHeight = mainContainer ? mainContainer.clientHeight : 650;
+      // Max height is 1/4th (25%) of overall chat box height
+      const maxHeight = Math.max(64, Math.floor(containerHeight / 4));
+
+      const scrollH = aiInputField.scrollHeight;
+      if (scrollH > maxHeight) {
+        aiInputField.style.height = `${maxHeight}px`;
+        aiInputField.style.overflowY = 'auto';
+      } else {
+        const targetH = Math.max(26, scrollH);
+        aiInputField.style.height = `${targetH}px`;
+        aiInputField.style.overflowY = 'hidden';
+      }
+
+      if (aiSendBtn) {
+        aiSendBtn.classList.toggle('has-input', aiInputField.value.trim().length > 0);
+      }
+    };
+    window.adjustAiInputHeight = adjustAiInputHeight;
+
+    if (aiInputField) {
+      aiInputField.addEventListener('input', adjustAiInputHeight);
+      window.addEventListener('resize', adjustAiInputHeight, { passive: true });
+    }
+
     if (aiChatForm && aiInputField) {
       aiChatForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (isGeneratingResponse) return; // Do NOT allow submitting while generation is in progress!
+        if (isGeneratingResponse) {
+          stopCurrentGeneration();
+          return;
+        }
         if (window.portfolioEngine?.isEnabled) return; // Chatbot paused while Game Mode is active
         const q = aiInputField.value.trim();
         if (!q) return;
         aiInputField.value = '';
+        aiInputField.style.height = '26px';
+        aiInputField.style.overflowY = 'hidden';
+        if (aiSendBtn) aiSendBtn.classList.remove('has-input');
         document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
         renderBotResponse(q);
       });
@@ -6895,6 +7036,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       aiInputField.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
+          if (isGeneratingResponse) {
+            stopCurrentGeneration();
+            return;
+          }
           if (aiChatForm.requestSubmit) {
             aiChatForm.requestSubmit();
           } else {
@@ -6904,12 +7049,20 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       });
     }
 
+    // Global Esc shortcut to cancel generation mid-way
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isGeneratingResponse) {
+        e.preventDefault();
+        stopCurrentGeneration();
+      }
+    });
+
     // 2a-2. Voice Dictation Controller: OpenAI Whisper Flow + Web Speech API Fallback
     function initCharlieVoiceDictation() {
       const micBtn = document.getElementById('aiChatMicBtn');
       const input = document.getElementById('aiInputField');
       const form = document.getElementById('aiChatForm');
-      const inputWrapper = micBtn ? micBtn.closest('.ai-input-wrapper') : null;
+      const inputWrapper = micBtn ? (micBtn.closest('.ai-input-card') || micBtn.closest('.ai-input-wrapper')) : null;
       if (!micBtn || !input) return;
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -7427,7 +7580,14 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const connStatus = document.getElementById('aiConnStatus');
       const connIcon = document.getElementById('aiConnIcon');
       const connMsg = document.getElementById('aiConnMsg');
-      const termTitleSpan = document.querySelector('.ai-bot-terminal .ai-bot-title span');
+      const termTitleSpan = document.getElementById('aiTerminalTitleText') || document.querySelector('.ai-bot-terminal .ai-bot-title span');
+      const llmIcon = llmBtn ? llmBtn.querySelector('.ai-llm-icon') : null;
+
+      // Quick-Access Model Switcher Pill in Bottom Chat Input Bar
+      const modelPillBtn = document.getElementById('aiModelPillBtn');
+      const modelPillLabel = document.getElementById('aiModelPillLabel');
+      const modelSelectorWrap = document.getElementById('aiModelSelectorWrap');
+      const modelDropdownMenu = document.getElementById('aiModelDropdownMenu');
 
       const STANDARD_MODELS = ['gpt-4o-mini', 'gpt-4o', 'o3-mini', 'o1', 'o1-mini'];
 
@@ -7441,12 +7601,31 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       function updateUIState() {
         const isLive = (charlieAiConfig.mode === 'openai' && charlieAiConfig.apiKey.trim().length > 0);
+        
+        // 1. Top Bar Mode Button (#aiLlmConfigBtn) - icon, state, title, and label
         if (llmBtn) {
           llmBtn.classList.toggle('openai-active', isLive);
+          llmBtn.setAttribute('title', isLive 
+            ? `Active AI Mode: OpenAI Live (${charlieAiConfig.model || 'GPT-4o-mini'}) • Click to change mode or configure API keys` 
+            : 'Active AI Mode: Local KB (Offline) • Click to change mode or connect OpenAI key'
+          );
+        }
+        if (llmIcon) {
+          llmIcon.textContent = isLive ? '⚡' : '🧠';
         }
         if (llmLabel) {
           llmLabel.textContent = isLive ? `OPENAI: ${charlieAiConfig.model.replace('gpt-', '')}` : 'LOCAL KB';
         }
+
+        // 2. Terminal Header Session Text: charlie-ai --session=assistant-console [LOCAL-KB] vs [OPENAI: ...]
+        const titleSpan = document.getElementById('aiTerminalTitleText') || termTitleSpan || document.querySelector('.ai-bot-terminal .ai-bot-title span');
+        if (titleSpan) {
+          titleSpan.textContent = isLive
+            ? `charlie-ai --session=assistant-console [OPENAI: ${(charlieAiConfig.model || 'gpt-4o-mini').toUpperCase()}]`
+            : `charlie-ai --session=assistant-console [LOCAL-KB]`;
+        }
+
+        // 3. Status Pill in Header
         if (aiBotStatusPill) {
           aiBotStatusPill.classList.toggle('openai-mode', isLive);
           const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
@@ -7454,12 +7633,157 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             text.textContent = isLive ? `OPENAI [${charlieAiConfig.model}] ONLINE` : 'LOCAL KB READY';
           }
         }
-        if (termTitleSpan) {
-          termTitleSpan.textContent = isLive
-            ? `charlie-ai --session=assistant-console [OPENAI]`
-            : `charlie-ai --session=assistant-console [LOCAL-KB]`;
+
+        // 4. Quick-Access Model Switcher Pill in Bottom Chat Input Bar
+        if (modelPillBtn && modelPillLabel) {
+          if (isLive) {
+            modelPillBtn.classList.add('live-active');
+            const displayModel = charlieAiConfig.model ? charlieAiConfig.model.replace('gpt-', 'GPT-') : 'Live Model';
+            modelPillLabel.textContent = displayModel;
+            modelPillBtn.setAttribute('title', `Active Model: ${displayModel} (Click to switch or configure)`);
+          } else {
+            modelPillBtn.classList.remove('live-active');
+            modelPillLabel.textContent = 'Local KB';
+            modelPillBtn.setAttribute('title', 'Active Model: Local KB (Click to switch or connect OpenAI API Key)');
+          }
         }
       }
+
+      const STANDARD_DISPLAY_MODELS = [
+        { id: 'gpt-4o-mini', label: 'gpt-4o-mini (Recommended • Fast & Cheap)' },
+        { id: 'gpt-4o', label: 'gpt-4o (High Precision • Flagship)' },
+        { id: 'o3-mini', label: 'o3-mini (High Reasoning)' },
+        { id: 'o1', label: 'o1 (Frontier Reasoning)' },
+        { id: 'o1-mini', label: 'o1-mini (Fast Reasoning)' }
+      ];
+
+      function renderModelDropdown() {
+        if (!modelDropdownMenu) return;
+        const cachedKey = (charlieAiConfig.apiKey || localStorage.getItem('charlie_openai_key') || '').trim();
+        const hasCachedKey = cachedKey.length > 0;
+        const isLive = (charlieAiConfig.mode === 'openai' && hasCachedKey);
+        const curModel = charlieAiConfig.model || localStorage.getItem('charlie_openai_model') || 'gpt-4o-mini';
+
+        let html = '';
+        if (!hasCachedKey) {
+          // When no key is cached: Show Local KB active, second option opens key modal (no trailing dots)
+          html = `
+            <button type="button" class="ai-model-item active" data-action="select-local">
+              <span>● Local KB (Active)</span>
+              <span class="ai-model-item-check">✓</span>
+            </button>
+            <div class="ai-model-divider"></div>
+            <button type="button" class="ai-model-item action-item" data-action="open-key-modal">
+              <span>🔑 Connect API Key</span>
+            </button>
+          `;
+        } else {
+          // When key is cached:
+          // 1. Local KB option
+          const isLocalActive = !isLive;
+          html = `
+            <button type="button" class="ai-model-item ${isLocalActive ? 'active' : ''}" data-action="select-local">
+              <span>${isLocalActive ? '● Local KB (Active)' : 'Local KB (Offline)'}</span>
+              ${isLocalActive ? '<span class="ai-model-item-check">✓</span>' : ''}
+            </button>
+            <div class="ai-model-divider"></div>
+          `;
+
+          // 2. The 5 Live Models from Image 2 (without Custom Model ID)
+          STANDARD_DISPLAY_MODELS.forEach((m) => {
+            const isModelSelected = isLive && (curModel === m.id);
+            html += `
+              <button type="button" class="ai-model-item ${isModelSelected ? 'active' : ''}" data-action="select-model" data-model="${m.id}">
+                <span>${escapeHtml(m.label)}</span>
+                ${isModelSelected ? '<span class="ai-model-item-check">✓</span>' : ''}
+              </button>
+            `;
+          });
+
+          // 3. Settings modal action without trailing dots so it fits cleanly on one line
+          html += `
+            <div class="ai-model-divider"></div>
+            <button type="button" class="ai-model-item action-item" data-action="open-key-modal">
+              <span>⚙️ Manage API Keys &amp; Models</span>
+            </button>
+          `;
+        }
+
+        modelDropdownMenu.innerHTML = html;
+      }
+
+      function toggleModelDropdown(forceState) {
+        if (!modelDropdownMenu || !modelSelectorWrap) return;
+        const shouldOpen = (typeof forceState === 'boolean') ? forceState : modelDropdownMenu.classList.contains('hidden');
+        if (shouldOpen) {
+          renderModelDropdown();
+          modelDropdownMenu.classList.remove('hidden');
+          modelSelectorWrap.classList.add('menu-open');
+          modelPillBtn?.setAttribute('aria-expanded', 'true');
+        } else {
+          modelDropdownMenu.classList.add('hidden');
+          modelSelectorWrap.classList.remove('menu-open');
+          modelPillBtn?.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      if (modelPillBtn) {
+        modelPillBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleModelDropdown();
+        });
+      }
+
+      if (modelDropdownMenu) {
+        modelDropdownMenu.addEventListener('click', (e) => {
+          const item = e.target.closest('.ai-model-item');
+          if (!item) return;
+          e.preventDefault();
+          e.stopPropagation();
+          const action = item.getAttribute('data-action');
+          toggleModelDropdown(false);
+
+          if (action === 'select-local') {
+            charlieAiConfig.mode = 'local';
+            localStorage.setItem('charlie_ai_mode', 'local');
+            updateUIState();
+            try {
+              if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function' && !window.portfolioSoundEngine.isMuted) {
+                window.portfolioSoundEngine.playLaserDeflect();
+              }
+            } catch (e) { }
+          } else if (action === 'select-model') {
+            const targetModel = item.getAttribute('data-model') || 'gpt-4o-mini';
+            const cachedKey = (charlieAiConfig.apiKey || localStorage.getItem('charlie_openai_key') || '').trim();
+            if (cachedKey) {
+              charlieAiConfig.mode = 'openai';
+              charlieAiConfig.apiKey = cachedKey;
+              charlieAiConfig.model = targetModel;
+              localStorage.setItem('charlie_ai_mode', 'openai');
+              localStorage.setItem('charlie_openai_model', targetModel);
+              updateUIState();
+              try {
+                if (typeof window.portfolioSoundEngine?.playComboDing === 'function' && !window.portfolioSoundEngine.isMuted) {
+                  window.portfolioSoundEngine.playComboDing();
+                }
+              } catch (e) { }
+            } else {
+              openModal();
+            }
+          } else if (action === 'open-key-modal') {
+            openModal();
+          }
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        if (modelDropdownMenu && !modelDropdownMenu.classList.contains('hidden')) {
+          if (!modelSelectorWrap || !modelSelectorWrap.contains(e.target)) {
+            toggleModelDropdown(false);
+          }
+        }
+      });
 
       function populateModalFields() {
         if (keyInput) keyInput.value = charlieAiConfig.apiKey || '';
@@ -7798,6 +8122,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             if (input) {
               input.focus({ preventScroll: true });
             }
+          }
+          if (typeof adjustAiInputHeight === 'function') {
+            adjustAiInputHeight();
           }
           if (window.portfolioCharlie && typeof window.portfolioCharlie.onResize === 'function') {
             window.portfolioCharlie.onResize();

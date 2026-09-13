@@ -502,7 +502,7 @@
             <line x1="8" y1="21" x2="16" y2="21"></line>
             <line x1="12" y1="17" x2="12" y2="21"></line>
           </svg>
-          <span>charlie-ai --session=assistant-console [LOCAL-KB]</span>
+          <span id="aiTerminalTitleText">charlie-ai --session=assistant-console [LOCAL-KB]</span>
         </div>
         <div class="ai-bot-header-actions">
           <button type="button" class="ai-bot-profile-btn" id="aiProfileReturnBtn"
@@ -733,27 +733,48 @@
 
           <!-- Input Bar -->
           <form class="ai-chat-input-bar" id="aiChatForm">
-            <div class="ai-input-wrapper">
-              <span class="ai-input-prefix">&gt;</span>
-              <textarea class="ai-input-field" id="aiInputField" rows="3"
-                placeholder="Ask about Architecture, Production Technology, OpenUSD, Agentic AI, Studio Automation, or Why Hire Rajeev..."
-                autocomplete="off" spellcheck="false"></textarea>
-              <button type="button" class="ai-mic-btn" id="aiChatMicBtn"
-                title="Dictate question with Microphone (Click to Speak)" aria-label="Voice Dictation">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                  <line x1="12" y1="19" x2="12" y2="23"></line>
-                  <line x1="8" y1="23" x2="16" y2="23"></line>
-                </svg>
-              </button>
+            <div class="ai-input-card" id="aiInputCard">
+              <!-- Row 1: Top Expanding Textarea -->
+              <div class="ai-input-row-top">
+                <textarea class="ai-input-field" id="aiInputField" rows="1"
+                  placeholder="Ask anything, @ to mention, / for actions..."
+                  autocomplete="off" spellcheck="false"></textarea>
+              </div>
+
+              <!-- Row 2: Bottom Actions Bar -->
+              <div class="ai-input-row-bottom">
+                <div class="ai-model-selector-wrap" id="aiModelSelectorWrap">
+                  <button type="button" class="ai-model-pill-btn" id="aiModelPillBtn" aria-expanded="false" aria-haspopup="true" title="Select AI Engine / Model">
+                    <span class="ai-model-pill-label" id="aiModelPillLabel">Local KB</span>
+                    <svg class="ai-model-pill-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                  </button>
+                  <div class="ai-model-dropdown-menu hidden" id="aiModelDropdownMenu" role="menu">
+                    <!-- Populated dynamically based on cached key state -->
+                  </div>
+                </div>
+
+                <div class="ai-input-actions-right">
+                  <button type="button" class="ai-mic-btn" id="aiChatMicBtn"
+                    title="Dictate question with Microphone (Click to Speak)" aria-label="Voice Dictation">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                      <line x1="12" y1="19" x2="12" y2="23"></line>
+                      <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                  </button>
+                  <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send Technical Query" title="Send (Enter)">
+                    <svg class="ai-send-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="19" x2="12" y2="5"></line>
+                      <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                    <span class="ai-stop-icon" style="display:none;" title="Stop Generating"></span>
+                  </button>
+                </div>
+              </div>
             </div>
-            <button type="submit" class="ai-send-btn" id="aiSendBtn" aria-label="Send Technical Query" title="Send (Enter)">
-              <svg class="ai-send-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="19" x2="12" y2="5"></line>
-                <polyline points="5 12 12 5 19 12"></polyline>
-              </svg>
-            </button>
           </form>
         </main>
       </div>
@@ -1599,7 +1620,7 @@
                 <option value="o3-mini">o3-mini (High Reasoning)</option>
                 <option value="o1">o1 (Frontier Reasoning)</option>
                 <option value="o1-mini">o1-mini (Fast Reasoning)</option>
-                <option value="custom">⚙️ Custom Model ID (e.g. gpt-5, fine-tunes)...</option>
+                <option value="custom">⚙️ Custom Model ID (e.g. gpt-5, fine-tunes)</option>
               </select>
             </div>
             <div class="ai-field-group btn-align">
