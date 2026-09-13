@@ -4136,19 +4136,19 @@
           <button type="button" class="ai-followup-btn" data-query="switch fx to aurora">🌌 Preset: Aurora Borealis</button>
           <button type="button" class="ai-followup-btn" data-query="switch fx to diamond">💎 Preset: Hyper Diamond</button>
           <button type="button" class="ai-followup-btn" data-query="switch fx to comet">☄️ Preset: Comet Cascade</button>
-          <button type="button" class="ai-followup-btn" data-query="Tell me about your AI certifications, accelerator credentials, and hackathons">📜 AI Certifications</button>
+          <button type="button" class="ai-followup-btn" data-query="Tell me about Rajeev's AI certifications, accelerator credentials, and hackathons">📜 AI Certifications</button>
           <button type="button" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?">🌟 Why Hire Rajeev?</button>
         `;
       } else {
-        if (welcomeLabel) welcomeLabel.innerText = 'Executive Quick Links:';
+        if (welcomeLabel) welcomeLabel.innerText = "Rajeev's Executive Quick Links:";
         welcomeChips.innerHTML = `
           <button type="button" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?">🌟 Why Hire Rajeev?</button>
-          <button type="button" class="ai-followup-btn" data-query="Tell me about your AI certifications, accelerator credentials, and hackathons">📜 AI Certifications &amp; Hackathon</button>
-          <button type="button" class="ai-followup-btn" data-query="Tell me about your 20-year engineering leadership and mentorship background">🏆 Leadership &amp; Filmography</button>
+          <button type="button" class="ai-followup-btn" data-query="Tell me about Rajeev's AI certifications, accelerator credentials, and hackathons">📜 AI Certifications &amp; Hackathon</button>
+          <button type="button" class="ai-followup-btn" data-query="Tell me about Rajeev's 20-year engineering leadership and mentorship background">🏆 Leadership &amp; Filmography</button>
           <button type="button" class="ai-followup-btn" data-query="turn on game mode">🎮 Turn On Game Mode</button>
           <button type="button" class="ai-followup-btn" data-query="What is Model Context Protocol (MCP) and how is it used in production?">🔌 Model Context Protocol</button>
           <button type="button" class="ai-followup-btn" data-query="How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?">🔒 On-Prem LLMs &amp; OpenClaw</button>
-          <button type="button" class="ai-followup-btn" data-query="Explain your OpenUSD VFX pipeline architecture">🎬 OpenUSD Architecture</button>
+          <button type="button" class="ai-followup-btn" data-query="Explain Rajeev's OpenUSD VFX pipeline architecture">🎬 OpenUSD Architecture</button>
           <button type="button" class="ai-followup-btn" data-query="How does zero-touch n8n studio automation orchestrate pipelines?">⚡ n8n Automation</button>
         `;
       }
@@ -4758,7 +4758,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
       safe = safe.replace(/```([a-z0-9_-]*)[ \t]*\r?\n([\s\S]*?)```/gi, (match, rawLang, code) => {
         const cleanCode = code.trim();
         const langLower = (rawLang || '').toLowerCase().trim();
-        
+
         // Smart label detection (identifies email drafts, templates, json, python, bash, etc.)
         let displayLabel = 'BLOCK';
         let icon = '📋';
@@ -4793,17 +4793,17 @@ INTELLIGENCE CAPABILITIES & SCOPE:
 
         return `<div class="ai-code-wrapper">` +
           `<div class="ai-code-header">` +
-            `<span class="ai-code-lang"><span class="ai-code-lang-icon">${icon}</span> ${displayLabel}</span>` +
-            `<button type="button" class="ai-code-copy-btn" title="Copy only this block to clipboard" aria-label="Copy ${displayLabel}">` +
-              `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">` +
-                `<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>` +
-                `<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>` +
-              `</svg>` +
-              `<span>Copy Block</span>` +
-            `</button>` +
+          `<span class="ai-code-lang"><span class="ai-code-lang-icon">${icon}</span> ${displayLabel}</span>` +
+          `<button type="button" class="ai-code-copy-btn" title="Copy only this block to clipboard" aria-label="Copy ${displayLabel}">` +
+          `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">` +
+          `<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>` +
+          `<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>` +
+          `</svg>` +
+          `<span>Copy Block</span>` +
+          `</button>` +
           `</div>` +
           `<pre class="ai-code-block"><code>${cleanCode}</code></pre>` +
-        `</div>`;
+          `</div>`;
       });
 
       // Inline code
@@ -5131,10 +5131,10 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
         ],
         followupPool: [
-          'Tell me about your AI certifications, accelerator credentials, and hackathons',
-          'Tell me about your 20-year engineering leadership and mentorship background',
+          'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons',
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
           'Tell me about GenAI video pipelines with Veo, Kling, and Studio.AI'
@@ -5172,9 +5172,9 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
         ],
         followupPool: [
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'Tell me about your 20-year engineering leadership and mentorship background',
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'What is vibe coding and how do you use agentic AI systems?'
         ]
       },
@@ -5211,7 +5211,7 @@ MCP acts as the nervous system connecting autonomous coding agents (Claude Code,
         followupPool: [
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
           'What is vibe coding and how do you use agentic AI systems?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
@@ -5249,7 +5249,7 @@ Rajeev utilizes state-of-the-art agentic tools including Google Antigravity, Cla
         followupPool: [
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
@@ -5286,7 +5286,7 @@ Engineered specifically for visual effects and gaming studios that require auton
         followupPool: [
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
@@ -5321,7 +5321,7 @@ Traditional studio pipelines suffer from massive file merge locks when multiple 
 <a href="#conform" class="ai-section-link">📦 View Conform Ingest Pipeline &rarr;</a>`
         ],
         followupPool: [
-          'How does your Conform Ingest and editorial turnover pipeline work?',
+          'How does Rajeev\'s Conform Ingest and editorial turnover pipeline work?',
           'Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO) standards',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
           'What is Model Context Protocol (MCP) and how is it used in production?',
@@ -5358,8 +5358,8 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 <a href="#architecture" class="ai-section-link">🎬 Launch Pipeline Visualizer &rarr;</a>`
         ],
         followupPool: [
-          'How does your Conform Ingest and editorial turnover pipeline work?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'How does Rajeev\'s Conform Ingest and editorial turnover pipeline work?',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
@@ -5395,7 +5395,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`
         ],
         followupPool: [
-          'How does your Conform Ingest and editorial turnover pipeline work?',
+          'How does Rajeev\'s Conform Ingest and editorial turnover pipeline work?',
           'Tell me about GenAI video pipelines with Veo, Kling, and Studio.AI',
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'Who is Rajeev Mutyalu and why should we hire him?'
@@ -5468,7 +5468,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`
         ],
         followupPool: [
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
           'Who is Rajeev Mutyalu and why should we hire him?'
@@ -5504,9 +5504,9 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
 <a href="#contact" class="ai-section-link">📬 Get in Touch &rarr;</a>`
         ],
         followupPool: [
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Tell me about your 20-year engineering leadership and mentorship background',
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
@@ -5542,7 +5542,7 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
         followupPool: [
           'How does zero-touch n8n studio automation orchestrate pipelines?',
           'Tell me about OpenTimelineIO (OTIO) and OpenColorIO (OCIO) standards',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'Who is Rajeev Mutyalu and why should we hire him?'
         ]
       },
@@ -5597,9 +5597,9 @@ Legacy CMX3600 EDLs truncate clip names to 8 characters and strip audio tracks. 
         ],
         followupPool: [
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'Tell me about your 20-year engineering leadership and mentorship background',
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?'
         ]
       },
@@ -5634,7 +5634,7 @@ Awarded for rapid prototyping, creativity, and deployment of functional generati
           'Who is Rajeev Mutyalu and why should we hire him?',
           'What is Model Context Protocol (MCP) and how is it used in production?',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
-          'Tell me about your 20-year engineering leadership and mentorship background'
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background'
         ]
       },
       {
@@ -5674,9 +5674,9 @@ Feel free to email or message Rajeev directly regarding Lead Pipeline Architectu
         ],
         followupPool: [
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'Tell me about your 20-year engineering leadership and mentorship background',
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain your OpenUSD VFX pipeline architecture'
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture'
         ]
       },
       {
@@ -5723,8 +5723,8 @@ You can download Rajeev's authentic executive portrait directly for event lineup
         ],
         followupPool: [
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'Tell me about your AI certifications, accelerator credentials, and hackathons',
-          'Tell me about your 20-year engineering leadership and mentorship background',
+          'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons',
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?'
         ]
       },
@@ -5757,9 +5757,9 @@ The <strong>Cyber Charlie Character Lab</strong> (<code>charlie-lab.html</code>)
         ],
         followupPool: [
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'Tell me about your AI certifications, accelerator credentials, and hackathons'
+          'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons'
         ]
       }
     ];
@@ -5852,7 +5852,7 @@ The <strong>Cyber Charlie Character Lab</strong> (<code>charlie-lab.html</code>)
             '🌌 Preset: Aurora Borealis',
             '💎 Preset: Hyper Diamond',
             '🛑 Turn Off Game Mode',
-            'Explain your OpenUSD VFX pipeline architecture'
+            'Explain Rajeev\'s OpenUSD VFX pipeline architecture'
           ], 4)
         };
       }
@@ -5874,9 +5874,9 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
 💻 <em>Please open <strong>rajeev-mutyalu.github.io/portfolio-website</strong> on a desktop or laptop to vaporize comets, build multi-stage combos, and slash comets with Cyber Charlie!</em>`,
             followups: getDynamicFollowups([
               'Who is Rajeev Mutyalu and why should we hire him?',
-              'Tell me about your 20-year engineering leadership and mentorship background',
+              'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
               'What is Model Context Protocol (MCP) and how is it used in production?',
-              'Explain your OpenUSD VFX pipeline architecture'
+              'Explain Rajeev\'s OpenUSD VFX pipeline architecture'
             ], 4)
           };
         }
@@ -5936,8 +5936,8 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
           followups: getDynamicFollowups([
             '🎮 Turn On Game Mode',
             'Who is Rajeev Mutyalu and why should we hire him?',
-            'Tell me about your 20-year engineering leadership and mentorship background',
-            'Explain your OpenUSD VFX pipeline architecture',
+            'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
+            'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
             'What is Model Context Protocol (MCP) and how is it used in production?'
           ], 4)
         };
@@ -5950,7 +5950,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
             response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Solar Flare!</em>`,
-            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about your 20-year engineering leadership and mentorship background']
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background']
           };
         }
         if (typeof window.togglePortfolioGameMode === 'function') {
@@ -5982,7 +5982,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
             response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Aurora Borealis!</em>`,
-            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about your 20-year engineering leadership and mentorship background']
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background']
           };
         }
         if (typeof window.togglePortfolioGameMode === 'function') {
@@ -6003,7 +6003,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
             '💎 Preset: Hyper Diamond',
             '☄️ Preset: Comet Cascade',
             '🛑 Turn Off Game Mode',
-            'Explain your OpenUSD VFX pipeline architecture'
+            'Explain Rajeev\'s OpenUSD VFX pipeline architecture'
           ], 4)
         };
       }
@@ -6014,7 +6014,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
             response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Hyper Diamond!</em>`,
-            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about your 20-year engineering leadership and mentorship background']
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background']
           };
         }
         if (typeof window.togglePortfolioGameMode === 'function') {
@@ -6046,7 +6046,7 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
             id: 'fx_mobile_notice',
             title: 'FX Presets on Desktop',
             response: `📱 <em>Cosmic FX presets are part of the desktop particle game engine. Please open this portfolio on a desktop or laptop to experience Comet Cascade!</em>`,
-            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about your 20-year engineering leadership and mentorship background']
+            followups: ['Who is Rajeev Mutyalu and why should we hire him?', 'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background']
           };
         }
         if (typeof window.togglePortfolioGameMode === 'function') {
@@ -6096,8 +6096,8 @@ The interactive <strong>Comet Cascade Particle Physics Engine &amp; Cyber Charli
 <em>Launching the simulator now in your browser! Press <kbd>Esc</kbd> or <kbd>M</kbd> to exit anytime.</em>`,
             followups: getDynamicFollowups([
               'Who is Rajeev Mutyalu and why should we hire him?',
-              'Tell me about your AI certifications, accelerator credentials, and hackathons',
-              'Explain your OpenUSD VFX pipeline architecture'
+              'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons',
+              'Explain Rajeev\'s OpenUSD VFX pipeline architecture'
             ], 3)
           };
         } else {
@@ -6111,8 +6111,8 @@ The in-browser device simulator is an internal development tool reserved exclusi
 This activates Chrome/Edge/Safari/Firefox native responsive mode with precise touch emulation and orientation switching!`,
             followups: getDynamicFollowups([
               'Who is Rajeev Mutyalu and why should we hire him?',
-              'Tell me about your AI certifications, accelerator credentials, and hackathons',
-              'Explain your OpenUSD VFX pipeline architecture'
+              'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons',
+              'Explain Rajeev\'s OpenUSD VFX pipeline architecture'
             ], 3)
           };
         }
@@ -6150,13 +6150,13 @@ I am currently operating in <strong>Offline Local-KB Mode</strong>, which is str
 Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.getElementById('aiLlmConfigBtn')?.click()"><strong>🧠 LOCAL KB ⚙️</strong></a> in the top-right header and switch to <strong>Live LLM (OpenAI)</strong> with your API key. In Live mode, I can write recursive functions, debug code, explain complex algorithms, and answer any general question in real time!<br/><br/>
 <em>In Local Mode, explore Rajeev's verified technical domains:</em><br/>
 • <strong>🐍 Core Python Architecture:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Core Python &amp; PySide UI Systems" style="display:inline-block; margin-top:2px;">Python &amp; PySide UI</a><br/>
-• <strong>🎬 OpenUSD Pipeline:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Explain your OpenUSD VFX pipeline architecture" style="display:inline-block; margin-top:2px;">OpenUSD Composition</a><br/>
+• <strong>🎬 OpenUSD Pipeline:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Explain Rajeev's OpenUSD VFX pipeline architecture" style="display:inline-block; margin-top:2px;">OpenUSD Composition</a><br/>
 • <strong>⚡ Zero-Touch n8n:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="How does zero-touch n8n studio automation orchestrate pipelines?" style="display:inline-block; margin-top:2px;">n8n Studio Automation</a><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a>`,
           followups: getDynamicFollowups([
             'Tell me about Rajeev\'s Python & PySide architecture',
             'Who is Rajeev Mutyalu and why should we hire him?',
-            'Explain your OpenUSD VFX pipeline architecture',
+            'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
             'What is Model Context Protocol (MCP) and how is it used in production?',
             'How does zero-touch n8n studio automation orchestrate pipelines?'
           ], 4)
@@ -6239,8 +6239,8 @@ I am an advanced interactive AI companion and VFX &amp; GenAI systems mascot eng
 <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Charlie Character Lab &rarr;</a>`,
           followups: getDynamicFollowups([
             'Who is Rajeev Mutyalu and why should we hire him?',
-            'Tell me about your AI certifications, accelerator credentials, and hackathons',
-            'Explain your OpenUSD VFX pipeline architecture',
+            'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons',
+            'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
             'What is Model Context Protocol (MCP) and how is it used in production?'
           ], 4)
         };
@@ -6301,8 +6301,8 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 <em>In the meantime, ask me about Rajeev's core expertise:</em><br/><br/>
 • <strong>🌟 Executive Summary:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?" style="display:inline-block; margin-top:2px;">Why Hire Rajeev?</a><br/>
 • <strong>📸 High-Res Portrait:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Download Rajeev high resolution profile photo" style="display:inline-block; margin-top:2px;">Download HD Photo</a><br/>
-• <strong>📜 AI Certifications &amp; Credentials:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about your AI certifications, accelerator credentials, and hackathons" style="display:inline-block; margin-top:2px;">AI Generalist &amp; Hackathon</a><br/>
-• <strong>🏆 Leadership &amp; Film Credits:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about your 20-year engineering leadership and mentorship background" style="display:inline-block; margin-top:2px;">Leadership &amp; Tenures</a><br/>
+• <strong>📜 AI Certifications &amp; Credentials:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about Rajeev's AI certifications, accelerator credentials, and hackathons" style="display:inline-block; margin-top:2px;">AI Generalist &amp; Hackathon</a><br/>
+• <strong>🏆 Leadership &amp; Film Credits:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Tell me about Rajeev's 20-year engineering leadership and mentorship background" style="display:inline-block; margin-top:2px;">Leadership &amp; Tenures</a><br/>
 • <strong>🎮 Interactive Game:</strong> Type <code>turn on game mode</code> or <code>turn off game mode</code><br/>
 • <strong>🔌 Model Context Protocol (MCP):</strong> Custom JSON-RPC tool binding for DCCs<br/>
 • <strong>🧠 Agentic AI &amp; Vibe Coding:</strong> Claude Code, Google Antigravity &amp; subagent swarms<br/>
@@ -6313,11 +6313,11 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 <a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>`,
         followups: getDynamicFollowups([
           'Download Rajeev high resolution profile photo',
-          'Tell me about your AI certifications, accelerator credentials, and hackathons',
+          'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons',
           'Who is Rajeev Mutyalu and why should we hire him?',
-          'Tell me about your 20-year engineering leadership and mentorship background',
+          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
           'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain your OpenUSD VFX pipeline architecture',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
           'How does zero-touch n8n studio automation orchestrate pipelines?',
           'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?'
         ], 4)
@@ -6419,7 +6419,16 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           </svg>
         </div>
         <div class="ai-msg-body">
-          <div class="ai-msg-author ai-user-author">You <span>[Terminal Prompt]</span></div>
+          <div class="ai-msg-header-row ai-user-header-row">
+            <button type="button" class="ai-msg-copy-btn ai-user-copy-btn" title="Copy question to clipboard" aria-label="Copy Question">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+            <div class="ai-msg-author ai-user-author">You <span>[Terminal Prompt]</span></div>
+          </div>
           <div class="ai-msg-content">${escapeHtml(trimmedQuery)}</div>
         </div>
       `;
@@ -6507,7 +6516,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (match.followups && match.followups.length) {
           followupsHtml = `
             <div class="ai-followup-container">
-              <span class="ai-followup-label">Explore Next:</span>
+              <span class="ai-followup-label">Explore Rajeev's Work:</span>
               <div class="ai-followup-chips">
                 ${match.followups.map(f => {
             let queryText = f;
@@ -6755,7 +6764,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (typingDiv) {
           const authorSpan = typingDiv.querySelector('.ai-msg-author span');
           if (authorSpan) {
-            authorSpan.textContent = isPortfolioQuery 
+            authorSpan.textContent = isPortfolioQuery
               ? `querying OpenAI [${charlieAiConfig.model}] with Portfolio Grounding...`
               : `querying OpenAI [${charlieAiConfig.model}] for Outside Knowledge...`;
           }
@@ -6985,7 +6994,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             activeStream = null;
           }
           if (audioContext && audioContext.state !== 'closed') {
-            try { audioContext.close(); } catch (e) {}
+            try { audioContext.close(); } catch (e) { }
           }
 
           if (audioChunks.length === 0) {
@@ -7211,7 +7220,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               if (typeof window.portfolioSoundEngine?.playComboDing === 'function' && !window.portfolioSoundEngine.isMuted) {
                 window.portfolioSoundEngine.playComboDing();
               }
-            } catch (e) {}
+            } catch (e) { }
 
             // Auto-submit corrected question to Charlie after 600ms so user can see their auto-corrected question
             setTimeout(() => {
@@ -7267,7 +7276,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               if (typeof window.portfolioSoundEngine?.playComboDing === 'function' && !window.portfolioSoundEngine.isMuted) {
                 window.portfolioSoundEngine.playComboDing();
               }
-            } catch (e) {}
+            } catch (e) { }
 
             if (autoSubmitTimeout) clearTimeout(autoSubmitTimeout);
             autoSubmitTimeout = setTimeout(() => {
@@ -7311,7 +7320,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           if (typeof window.portfolioSoundEngine?.playLaserDeflect === 'function' && !window.portfolioSoundEngine.isMuted) {
             window.portfolioSoundEngine.playLaserDeflect();
           }
-        } catch (e) {}
+        } catch (e) { }
 
         if (window.portfolioCharlie && typeof window.portfolioCharlie.addSparks === 'function') {
           window.portfolioCharlie.face = 'sprint';
@@ -7335,11 +7344,11 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (mediaRecorder && mediaRecorder.state === 'recording') {
           try {
             mediaRecorder.stop();
-          } catch (e) {}
+          } catch (e) { }
         } else if (nativeRecognition) {
           try {
             nativeRecognition.stop();
-          } catch (e) {}
+          } catch (e) { }
         }
       }
 
@@ -7446,7 +7455,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           }
         }
         if (termTitleSpan) {
-          termTitleSpan.textContent = isLive 
+          termTitleSpan.textContent = isLive
             ? `charlie-ai --session=assistant-console [OPENAI]`
             : `charlie-ai --session=assistant-console [LOCAL-KB]`;
         }
@@ -7454,7 +7463,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       function populateModalFields() {
         if (keyInput) keyInput.value = charlieAiConfig.apiKey || '';
-        
+
         const curModel = charlieAiConfig.model || 'gpt-4o-mini';
         if (STANDARD_MODELS.includes(curModel)) {
           if (modelSelect) modelSelect.value = curModel;
@@ -7718,7 +7727,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         terminal.classList.toggle('sidebar-collapsed', collapsed);
         try {
           localStorage.setItem('charlie_sidebar_collapsed', collapsed ? 'true' : 'false');
-        } catch (e) {}
+        } catch (e) { }
       }
 
       function toggleSidebar() {
@@ -7750,7 +7759,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (savedCollapsed === 'true') {
           setSidebarCollapsed(true);
         }
-      } catch (e) {}
+      } catch (e) { }
 
       // --- 2. Full Screen Mode (Maximized Below Top Banner) ---
       function isGameModeCombatActive() {
@@ -7894,10 +7903,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           if (pre.closest('.ai-code-wrapper')) return; // already wrapped
           const wrapper = document.createElement('div');
           wrapper.className = 'ai-code-wrapper';
-          
+
           const header = document.createElement('div');
           header.className = 'ai-code-header';
-          
+
           const rawText = pre.textContent || '';
           const isEmail = /subject:|^dear\s|best\s+regards|sincerely/im.test(rawText);
           const label = isEmail ? 'EMAIL TEMPLATE' : 'CODE / TEXT';
@@ -7913,7 +7922,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               <span>Copy Block</span>
             </button>
           `;
-          
+
           pre.parentNode.insertBefore(wrapper, pre);
           wrapper.appendChild(header);
           wrapper.appendChild(pre);
@@ -7954,14 +7963,14 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           return;
         }
 
-        // B. Full Response Copy Button (Charlie's Full Answer)
+        // B. Message Copy Button (Charlie's Full Answer or User Question Prompt)
         const copyBtn = e.target.closest('.ai-msg-copy-btn');
         if (copyBtn) {
           e.preventDefault();
           e.stopPropagation();
-          const botMsg = copyBtn.closest('.ai-bot-msg');
-          if (!botMsg) return;
-          const contentEl = botMsg.querySelector('.ai-msg-content');
+          const msgEl = copyBtn.closest('.ai-message');
+          if (!msgEl) return;
+          const contentEl = msgEl.querySelector('.ai-msg-content');
           if (!contentEl) return;
 
           // Clean text extraction: preserve line breaks, strip headers/buttons & HTML markup
@@ -8004,7 +8013,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         try {
           document.execCommand('copy');
           if (typeof cb === 'function') cb();
-        } catch (err) {}
+        } catch (err) { }
         document.body.removeChild(ta);
       }
 
@@ -8030,7 +8039,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           sessionStorage.removeItem('portfolio_return_top');
           window.scrollTo(0, 0);
         }
-      } catch (e) {}
+      } catch (e) { }
     });
 
     // 3. Setup Floating Quick-Launcher for Charlie (AI)
