@@ -8311,9 +8311,12 @@ screen and (max-device-width: 956px) and (orientation: landscape) {
 
   .cv-topbar #printCvBtn,
   .cv-topbar .btn-primary {
-    width: 36px !important;
-    min-width: 36px !important;
-    max-width: 36px !important;
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 42px !important;
+    height: 36px !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
   }
 
   .cv-topbar #copyContactBtn svg,
@@ -8322,6 +8325,7 @@ screen and (max-device-width: 956px) and (orientation: landscape) {
   .cv-topbar .btn-primary svg {
     margin: 0 !important;
     flex-shrink: 0 !important;
+    pointer-events: none !important;
   }
 
   .cv-page-wrapper {
@@ -8565,9 +8569,12 @@ body.is-mobile-screen .cv-topbar #printCvBtn,
 body.is-mobile-screen .cv-topbar .btn-primary,
 body.in-simulator .cv-topbar #printCvBtn,
 body.in-simulator .cv-topbar .btn-primary {
-  width: 36px !important;
-  min-width: 36px !important;
-  max-width: 36px !important;
+  width: 38px !important;
+  min-width: 38px !important;
+  max-width: 42px !important;
+  height: 36px !important;
+  cursor: pointer !important;
+  touch-action: manipulation !important;
 }
 
 body.is-mobile-screen .cv-topbar #copyContactBtn svg,
@@ -8580,6 +8587,7 @@ body.in-simulator .cv-topbar #printCvBtn svg,
 body.in-simulator .cv-topbar .btn-primary svg {
   margin: 0 !important;
   flex-shrink: 0 !important;
+  pointer-events: none !important;
 }
 
 
@@ -10925,4 +10933,486 @@ body.is-local-build .floating-sim-trigger:active {
   .ai-att-modal-btn.download span {
     display: none;
   }
+}
+
+/* ==========================================================================
+   🖨️ Mobile & Universal CV Export & Print Modal (Vetric Design System)
+   ========================================================================== */
+.cv-export-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  padding: 16px;
+  box-sizing: border-box;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cv-export-modal-overlay.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.cv-export-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(3, 7, 18, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.cv-export-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  background: linear-gradient(145deg, rgba(10, 16, 32, 0.98) 0%, rgba(5, 9, 20, 0.99) 100%);
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  border-radius: 22px;
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.92),
+    0 0 45px rgba(0, 242, 254, 0.22);
+  padding: 22px 24px 18px;
+  z-index: 2;
+  transform: scale(1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  color: #f1f5f9;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  margin: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #00f2fe rgba(255, 255, 255, 0.04);
+}
+
+/* Sleek Cyber Cyan Scrollbar for Export Card */
+.cv-export-modal-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cv-export-modal-card::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  margin: 6px 0;
+}
+
+.cv-export-modal-card::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00f2fe 0%, #2563eb 100%);
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
+}
+
+.cv-export-modal-card::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
+}
+
+.cv-export-modal-overlay.hidden .cv-export-modal-card {
+  transform: scale(0.94) translateY(16px);
+}
+
+.cv-export-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cv-export-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cv-export-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(0, 242, 254, 0.1);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 16px rgba(0, 242, 254, 0.2);
+}
+
+.cv-export-modal-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.cv-export-modal-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cv-export-track-pill {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(0, 242, 254, 0.14);
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  color: #38bdf8;
+  font-weight: 600;
+  font-size: 0.74rem;
+  font-family: var(--font-mono);
+}
+
+.cv-export-modal-close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.cv-export-modal-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  transform: rotate(90deg);
+}
+
+.cv-export-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.cv-export-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #f1f5f9;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
+}
+
+.cv-export-option:hover,
+.cv-export-option:focus {
+  background: rgba(0, 242, 254, 0.07);
+  border-color: rgba(0, 242, 254, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 242, 254, 0.12);
+  outline: none;
+}
+
+.cv-export-option:active {
+  transform: translateY(0);
+  background: rgba(0, 242, 254, 0.12);
+}
+
+/* Option 1: PDF Hero Option */
+.cv-export-option.option-pdf {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.18) 0%, rgba(37, 99, 235, 0.12) 100%);
+  border: 1px solid rgba(0, 242, 254, 0.45);
+  box-shadow: 0 4px 18px rgba(0, 242, 254, 0.14);
+}
+
+.cv-export-option.option-pdf:hover {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.28) 0%, rgba(37, 99, 235, 0.2) 100%);
+  border-color: rgba(0, 242, 254, 0.7);
+  box-shadow: 0 8px 26px rgba(0, 242, 254, 0.28);
+}
+
+.cv-export-option-icon {
+  font-size: 1.5rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cv-export-option.option-pdf .cv-export-option-icon {
+  background: rgba(0, 242, 254, 0.15);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+.cv-export-option-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.cv-export-option-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 3px;
+}
+
+.cv-export-option-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.cv-export-badge-recommended {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #00f2fe 0%, #2563eb 100%);
+  color: #050811;
+}
+
+.cv-export-badge-pill {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cv-export-option-desc {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.cv-export-option-arrow {
+  font-size: 1.1rem;
+  color: #64748b;
+  transition: transform 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.cv-export-option:hover .cv-export-option-arrow {
+  color: #00f2fe;
+  transform: translateX(3px);
+}
+
+.cv-export-modal-footer {
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cv-export-footer-hint {
+  font-size: 0.74rem;
+  color: #64748b;
+  line-height: 1.4;
+  display: block;
+}
+
+.cv-export-footer-hint strong {
+  color: #94a3b8;
+}
+
+/* Portrait Mobile adjustments (iPhone / small screens <= 600px) */
+@media (max-width: 600px) and (min-height: 551px) {
+  .cv-export-modal-overlay {
+    padding: 12px;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .cv-export-modal-card {
+    border-radius: 20px;
+    padding: 20px 18px 16px;
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+    margin: auto !important;
+  }
+
+  .cv-export-modal-title {
+    font-size: 1.02rem;
+  }
+
+  .cv-export-option {
+    padding: 12px 14px;
+    gap: 12px;
+  }
+
+  .cv-export-option-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 1.3rem;
+  }
+
+  .cv-export-option-name {
+    font-size: 0.88rem;
+  }
+
+  .cv-export-option-desc {
+    font-size: 0.74rem;
+  }
+}
+
+/* 📱 Rotated Mobile Mode (Landscape: max-height 550px, e.g. iPhone 16 Pro Max 956x440 sideways) */
+@media screen and (orientation: landscape) and (max-height: 550px),
+screen and (max-height: 550px),
+screen and (pointer: coarse) and (orientation: landscape) and (max-height: 550px) {
+  .cv-export-modal-overlay {
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 8px 12px !important;
+    overflow-y: auto !important;
+  }
+
+  .cv-export-modal-card {
+    max-width: 600px !important;
+    max-height: calc(100vh - 16px) !important;
+    max-height: calc(100dvh - 16px) !important;
+    padding: 12px 18px 10px !important;
+    margin: auto !important;
+    border-radius: 18px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .cv-export-modal-header {
+    margin-bottom: 8px !important;
+    padding-bottom: 6px !important;
+  }
+
+  .cv-export-icon-badge {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1.1rem !important;
+    border-radius: 8px !important;
+  }
+
+  .cv-export-modal-title {
+    font-size: 0.95rem !important;
+  }
+
+  .cv-export-modal-subtitle {
+    font-size: 0.72rem !important;
+    margin-top: 2px !important;
+  }
+
+  .cv-export-track-pill {
+    font-size: 0.68rem !important;
+    padding: 0px 6px !important;
+  }
+
+  .cv-export-modal-close {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 1.1rem !important;
+  }
+
+  .cv-export-modal-body {
+    gap: 7px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .cv-export-option {
+    padding: 8px 12px !important;
+    gap: 10px !important;
+    border-radius: 10px !important;
+  }
+
+  .cv-export-option-icon {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 1.15rem !important;
+    border-radius: 8px !important;
+  }
+
+  .cv-export-option-name {
+    font-size: 0.85rem !important;
+  }
+
+  .cv-export-badge-recommended,
+  .cv-export-badge-pill {
+    font-size: 0.62rem !important;
+    padding: 1px 5px !important;
+  }
+
+  .cv-export-option-desc {
+    font-size: 0.72rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .cv-export-modal-footer {
+    padding-top: 6px !important;
+  }
+
+  .cv-export-footer-hint {
+    font-size: 0.68rem !important;
+    line-height: 1.25 !important;
+  }
+}
+
+body.is-rotated-mobile .cv-export-modal-overlay {
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 8px 12px !important;
+  overflow-y: auto !important;
+}
+
+body.is-rotated-mobile .cv-export-modal-card {
+  max-width: 600px !important;
+  max-height: calc(100vh - 16px) !important;
+  max-height: calc(100dvh - 16px) !important;
+  padding: 12px 18px 10px !important;
+  margin: auto !important;
+  border-radius: 18px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }

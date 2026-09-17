@@ -755,8 +755,69 @@
         </div>
       </section>
 
-    </div>
   </main>
+
+  <!-- 🖨️ Context-Aware CV Print & PDF Export Modal -->
+  <div class="cv-export-modal-overlay hidden" id="cvExportModal" role="dialog" aria-modal="true" aria-labelledby="cvExportModalTitle">
+    <div class="cv-export-modal-backdrop" id="cvExportModalBackdrop"></div>
+    <div class="cv-export-modal-card">
+      <header class="cv-export-modal-header">
+        <div class="cv-export-modal-title-wrap">
+          <div class="cv-export-icon-badge">🖨️</div>
+          <div>
+            <h3 class="cv-export-modal-title" id="cvExportModalTitle">Print &amp; Export Curriculum Vitae</h3>
+            <p class="cv-export-modal-subtitle">Focus Track: <span class="cv-export-track-pill" id="cvExportTrackPill">Production Technology</span></p>
+          </div>
+        </div>
+        <button type="button" class="cv-export-modal-close" id="cvExportModalClose" aria-label="Close export modal">&times;</button>
+      </header>
+
+      <div class="cv-export-modal-body">
+        <!-- Option 1: Official Vector PDF Download (Hero Recommended on Mobile / iOS) -->
+        <a href="Rajeev-Mutyalu-Production-Technology-VFX-Architect-CV.pdf" download="Rajeev-Mutyalu-Production-Technology-VFX-Architect-CV.pdf" target="_blank" rel="noopener" class="cv-export-option option-pdf" id="cvExportPdfLink">
+          <div class="cv-export-option-icon">📄</div>
+          <div class="cv-export-option-content">
+            <div class="cv-export-option-top">
+              <span class="cv-export-option-name">Download Official PDF</span>
+              <span class="cv-export-badge-recommended">Recommended for Mobile &amp; iOS</span>
+            </div>
+            <p class="cv-export-option-desc">Direct vector PDF (ATS-optimised). View instantly on iPhone, save to Apple Files, AirDrop, or WhatsApp.</p>
+          </div>
+          <div class="cv-export-option-arrow">→</div>
+        </a>
+
+        <!-- Option 2: AirPrint / Browser Print -->
+        <button type="button" class="cv-export-option option-print" id="cvExportAirPrintBtn">
+          <div class="cv-export-option-icon">🖨️</div>
+          <div class="cv-export-option-content">
+            <div class="cv-export-option-top">
+              <span class="cv-export-option-name">AirPrint / Browser Print</span>
+              <span class="cv-export-badge-pill">Direct Print</span>
+            </div>
+            <p class="cv-export-option-desc">Launch native Apple AirPrint dialog for wireless printers, or browser print view.</p>
+          </div>
+          <div class="cv-export-option-arrow">→</div>
+        </button>
+
+        <!-- Option 3: Copy Plain Text ATS Resume -->
+        <button type="button" class="cv-export-option option-ats" id="cvExportAtsBtn">
+          <div class="cv-export-option-icon">📋</div>
+          <div class="cv-export-option-content">
+            <div class="cv-export-option-top">
+              <span class="cv-export-option-name">Copy ATS Plain Text Resume</span>
+              <span class="cv-export-badge-pill">1-Click Copy</span>
+            </div>
+            <p class="cv-export-option-desc">Plain text formatted without styling, ready to paste directly into ATS job application portals.</p>
+          </div>
+          <div class="cv-export-option-arrow">→</div>
+        </button>
+      </div>
+
+      <footer class="cv-export-modal-footer">
+        <span class="cv-export-footer-hint">💡 Tip: On iPhone, tapping <strong>Download Official PDF</strong> opens the clean 3-page document with native iOS Save to Files, Print &amp; Share tools.</span>
+      </footer>
+    </div>
+  </div>
 
   <!-- Interactive Theme Mode Toggle & Helper Script -->
   <script>
@@ -1294,27 +1355,138 @@ Jawaharlal Nehru Technological University (JNTU) / SVCET
       });
     }
 
-    // 🖨️ Context-Aware Print / PDF Handler (Sets filename to active track)
+    // 🖨️ Context-Aware Print & PDF Export Modal Handler
     const printCvBtn = document.getElementById('printCvBtn');
+    const cvExportModal = document.getElementById('cvExportModal');
+    const cvExportModalClose = document.getElementById('cvExportModalClose');
+    const cvExportModalBackdrop = document.getElementById('cvExportModalBackdrop');
+    const cvExportPdfLink = document.getElementById('cvExportPdfLink');
+    const cvExportAirPrintBtn = document.getElementById('cvExportAirPrintBtn');
+    const cvExportAtsBtn = document.getElementById('cvExportAtsBtn');
+    const cvExportTrackPill = document.getElementById('cvExportTrackPill');
+
+    function openExportModal() {
+      if (!cvExportModal) {
+        // Ultimate fallback: open print or PDF directly if modal missing
+        window.print();
+        return;
+      }
+      const isAi = (activeTrack === 'ai');
+      const pdfFile = isAi
+        ? 'Rajeev-Mutyalu-AI-GenAI-Systems-Architect-CV.pdf'
+        : 'Rajeev-Mutyalu-Production-Technology-VFX-Architect-CV.pdf';
+      const trackName = isAi ? 'AI & Creative Technology' : 'Production Technology & Architecture';
+
+      if (cvExportTrackPill) {
+        cvExportTrackPill.textContent = trackName;
+      }
+      if (cvExportPdfLink) {
+        cvExportPdfLink.href = pdfFile;
+        cvExportPdfLink.setAttribute('download', pdfFile);
+      }
+
+      cvExportModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeExportModal() {
+      if (!cvExportModal) return;
+      cvExportModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
     if (printCvBtn) {
       printCvBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        try {
-          const config = (typeof TRACK_CONFIGS !== 'undefined' && TRACK_CONFIGS[activeTrack])
-            ? TRACK_CONFIGS[activeTrack]
-            : (TRACK_CONFIGS ? TRACK_CONFIGS.vfx : null);
-          const originalTitle = document.title;
-          const targetTitle = (config && config.docTitle) ? config.docTitle : 'Rajeev-Mutyalu-Production-Technology-Architect-CV';
+        e.stopPropagation();
+        openExportModal();
+      });
+    }
+
+    if (cvExportAirPrintBtn) {
+      cvExportAirPrintBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeExportModal();
+
+        const config = (typeof TRACK_CONFIGS !== 'undefined' && TRACK_CONFIGS[activeTrack])
+          ? TRACK_CONFIGS[activeTrack]
+          : (TRACK_CONFIGS ? TRACK_CONFIGS.vfx : null);
+        const originalTitle = document.title;
+        const targetTitle = (config && config.docTitle) ? config.docTitle : 'Rajeev-Mutyalu-Curriculum-Vitae';
+
+        // Detect iOS (iPhone / iPad) or WebKit touch devices to avoid killing transient user gesture via document.title mutation
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        if (!isIOS) {
           document.title = targetTitle;
+        }
+
+        try {
+          if (window.self !== window.top) {
+            window.focus();
+          }
           window.print();
+        } catch (err) {
+          const isAi = (activeTrack === 'ai');
+          const pdfFile = isAi
+            ? 'Rajeev-Mutyalu-AI-GenAI-Systems-Architect-CV.pdf'
+            : 'Rajeev-Mutyalu-Production-Technology-VFX-Architect-CV.pdf';
+          window.open(pdfFile, '_blank');
+          showCvToast('Opening official CV PDF...', '📄');
+        }
+
+        if (!isIOS) {
           setTimeout(() => {
             document.title = originalTitle;
           }, 1200);
-        } catch (err) {
-          window.print();
         }
       });
     }
+
+    if (cvExportAtsBtn) {
+      cvExportAtsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const config = (typeof TRACK_CONFIGS !== 'undefined' && TRACK_CONFIGS[activeTrack])
+          ? TRACK_CONFIGS[activeTrack]
+          : (TRACK_CONFIGS ? TRACK_CONFIGS.vfx : null);
+        const resumeText = (config && config.atsResume) ? config.atsResume : '';
+
+        copyTextToClipboard(resumeText).then(() => {
+          showCvToast(`ATS Resume for ${config ? config.name : 'Production Technology'} copied!`);
+          closeExportModal();
+        }).catch(err => {
+          showCvToast('Failed to copy ATS text: ' + err, '⚠️');
+        });
+      });
+    }
+
+    if (cvExportPdfLink) {
+      cvExportPdfLink.addEventListener('click', () => {
+        showCvToast('Opening official CV PDF...', '📄');
+        setTimeout(closeExportModal, 350);
+      });
+    }
+
+    if (cvExportModalClose) {
+      cvExportModalClose.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeExportModal();
+      });
+    }
+
+    if (cvExportModalBackdrop) {
+      cvExportModalBackdrop.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeExportModal();
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && cvExportModal && !cvExportModal.classList.contains('hidden')) {
+        closeExportModal();
+      }
+    });
 
     // 📋 1-Click Copy ATS-Clean Resume Text (Copies active track text)
     const copyAtsBtn = document.getElementById('copyAtsBtn');
