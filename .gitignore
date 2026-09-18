@@ -17,6 +17,10 @@ docs/*.pdf
 *.pdf
 !docs/Rajeev-Mutyalu-AI-Generalist-certificate.pdf
 !docs/Rajeev-Mutyalu-hackathon-certificate.pdf
+!Rajeev-Mutyalu-AI-GenAI-Systems-Architect-CV.pdf
+!Rajeev-Mutyalu-Production-Technology-VFX-Architect-CV.pdf
+!docs/Rajeev-Mutyalu-AI-GenAI-Systems-Architect-CV.pdf
+!docs/Rajeev-Mutyalu-Production-Technology-VFX-Architect-CV.pdf
 
 # OS generated files
 .DS_Store
