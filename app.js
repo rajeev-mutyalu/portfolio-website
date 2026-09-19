@@ -4473,6 +4473,7 @@
     const aiChatSoundToggle = document.getElementById('aiChatSoundToggle');
     const aiChatSoundIcon = document.getElementById('aiChatSoundIcon');
     const aiChatSoundText = document.getElementById('aiChatSoundText');
+    const aiChatSoundTextShort = document.getElementById('aiChatSoundTextShort');
 
     function setPortfolioAudioMute(forceMute) {
       if (!soundEngine) return false;
@@ -4497,6 +4498,7 @@
         aiChatSoundToggle.setAttribute('title', isMuted ? 'Unmute Chat Audio & SFX' : 'Mute Chat Audio & SFX');
         if (aiChatSoundIcon) aiChatSoundIcon.textContent = isMuted ? '🔇' : '🔊';
         if (aiChatSoundText) aiChatSoundText.textContent = isMuted ? 'SFX MUTED' : 'SFX ON';
+        if (aiChatSoundTextShort) aiChatSoundTextShort.textContent = isMuted ? 'OFF' : 'ON';
       }
       window.isChatAudioMuted = isMuted;
       try {

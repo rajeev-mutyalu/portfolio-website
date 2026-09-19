@@ -2873,6 +2873,10 @@ body.in-simulator #floatingCharlieBtn {
   line-height: 1.25;
 }
 
+.ai-sound-text-short {
+  display: none;
+}
+
 .ai-bot-sound-btn:hover {
   background: rgba(56, 189, 248, 0.22);
   border-color: #38bdf8;
@@ -11692,78 +11696,280 @@ body.in-simulator.is-rotated-mobile.mobile-chat-open .ai-bot-header {
   padding-right: 14px !important;
 }
 
-/* 1. Remove Profile button on mobile & tablets completely */
-@media (max-width: 1024px) {
-  .ai-bot-profile-btn,
-  #aiProfileReturnBtn {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-}
+/* ==========================================================================
+   📱 3-Profile Mobile AI Terminal Header Controls Matrix
+   ========================================================================== */
 
-body.is-mobile-screen .ai-bot-profile-btn,
-body.mobile-chat-open .ai-bot-profile-btn {
+/* 1. Large Mobile (iPhone 16 Pro Max, Pixel 8) - PORTRAIT */
+/* Left: <- icon only | Right: 🧠 ⚙️ and 🔊 ON/OFF | Remove Close & Title */
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-title,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-title,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-title {
   display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
-/* 2. Remove Charlie Lab completely in mobile and Tablets */
-@media (max-width: 1024px), (pointer: coarse) {
-  .ai-bot-lab-link,
-  a[href="charlie-lab.html"] {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-header-actions,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-header-actions,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-header-actions {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-left: 0 !important;
 }
 
-body.is-mobile-screen .ai-bot-lab-link,
-body.is-rotated-mobile .ai-bot-lab-link,
-body.mobile-chat-open .ai-bot-lab-link {
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-profile-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  margin-right: auto !important;
+  padding: 3px 8px !important;
+  border-radius: 16px !important;
+}
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn span,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn span,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-profile-btn span {
   display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
-/* 3. Brain icon with cog wheel and NO text on mobile portrait */
-body.is-mobile-screen:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
-@media (max-width: 768px) and (orientation: portrait) {
-  .ai-bot-llm-btn .ai-llm-text {
-    display: none !important;
-  }
-  .ai-bot-llm-btn {
-    padding: 3px 8px !important;
-    gap: 4px !important;
-  }
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text {
+  display: none !important;
+}
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-llm-btn {
+  display: inline-flex !important;
+  padding: 3px 8px !important;
+  gap: 4px !important;
 }
 
-/* 4. But OpenAI settings full text will appear on rotate mode */
-body.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
-body.is-mobile-screen.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
-@media (max-width: 1024px) and (orientation: landscape),
-(max-height: 550px) and (orientation: landscape) {
-  body.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
-  body.is-mobile-screen.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text {
-    display: inline !important;
-  }
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-sound-btn {
+  display: inline-flex !important;
+  padding: 3px 8px !important;
+  gap: 4px !important;
+}
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text {
+  display: none !important;
+}
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text-short,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text-short,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text-short {
+  display: inline !important;
+}
+
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-maximize-btn,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-maximize-btn,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-maximize-btn,
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-lab-link,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-lab-link,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-lab-link {
+  display: none !important;
+}
+
+/* 2. Large Mobile (iPhone / Pixel) - ROTATE MODE (Landscape) */
+/* Left: <- Profile | Right: 🧠 OPENAI: 4o-mini ⚙️, 🔊 SFX ON, Close ✕ */
+body.is-large-mobile.is-rotated-mobile .ai-bot-title,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-title,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-title {
+  display: none !important;
+}
+
+body.is-large-mobile.is-rotated-mobile .ai-bot-header-actions,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-header-actions,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-header-actions {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-left: 0 !important;
+}
+
+body.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  margin-right: auto !important;
+  padding: 3px 9px !important;
+}
+body.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn span,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn span,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn span {
+  display: inline !important;
+}
+
+body.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn {
+  display: inline-flex !important;
+}
+body.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn .ai-llm-text {
+  display: inline !important;
+}
+
+body.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn {
+  display: inline-flex !important;
+}
+body.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn .ai-sound-text {
+  display: inline !important;
+}
+body.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text-short,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text-short,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn .ai-sound-text-short {
+  display: none !important;
+}
+
+body.is-large-mobile.is-rotated-mobile .ai-bot-maximize-btn,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-maximize-btn,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-maximize-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+}
+body.is-large-mobile.is-rotated-mobile .ai-bot-lab-link,
+body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-lab-link,
+body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-lab-link {
+  display: none !important;
+}
+
+/* 3. Tablet (iPad Pro / Air) - BOTH PORTRAIT & LANDSCAPE SHOW LIKE DESKTOP */
+body.is-tablet-device .ai-bot-title,
+body.in-simulator.is-tablet-device .ai-bot-title {
+  display: flex !important;
+  visibility: visible !important;
+}
+body.is-tablet-device .ai-bot-header-actions,
+body.in-simulator.is-tablet-device .ai-bot-header-actions {
+  width: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-left: auto !important;
+}
+body.is-tablet-device .ai-bot-profile-btn,
+body.in-simulator.is-tablet-device .ai-bot-profile-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  margin-right: 0 !important;
+  padding: 2px 9px !important;
+}
+body.is-tablet-device .ai-bot-profile-btn span,
+body.in-simulator.is-tablet-device .ai-bot-profile-btn span {
+  display: inline !important;
+}
+body.is-tablet-device .ai-bot-llm-btn,
+body.in-simulator.is-tablet-device .ai-bot-llm-btn {
+  display: inline-flex !important;
+}
+body.is-tablet-device .ai-bot-llm-btn .ai-llm-text,
+body.in-simulator.is-tablet-device .ai-bot-llm-btn .ai-llm-text {
+  display: inline !important;
+}
+body.is-tablet-device .ai-bot-sound-btn,
+body.in-simulator.is-tablet-device .ai-bot-sound-btn {
+  display: inline-flex !important;
+}
+body.is-tablet-device .ai-bot-sound-btn .ai-sound-text,
+body.in-simulator.is-tablet-device .ai-bot-sound-btn .ai-sound-text {
+  display: inline !important;
+}
+body.is-tablet-device .ai-bot-sound-btn .ai-sound-text-short,
+body.in-simulator.is-tablet-device .ai-bot-sound-btn .ai-sound-text-short {
+  display: none !important;
+}
+body.is-tablet-device .ai-bot-maximize-btn,
+body.in-simulator.is-tablet-device .ai-bot-maximize-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+}
+body.is-tablet-device .ai-bot-lab-link,
+body.in-simulator.is-tablet-device .ai-bot-lab-link {
+  display: none !important;
+}
+
+/* 4. Compact SE (iPhone SE) - BOTH MODES ONLY ICONS */
+body.is-compact-se .ai-bot-title,
+body.in-simulator.is-compact-se .ai-bot-title,
+body.is-compact-phone .ai-bot-title {
+  display: none !important;
+}
+body.is-compact-se .ai-bot-header-actions,
+body.in-simulator.is-compact-se .ai-bot-header-actions,
+body.is-compact-phone .ai-bot-header-actions {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 6px !important;
+  margin-left: 0 !important;
+}
+body.is-compact-se .ai-bot-profile-btn,
+body.in-simulator.is-compact-se .ai-bot-profile-btn,
+body.is-compact-phone .ai-bot-profile-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  margin-right: auto !important;
+  padding: 2px 6px !important;
+}
+body.is-compact-se .ai-bot-profile-btn span,
+body.in-simulator.is-compact-se .ai-bot-profile-btn span,
+body.is-compact-phone .ai-bot-profile-btn span {
+  display: none !important;
+}
+body.is-compact-se .ai-bot-llm-btn,
+body.in-simulator.is-compact-se .ai-bot-llm-btn,
+body.is-compact-phone .ai-bot-llm-btn {
+  display: inline-flex !important;
+  padding: 2px 6px !important;
+  gap: 3px !important;
+}
+body.is-compact-se .ai-bot-llm-btn .ai-llm-text,
+body.in-simulator.is-compact-se .ai-bot-llm-btn .ai-llm-text,
+body.is-compact-phone .ai-bot-llm-btn .ai-llm-text {
+  display: none !important;
+}
+body.is-compact-se .ai-bot-sound-btn,
+body.in-simulator.is-compact-se .ai-bot-sound-btn,
+body.is-compact-phone .ai-bot-sound-btn {
+  display: inline-flex !important;
+  padding: 2px 6px !important;
+  gap: 3px !important;
+}
+body.is-compact-se .ai-bot-sound-btn .ai-sound-text,
+body.in-simulator.is-compact-se .ai-bot-sound-btn .ai-sound-text,
+body.is-compact-phone .ai-bot-sound-btn .ai-sound-text {
+  display: none !important;
+}
+body.is-compact-se .ai-bot-sound-btn .ai-sound-text-short,
+body.in-simulator.is-compact-se .ai-bot-sound-btn .ai-sound-text-short,
+body.is-compact-phone .ai-bot-sound-btn .ai-sound-text-short {
+  display: inline !important;
+}
+body.is-compact-se .ai-bot-maximize-btn,
+body.in-simulator.is-compact-se .ai-bot-maximize-btn,
+body.is-compact-phone .ai-bot-maximize-btn,
+body.is-compact-se .ai-bot-lab-link,
+body.in-simulator.is-compact-se .ai-bot-lab-link,
+body.is-compact-phone .ai-bot-lab-link {
+  display: none !important;
 }
 
 body.mobile-chat-open .ai-bot-body-split,
