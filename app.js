@@ -7589,6 +7589,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
     let isGeneratingResponse = false;
     let chatGeneratingFailsafeTimeout = null;
     let activeTypeInterval = null;
+    let activeAnimationId = null;
     let activeDeliveryTimeout = null;
     let activeAbortController = null;
     let activeTypingDiv = null;
@@ -7618,12 +7619,19 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         activeTypeInterval = null;
       }
 
+      if (activeAnimationId) {
+        cancelAnimationFrame(activeAnimationId);
+        activeAnimationId = null;
+      }
+
       if (activeTypingDiv && activeTypingDiv.parentNode) {
         activeTypingDiv.parentNode.removeChild(activeTypingDiv);
         activeTypingDiv = null;
       }
 
       if (activeBotMsgDiv && activeContentEl) {
+        activeContentEl.style.clipPath = 'none';
+        activeContentEl.style.willChange = 'auto';
         const cursor = activeContentEl.querySelector('.typewriter-cursor');
         if (cursor) cursor.remove();
 
@@ -7871,6 +7879,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       activeAbortController = new AbortController();
       activeDeliveryTimeout = null;
       activeTypeInterval = null;
+      activeAnimationId = null;
       activeBotMsgDiv = null;
       activeContentEl = null;
 
@@ -7950,16 +7959,9 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
         // Physical Delivery Synchronization:
         const isMobile = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
-        const textTravelY = !isMobile ? Math.max(65, Math.min(130, Math.round(bottomCenter.y - writeCenter.y))) : 0;
         botMsgDiv.style.animation = 'none';
         botMsgDiv.style.opacity = '1';
-
-        if (!isMobile) {
-          botMsgDiv.style.willChange = 'transform';
-          botMsgDiv.style.transform = `translateY(${textTravelY}px)`;
-        } else {
-          botMsgDiv.style.transform = 'none';
-        }
+        botMsgDiv.style.transform = 'none';
 
         aiChatStream.appendChild(botMsgDiv);
         scrollStreamToBottom();
@@ -7971,7 +7973,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         const startTypingSequence = () => {
           if (aiBotStatusPill) {
             const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-            if (text) text.textContent = 'CHARLIE WRITING ANS [CYBER SPEED]...';
+            if (text) text.textContent = 'CHARLIE STREAMING ANS [CYBER SPEED]...';
           }
 
           if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
@@ -7985,154 +7987,103 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             window.portfolioCharlie.addSparks(bottomCenter.x, bottomCenter.y, '#00f2fe', 16);
           }
 
-          // Supersonic Cyber Typewriter Effect: Stream text rapidly while Charlie scribbles with laser stylus at Point B!
-          let charIndex = 0;
-          const chunkSize = 16;
-          const tickInterval = 14;
+          contentEl.innerHTML = fullResponse;
+          if (typeof window.attachBlockCopyButtons === 'function') {
+            window.attachBlockCopyButtons(contentEl);
+          }
 
-          const typeInterval = setInterval(() => {
-            charIndex = Math.min(fullResponse.length, charIndex + chunkSize);
-            contentEl.innerHTML = fullResponse.substring(0, charIndex) + (charIndex < fullResponse.length ? '<span class="typewriter-cursor">⚡</span>' : '');
+          // Top-to-Bottom Smooth Cyber Stream Reveal & Synchronized Charlie Ascending in Lockstep
+          const revealDuration = Math.min(650, Math.max(420, Math.round(fullResponse.length * 0.75)));
+          const revealStart = performance.now();
+          const startX = bottomCenter.x;
+          const startY = bottomCenter.y;
+          const endX = writeCenter.x;
+          const endY = writeCenter.y;
 
-            // At Point B: Charlie stays firmly locked at bottomCenter scribbling with his laser stylus!
-            if (window.portfolioCharlie && (window.portfolioCharlie.state === 'writing')) {
-              window.portfolioCharlie.x = bottomCenter.x;
-              window.portfolioCharlie.y = bottomCenter.y;
-              window.portfolioCharlie.targetX = bottomCenter.x;
-              window.portfolioCharlie.targetY = bottomCenter.y;
+          contentEl.style.clipPath = 'inset(0 0 100% 0)';
+          contentEl.style.willChange = 'clip-path';
 
-              if (Math.random() > 0.25) {
-                const stylusTipX = bottomCenter.x + window.portfolioCharlie.facing * 14 * window.portfolioCharlie.scale;
-                const stylusTipY = bottomCenter.y - 2 * window.portfolioCharlie.scale;
-                window.portfolioCharlie.addSparks(stylusTipX, stylusTipY, '#00f2fe', 2);
+          const stepSyncReveal = (now) => {
+            if (!isGeneratingResponse) {
+              contentEl.style.clipPath = 'none';
+              contentEl.style.willChange = 'auto';
+              return;
+            }
+            const elapsed = now - revealStart;
+            const progress = Math.min(1.0, elapsed / revealDuration);
+            const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+
+            // 1. Unroll text top to bottom in real-time
+            const bottomInset = ((1 - ease) * 100).toFixed(2);
+            contentEl.style.clipPath = `inset(0 0 ${bottomInset}% 0)`;
+
+            // 2. Charlie Choreography:
+            // Stays at Point B (startX, startY) scribbling until text reaches 50% (halfway),
+            // then ascends from Point B to Point C (endX, endY) across 50% -> 100% of text progress,
+            // arriving at Point C exactly as text reaches 100%!
+            if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+              let curX = startX;
+              let curY = startY;
+
+              if (progress < 0.50) {
+                curX = startX;
+                curY = startY;
+              } else {
+                const charlieNorm = (progress - 0.50) / 0.50;
+                const charlieEase = 1 - Math.pow(1 - charlieNorm, 3);
+                curX = startX + (endX - startX) * charlieEase;
+                curY = startY + (endY - startY) * charlieEase;
+              }
+
+              if (window.portfolioCharlie.state === 'writing' || window.portfolioCharlie.state === 'idle') {
+                window.portfolioCharlie.x = curX;
+                window.portfolioCharlie.y = curY;
+                window.portfolioCharlie.targetX = curX;
+                window.portfolioCharlie.targetY = curY;
+
+                if (Math.random() > 0.25) {
+                  const stylusTipX = curX + window.portfolioCharlie.facing * 14 * window.portfolioCharlie.scale;
+                  const stylusTipY = curY - 2 * window.portfolioCharlie.scale;
+                  window.portfolioCharlie.addSparks(stylusTipX, stylusTipY, '#00f2fe', 2);
+                }
               }
             }
 
             scrollStreamToBottom();
 
-            // When writing animation at Point B completes:
-            if (charIndex >= fullResponse.length) {
-              clearInterval(typeInterval);
-              activeTypeInterval = null;
-              contentEl.innerHTML = fullResponse;
-              if (typeof window.attachBlockCopyButtons === 'function') {
-                window.attachBlockCopyButtons(contentEl);
-              }
+            if (progress < 1.0) {
+              activeAnimationId = requestAnimationFrame(stepSyncReveal);
+            } else {
+              activeAnimationId = null;
+              contentEl.style.clipPath = 'none';
+              contentEl.style.willChange = 'auto';
               scrollStreamToBottom();
 
-              if (aiBotStatusPill) {
-                const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                if (text) text.textContent = 'TEXT ASCENDING [CHARLIE WAITING 20%]...';
+              // Append followups smoothly once writing & ascending complete
+              if (followupsHtml && !botMsgDiv.querySelector('.ai-followup-container')) {
+                const followContainer = document.createElement('div');
+                followContainer.innerHTML = followupsHtml;
+                followContainer.style.animation = 'msgFadeIn 0.35s ease forwards';
+                botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
+                scrollStreamToBottom();
               }
 
-              // Writing at Point B is 100% COMPLETE!
-              // Now text & background bubble start moving up first towards Point C.
-              // Charlie WAITS at Point B until text moves 20%, then ATTACHES and ascends in lockstep!
+              // Arrived at Point C (Center of Screen) simultaneously: Return Dash to Point A (Home Anchor)
+              setCharlieThinkingState(false);
               if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-                const ascentDuration = 650;
-                const ascentStart = performance.now();
-                const startX = bottomCenter.x;
-                const startY = bottomCenter.y;
-                const endX = writeCenter.x;
-                const endY = writeCenter.y;
-
-                const stepAscent = (now) => {
-                  if (!isGeneratingResponse) return; // User stopped mid-flight
-                  const elapsed = now - ascentStart;
-                  const textProgress = Math.min(1.0, elapsed / ascentDuration);
-                  const textEase = 1 - Math.pow(1 - textProgress, 3); // easeOutCubic
-
-                  // 1. Text & Background bubble continuously moves up from Point B to Point C
-                  const curTranslateY = (1 - textEase) * textTravelY;
-                  botMsgDiv.style.transform = `translateY(${curTranslateY.toFixed(2)}px)`;
-
-                  // 2. Charlie Sync: wait at Point B until text has moved 20%, then attach!
-                  if (textProgress < 0.20) {
-                    if (window.portfolioCharlie && window.portfolioCharlie.state === 'writing') {
-                      window.portfolioCharlie.x = startX;
-                      window.portfolioCharlie.y = startY;
-                      window.portfolioCharlie.targetX = startX;
-                      window.portfolioCharlie.targetY = startY;
-
-                      if (Math.random() > 0.35) {
-                        window.portfolioCharlie.addSparks(startX, startY + 14 * window.portfolioCharlie.scale, '#00f2fe', 2);
-                      }
-                    }
-                    if (aiBotStatusPill) {
-                      const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                      if (text) text.textContent = 'TEXT ASCENDING [CHARLIE ATTACHING]...';
-                    }
-                  } else {
-                    const charlieNorm = (textProgress - 0.20) / 0.80;
-                    const charlieEase = 1 - Math.pow(1 - charlieNorm, 3);
-                    const curX = startX + (endX - startX) * charlieEase;
-                    const curY = startY + (endY - startY) * charlieEase;
-
-                    if (window.portfolioCharlie && window.portfolioCharlie.state === 'writing') {
-                      window.portfolioCharlie.x = curX;
-                      window.portfolioCharlie.y = curY;
-                      window.portfolioCharlie.targetX = curX;
-                      window.portfolioCharlie.targetY = curY;
-
-                      if (Math.random() > 0.25) {
-                        window.portfolioCharlie.addSparks(curX, curY + 14 * window.portfolioCharlie.scale, '#00f2fe', 2);
-                      }
-                    }
-                    if (aiBotStatusPill) {
-                      const text = aiBotStatusPill.querySelector('.ai-status-text') || aiBotStatusPill.querySelector('span:last-child');
-                      if (text) text.textContent = 'CHARLIE & TEXT ASCENDING...';
-                    }
-                  }
-
-                  scrollStreamToBottom();
-
-                  if (textProgress < 1.0) {
-                    requestAnimationFrame(stepAscent);
-                  } else {
-                    // Arrived at Point C (Screen Center): Delivery complete!
-                    botMsgDiv.style.transform = 'translateY(0px)';
-                    botMsgDiv.style.willChange = 'auto';
-
-                    // Append followups smoothly once settled at Point C
-                    if (followupsHtml && !botMsgDiv.querySelector('.ai-followup-container')) {
-                      const followContainer = document.createElement('div');
-                      followContainer.innerHTML = followupsHtml;
-                      followContainer.style.animation = 'msgFadeIn 0.35s ease forwards';
-                      botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
-                      scrollStreamToBottom();
-                    }
-
-                    setCharlieThinkingState(false);
-
-                    // Immediate return dash to Point A (mascot anchor) without victory delay
-                    if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-                      const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
-                      window.portfolioCharlie.triggerReturnDash(endX, endY, homeAnchor.x, homeAnchor.y);
-                    }
-                    if (window.portfolioDockCharlie) {
-                      window.portfolioDockCharlie.triggerWaiting();
-                    }
-
-                    // Re-enable selecting questions and inputs immediately as return dash commences
-                    setChatGeneratingLock(false);
-                  }
-                };
-
-                requestAnimationFrame(stepAscent);
-              } else {
-                botMsgDiv.style.transform = 'translateY(0px)';
-                if (followupsHtml && !botMsgDiv.querySelector('.ai-followup-container')) {
-                  const followContainer = document.createElement('div');
-                  followContainer.innerHTML = followupsHtml;
-                  botMsgDiv.querySelector('.ai-msg-body').appendChild(followContainer);
-                }
-                setCharlieThinkingState(false);
-                setChatGeneratingLock(false);
+                const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
+                window.portfolioCharlie.triggerReturnDash(endX, endY, homeAnchor.x, homeAnchor.y);
               }
-            }
-          }, tickInterval);
+              if (window.portfolioDockCharlie) {
+                window.portfolioDockCharlie.triggerWaiting();
+              }
 
-          activeTypeInterval = typeInterval;
+              // Re-enable selecting questions and inputs immediately
+              setChatGeneratingLock(false);
+            }
+          };
+
+          activeAnimationId = requestAnimationFrame(stepSyncReveal);
         };
 
         if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
