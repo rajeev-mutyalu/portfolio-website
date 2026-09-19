@@ -83,7 +83,7 @@
   };
 
   window.isMobileWithCharlie = function () {
-    return window.isMobileScreen() && !window.isCompactPhone();
+    return window.isMobileScreen();
   };
 
   function updateMobileOrientationState() {
@@ -118,18 +118,8 @@
       }
 
       const charlieCanvas = document.getElementById('charlieCanvas');
-      if (isCompact) {
-        // Compact phone (e.g. iPhone SE): AI Chat works 100%, but canvas mascot animation is suppressed
-        if (charlieCanvas) charlieCanvas.style.display = 'none';
-        if (window.portfolioCharlie) {
-          window.portfolioCharlie.x = -1000;
-          window.portfolioCharlie.y = -1000;
-          window.portfolioCharlie.sectionActive = false;
-        }
-      } else {
-        // Standard & large mobile / tablets: living Charlie mascot is active
-        if (charlieCanvas) charlieCanvas.style.display = '';
-      }
+      // Living Charlie mascot is active across ALL mobile devices, tablets, and compact SE!
+      if (charlieCanvas) charlieCanvas.style.display = '';
 
       if (window.portfolioEngine && window.portfolioEngine.isEnabled) {
         window.portfolioEngine.toggleState(false);
@@ -9187,12 +9177,17 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           }
         }
 
-        // 2. Terminal Header Session Text: charlie-ai --session=assistant-console [LOCAL-KB] vs [OPENAI: ...]
+        // 2. Terminal Header Title Text: charlie-ai on mobile/tablet
         const titleSpan = document.getElementById('aiTerminalTitleText') || termTitleSpan || document.querySelector('.ai-bot-terminal .ai-bot-title span');
         if (titleSpan) {
-          titleSpan.textContent = isLive
-            ? `charlie-ai --session=assistant-console [OPENAI: ${(charlieAiConfig.model || 'gpt-4o-mini').toUpperCase()}]`
-            : `charlie-ai --session=assistant-console [LOCAL-KB]`;
+          const isMobileOrTablet = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 1024);
+          if (isMobileOrTablet) {
+            titleSpan.textContent = 'charlie-ai';
+          } else {
+            titleSpan.textContent = isLive
+              ? `charlie-ai --session=assistant-console [OPENAI: ${(charlieAiConfig.model || 'gpt-4o-mini').toUpperCase()}]`
+              : `charlie-ai --session=assistant-console [LOCAL-KB]`;
+          }
         }
 
         // 3. Status Pill in Header

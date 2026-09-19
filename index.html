@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=186" />
+  <link rel="stylesheet" href="style.css?v=188" />
   <link rel="prefetch" href="cv.html" />
 
   <!-- Navigation & Scroll Position Guard: Always land cleanly on the first page when returning from CV, Charlie Lab, or Full Screen -->
@@ -98,9 +98,6 @@
     @media (max-width: 768px), (max-height: 550px) and (orientation: landscape) {
       body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock {
         display: inline-flex !important;
-      }
-      body.is-compact-phone .compact-se-icon {
-        display: block !important;
       }
     }
   </style>
@@ -541,7 +538,7 @@
             <line x1="8" y1="21" x2="16" y2="21"></line>
             <line x1="12" y1="17" x2="12" y2="21"></line>
           </svg>
-          <span id="aiTerminalTitleText">charlie-ai --session=assistant-console [LOCAL-KB]</span>
+          <span id="aiTerminalTitleText">charlie-ai</span>
         </div>
         <div class="ai-bot-header-actions">
           <button type="button" class="ai-bot-profile-btn" id="aiProfileReturnBtn"
@@ -2025,7 +2022,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=186"></script>
+  <script src="app.js?v=188"></script>
 </body>
 
 </html>

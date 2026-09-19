@@ -172,15 +172,6 @@ body {
   display: block;
 }
 
-@media (max-width: 768px) {
-  body.is-compact-phone #charlieCanvas {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-  }
-}
-
 /* ⚡ Cyber Charlie Combat Cursor Mode - Ensure cursor is always visible across canvas & playground */
 body.combat-cursor-active,
 body.combat-cursor-active a,
@@ -580,8 +571,7 @@ body.combat-cursor-active .ai-bot-game-lockout button {
 (max-device-width: 956px) and (orientation: landscape) {
 
   .floating-charlie-btn,
-  #floatingCharlieBtn,
-  body.is-compact-phone #charlieCanvas {
+  #floatingCharlieBtn {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
@@ -589,7 +579,6 @@ body.combat-cursor-active .ai-bot-game-lockout button {
   }
 }
 
-body.is-compact-phone #charlieCanvas,
 body.is-mobile-screen .floating-charlie-btn,
 body.is-mobile-screen #floatingCharlieBtn,
 body.in-simulator .floating-charlie-btn,
@@ -6012,7 +6001,6 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   .mobile-nav-link[href="#ai-assistant"],
   a[href="#ai-assistant"],
   .nav-ai-link,
-  body.is-compact-phone #charlieCanvas,
   .floating-charlie-btn,
   #floatingCharlieBtn,
   #charlieDockCanvas,
@@ -6061,7 +6049,6 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   .mobile-nav-link[href="#ai-assistant"],
   a[href="#ai-assistant"],
   .nav-ai-link,
-  body.is-compact-phone #charlieCanvas,
   .floating-charlie-btn,
   #floatingCharlieBtn,
   #charlieDockCanvas,
@@ -11554,20 +11541,8 @@ body.is-rotated-mobile .cv-export-modal-card {
     pointer-events: none;
   }
 
-  /* Compact phones (iPhone SE, min-dim <= 380px): no canvas mascot animation, sleek emoji icon */
   body.is-mobile-screen #mobileCharlieTopDock .compact-se-icon {
-    display: none;
-    font-size: 1.15rem;
-    line-height: 1;
-    pointer-events: none;
-  }
-
-  body.is-compact-phone #mobileCharlieTopDock canvas {
     display: none !important;
-  }
-
-  body.is-compact-phone #mobileCharlieTopDock .compact-se-icon {
-    display: block !important;
   }
 }
 
@@ -11649,9 +11624,9 @@ body.is-mobile-screen.mobile-chat-open #charlie {
   overflow: hidden !important;
 }
 
-/* Ensure Charlie mascot canvas stays in front of mobile chat modal */
-body.mobile-chat-open:not(.is-compact-phone) #charlieCanvas,
-body.is-mobile-screen.mobile-chat-open:not(.is-compact-phone) #charlieCanvas {
+/* Ensure Charlie mascot canvas stays in front of mobile chat modal across all mobile devices */
+body.mobile-chat-open #charlieCanvas,
+body.is-mobile-screen.mobile-chat-open #charlieCanvas {
   z-index: 10000005 !important;
   display: block !important;
   visibility: visible !important;
@@ -11700,32 +11675,100 @@ body.in-simulator.is-rotated-mobile.mobile-chat-open .ai-bot-header {
    📱 3-Profile Mobile AI Terminal Header Controls Matrix
    ========================================================================== */
 
-/* 1. Large Mobile (iPhone 16 Pro Max, Pixel 8) - PORTRAIT */
-/* Left: <- icon only | Right: 🧠 ⚙️ and 🔊 ON/OFF | Remove Close & Title */
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-title,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-title,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-title {
-  display: none !important;
-}
-
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-header-actions,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-header-actions,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-header-actions {
-  width: 100% !important;
+/* Universal Mobile/Tablet Header: Monitor + charlie-ai on Left, Actions on Right, NO Close Button */
+body.is-mobile-screen .ai-bot-header,
+body.mobile-chat-open .ai-bot-header,
+body.in-simulator .ai-bot-header {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 8px !important;
-  margin-left: 0 !important;
 }
 
+body.is-mobile-screen .ai-bot-title,
+body.mobile-chat-open .ai-bot-title,
+body.in-simulator .ai-bot-title,
+body.is-large-mobile .ai-bot-title,
+body.is-tablet-device .ai-bot-title,
+body.is-compact-se .ai-bot-title,
+body.is-compact-phone .ai-bot-title,
+body.is-rotated-mobile .ai-bot-title {
+  display: flex !important;
+  visibility: visible !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  color: #38bdf8 !important;
+  letter-spacing: 0.02em !important;
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+body.is-mobile-screen .ai-bot-title svg,
+body.mobile-chat-open .ai-bot-title svg,
+body.in-simulator .ai-bot-title svg {
+  width: 14px !important;
+  height: 14px !important;
+  flex-shrink: 0 !important;
+  stroke: #38bdf8 !important;
+  display: block !important;
+}
+
+body.is-mobile-screen .ai-bot-header-actions,
+body.mobile-chat-open .ai-bot-header-actions,
+body.in-simulator .ai-bot-header-actions,
+body.is-large-mobile .ai-bot-header-actions,
+body.is-tablet-device .ai-bot-header-actions,
+body.is-compact-se .ai-bot-header-actions,
+body.is-compact-phone .ai-bot-header-actions,
+body.is-rotated-mobile .ai-bot-header-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-left: auto !important;
+  width: auto !important;
+  flex-shrink: 0 !important;
+}
+
+/* Close Button REMOVED in ALL 3 Profiles (Both Portrait & Landscape) */
+body.is-mobile-screen .ai-bot-maximize-btn,
+body.mobile-chat-open .ai-bot-maximize-btn,
+body.in-simulator .ai-bot-maximize-btn,
+body.is-large-mobile .ai-bot-maximize-btn,
+body.is-tablet-device .ai-bot-maximize-btn,
+body.is-compact-se .ai-bot-maximize-btn,
+body.is-compact-phone .ai-bot-maximize-btn,
+body.is-rotated-mobile .ai-bot-maximize-btn,
+body.is-mobile-screen #aiTerminalMaximizeBtn,
+body.mobile-chat-open #aiTerminalMaximizeBtn,
+body.in-simulator #aiTerminalMaximizeBtn {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Charlie Lab hidden on mobile/tablet */
+body.is-mobile-screen .ai-bot-lab-link,
+body.mobile-chat-open .ai-bot-lab-link,
+body.in-simulator .ai-bot-lab-link {
+  display: none !important;
+}
+
+/* 1. Large Mobile (iPhone 16 Pro Max, Pixel 8) - PORTRAIT */
+/* Left: 🖥️ charlie-ai | Right: [<-] [🧠 ⚙️] [🔊 ON/OFF] */
 body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn,
 body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn,
 body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-profile-btn {
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  margin-right: auto !important;
+  margin-right: 0 !important;
   padding: 3px 8px !important;
   border-radius: 16px !important;
 }
@@ -11735,17 +11778,17 @@ body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated
   display: none !important;
 }
 
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text {
-  display: none !important;
-}
 body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn,
 body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn,
 body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-llm-btn {
   display: inline-flex !important;
   padding: 3px 8px !important;
   gap: 4px !important;
+}
+body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text {
+  display: none !important;
 }
 
 body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn,
@@ -11766,41 +11809,15 @@ body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated
   display: inline !important;
 }
 
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-maximize-btn,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-maximize-btn,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-maximize-btn,
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-lab-link,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-lab-link,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-lab-link {
-  display: none !important;
-}
-
 /* 2. Large Mobile (iPhone / Pixel) - ROTATE MODE (Landscape) */
-/* Left: <- Profile | Right: 🧠 OPENAI: 4o-mini ⚙️, 🔊 SFX ON, Close ✕ */
-body.is-large-mobile.is-rotated-mobile .ai-bot-title,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-title,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-title {
-  display: none !important;
-}
-
-body.is-large-mobile.is-rotated-mobile .ai-bot-header-actions,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-header-actions,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-header-actions {
-  width: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 8px !important;
-  margin-left: 0 !important;
-}
-
+/* Left: 🖥️ charlie-ai | Right: [<- Profile] [🧠 OPENAI: 4o-mini ⚙️] [🔊 SFX ON] */
 body.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn,
 body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn,
 body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn {
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  margin-right: auto !important;
+  margin-right: 0 !important;
   padding: 3px 9px !important;
 }
 body.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn span,
@@ -11836,32 +11853,8 @@ body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-s
   display: none !important;
 }
 
-body.is-large-mobile.is-rotated-mobile .ai-bot-maximize-btn,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-maximize-btn,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-maximize-btn {
-  display: inline-flex !important;
-  visibility: visible !important;
-}
-body.is-large-mobile.is-rotated-mobile .ai-bot-lab-link,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-lab-link,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-lab-link {
-  display: none !important;
-}
-
-/* 3. Tablet (iPad Pro / Air) - BOTH PORTRAIT & LANDSCAPE SHOW LIKE DESKTOP */
-body.is-tablet-device .ai-bot-title,
-body.in-simulator.is-tablet-device .ai-bot-title {
-  display: flex !important;
-  visibility: visible !important;
-}
-body.is-tablet-device .ai-bot-header-actions,
-body.in-simulator.is-tablet-device .ai-bot-header-actions {
-  width: auto !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  margin-left: auto !important;
-}
+/* 3. Tablet (iPad Pro / Air) - BOTH PORTRAIT & LANDSCAPE SHOW FULL TEXT & NO CLOSE */
+/* Left: 🖥️ charlie-ai | Right: [<- Profile] [🧠 LOCAL KB ⚙️] [🔊 SFX ON] */
 body.is-tablet-device .ai-bot-profile-btn,
 body.in-simulator.is-tablet-device .ai-bot-profile-btn {
   display: inline-flex !important;
@@ -11894,39 +11887,16 @@ body.is-tablet-device .ai-bot-sound-btn .ai-sound-text-short,
 body.in-simulator.is-tablet-device .ai-bot-sound-btn .ai-sound-text-short {
   display: none !important;
 }
-body.is-tablet-device .ai-bot-maximize-btn,
-body.in-simulator.is-tablet-device .ai-bot-maximize-btn {
-  display: inline-flex !important;
-  visibility: visible !important;
-}
-body.is-tablet-device .ai-bot-lab-link,
-body.in-simulator.is-tablet-device .ai-bot-lab-link {
-  display: none !important;
-}
 
 /* 4. Compact SE (iPhone SE) - BOTH MODES ONLY ICONS */
-body.is-compact-se .ai-bot-title,
-body.in-simulator.is-compact-se .ai-bot-title,
-body.is-compact-phone .ai-bot-title {
-  display: none !important;
-}
-body.is-compact-se .ai-bot-header-actions,
-body.in-simulator.is-compact-se .ai-bot-header-actions,
-body.is-compact-phone .ai-bot-header-actions {
-  width: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 6px !important;
-  margin-left: 0 !important;
-}
+/* Left: 🖥️ charlie-ai | Right: [<-] [🧠 ⚙️] [🔊 ON/OFF] */
 body.is-compact-se .ai-bot-profile-btn,
 body.in-simulator.is-compact-se .ai-bot-profile-btn,
 body.is-compact-phone .ai-bot-profile-btn {
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  margin-right: auto !important;
+  margin-right: 0 !important;
   padding: 2px 6px !important;
 }
 body.is-compact-se .ai-bot-profile-btn span,
@@ -11963,9 +11933,6 @@ body.in-simulator.is-compact-se .ai-bot-sound-btn .ai-sound-text-short,
 body.is-compact-phone .ai-bot-sound-btn .ai-sound-text-short {
   display: inline !important;
 }
-body.is-compact-se .ai-bot-maximize-btn,
-body.in-simulator.is-compact-se .ai-bot-maximize-btn,
-body.is-compact-phone .ai-bot-maximize-btn,
 body.is-compact-se .ai-bot-lab-link,
 body.in-simulator.is-compact-se .ai-bot-lab-link,
 body.is-compact-phone .ai-bot-lab-link {
