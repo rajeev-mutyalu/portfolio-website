@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=155" />
+  <link rel="stylesheet" href="style.css?v=157" />
   <link rel="prefetch" href="cv.html" />
 
   <!-- Navigation & Scroll Position Guard: Always land cleanly on the first page when returning from CV, Charlie Lab, or Full Screen -->
@@ -71,6 +71,39 @@
       }
     })();
   </script>
+  <style>
+    /* Strict Desktop Isolation: Mobile Charlie top dock NEVER renders on desktop */
+    #mobileCharlieTopDock,
+    .mobile-charlie-top-dock,
+    .compact-se-icon {
+      display: none !important;
+    }
+    @media (min-width: 769px) {
+      #mobileCharlieTopDock,
+      .mobile-charlie-top-dock,
+      #mobileCharlieDockCanvas,
+      .compact-se-icon {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        position: absolute !important;
+        left: -99999px !important;
+        pointer-events: none !important;
+      }
+    }
+    @media (max-width: 768px), (max-height: 550px) and (orientation: landscape) {
+      body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock {
+        display: inline-flex !important;
+      }
+      body.is-compact-phone .compact-se-icon {
+        display: block !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -93,6 +126,11 @@
         <span class="logo-badge">RM</span>
         <span class="logo-text">Rajeev Mutyalu</span>
       </a>
+      <!-- Mobile Top Navigation Charlie Dock (Active ONLY on Mobile, Strictly Hidden on Desktop) -->
+      <button type="button" class="mobile-charlie-top-dock" id="mobileCharlieTopDock" style="display: none !important;" title="Chat with Charlie (AI Assistant)" aria-label="Chat with Charlie AI">
+        <canvas id="mobileCharlieDockCanvas" width="48" height="48"></canvas>
+        <span class="compact-se-icon" aria-hidden="true">🤖</span>
+      </button>
 
       <nav class="nav-links">
         <a href="#initiatives" class="nav-link">Capabilities</a>
@@ -1986,7 +2024,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=172"></script>
+  <script src="app.js?v=174"></script>
 </body>
 
 </html>

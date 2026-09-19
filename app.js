@@ -20,43 +20,52 @@
   // Universal Mobile & Rotated Mobile Detection (Portrait & Landscape)
   // ==========================================================================
   window.isMobileOrRotatedMobile = function () {
-    // 1. Inside simulator iframe
-    if (window.self !== window.top) return true;
-    if (document.body && (document.body.classList.contains('in-simulator') || document.body.classList.contains('is-mobile-screen'))) return true;
-    // 2. Query param indicator
+    // 1. Explicit simulator flag via query param or class
     if (window.location.search && window.location.search.includes('sim=1')) return true;
+    if (document.body && document.body.classList.contains('in-simulator')) return true;
+    if (window.self !== window.top && Math.min(window.innerWidth, window.innerHeight) <= 768) return true;
+
+    // 2. Strict Desktop Guard: Any screen wider than 768px and taller than 550px is ALWAYS desktop
+    if (window.innerWidth > 768 && window.innerHeight > 550) return false;
+
     // 3. Standard portrait mobile width (<= 768px)
-    if (window.innerWidth <= 768) return true;
-    // 4. Rotated mobile landscape: phone turned sideways has small height (<= 550px) while width > height
-    if (window.innerHeight <= 550 && window.innerWidth > window.innerHeight) return true;
-    // 5. CSS media queries for orientation landscape and mobile dimensions
-    if (window.matchMedia && (
-      window.matchMedia('(max-height: 550px) and (orientation: landscape)').matches ||
-      window.matchMedia('(pointer: coarse) and (max-height: 550px)').matches ||
-      window.matchMedia('(max-device-width: 956px) and (orientation: landscape)').matches
-    )) return true;
-    // 6. Touch phone: minimum dimension <= 500px covers all mobile smartphones (iPhone 16 Pro Max is 440x956)
+    if (window.innerWidth <= 768 && window.innerWidth <= window.innerHeight) return true;
+
+    // 4. Rotated mobile landscape: phone turned sideways has small height (<= 500px) and width <= 956px
+    if (window.innerWidth > window.innerHeight && window.innerHeight <= 500 && window.innerWidth <= 956) return true;
+
+    // 5. Touch phone: minimum dimension <= 500px covers all mobile smartphones (iPhone 16 Pro Max is 440x956)
     const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
     if (isTouch && Math.min(window.innerWidth, window.innerHeight) <= 500) return true;
+
     return false;
   };
 
   window.isRotatedMobileLandscape = function () {
+    if (window.innerWidth > 768 && window.innerHeight > 550) return false;
     const isLandscape = (window.innerWidth > window.innerHeight);
-    const isSmallHeight = (window.innerHeight <= 650);
-    const isMobileDim = (Math.min(window.innerWidth, window.innerHeight) <= 600) ||
-      (window.matchMedia && (
-        window.matchMedia('(max-height: 650px) and (orientation: landscape)').matches ||
-        window.matchMedia('(orientation: landscape) and (max-width: 1024px) and (max-height: 700px)').matches ||
-        window.matchMedia('(pointer: coarse) and (max-height: 650px)').matches ||
-        window.matchMedia('(max-device-width: 1024px) and (orientation: landscape)').matches
-      ));
+    const isSmallHeight = (window.innerHeight <= 500);
+    const isMobileDim = (Math.min(window.innerWidth, window.innerHeight) <= 500 && Math.max(window.innerWidth, window.innerHeight) <= 956);
     return isLandscape && (isSmallHeight || isMobileDim);
+  };
+
+  window.isCompactPhone = function () {
+    const minDim = Math.min(window.innerWidth, window.innerHeight);
+    return minDim <= 380;
+  };
+
+  window.isMobileScreen = function () {
+    return window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+  };
+
+  window.isMobileWithCharlie = function () {
+    return window.isMobileScreen() && !window.isCompactPhone();
   };
 
   function updateMobileOrientationState() {
     const isMob = window.isMobileOrRotatedMobile();
     const isRotated = window.isRotatedMobileLandscape ? window.isRotatedMobileLandscape() : false;
+    const isCompact = window.isCompactPhone();
     if (!document.body) return;
 
     if (isRotated) {
@@ -67,22 +76,53 @@
 
     if (isMob) {
       document.body.classList.add('is-mobile-screen');
+      if (isCompact) {
+        document.body.classList.add('is-compact-phone');
+      } else {
+        document.body.classList.remove('is-compact-phone');
+      }
+
       const floatingBtn = document.getElementById('floatingCharlieBtn');
       if (floatingBtn) floatingBtn.classList.add('hidden');
-      const charlieCanvas = document.getElementById('charlieCanvas');
-      if (charlieCanvas) charlieCanvas.style.display = 'none';
       const botHud = document.getElementById('botHudWidget');
       if (botHud) botHud.classList.add('hidden');
-      if (window.portfolioCharlie) {
-        window.portfolioCharlie.x = -1000;
-        window.portfolioCharlie.y = -1000;
-        window.portfolioCharlie.sectionActive = false;
+
+      const mobileDock = document.getElementById('mobileCharlieTopDock');
+      if (mobileDock && !document.body.classList.contains('mobile-chat-open')) {
+        mobileDock.style.display = 'inline-flex';
       }
+
+      const charlieCanvas = document.getElementById('charlieCanvas');
+      if (isCompact) {
+        // Compact phone (e.g. iPhone SE): AI Chat works 100%, but canvas mascot animation is suppressed
+        if (charlieCanvas) charlieCanvas.style.display = 'none';
+        if (window.portfolioCharlie) {
+          window.portfolioCharlie.x = -1000;
+          window.portfolioCharlie.y = -1000;
+          window.portfolioCharlie.sectionActive = false;
+        }
+      } else {
+        // Standard & large mobile / tablets: living Charlie mascot is active
+        if (charlieCanvas) charlieCanvas.style.display = '';
+      }
+
       if (window.portfolioEngine && window.portfolioEngine.isEnabled) {
         window.portfolioEngine.toggleState(false);
       }
     } else {
+      // 100% Desktop Lock: strictly restore desktop state exactly as live
       document.body.classList.remove('is-mobile-screen');
+      document.body.classList.remove('is-compact-phone');
+      document.body.classList.remove('is-rotated-mobile');
+      document.body.classList.remove('mobile-chat-open');
+
+      const mobileDock = document.getElementById('mobileCharlieTopDock');
+      if (mobileDock) {
+        mobileDock.style.display = 'none';
+      }
+
+      const floatingBtn = document.getElementById('floatingCharlieBtn');
+      if (floatingBtn) floatingBtn.classList.remove('hidden');
       const charlieCanvas = document.getElementById('charlieCanvas');
       if (charlieCanvas) charlieCanvas.style.display = '';
     }
@@ -523,10 +563,13 @@
     triggerSectionEscort(targetEl, sectionName) {
       if (!targetEl) return;
 
-      // If deployed in dock (off-screen), start flight from dock button coordinates
+      // If deployed in dock (off-screen), start flight from appropriate dock button coordinates
       if (!isFinite(this.x) || this.x < -200 || !isFinite(this.y) || this.y < -200) {
+        const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+        const mobileDock = document.getElementById('mobileCharlieTopDock');
         const floatingBtn = document.getElementById('floatingCharlieBtn');
-        const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+        const dockEl = (isMob && mobileDock) ? mobileDock : floatingBtn;
+        const dockRect = dockEl ? dockEl.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
         this.x = dockRect.left + dockRect.width / 2;
         this.y = dockRect.top + dockRect.height / 2;
         if (floatingBtn) floatingBtn.classList.add('hidden');
@@ -625,45 +668,32 @@
 
     getChatWritingCenter() {
       const streamEl = document.getElementById('aiChatStream');
-      const terminalEl = document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
       const navbarEl = document.querySelector('.navbar');
-      const navBottom = (navbarEl ? navbarEl.getBoundingClientRect().bottom : 70);
+      const isMobileChatOpen = document.body && document.body.classList.contains('mobile-chat-open');
+      const navBottom = (navbarEl && !isMobileChatOpen ? navbarEl.getBoundingClientRect().bottom : 0);
 
-      const targetEl = (streamEl && streamEl.getBoundingClientRect().height > 80) ? streamEl : terminalEl;
-      if (targetEl) {
-        const sRect = targetEl.getBoundingClientRect();
-        const centerX = Math.max(60, Math.min(window.innerWidth - 60, sRect.left + sRect.width / 2));
-        const topBound = Math.max(sRect.top + 45, navBottom + 45);
-        const bottomBound = Math.max(topBound + 20, sRect.bottom - 45);
-        const naturalY = sRect.top + sRect.height * 0.46;
-        const centerY = Math.max(topBound, Math.min(bottomBound, naturalY));
-        const isVisible = (sRect.bottom > navBottom + 50 && sRect.top < window.innerHeight - 50);
-        return { x: centerX, y: centerY, isVisible };
+      if (streamEl) {
+        const sRect = streamEl.getBoundingClientRect();
+        const centerX = sRect.left + sRect.width / 2;
+        const targetScreenY = window.innerHeight * 0.46;
+        const clampedY = Math.max(navBottom + 85, Math.min(sRect.bottom - 90, targetScreenY));
+        const isVisible = (sRect.bottom > navBottom + 90 && sRect.top < window.innerHeight - 80);
+        return { x: centerX, y: clampedY, isVisible };
       }
-      return { x: window.innerWidth / 2, y: window.innerHeight / 2, isVisible: true };
+      return { x: window.innerWidth / 2, y: window.innerHeight * 0.46, isVisible: true };
     }
 
     getChatBottomCenter() {
       const streamEl = document.getElementById('aiChatStream');
-      const formEl = document.getElementById('aiChatForm');
       const terminalEl = document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
       const navbarEl = document.querySelector('.navbar');
-      const navBottom = (navbarEl ? navbarEl.getBoundingClientRect().bottom : 70);
+      const isMobileChatOpen = document.body && document.body.classList.contains('mobile-chat-open');
+      const navBottom = (navbarEl && !isMobileChatOpen ? navbarEl.getBoundingClientRect().bottom : 0);
 
-      const targetEl = (streamEl && streamEl.getBoundingClientRect().height > 80) ? streamEl : terminalEl;
-      if (targetEl) {
-        const sRect = targetEl.getBoundingClientRect();
-        const centerX = Math.max(60, Math.min(window.innerWidth - 60, sRect.left + sRect.width / 2));
-        // Position Charlie hovering a few pixels above the input bar at bottom-center
-        let bottomY;
-        if (formEl) {
-          const fRect = formEl.getBoundingClientRect();
-          // Charlie's feet extend downward from center by ~22*scale. To hover ~8px above the input bar:
-          bottomY = fRect.top - (30 * this.scale);
-        } else {
-          bottomY = sRect.bottom - (42 * this.scale);
-        }
-        // Clamp so Charlie stays safely inside visible viewport
+      if (streamEl) {
+        const sRect = streamEl.getBoundingClientRect();
+        const centerX = sRect.left + sRect.width / 2;
+        let bottomY = sRect.bottom - 75;
         bottomY = Math.max(navBottom + 60, Math.min(window.innerHeight - 55, bottomY));
         const isVisible = (sRect.bottom > navBottom + 50 && sRect.top < window.innerHeight - 50);
         return { x: centerX, y: bottomY, isVisible };
@@ -675,31 +705,35 @@
       const streamEl = document.getElementById('aiChatStream');
       const terminalEl = document.querySelector('.ai-bot-terminal') || document.getElementById('ai-assistant');
       const navbarEl = document.querySelector('.navbar');
-      const navBottom = (navbarEl ? navbarEl.getBoundingClientRect().bottom : 70);
+      const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+      const isMobileChatOpen = document.body && document.body.classList.contains('mobile-chat-open');
+      const navBottom = (navbarEl && !isMobileChatOpen ? navbarEl.getBoundingClientRect().bottom : (isMobileChatOpen ? 0 : 70));
 
       if (streamEl) {
         const sRect = streamEl.getBoundingClientRect();
-        // 1. Horizontal: inside chat window, comfortably towards the right, shifted 5px right from previous anchor
-        const anchorX = Math.min(window.innerWidth - 39, Math.max(44, sRect.right - 43));
+        // 1. Horizontal: inside chat window, comfortably towards the right on user side
+        const anchorX = isMob
+          ? Math.min(window.innerWidth - 30, Math.max(38, sRect.right - 34))
+          : Math.min(window.innerWidth - 39, Math.max(44, sRect.right - 43));
 
-        // 2. Vertical: inside the chat window area, down below the terminal header & "LOCAL KB READY" pill
-        // Natural center is sRect.top + 62 (head at sRect.top + 34, cleanly down inside chat stream)
-        // Clamped to navBottom + 44 so when scrolling, Charlie never overlaps sticky top menu bar
-        const minAllowedY = navBottom + 44;
+        // 2. Vertical: inside the chat window area
+        const minAllowedY = isMob ? (isMobileChatOpen ? sRect.top + 36 : navBottom + 36) : navBottom + 44;
         const maxAllowedY = sRect.bottom - 45;
-        const naturalY = sRect.top + 62;
+        const naturalY = isMob ? (isMobileChatOpen ? sRect.top + 46 : sRect.top + 52) : sRect.top + 62;
         const anchorY = Math.max(minAllowedY, Math.min(maxAllowedY, naturalY));
 
-        const isVisible = (sRect.bottom > navBottom + 65 && sRect.top < window.innerHeight - 60);
+        const isVisible = (sRect.bottom > minAllowedY + 20 && sRect.top < window.innerHeight - 40);
         return { x: anchorX, y: anchorY, isVisible };
       } else if (terminalEl) {
         const tRect = terminalEl.getBoundingClientRect();
-        const anchorX = Math.min(window.innerWidth - 39, Math.max(44, tRect.right - 43));
-        const minAllowedY = navBottom + 44;
+        const anchorX = isMob
+          ? Math.min(window.innerWidth - 30, Math.max(38, tRect.right - 34))
+          : Math.min(window.innerWidth - 39, Math.max(44, tRect.right - 43));
+        const minAllowedY = isMob ? (isMobileChatOpen ? tRect.top + 36 : navBottom + 36) : navBottom + 44;
         const maxAllowedY = tRect.bottom - 45;
-        const naturalY = tRect.top + 105;
+        const naturalY = isMob ? tRect.top + 70 : tRect.top + 105;
         const anchorY = Math.max(minAllowedY, Math.min(maxAllowedY, naturalY));
-        const isVisible = (tRect.bottom > navBottom + 65 && tRect.top < window.innerHeight - 60);
+        const isVisible = (tRect.bottom > minAllowedY + 20 && tRect.top < window.innerHeight - 40);
         return { x: anchorX, y: anchorY, isVisible };
       }
       return { x: window.innerWidth - 75, y: 250, isVisible: false };
@@ -1067,8 +1101,11 @@
           }
 
           setTimeout(() => {
+            const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+            const mobileDock = document.getElementById('mobileCharlieTopDock');
             const floatingBtn = document.getElementById('floatingCharlieBtn');
-            const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+            const dockEl = (isMob && mobileDock) ? mobileDock : floatingBtn;
+            const dockRect = dockEl ? dockEl.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
             const dockCenterX = dockRect.left + dockRect.width / 2;
             const dockCenterY = dockRect.top + dockRect.height / 2;
             this.isEscorting = false;
@@ -2930,8 +2967,8 @@
       if (this.charlieCtx) {
         this.charlieCtx.clearRect(0, 0, this.width, this.height);
       }
-      const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
-      const shouldDrawCharlie = (!isMob) && this.charlie && (
+      const isCompact = window.isCompactPhone ? window.isCompactPhone() : false;
+      const shouldDrawCharlie = (!isCompact) && this.charlie && (
         this.isEnabled ||
         this.charlie.state === 'cyber_dash' ||
         this.charlie.state === 'escort' ||
@@ -3175,10 +3212,58 @@
       this.dockCharlie.draw(this.dockCtx);
     }
 
+    drawMobileTopDockCharlie() {
+      if (!window.isMobileWithCharlie || !window.isMobileWithCharlie()) return;
+      if (!this.mobileDockCanvas) {
+        this.mobileDockCanvas = document.getElementById('mobileCharlieDockCanvas');
+        if (this.mobileDockCanvas) {
+          this.mobileDockCtx = this.mobileDockCanvas.getContext('2d');
+          this.mobileDockCharlie = new CyberCharlie(24, 25, 0.40);
+          this.mobileDockCharlie.isDockMini = true;
+          this.mobileDockCharlie.bladeGlowIntensity = 2.0;
+          this.mobileDockCharlie.state = 'waiting';
+          this.mobileDockCharlie.face = 'waiting';
+          window.portfolioMobileDockCharlie = this.mobileDockCharlie;
+        }
+      }
+      if (!this.mobileDockCanvas || !this.mobileDockCtx || !this.mobileDockCharlie) return;
+
+      const isChatOpen = document.body.classList.contains('mobile-chat-open') || document.body.classList.contains('charlie-fullscreen-active');
+      const isCharlieDeployed = this.isEnabled || isChatOpen ||
+        (this.charlie && (this.charlie.isEscorting || this.charlie.state === 'cyber_dash' || this.charlie.state === 'escort' || this.charlie.state === 'victory' || this.charlie.sectionActive || (this.charlie.state !== 'waiting' && this.charlie.x > -200)));
+
+      if (isCharlieDeployed) {
+        this.mobileDockCtx.clearRect(0, 0, this.mobileDockCanvas.width, this.mobileDockCanvas.height);
+        return;
+      }
+
+      if (this.mobileDockCharlie.state !== 'waiting') {
+        this.mobileDockCharlie.state = 'waiting';
+        this.mobileDockCharlie.face = 'waiting';
+      }
+
+      this.mobileDockCharlie.update();
+      this.mobileDockCtx.clearRect(0, 0, this.mobileDockCanvas.width, this.mobileDockCanvas.height);
+
+      // Subtle ambient cyber energy aura in mobile dock
+      const pulseAlpha = 0.25 + Math.sin(this.mobileDockCharlie.animTimer * 2.0) * 0.15;
+      this.mobileDockCtx.save();
+      this.mobileDockCtx.beginPath();
+      this.mobileDockCtx.arc(24, 24, 18, 0, Math.PI * 2);
+      this.mobileDockCtx.fillStyle = `rgba(0, 242, 254, ${pulseAlpha * 0.2})`;
+      this.mobileDockCtx.shadowColor = '#00f2fe';
+      this.mobileDockCtx.shadowBlur = 8;
+      this.mobileDockCtx.fill();
+      this.mobileDockCtx.restore();
+
+      this.mobileDockCharlie.draw(this.mobileDockCtx);
+    }
+
     animate() {
       this.update();
       this.draw();
       this.drawDockCharlie();
+      this.drawMobileTopDockCharlie();
       requestAnimationFrame(() => this.animate());
     }
   }
@@ -8208,8 +8293,13 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
             // If terminal is in full screen mode, restore first, then animate and scroll!
             const terminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
-            const isFullscreen = (terminal && terminal.classList.contains('is-fullscreen')) || document.body.classList.contains('charlie-fullscreen-active');
-            if (isFullscreen && typeof window.toggleCharlieFullscreen === 'function') {
+            const isFullscreen = (terminal && terminal.classList.contains('is-fullscreen')) ||
+              document.body.classList.contains('charlie-fullscreen-active') ||
+              document.body.classList.contains('mobile-chat-open');
+            if (isFullscreen && typeof window.setCharlieFullscreen === 'function') {
+              window.setCharlieFullscreen(false);
+              setTimeout(executeScrollAndEscort, 120);
+            } else if (isFullscreen && typeof window.toggleCharlieFullscreen === 'function') {
               window.toggleCharlieFullscreen(false);
               setTimeout(executeScrollAndEscort, 120);
             } else {
@@ -8240,6 +8330,11 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           document.querySelectorAll('.ai-sidebar-btn').forEach(b => b.classList.remove('active'));
           if (btn.classList.contains('ai-sidebar-btn')) {
             btn.classList.add('active');
+            // If on mobile: immediately close Capabilities Directory drawer so answer is seen directly!
+            if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
+              const term = document.querySelector('.ai-bot-terminal');
+              if (term) term.classList.add('sidebar-collapsed');
+            }
           }
           renderBotResponse(query);
         }
@@ -9517,6 +9612,12 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         updateNavHeightVar();
         terminal.classList.toggle('is-fullscreen', fullscreen);
         document.body.classList.toggle('charlie-fullscreen-active', fullscreen);
+        const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+        if (isMob) {
+          document.body.classList.toggle('mobile-chat-open', fullscreen);
+        } else {
+          document.body.classList.remove('mobile-chat-open');
+        }
 
         if (maxBtn) {
           maxBtn.classList.toggle('is-maximized', fullscreen);
@@ -9589,13 +9690,23 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           };
           lockTop();
 
-          // 5. Explicitly trigger Charlie to dock to his floating button
-          if (typeof window.returnCharlieToDock === 'function') {
-            window.returnCharlieToDock();
-          } else if (window.portfolioEngine?.charlie) {
-            const floatingBtn = document.getElementById('floatingCharlieBtn');
-            const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
-            window.portfolioEngine.charlie.triggerDock(dockRect.left + dockRect.width / 2, dockRect.top + dockRect.height / 2);
+          // 5. Explicitly trigger Charlie to dock to his button (mobile dock if mobile, floating if desktop)
+          const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+          if (isMob) {
+            document.body.classList.remove('mobile-chat-open');
+            if (window.isMobileWithCharlie && window.isMobileWithCharlie() && window.portfolioCharlie) {
+              const mobileDock = document.getElementById('mobileCharlieTopDock');
+              const dockRect = mobileDock ? mobileDock.getBoundingClientRect() : { left: 40, top: 20, width: 36, height: 36 };
+              window.portfolioCharlie.triggerDock(dockRect.left + dockRect.width / 2, dockRect.top + dockRect.height / 2);
+            }
+          } else {
+            if (typeof window.returnCharlieToDock === 'function') {
+              window.returnCharlieToDock();
+            } else if (window.portfolioEngine?.charlie) {
+              const floatingBtn = document.getElementById('floatingCharlieBtn');
+              const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+              window.portfolioEngine.charlie.triggerDock(dockRect.left + dockRect.width / 2, dockRect.top + dockRect.height / 2);
+            }
           }
 
           // Multiple frames of scroll locking to guarantee zero layout shift or back-scrolling
@@ -9610,6 +9721,16 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             terminal.style.transition = '';
             document.documentElement.classList.remove('instant-scroll');
           }, 400);
+        });
+      }
+
+      // Mobile Top Dock button: opens full screen chat modal on mobile
+      const mobileTopDockBtn = document.getElementById('mobileCharlieTopDock');
+      if (mobileTopDockBtn) {
+        mobileTopDockBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setTerminalFullscreen(true);
         });
       }
 
