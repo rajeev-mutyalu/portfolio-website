@@ -163,7 +163,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  #charlieCanvas {
+  body.is-compact-phone #charlieCanvas {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
@@ -570,7 +570,8 @@ body.combat-cursor-active .ai-bot-game-lockout button {
 (max-device-width: 956px) and (orientation: landscape) {
 
   .floating-charlie-btn,
-  #floatingCharlieBtn {
+  #floatingCharlieBtn,
+  body.is-compact-phone #charlieCanvas {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
@@ -578,6 +579,7 @@ body.combat-cursor-active .ai-bot-game-lockout button {
   }
 }
 
+body.is-compact-phone #charlieCanvas,
 body.is-mobile-screen .floating-charlie-btn,
 body.is-mobile-screen #floatingCharlieBtn,
 body.in-simulator .floating-charlie-btn,
@@ -5987,16 +5989,16 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   /* =========================================================================
      🚫 Completely Remove Charlie & AI Assistant from Mobile Screens (<= 768px)
      ========================================================================= */
-  #ai-assistant,
-  section#ai-assistant,
-  .ai-assistant-section,
-  #charlie,
-  .ai-bot-terminal,
+  body:not(.mobile-chat-open) #ai-assistant,
+  body:not(.mobile-chat-open) section#ai-assistant,
+  body:not(.mobile-chat-open) .ai-assistant-section,
+  body:not(.mobile-chat-open) #charlie,
+  body:not(.mobile-chat-open) .ai-bot-terminal,
   .mobile-nav-ai,
   .mobile-nav-link[href="#ai-assistant"],
   a[href="#ai-assistant"],
   .nav-ai-link,
-  #charlieCanvas,
+  body.is-compact-phone #charlieCanvas,
   .floating-charlie-btn,
   #floatingCharlieBtn,
   #charlieDockCanvas,
@@ -6036,16 +6038,16 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 (pointer: coarse) and (max-height: 650px) and (orientation: landscape),
 (max-device-width: 1024px) and (orientation: landscape) {
 
-  #ai-assistant,
-  section#ai-assistant,
-  .ai-assistant-section,
-  #charlie,
-  .ai-bot-terminal,
+  body:not(.mobile-chat-open) #ai-assistant,
+  body:not(.mobile-chat-open) section#ai-assistant,
+  body:not(.mobile-chat-open) .ai-assistant-section,
+  body:not(.mobile-chat-open) #charlie,
+  body:not(.mobile-chat-open) .ai-bot-terminal,
   .mobile-nav-ai,
   .mobile-nav-link[href="#ai-assistant"],
   a[href="#ai-assistant"],
   .nav-ai-link,
-  #charlieCanvas,
+  body.is-compact-phone #charlieCanvas,
   .floating-charlie-btn,
   #floatingCharlieBtn,
   #charlieDockCanvas,
@@ -6189,11 +6191,11 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   }
 }
 
-body.is-mobile-screen #ai-assistant,
-body.is-mobile-screen section#ai-assistant,
-body.is-mobile-screen .ai-assistant-section,
-body.is-mobile-screen #charlie,
-body.is-mobile-screen .ai-bot-terminal,
+body.is-mobile-screen:not(.mobile-chat-open) #ai-assistant,
+body.is-mobile-screen:not(.mobile-chat-open) section#ai-assistant,
+body.is-mobile-screen:not(.mobile-chat-open) .ai-assistant-section,
+body.is-mobile-screen:not(.mobile-chat-open) #charlie,
+body.is-mobile-screen:not(.mobile-chat-open) .ai-bot-terminal,
 body.is-mobile-screen .mobile-nav-ai,
 body.is-mobile-screen .mobile-nav-link[href="#ai-assistant"],
 body.is-mobile-screen a[href="#ai-assistant"],
@@ -6216,11 +6218,11 @@ body.is-mobile-screen #fxWidget,
 body.is-mobile-screen #missionToast,
 body.is-mobile-screen #cometCanvas,
 body.is-mobile-screen .shatter-popup,
-body.in-simulator #ai-assistant,
-body.in-simulator section#ai-assistant,
-body.in-simulator .ai-assistant-section,
-body.in-simulator #charlie,
-body.in-simulator .ai-bot-terminal,
+body.in-simulator:not(.mobile-chat-open) #ai-assistant,
+body.in-simulator:not(.mobile-chat-open) section#ai-assistant,
+body.in-simulator:not(.mobile-chat-open) .ai-assistant-section,
+body.in-simulator:not(.mobile-chat-open) #charlie,
+body.in-simulator:not(.mobile-chat-open) .ai-bot-terminal,
 body.in-simulator .mobile-nav-ai,
 body.in-simulator .mobile-nav-link[href="#ai-assistant"],
 body.in-simulator a[href="#ai-assistant"],
@@ -11529,10 +11531,13 @@ body.is-rotated-mobile .cv-export-modal-card {
 }
 
 /* 3. Mobile Full-Screen Chat Modal */
+/* 3. Mobile Full-Screen Chat Modal */
+body.mobile-chat-open .navbar,
 body.is-mobile-screen.mobile-chat-open .navbar {
   display: none !important;
 }
 
+body.mobile-chat-open,
 body.is-mobile-screen.mobile-chat-open {
   overflow: hidden !important;
   position: fixed !important;
@@ -11540,59 +11545,154 @@ body.is-mobile-screen.mobile-chat-open {
   height: 100% !important;
 }
 
-body.is-mobile-screen.mobile-chat-open #ai-assistant {
+body.mobile-chat-open #ai-assistant,
+body.mobile-chat-open section#ai-assistant,
+body.is-mobile-screen.mobile-chat-open #ai-assistant,
+body.is-mobile-screen.mobile-chat-open section#ai-assistant {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
   position: fixed !important;
   inset: 0 !important;
   top: 0 !important;
   left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
   width: 100vw !important;
+  max-width: 100vw !important;
   height: 100vh !important;
   height: 100dvh !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
   margin: 0 !important;
   padding: 0 !important;
-  max-width: 100vw !important;
-  z-index: 999999 !important;
+  z-index: 9999999 !important;
   background: #030712 !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-body.is-mobile-screen.mobile-chat-open #ai-assistant .section-header {
-  display: none !important;
-}
-
-body.is-mobile-screen.mobile-chat-open .ai-bot-terminal {
-  position: fixed !important;
-  inset: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  border: none !important;
-  z-index: 999999 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  background: #030712 !important;
-  box-shadow: none !important;
-}
-
-body.is-mobile-screen.mobile-chat-open .ai-bot-main-area {
-  flex: 1 1 auto !important;
-  height: 0 !important;
-  min-height: 0 !important;
-  display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
 }
 
-body.is-mobile-screen.mobile-chat-open .ai-chat-stream {
+body.mobile-chat-open #ai-assistant .section-header,
+body.is-mobile-screen.mobile-chat-open #ai-assistant .section-header {
+  display: none !important;
+}
+
+body.mobile-chat-open .ai-bot-terminal,
+body.mobile-chat-open #charlie,
+body.is-mobile-screen.mobile-chat-open .ai-bot-terminal,
+body.is-mobile-screen.mobile-chat-open #charlie {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  z-index: 9999999 !important;
+  flex-direction: column !important;
+  background: #030712 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+/* Ensure Charlie mascot canvas stays in front of mobile chat modal */
+body.mobile-chat-open:not(.is-compact-phone) #charlieCanvas,
+body.is-mobile-screen.mobile-chat-open:not(.is-compact-phone) #charlieCanvas {
+  z-index: 10000005 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+
+body.mobile-chat-open .ai-bot-header,
+body.is-mobile-screen.mobile-chat-open .ai-bot-header {
+  flex-shrink: 0 !important;
+  padding: 10px 14px !important;
+  background: rgba(10, 15, 30, 0.98) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+body.mobile-chat-open .ai-bot-profile-btn,
+body.is-mobile-screen.mobile-chat-open .ai-bot-profile-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  background: rgba(239, 68, 68, 0.15) !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+  color: #f87171 !important;
+  font-size: 0.75rem !important;
+  padding: 4px 10px !important;
+  border-radius: 8px !important;
+}
+
+body.mobile-chat-open .ai-bot-body-split,
+body.is-mobile-screen.mobile-chat-open .ai-bot-body-split {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-direction: column !important;
   flex: 1 1 auto !important;
+  height: calc(100% - 52px) !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+body.mobile-chat-open .ai-bot-main,
+body.is-mobile-screen.mobile-chat-open .ai-bot-main {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+}
+
+body.mobile-chat-open .ai-chat-stream,
+body.is-mobile-screen.mobile-chat-open .ai-chat-stream {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
-  padding: 12px 14px 24px !important;
+  padding: 12px 14px 20px !important;
+}
+
+body.mobile-chat-open .ai-chat-input-bar,
+body.is-mobile-screen.mobile-chat-open .ai-chat-input-bar {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-shrink: 0 !important;
+  padding: 8px 12px calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+  background: rgba(10, 15, 30, 0.98) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
 /* Ensure messages and copy buttons never overlap Charlie on user side on mobile */
@@ -11602,16 +11702,6 @@ body.is-mobile-screen .ai-message.ai-user-msg {
 
 body.is-mobile-screen .ai-message.ai-bot-msg {
   max-width: calc(100% - 36px) !important;
-}
-
-body.is-mobile-screen .ai-bot-header {
-  padding: 10px 14px !important;
-}
-
-body.is-mobile-screen .ai-bot-profile-btn {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 5px;
 }
 
 /* Rotated mobile landscape adjustments */

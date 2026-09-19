@@ -821,7 +821,7 @@
     }
 
     update() {
-      if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) return;
+      if (window.isCompactPhone ? window.isCompactPhone() : false) return;
       // Timing: Sprint Animation Speed = 1.0x, rest all = 0.5x
       const stateSpeedRate = (this.state === 'run' || this.state === 'cyber_dash') ? 1.0 : 0.5;
       this.animTimer += 0.15 * this.animSpeed * stateSpeedRate;
@@ -864,8 +864,9 @@
           }
         } else if (!isCenteredMode) {
           // Mascot scrolled out of view -> trigger return dash to dock (NEVER dock during writing or celebrating!)
-          const floatingBtn = document.getElementById('floatingCharlieBtn');
-          const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+          const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+          const dockEl = isMob ? document.getElementById('mobileCharlieTopDock') : document.getElementById('floatingCharlieBtn');
+          const dockRect = dockEl ? dockEl.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
           const dockCenterX = dockRect.left + dockRect.width / 2;
           const dockCenterY = dockRect.top + dockRect.height / 2;
           this.triggerDock(dockCenterX, dockCenterY);
@@ -1144,8 +1145,9 @@
             this.sectionActive = false;
             document.body.classList.remove('combat-cursor-active');
             this.addSparks(this.deployTargetX, this.deployTargetY, '#00f2fe', 24);
+            const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
             const floatingBtn = document.getElementById('floatingCharlieBtn');
-            if (floatingBtn) floatingBtn.classList.remove('hidden');
+            if (floatingBtn && !isMob) floatingBtn.classList.remove('hidden');
           } else if (this.dashType === 'to_write') {
             this.state = this.postDashState || 'writing';
             this.face = this.postDashFace || 'writing';
@@ -9599,6 +9601,8 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       // --- 2. Full Screen Mode (Maximized Below Top Banner) ---
       function isGameModeCombatActive() {
+        const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+        if (isMob) return false;
         return terminal.classList.contains('game-mode-lockout') ||
           (window.portfolioEngine && window.portfolioEngine.isEnabled) ||
           document.body.classList.contains('combat-cursor-active');
@@ -9615,6 +9619,13 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
         if (isMob) {
           document.body.classList.toggle('mobile-chat-open', fullscreen);
+          if (window.portfolioCharlie) {
+            window.portfolioCharlie.sectionActive = fullscreen;
+            if (fullscreen) {
+              window.portfolioCharlie.state = 'waiting';
+              window.portfolioCharlie.face = 'waiting';
+            }
+          }
         } else {
           document.body.classList.remove('mobile-chat-open');
         }
@@ -9730,6 +9741,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         mobileTopDockBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
+          document.body.classList.remove('combat-cursor-active');
+          if (window.portfolioCharlie) {
+            window.portfolioCharlie.isEscorting = false;
+          }
           setTerminalFullscreen(true);
         });
       }
