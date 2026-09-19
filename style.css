@@ -11854,57 +11854,60 @@ body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated
   display: inline !important;
 }
 
-/* 2. Large Mobile (iPhone / Pixel) - ROTATE MODE (Landscape) */
-/* Left: 🖥️ charlie-ai | Right: [<- Profile] [🧠 OPENAI: 4o-mini ⚙️] [🔊 SFX ON] */
-body.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn {
+/* 2. Large Mobile & Compact Phones - ALWAYS PORTRAIT ICONS ONLY */
+/* Left: 🖥️ charlie-ai | Right: [<-] [🧠 ⚙️] [🔊 ON/OFF] */
+body.is-large-mobile .ai-bot-profile-btn,
+body.in-simulator.is-large-mobile .ai-bot-profile-btn,
+body.is-mobile-screen:not(.is-tablet-device) .ai-bot-profile-btn {
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
   align-items: center !important;
+  justify-content: center !important;
   margin-right: 0 !important;
-  padding: 3px 9px !important;
+  padding: 4px 8px !important;
   border-radius: 16px !important;
   background: rgba(245, 158, 11, 0.12) !important;
   border: 1px solid rgba(245, 158, 11, 0.4) !important;
   color: #f59e0b !important;
 }
-body.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn span,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn span,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn span {
-  display: inline !important;
-}
-
-body.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn {
-  display: inline-flex !important;
-  padding: 3px 9px !important;
-  border-radius: 16px !important;
-}
-body.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn .ai-llm-text {
-  display: inline !important;
-}
-
-body.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn {
-  display: inline-flex !important;
-  padding: 3px 9px !important;
-  border-radius: 16px !important;
-}
-body.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn .ai-sound-text {
-  display: inline !important;
-}
-body.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text-short,
-body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text-short,
-body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn .ai-sound-text-short {
+body.is-large-mobile .ai-bot-profile-btn span,
+body.in-simulator.is-large-mobile .ai-bot-profile-btn span,
+body.is-mobile-screen:not(.is-tablet-device) .ai-bot-profile-btn span {
   display: none !important;
+}
+
+body.is-large-mobile .ai-bot-llm-btn,
+body.in-simulator.is-large-mobile .ai-bot-llm-btn,
+body.is-mobile-screen:not(.is-tablet-device) .ai-bot-llm-btn {
+  display: inline-flex !important;
+  padding: 4px 8px !important;
+  gap: 4px !important;
+  border-radius: 16px !important;
+}
+body.is-large-mobile .ai-bot-llm-btn .ai-llm-text,
+body.in-simulator.is-large-mobile .ai-bot-llm-btn .ai-llm-text,
+body.is-mobile-screen:not(.is-tablet-device) .ai-bot-llm-btn .ai-llm-text {
+  display: none !important;
+}
+
+body.is-large-mobile .ai-bot-sound-btn,
+body.in-simulator.is-large-mobile .ai-bot-sound-btn,
+body.is-mobile-screen:not(.is-tablet-device) .ai-bot-sound-btn {
+  display: inline-flex !important;
+  padding: 4px 8px !important;
+  gap: 4px !important;
+  border-radius: 16px !important;
+}
+body.is-large-mobile .ai-bot-sound-btn .ai-sound-text,
+body.in-simulator.is-large-mobile .ai-bot-sound-btn .ai-sound-text,
+body.is-mobile-screen:not(.is-tablet-device) .ai-bot-sound-btn .ai-sound-text {
+  display: none !important;
+}
+body.is-large-mobile .ai-bot-sound-btn .ai-sound-text-short,
+body.in-simulator.is-large-mobile .ai-bot-sound-btn .ai-sound-text-short,
+body.is-mobile-screen:not(.is-tablet-device) .ai-bot-sound-btn .ai-sound-text-short {
+  display: inline !important;
 }
 
 /* 3. Tablet (iPad Pro / Air) - BOTH PORTRAIT & LANDSCAPE SHOW FULL TEXT & NO CLOSE */
@@ -12132,4 +12135,135 @@ body.is-rotated-mobile.mobile-chat-open .ai-chat-stream {
 
 body.is-rotated-mobile.mobile-chat-open .ai-chat-input-bar {
   padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* ==========================================================================
+   Mobile Orientation Warning Modal (Portrait Mode Recommended)
+   ========================================================================== */
+.mobile-orientation-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000020 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  background: rgba(3, 7, 18, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  opacity: 1;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.mobile-orientation-modal-overlay.hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.mobile-orientation-modal-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+}
+
+.mobile-orientation-modal-card {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  max-width: 360px !important;
+  padding: 22px 20px 20px !important;
+  border-radius: 20px !important;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(6, 11, 25, 0.98)) !important;
+  border: 1px solid rgba(0, 242, 254, 0.35) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 242, 254, 0.2) !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalScaleIn {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.mobile-orientation-icon-wrapper {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.mobile-orientation-phone-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+  animation: phoneRotatePulse 2.8s ease-in-out infinite;
+}
+
+@keyframes phoneRotatePulse {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  30%, 70% {
+    transform: rotate(-90deg);
+  }
+}
+
+.mobile-orientation-rotate-arrow {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 50%;
+  padding: 2px;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-orientation-title {
+  font-family: var(--font-heading, 'Outfit', sans-serif) !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin: 0 0 8px 0 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.mobile-orientation-desc {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.45 !important;
+  color: #94a3b8 !important;
+  margin: 0 0 16px 0 !important;
+}
+
+.mobile-orientation-actions {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.mobile-orientation-dismiss-btn {
+  width: 100% !important;
+  max-width: 240px !important;
+  padding: 9px 18px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
 }

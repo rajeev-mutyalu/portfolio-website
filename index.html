@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=189" />
+  <link rel="stylesheet" href="style.css?v=190" />
   <link rel="prefetch" href="cv.html" />
 
   <!-- Navigation & Scroll Position Guard: Always land cleanly on the first page when returning from CV, Charlie Lab, or Full Screen -->
@@ -2016,11 +2016,39 @@
       </header>
       <div class="ai-att-modal-body" id="aiAttModalBody">
         <!-- Dynamically injected Image or Document viewer -->
+    </div>
+  </div>
+
+  <!-- Mobile Portrait Mode Lock & Orientation Warning Modal -->
+  <div class="mobile-orientation-modal-overlay hidden" id="mobileOrientationModal" role="dialog" aria-modal="true" aria-labelledby="mobileOrientationTitle">
+    <div class="mobile-orientation-modal-backdrop" id="mobileOrientationBackdrop"></div>
+    <div class="mobile-orientation-modal-card glass-card">
+      <div class="mobile-orientation-icon-wrapper">
+        <div class="mobile-orientation-phone-icon">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+          </svg>
+          <div class="mobile-orientation-rotate-arrow">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <h3 class="mobile-orientation-title" id="mobileOrientationTitle">Portrait Mode Recommended</h3>
+      <p class="mobile-orientation-desc">
+        This portfolio and Charlie AI experience are designed and optimized for portrait orientation. Please rotate your device for the best view.
+      </p>
+      <div class="mobile-orientation-actions">
+        <button type="button" class="btn btn-primary btn-sm mobile-orientation-dismiss-btn" id="dismissOrientationWarning">
+          <span>OK (Stay in Portrait)</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <script src="app.js?v=189"></script>
+  <script src="app.js?v=190"></script>
 </body>
 
 </html>

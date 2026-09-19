@@ -86,6 +86,22 @@
     return window.isMobileScreen();
   };
 
+  let orientationWarningDismissed = false;
+
+  function handleMobileOrientationWarning(isPhone, isRotated) {
+    const modal = document.getElementById('mobileOrientationModal');
+    if (!modal) return;
+
+    if (isPhone && isRotated) {
+      if (!orientationWarningDismissed) {
+        modal.classList.remove('hidden');
+      }
+    } else {
+      modal.classList.add('hidden');
+      orientationWarningDismissed = false;
+    }
+  }
+
   function updateMobileOrientationState() {
     const isMob = window.isMobileOrRotatedMobile();
     const isRotated = window.isRotatedMobileLandscape ? window.isRotatedMobileLandscape() : false;
@@ -93,6 +109,9 @@
     const isCompact = window.isCompactSE ? window.isCompactSE() : false;
     const isLargeMob = window.isLargeMobile ? window.isLargeMobile() : (!isTablet && !isCompact);
     if (!document.body) return;
+
+    const isPhone = (isCompact || isLargeMob) && !isTablet;
+    handleMobileOrientationWarning(isPhone, isRotated);
 
     if (isRotated) {
       document.body.classList.add('is-rotated-mobile');
@@ -134,6 +153,9 @@
       document.body.classList.remove('is-rotated-mobile');
       document.body.classList.remove('mobile-chat-open');
 
+      const modal = document.getElementById('mobileOrientationModal');
+      if (modal) modal.classList.add('hidden');
+
       const mobileDock = document.getElementById('mobileCharlieTopDock');
       if (mobileDock) {
         mobileDock.style.display = 'none';
@@ -160,7 +182,25 @@
       });
     } catch (e) { }
   }
-  document.addEventListener('DOMContentLoaded', updateMobileOrientationState);
+  document.addEventListener('DOMContentLoaded', () => {
+    updateMobileOrientationState();
+
+    const dismissBtn = document.getElementById('dismissOrientationWarning');
+    const backdrop = document.getElementById('mobileOrientationBackdrop');
+    const modal = document.getElementById('mobileOrientationModal');
+
+    const dismissOrientationModal = (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      orientationWarningDismissed = true;
+      if (modal) modal.classList.add('hidden');
+    };
+
+    if (dismissBtn) dismissBtn.addEventListener('click', dismissOrientationModal);
+    if (backdrop) backdrop.addEventListener('click', dismissOrientationModal);
+  });
 
   // ==========================================================================
   // 0. Cyber Charlie Character & Combat Engine
