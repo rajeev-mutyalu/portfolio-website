@@ -4678,6 +4678,50 @@
       });
     });
 
+    // 6b. Smooth Scroll Animator (Optimized to eliminate iOS Safari WebKit Black Screen Tile-Drop)
+    function smoothScrollTo(targetY, duration = 400) {
+      const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+
+      // On desktop, native smooth scroll is performant
+      if (!isMob) {
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+        return;
+      }
+
+      // On mobile / iOS Safari, use controlled RAF interpolation with easeOutCubic to prevent tile dropping
+      const startY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      const diff = targetY - startY;
+      if (Math.abs(diff) < 8) {
+        window.scrollTo(0, targetY);
+        return;
+      }
+
+      const startTime = performance.now();
+      let lastY = startY;
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // easeOutCubic: fast initial response with smooth deceleration
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const nextY = Math.round(startY + diff * ease);
+
+        if (nextY !== lastY) {
+          window.scrollTo(0, nextY);
+          lastY = nextY;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          window.scrollTo(0, targetY);
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+    window.smoothScrollTo = smoothScrollTo;
+
     // 7. Mobile Navigation Drawer Toggle & Link Handler
     const mobileNavToggle = document.getElementById('mobileNavToggle');
     const mobileNavDrawer = document.getElementById('mobileNavDrawer');
@@ -4701,12 +4745,6 @@
         setDrawerOpen(isOpen);
       });
 
-      mobileNavLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          setDrawerOpen(false);
-        });
-      });
-
       document.addEventListener('click', (e) => {
         if (mobileNavDrawer.classList.contains('open') &&
           !mobileNavDrawer.contains(e.target) &&
@@ -4724,6 +4762,40 @@
         }
       }, { passive: false });
     }
+
+    // 7a. Universal Smooth In-Page Anchor Link Navigation
+    document.addEventListener('click', (e) => {
+      const anchor = e.target.closest('a[href^="#"]');
+      if (!anchor) return;
+      const href = anchor.getAttribute('href');
+      if (!href || href === '#' || href === '#!') return;
+      
+      // Do not intercept AI terminal internal actions
+      if (anchor.closest('.ai-bot-terminal, #aiChatStream, #mobileCharlieTopDock, .charlie-dock')) return;
+
+      const targetEl = document.querySelector(href);
+      if (!targetEl) return;
+
+      e.preventDefault();
+
+      if (mobileNavDrawer && mobileNavDrawer.classList.contains('open')) {
+        mobileNavDrawer.classList.remove('open');
+        if (mobileNavToggle) {
+          mobileNavToggle.setAttribute('aria-expanded', 'false');
+          mobileNavToggle.querySelector('.nav-bar-icon').innerHTML = '&#9776;';
+        }
+      }
+
+      const nav = document.querySelector('.navbar');
+      const navH = (nav && window.getComputedStyle(nav).display !== 'none') ? nav.offsetHeight : 64;
+      const targetY = Math.max(0, targetEl.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop || 0) - navH + 2);
+
+      smoothScrollTo(targetY, 400);
+
+      try {
+        history.pushState(null, '', href);
+      } catch (err) { }
+    });
 
     // 7b. Curriculum Vitae Specialisation Selector Modal Handler
     const navCvTrigger = document.getElementById('navCvTrigger');

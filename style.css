@@ -51,9 +51,17 @@ html {
   scroll-padding-top: 64px;
 }
 
+@media (max-width: 1024px) {
+  html {
+    scroll-behavior: auto !important; /* Prevents iOS Safari WebKit layer-drop black screen on long anchor scroll */
+  }
+}
+
 html.instant-scroll,
 html.instant-scroll *,
-html.instant-scroll body {
+html.instant-scroll body,
+body.is-mobile-screen,
+body.is-mobile-screen html {
   scroll-behavior: auto !important;
 }
 
@@ -148,6 +156,8 @@ body {
 
 #cometCanvas.fx-disabled {
   opacity: 0 !important;
+  display: none !important;
+  pointer-events: none !important;
 }
 
 /* ⚡ Cyber Charlie Foreground Mascot & Combat Canvas (Always On Top of All Blocks) */
