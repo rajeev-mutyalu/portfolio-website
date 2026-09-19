@@ -6364,6 +6364,33 @@ body.in-simulator .fx-switch-wrapper {
   display: none !important;
 }
 
+/* 📱 Top Navbar Safe Clearance (Real Mobile + Simulator with Dynamic Island) */
+body.is-mobile-screen .navbar {
+  padding-top: max(env(safe-area-inset-top, 0px), 0.75rem) !important;
+}
+
+/* Flag 2: Large Mobile Simulator Top Clearance (iPhone 16 Pro Max 440x956 / Pixel 8) */
+body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .navbar,
+body.in-simulator:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .navbar {
+  padding-top: 48px !important;
+}
+
+/* Flag 1: Tablet Simulator Top Clearance (iPad Pro / Air) */
+body.in-simulator.is-tablet-device:not(.is-rotated-mobile) .navbar {
+  padding-top: 18px !important;
+}
+
+/* Flag 3: Compact SE Simulator Top Clearance (iPhone SE) */
+body.in-simulator.is-compact-se:not(.is-rotated-mobile) .navbar {
+  padding-top: 18px !important;
+}
+
+/* Landscape / Rotated Mobile Simulator Clearance */
+body.in-simulator.is-rotated-mobile .navbar {
+  padding-top: 0.5rem !important;
+  padding-left: 52px !important;
+}
+
 /* 4. Extra Small Phones (< 380px) */
 @media (max-width: 380px) {
   .hero-badges {
@@ -11621,12 +11648,38 @@ body.is-mobile-screen.mobile-chat-open:not(.is-compact-phone) #charlieCanvas {
 body.mobile-chat-open .ai-bot-header,
 body.is-mobile-screen.mobile-chat-open .ai-bot-header {
   flex-shrink: 0 !important;
-  padding: 10px 14px !important;
+  padding: max(env(safe-area-inset-top, 0px), 12px) 14px 10px 14px !important;
   background: rgba(10, 15, 30, 0.98) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+}
+
+/* Flag 2: Large Mobile Simulator Dynamic Island Clearance (iPhone 16 Pro Max / Pixel 8) */
+body.in-simulator.is-large-mobile.mobile-chat-open:not(.is-rotated-mobile) .ai-bot-header,
+body.in-simulator.mobile-chat-open:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-header {
+  padding-top: 52px !important;
+  padding-bottom: 10px !important;
+}
+
+/* Flag 1: Tablet Simulator Clearance (iPad Pro / Air) */
+body.in-simulator.is-tablet-device.mobile-chat-open:not(.is-rotated-mobile) .ai-bot-header {
+  padding-top: 20px !important;
+  padding-bottom: 10px !important;
+}
+
+/* Flag 3: Compact SE Simulator Clearance (iPhone SE) */
+body.in-simulator.is-compact-se.mobile-chat-open:not(.is-rotated-mobile) .ai-bot-header {
+  padding-top: 20px !important;
+  padding-bottom: 10px !important;
+}
+
+/* Landscape / Rotated Mobile Simulator Clearance (Dynamic Island on Left) */
+body.in-simulator.is-rotated-mobile.mobile-chat-open .ai-bot-header {
+  padding-top: 10px !important;
+  padding-left: 52px !important;
+  padding-right: 14px !important;
 }
 
 /* 1. Remove Profile button on mobile & tablets completely */
@@ -11709,8 +11762,8 @@ body.is-mobile-screen.mobile-chat-open .ai-bot-body-split {
   visibility: visible !important;
   opacity: 1 !important;
   flex-direction: column !important;
-  flex: 1 1 auto !important;
-  height: calc(100% - 52px) !important;
+  flex: 1 1 0% !important;
+  height: auto !important;
   min-height: 0 !important;
   max-height: none !important;
   overflow: hidden !important;

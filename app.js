@@ -17,7 +17,9 @@
   'use strict';
 
   // ==========================================================================
+  // ==========================================================================
   // Universal Mobile & Rotated Mobile Detection (Portrait & Landscape)
+  // With 3 Strict Device Profiles: Tablet, Large Mobile (Apple/Pixel), Compact (SE)
   // ==========================================================================
   window.isMobileOrRotatedMobile = function () {
     // 1. Explicit simulator flag via query param or class
@@ -49,9 +51,31 @@
     return isLandscape && (isSmallHeight || isMobileDim);
   };
 
-  window.isCompactPhone = function () {
+  // Flag 1: Tablet Profile (iPad Pro / Air, 768px - 1024px)
+  window.isTabletDevice = function () {
+    if (window.location.search && (window.location.search.includes('device=tablet') || window.location.search.includes('device=ipad'))) return true;
+    if (document.body && (document.body.classList.contains('is-tablet-device') || document.body.getAttribute('data-sim-device') === 'tablet' || document.body.getAttribute('data-sim-device') === 'ipad')) return true;
+    if (window.innerWidth >= 600 && window.innerWidth <= 1024 && !window.isRotatedMobileLandscape()) return true;
+    return false;
+  };
+
+  // Flag 3: Compact SE Profile (iPhone SE / <= 380px)
+  window.isCompactSE = function () {
+    if (window.location.search && window.location.search.includes('device=compact')) return true;
+    if (document.body && (document.body.classList.contains('is-compact-se') || document.body.getAttribute('data-sim-device') === 'compact')) return true;
     const minDim = Math.min(window.innerWidth, window.innerHeight);
     return minDim <= 380;
+  };
+
+  window.isCompactPhone = function () {
+    return window.isCompactSE();
+  };
+
+  // Flag 2: Large Mobile Profile (iPhone 16 Pro Max, Pixel 8, modern large smartphones)
+  window.isLargeMobile = function () {
+    if (window.location.search && (window.location.search.includes('device=iphone') || window.location.search.includes('device=pixel'))) return true;
+    if (document.body && (document.body.getAttribute('data-sim-device') === 'iphone' || document.body.getAttribute('data-sim-device') === 'pixel')) return true;
+    return window.isMobileOrRotatedMobile() && !window.isTabletDevice() && !window.isCompactSE();
   };
 
   window.isMobileScreen = function () {
@@ -65,7 +89,9 @@
   function updateMobileOrientationState() {
     const isMob = window.isMobileOrRotatedMobile();
     const isRotated = window.isRotatedMobileLandscape ? window.isRotatedMobileLandscape() : false;
-    const isCompact = window.isCompactPhone();
+    const isTablet = window.isTabletDevice ? window.isTabletDevice() : false;
+    const isCompact = window.isCompactSE ? window.isCompactSE() : false;
+    const isLargeMob = window.isLargeMobile ? window.isLargeMobile() : (!isTablet && !isCompact);
     if (!document.body) return;
 
     if (isRotated) {
@@ -74,13 +100,12 @@
       document.body.classList.remove('is-rotated-mobile');
     }
 
-    if (isMob) {
+    if (isMob || isTablet) {
       document.body.classList.add('is-mobile-screen');
-      if (isCompact) {
-        document.body.classList.add('is-compact-phone');
-      } else {
-        document.body.classList.remove('is-compact-phone');
-      }
+      document.body.classList.toggle('is-tablet-device', isTablet);
+      document.body.classList.toggle('is-compact-se', isCompact);
+      document.body.classList.toggle('is-compact-phone', isCompact);
+      document.body.classList.toggle('is-large-mobile', isLargeMob);
 
       const floatingBtn = document.getElementById('floatingCharlieBtn');
       if (floatingBtn) floatingBtn.classList.add('hidden');
@@ -113,6 +138,9 @@
       // 100% Desktop Lock: strictly restore desktop state exactly as live
       document.body.classList.remove('is-mobile-screen');
       document.body.classList.remove('is-compact-phone');
+      document.body.classList.remove('is-compact-se');
+      document.body.classList.remove('is-large-mobile');
+      document.body.classList.remove('is-tablet-device');
       document.body.classList.remove('is-rotated-mobile');
       document.body.classList.remove('mobile-chat-open');
 
@@ -10297,11 +10325,19 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       }
 
       function syncFramesOrientation() {
+        const currentDev = simState.device || 'iphone';
         [frame, ipadFrame].forEach(f => {
           if (f && f.contentWindow) {
             try {
               if (f.contentDocument && f.contentDocument.body) {
-                f.contentDocument.body.classList.toggle('is-rotated-mobile', !!simState.isLandscape);
+                const b = f.contentDocument.body;
+                const dev = (f === ipadFrame) ? 'ipad' : currentDev;
+                b.setAttribute('data-sim-device', dev);
+                b.classList.toggle('is-rotated-mobile', !!simState.isLandscape);
+                b.classList.toggle('is-tablet-device', dev === 'tablet' || dev === 'ipad');
+                b.classList.toggle('is-compact-se', dev === 'compact');
+                b.classList.toggle('is-compact-phone', dev === 'compact');
+                b.classList.toggle('is-large-mobile', dev === 'iphone' || dev === 'pixel' || dev === 'duo');
               }
               if (typeof f.contentWindow.updateMobileOrientationState === 'function') {
                 f.contentWindow.updateMobileOrientationState();
@@ -10336,7 +10372,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         // Load iframe if not loaded yet
         if (!simState.hasLoadedOnce || frame.getAttribute('src') === 'about:blank') {
           const currentUrl = window.location.pathname.endsWith('index.html') ? 'index.html' : './';
-          frame.src = `${currentUrl}?sim=1&v=${Date.now()}`;
+          frame.src = `${currentUrl}?sim=1&device=${simState.device || 'iphone'}&v=${Date.now()}`;
           simState.hasLoadedOnce = true;
         }
 
