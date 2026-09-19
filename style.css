@@ -6259,42 +6259,8 @@ body.in-simulator .shatter-popup {
   border: none !important;
 }
 
-/* 📱 Rotated mobile mode helper: hide Get in Touch and CV Tracks in drawer when visible outside in top navbar */
-body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-link[href="#contact"],
-body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-group-title,
-body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-cv-header,
-body.is-rotated-mobile .mobile-nav-drawer .mobile-nav-cv-track,
-body.is-rotated-mobile .mobile-nav-drawer .cv-highlight-link,
-body.is-rotated-mobile .mobile-nav-drawer a[href*="cv.html"],
-body.is-rotated-mobile #mobileNavDrawer .mobile-nav-cv-header,
-body.is-rotated-mobile #mobileNavDrawer .mobile-nav-cv-track,
-body.is-rotated-mobile #mobileNavDrawer a[href*="cv.html"] {
-  display: none !important;
-}
-
-body.is-rotated-mobile .mobile-nav-drawer {
-  max-height: calc(100vh - 50px) !important;
-  max-height: calc(100dvh - 50px) !important;
-  overflow-y: auto !important;
-  overscroll-behavior: contain !important;
-  -webkit-overflow-scrolling: touch !important;
-  padding: 0.75rem 1.25rem 1.25rem !important;
-}
-
-body.is-rotated-mobile .mobile-nav-content {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 0.45rem 0.85rem !important;
-}
-
-body.is-rotated-mobile .mobile-nav-link {
-  padding: 0.45rem 0.75rem !important;
-  font-size: 0.82rem !important;
-}
-
 /* 📱 Dynamic Class Overrides: Ensure top navbar has logo on left, and actions (View CV, Get in Touch, burger menu) towards right */
 body.is-mobile-screen .nav-container,
-body.is-rotated-mobile .nav-container,
 body.in-simulator .nav-container {
   display: flex !important;
   align-items: center !important;
@@ -6303,13 +6269,11 @@ body.in-simulator .nav-container {
 }
 
 body.is-mobile-screen .nav-links,
-body.is-rotated-mobile .nav-links,
 body.in-simulator .nav-links {
   display: none !important;
 }
 
 body.is-mobile-screen .nav-actions,
-body.is-rotated-mobile .nav-actions,
 body.in-simulator .nav-actions {
   display: flex !important;
   align-items: center !important;
@@ -6321,7 +6285,6 @@ body.in-simulator .nav-actions {
 }
 
 body.is-mobile-screen .nav-actions .btn-secondary,
-body.is-rotated-mobile .nav-actions .btn-secondary,
 body.in-simulator .nav-actions .btn-secondary {
   display: inline-flex !important;
   align-items: center !important;
@@ -6334,7 +6297,6 @@ body.in-simulator .nav-actions .btn-secondary {
 }
 
 body.is-mobile-screen .nav-actions .btn-primary,
-body.is-rotated-mobile .nav-actions .btn-primary,
 body.in-simulator .nav-actions .btn-primary {
   display: inline-flex !important;
   align-items: center !important;
@@ -6347,7 +6309,6 @@ body.in-simulator .nav-actions .btn-primary {
 }
 
 body.is-mobile-screen .mobile-nav-toggle,
-body.is-rotated-mobile .mobile-nav-toggle,
 body.in-simulator .mobile-nav-toggle {
   display: inline-flex !important;
   align-items: center !important;
@@ -6360,7 +6321,6 @@ body.in-simulator .mobile-nav-toggle {
 }
 
 body.is-mobile-screen .fx-switch-wrapper,
-body.is-rotated-mobile .fx-switch-wrapper,
 body.in-simulator .fx-switch-wrapper {
   display: none !important;
 }
@@ -6371,25 +6331,19 @@ body.is-mobile-screen .navbar {
 }
 
 /* Flag 2: Large Mobile Simulator Top Clearance (iPhone 16 Pro Max 440x956 / Pixel 8) */
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .navbar,
-body.in-simulator:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .navbar {
+body.in-simulator.is-large-mobile .navbar,
+body.in-simulator:not(.is-tablet-device):not(.is-compact-se) .navbar {
   padding-top: 48px !important;
 }
 
 /* Flag 1: Tablet Simulator Top Clearance (iPad Pro / Air) */
-body.in-simulator.is-tablet-device:not(.is-rotated-mobile) .navbar {
+body.in-simulator.is-tablet-device .navbar {
   padding-top: 18px !important;
 }
 
 /* Flag 3: Compact SE Simulator Top Clearance (iPhone SE) */
-body.in-simulator.is-compact-se:not(.is-rotated-mobile) .navbar {
+body.in-simulator.is-compact-se .navbar {
   padding-top: 18px !important;
-}
-
-/* Landscape / Rotated Mobile Simulator Clearance */
-body.in-simulator.is-rotated-mobile .navbar {
-  padding-top: 0.5rem !important;
-  padding-left: 52px !important;
 }
 
 /* 4. Extra Small Phones (< 380px) */
@@ -8452,45 +8406,6 @@ screen and (pointer: coarse) and (orientation: landscape) and (max-height: 550px
   .cv-contact-link {
     font-size: 0.82rem !important;
     word-break: break-word !important;
-  }
-}
-
-@media screen and (orientation: landscape) and (min-width: 680px) and (max-height: 550px),
-screen and (orientation: landscape) and (min-width: 680px) and (max-device-width: 956px) {
-  .cv-contact-matrix {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-}
-
-body.is-rotated-mobile .cv-contact-matrix {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
-  gap: 8px 16px !important;
-  padding: 10px 16px !important;
-  font-size: 0.82rem !important;
-}
-
-body.is-rotated-mobile .cv-contact-item {
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  flex-wrap: wrap !important;
-}
-
-body.is-rotated-mobile .cv-contact-label {
-  font-size: 0.78rem !important;
-  flex-shrink: 0 !important;
-}
-
-body.is-rotated-mobile .cv-contact-val,
-body.is-rotated-mobile .cv-contact-link {
-  font-size: 0.82rem !important;
-  word-break: break-word !important;
-}
-
-@media (min-width: 680px) {
-  body.is-rotated-mobile .cv-contact-matrix {
-    grid-template-columns: repeat(3, 1fr) !important;
   }
 }
 
@@ -11487,24 +11402,6 @@ screen and (pointer: coarse) and (orientation: landscape) and (max-height: 550px
   }
 }
 
-body.is-rotated-mobile .cv-export-modal-overlay {
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 8px 12px !important;
-  overflow-y: auto !important;
-}
-
-body.is-rotated-mobile .cv-export-modal-card {
-  max-width: 600px !important;
-  max-height: calc(100vh - 16px) !important;
-  max-height: calc(100dvh - 16px) !important;
-  padding: 12px 18px 10px !important;
-  margin: auto !important;
-  border-radius: 18px !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-}
-
 /* ==========================================================================
    Mobile Charlie Top Dock, Full-Screen Modal Chat, & Compact Phone Support
    ========================================================================== */
@@ -11702,17 +11599,6 @@ body.in-simulator.is-compact-se.mobile-chat-open:not(.is-rotated-mobile) .ai-bot
   padding-bottom: 10px !important;
 }
 
-/* Landscape / Rotated Mobile Simulator Clearance (Dynamic Island on Left) */
-body.in-simulator.is-rotated-mobile.mobile-chat-open .ai-bot-header {
-  padding-top: 10px !important;
-  padding-left: 52px !important;
-  padding-right: 14px !important;
-}
-
-/* ==========================================================================
-   📱 3-Profile Mobile AI Terminal Header Controls Matrix
-   ========================================================================== */
-
 /* Universal Mobile/Tablet Header: Monitor + charlie-ai on Left, Actions on Right, NO Close Button */
 body.is-mobile-screen .ai-bot-header,
 body.mobile-chat-open .ai-bot-header,
@@ -11728,8 +11614,7 @@ body.in-simulator .ai-bot-title,
 body.is-large-mobile .ai-bot-title,
 body.is-tablet-device .ai-bot-title,
 body.is-compact-se .ai-bot-title,
-body.is-compact-phone .ai-bot-title,
-body.is-rotated-mobile .ai-bot-title {
+body.is-compact-phone .ai-bot-title {
   display: flex !important;
   visibility: visible !important;
   align-items: center !important;
@@ -11760,8 +11645,7 @@ body.in-simulator .ai-bot-header-actions,
 body.is-large-mobile .ai-bot-header-actions,
 body.is-tablet-device .ai-bot-header-actions,
 body.is-compact-se .ai-bot-header-actions,
-body.is-compact-phone .ai-bot-header-actions,
-body.is-rotated-mobile .ai-bot-header-actions {
+body.is-compact-phone .ai-bot-header-actions {
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
@@ -11778,7 +11662,6 @@ body.is-large-mobile .ai-bot-maximize-btn,
 body.is-tablet-device .ai-bot-maximize-btn,
 body.is-compact-se .ai-bot-maximize-btn,
 body.is-compact-phone .ai-bot-maximize-btn,
-body.is-rotated-mobile .ai-bot-maximize-btn,
 body.is-mobile-screen #aiTerminalMaximizeBtn,
 body.mobile-chat-open #aiTerminalMaximizeBtn,
 body.in-simulator #aiTerminalMaximizeBtn {
@@ -11798,11 +11681,11 @@ body.in-simulator .ai-bot-lab-link {
   display: none !important;
 }
 
-/* 1. Large Mobile (iPhone 16 Pro Max, Pixel 8) - PORTRAIT */
+/* 1. Large Mobile (iPhone 16 Pro Max, Pixel 8) - ALWAYS ICONS ONLY */
 /* Left: 🖥️ charlie-ai | Right: [<-] [🧠 ⚙️] [🔊 ON/OFF] */
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-profile-btn {
+body.is-large-mobile .ai-bot-profile-btn,
+body.in-simulator.is-large-mobile .ai-bot-profile-btn,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn {
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
@@ -11815,42 +11698,42 @@ body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated
   border: 1px solid rgba(245, 158, 11, 0.4) !important;
   color: #f59e0b !important;
 }
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn span,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn span,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-profile-btn span {
+body.is-large-mobile .ai-bot-profile-btn span,
+body.in-simulator.is-large-mobile .ai-bot-profile-btn span,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn span {
   display: none !important;
 }
 
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-llm-btn {
+body.is-large-mobile .ai-bot-llm-btn,
+body.in-simulator.is-large-mobile .ai-bot-llm-btn,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn {
   display: inline-flex !important;
   padding: 4px 8px !important;
   gap: 4px !important;
   border-radius: 16px !important;
 }
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text {
+body.is-large-mobile .ai-bot-llm-btn .ai-llm-text,
+body.in-simulator.is-large-mobile .ai-bot-llm-btn .ai-llm-text,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn .ai-llm-text {
   display: none !important;
 }
 
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-sound-btn {
+body.is-large-mobile .ai-bot-sound-btn,
+body.in-simulator.is-large-mobile .ai-bot-sound-btn,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn {
   display: inline-flex !important;
   padding: 4px 8px !important;
   gap: 4px !important;
   border-radius: 16px !important;
 }
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text {
+body.is-large-mobile .ai-bot-sound-btn .ai-sound-text,
+body.in-simulator.is-large-mobile .ai-bot-sound-btn .ai-sound-text,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn .ai-sound-text {
   display: none !important;
 }
-body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text-short,
-body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text-short,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text-short {
+body.is-large-mobile .ai-bot-sound-btn .ai-sound-text-short,
+body.in-simulator.is-large-mobile .ai-bot-sound-btn .ai-sound-text-short,
+body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn .ai-sound-text-short {
   display: inline !important;
 }
 
@@ -12121,20 +12004,6 @@ body.is-mobile-screen .ai-message.ai-user-msg {
 
 body.is-mobile-screen .ai-message.ai-bot-msg {
   max-width: calc(100% - 36px) !important;
-}
-
-/* Rotated mobile landscape adjustments */
-body.is-rotated-mobile.mobile-chat-open .ai-bot-terminal {
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-body.is-rotated-mobile.mobile-chat-open .ai-chat-stream {
-  padding: 8px 14px 14px !important;
-}
-
-body.is-rotated-mobile.mobile-chat-open .ai-chat-input-bar {
-  padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
 /* ==========================================================================

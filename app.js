@@ -113,12 +113,6 @@
     const isPhone = (isCompact || isLargeMob) && !isTablet;
     handleMobileOrientationWarning(isPhone, isRotated);
 
-    if (isRotated) {
-      document.body.classList.add('is-rotated-mobile');
-    } else {
-      document.body.classList.remove('is-rotated-mobile');
-    }
-
     if (isMob || isTablet) {
       document.body.classList.add('is-mobile-screen');
       document.body.classList.toggle('is-tablet-device', isTablet);
