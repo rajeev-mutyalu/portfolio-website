@@ -6404,6 +6404,33 @@ body.in-simulator.is-rotated-mobile .navbar {
   }
 }
 
+/* Compact SE & Compact Phone Navbar Fine-Tuning */
+body.is-compact-se .navbar .nav-container,
+body.is-compact-phone .navbar .nav-container,
+body.in-simulator.is-compact-se .navbar .nav-container {
+  gap: 4px !important;
+}
+
+body.is-compact-se .nav-actions,
+body.is-compact-phone .nav-actions,
+body.in-simulator.is-compact-se .nav-actions {
+  gap: 3px !important;
+}
+
+body.is-compact-se .nav-actions .btn-secondary,
+body.is-compact-phone .nav-actions .btn-secondary,
+body.in-simulator.is-compact-se .nav-actions .btn-secondary {
+  padding: 0.26rem 0.46rem !important;
+  font-size: 0.71rem !important;
+}
+
+body.is-compact-se .nav-actions .btn-primary,
+body.is-compact-phone .nav-actions .btn-primary,
+body.in-simulator.is-compact-se .nav-actions .btn-primary {
+  padding: 0.26rem 0.52rem !important;
+  font-size: 0.71rem !important;
+}
+
 /* ==========================================================================
    🖼️ CV Visual Picture Showcase & Gallery Styles
    ========================================================================== */
@@ -11489,64 +11516,75 @@ body.is-rotated-mobile .cv-export-modal-card {
   display: none !important;
 }
 
-@media (min-width: 769px) {
-  #mobileCharlieTopDock,
-  .mobile-charlie-top-dock,
-  #mobileCharlieDockCanvas,
-  .compact-se-icon {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    position: absolute !important;
-    left: -99999px !important;
-    pointer-events: none !important;
-  }
+body:not(.is-mobile-screen):not(.in-simulator) #mobileCharlieTopDock,
+body:not(.is-mobile-screen):not(.in-simulator) .mobile-charlie-top-dock,
+body:not(.is-mobile-screen):not(.in-simulator) #mobileCharlieDockCanvas,
+body:not(.is-mobile-screen):not(.in-simulator) .compact-se-icon {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  position: absolute !important;
+  left: -99999px !important;
+  pointer-events: none !important;
 }
 
-/* 2. Mobile Top Navigation Charlie Dock */
-@media (max-width: 768px), (max-height: 550px) and (orientation: landscape) {
-  body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 36px;
-    height: 36px;
-    background: rgba(15, 23, 42, 0.75);
-    border: 1px solid rgba(0, 242, 254, 0.4);
-    border-radius: 10px;
-    cursor: pointer;
-    flex-shrink: 0;
-    padding: 0;
-    margin-left: 6px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 242, 254, 0.2);
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    z-index: 10;
-  }
-
-  body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock:active {
-    transform: scale(0.92);
-  }
-
-  body.is-mobile-screen #mobileCharlieTopDock canvas {
-    width: 32px;
-    height: 32px;
-    display: block;
-    pointer-events: none;
-  }
-
-  body.is-mobile-screen #mobileCharlieTopDock .compact-se-icon {
-    display: none !important;
-  }
+/* 2. Mobile Top Navigation Charlie Dock (Active across Mobile/Tablet in both Portrait & Landscape) */
+body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock,
+body.in-simulator:not(.mobile-chat-open) #mobileCharlieTopDock {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 36px;
+  height: 36px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  border-radius: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  margin-left: 6px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 242, 254, 0.2);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  z-index: 10;
 }
 
-/* 3. Mobile Full-Screen Chat Modal */
+body.is-compact-se:not(.mobile-chat-open) #mobileCharlieTopDock,
+body.is-compact-phone:not(.mobile-chat-open) #mobileCharlieTopDock {
+  width: 32px;
+  height: 32px;
+  margin-left: 4px;
+}
+
+body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock:active {
+  transform: scale(0.92);
+}
+
+body.is-mobile-screen #mobileCharlieTopDock canvas,
+body.in-simulator #mobileCharlieTopDock canvas {
+  width: 32px;
+  height: 32px;
+  display: block;
+  pointer-events: none;
+}
+
+body.is-compact-se #mobileCharlieTopDock canvas,
+body.is-compact-phone #mobileCharlieTopDock canvas {
+  width: 28px;
+  height: 28px;
+}
+
+body.is-mobile-screen #mobileCharlieTopDock .compact-se-icon,
+body.in-simulator #mobileCharlieTopDock .compact-se-icon {
+  display: none !important;
+}
+
 /* 3. Mobile Full-Screen Chat Modal */
 body.mobile-chat-open .navbar,
 body.is-mobile-screen.mobile-chat-open .navbar {
@@ -11768,9 +11806,14 @@ body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
+  align-items: center !important;
+  justify-content: center !important;
   margin-right: 0 !important;
-  padding: 3px 8px !important;
+  padding: 4px 8px !important;
   border-radius: 16px !important;
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  color: #f59e0b !important;
 }
 body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn span,
 body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-profile-btn span,
@@ -11782,8 +11825,9 @@ body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn,
 body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn,
 body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-llm-btn {
   display: inline-flex !important;
-  padding: 3px 8px !important;
+  padding: 4px 8px !important;
   gap: 4px !important;
+  border-radius: 16px !important;
 }
 body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
 body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
@@ -11795,8 +11839,9 @@ body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn,
 body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn,
 body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-sound-btn {
   display: inline-flex !important;
-  padding: 3px 8px !important;
+  padding: 4px 8px !important;
   gap: 4px !important;
+  border-radius: 16px !important;
 }
 body.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text,
 body.in-simulator.is-large-mobile:not(.is-rotated-mobile) .ai-bot-sound-btn .ai-sound-text,
@@ -11817,8 +11862,13 @@ body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-s
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
+  align-items: center !important;
   margin-right: 0 !important;
   padding: 3px 9px !important;
+  border-radius: 16px !important;
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  color: #f59e0b !important;
 }
 body.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn span,
 body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-profile-btn span,
@@ -11830,6 +11880,8 @@ body.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn,
 body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn,
 body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn {
   display: inline-flex !important;
+  padding: 3px 9px !important;
+  border-radius: 16px !important;
 }
 body.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
 body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
@@ -11841,6 +11893,8 @@ body.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn,
 body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn,
 body.is-mobile-screen.is-rotated-mobile:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn {
   display: inline-flex !important;
+  padding: 3px 9px !important;
+  border-radius: 16px !important;
 }
 body.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text,
 body.in-simulator.is-large-mobile.is-rotated-mobile .ai-bot-sound-btn .ai-sound-text,
@@ -11860,8 +11914,13 @@ body.in-simulator.is-tablet-device .ai-bot-profile-btn {
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
+  align-items: center !important;
   margin-right: 0 !important;
-  padding: 2px 9px !important;
+  padding: 3px 10px !important;
+  border-radius: 16px !important;
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  color: #f59e0b !important;
 }
 body.is-tablet-device .ai-bot-profile-btn span,
 body.in-simulator.is-tablet-device .ai-bot-profile-btn span {
@@ -11870,6 +11929,8 @@ body.in-simulator.is-tablet-device .ai-bot-profile-btn span {
 body.is-tablet-device .ai-bot-llm-btn,
 body.in-simulator.is-tablet-device .ai-bot-llm-btn {
   display: inline-flex !important;
+  padding: 3px 10px !important;
+  border-radius: 16px !important;
 }
 body.is-tablet-device .ai-bot-llm-btn .ai-llm-text,
 body.in-simulator.is-tablet-device .ai-bot-llm-btn .ai-llm-text {
@@ -11878,6 +11939,8 @@ body.in-simulator.is-tablet-device .ai-bot-llm-btn .ai-llm-text {
 body.is-tablet-device .ai-bot-sound-btn,
 body.in-simulator.is-tablet-device .ai-bot-sound-btn {
   display: inline-flex !important;
+  padding: 3px 10px !important;
+  border-radius: 16px !important;
 }
 body.is-tablet-device .ai-bot-sound-btn .ai-sound-text,
 body.in-simulator.is-tablet-device .ai-bot-sound-btn .ai-sound-text {
@@ -11896,8 +11959,14 @@ body.is-compact-phone .ai-bot-profile-btn {
   display: inline-flex !important;
   visibility: visible !important;
   pointer-events: auto !important;
+  align-items: center !important;
+  justify-content: center !important;
   margin-right: 0 !important;
-  padding: 2px 6px !important;
+  padding: 3px 7px !important;
+  border-radius: 14px !important;
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  color: #f59e0b !important;
 }
 body.is-compact-se .ai-bot-profile-btn span,
 body.in-simulator.is-compact-se .ai-bot-profile-btn span,
@@ -11908,8 +11977,9 @@ body.is-compact-se .ai-bot-llm-btn,
 body.in-simulator.is-compact-se .ai-bot-llm-btn,
 body.is-compact-phone .ai-bot-llm-btn {
   display: inline-flex !important;
-  padding: 2px 6px !important;
+  padding: 3px 7px !important;
   gap: 3px !important;
+  border-radius: 14px !important;
 }
 body.is-compact-se .ai-bot-llm-btn .ai-llm-text,
 body.in-simulator.is-compact-se .ai-bot-llm-btn .ai-llm-text,
@@ -11920,8 +11990,9 @@ body.is-compact-se .ai-bot-sound-btn,
 body.in-simulator.is-compact-se .ai-bot-sound-btn,
 body.is-compact-phone .ai-bot-sound-btn {
   display: inline-flex !important;
-  padding: 2px 6px !important;
+  padding: 3px 7px !important;
   gap: 3px !important;
+  border-radius: 14px !important;
 }
 body.is-compact-se .ai-bot-sound-btn .ai-sound-text,
 body.in-simulator.is-compact-se .ai-bot-sound-btn .ai-sound-text,
@@ -11939,6 +12010,7 @@ body.is-compact-phone .ai-bot-lab-link {
   display: none !important;
 }
 
+/* 4. Full-Height Mobile Chat Viewport & Stream Layout */
 body.mobile-chat-open .ai-bot-body-split,
 body.is-mobile-screen.mobile-chat-open .ai-bot-body-split {
   display: flex !important;
@@ -11946,11 +12018,33 @@ body.is-mobile-screen.mobile-chat-open .ai-bot-body-split {
   opacity: 1 !important;
   flex-direction: column !important;
   flex: 1 1 0% !important;
-  height: auto !important;
+  height: 100% !important;
   min-height: 0 !important;
   max-height: none !important;
   overflow: hidden !important;
   position: relative !important;
+}
+
+body.mobile-chat-open:not(.is-tablet-device) .ai-bot-sidebar,
+body.is-mobile-screen.mobile-chat-open:not(.is-tablet-device) .ai-bot-sidebar {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  border-right: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  max-height: 160px !important;
+  height: auto !important;
+  padding: 8px 10px !important;
+  flex-shrink: 0 !important;
+}
+
+body.mobile-chat-open:not(.is-tablet-device) .ai-bot-terminal.sidebar-collapsed .ai-bot-sidebar,
+body.is-mobile-screen.mobile-chat-open:not(.is-tablet-device) .ai-bot-terminal.sidebar-collapsed .ai-bot-sidebar {
+  display: none !important;
+  max-height: 0 !important;
+  padding: 0 !important;
+  border-bottom: none !important;
 }
 
 body.mobile-chat-open .ai-bot-main,
@@ -11959,7 +12053,7 @@ body.is-mobile-screen.mobile-chat-open .ai-bot-main {
   visibility: visible !important;
   opacity: 1 !important;
   flex-direction: column !important;
-  flex: 1 1 auto !important;
+  flex: 1 1 0% !important;
   height: 100% !important;
   min-height: 0 !important;
   max-height: none !important;
@@ -11972,13 +12066,13 @@ body.is-mobile-screen.mobile-chat-open .ai-chat-stream {
   visibility: visible !important;
   opacity: 1 !important;
   flex-direction: column !important;
-  flex: 1 1 auto !important;
-  height: auto !important;
+  flex: 1 1 0% !important;
+  height: 100% !important;
   min-height: 0 !important;
   max-height: none !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
-  padding: 12px 14px 20px !important;
+  padding: 16px 14px 20px !important;
 }
 
 body.mobile-chat-open .ai-chat-input-bar,
@@ -11987,9 +12081,34 @@ body.is-mobile-screen.mobile-chat-open .ai-chat-input-bar {
   visibility: visible !important;
   opacity: 1 !important;
   flex-shrink: 0 !important;
-  padding: 8px 12px calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+  padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
   background: rgba(10, 15, 30, 0.98) !important;
   border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Fix Greeting Message Top Clearance (Eliminates Header / Drawer Overlap) */
+body.mobile-chat-open .ai-chat-stream .ai-message:first-child,
+body.is-mobile-screen.mobile-chat-open .ai-chat-stream .ai-message:first-child {
+  margin-top: 6px !important;
+}
+
+/* Tablet Desktop Parity: 2-Column Split in Landscape Tablet */
+body.is-tablet-device.mobile-chat-open .ai-bot-body-split {
+  flex-direction: row !important;
+}
+body.is-tablet-device.mobile-chat-open .ai-bot-sidebar {
+  width: 260px !important;
+  min-width: 260px !important;
+  max-width: 260px !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: none !important;
+  display: flex !important;
+}
+body.is-tablet-device.mobile-chat-open .ai-bot-terminal.sidebar-collapsed .ai-bot-sidebar {
+  margin-left: -260px !important;
+  opacity: 0 !important;
 }
 
 /* Ensure messages and copy buttons never overlap Charlie on user side on mobile */
@@ -12008,5 +12127,9 @@ body.is-rotated-mobile.mobile-chat-open .ai-bot-terminal {
 }
 
 body.is-rotated-mobile.mobile-chat-open .ai-chat-stream {
-  padding: 8px 12px 16px !important;
+  padding: 8px 14px 14px !important;
+}
+
+body.is-rotated-mobile.mobile-chat-open .ai-chat-input-bar {
+  padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
 }

@@ -3231,7 +3231,8 @@
     }
 
     drawMobileTopDockCharlie() {
-      if (!window.isMobileWithCharlie || !window.isMobileWithCharlie()) return;
+      const isMobileScreen = (document.body && (document.body.classList.contains('is-mobile-screen') || document.body.classList.contains('in-simulator'))) || (window.isMobileWithCharlie && window.isMobileWithCharlie());
+      if (!isMobileScreen) return;
       if (!this.mobileDockCanvas) {
         this.mobileDockCanvas = document.getElementById('mobileCharlieDockCanvas');
         if (this.mobileDockCanvas) {
@@ -9177,17 +9178,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           }
         }
 
-        // 2. Terminal Header Title Text: charlie-ai on mobile/tablet
+        // 2. Terminal Header Title Text: clean charlie-ai
         const titleSpan = document.getElementById('aiTerminalTitleText') || termTitleSpan || document.querySelector('.ai-bot-terminal .ai-bot-title span');
         if (titleSpan) {
-          const isMobileOrTablet = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 1024);
-          if (isMobileOrTablet) {
-            titleSpan.textContent = 'charlie-ai';
-          } else {
-            titleSpan.textContent = isLive
-              ? `charlie-ai --session=assistant-console [OPENAI: ${(charlieAiConfig.model || 'gpt-4o-mini').toUpperCase()}]`
-              : `charlie-ai --session=assistant-console [LOCAL-KB]`;
-          }
+          titleSpan.textContent = 'charlie-ai';
         }
 
         // 3. Status Pill in Header

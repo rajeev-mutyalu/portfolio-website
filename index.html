@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=188" />
+  <link rel="stylesheet" href="style.css?v=189" />
   <link rel="prefetch" href="cv.html" />
 
   <!-- Navigation & Scroll Position Guard: Always land cleanly on the first page when returning from CV, Charlie Lab, or Full Screen -->
@@ -78,27 +78,24 @@
     .compact-se-icon {
       display: none !important;
     }
-    @media (min-width: 769px) {
-      #mobileCharlieTopDock,
-      .mobile-charlie-top-dock,
-      #mobileCharlieDockCanvas,
-      .compact-se-icon {
-        display: none !important;
-        visibility: hidden !important;
-        width: 0 !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        position: absolute !important;
-        left: -99999px !important;
-        pointer-events: none !important;
-      }
+    body:not(.is-mobile-screen):not(.in-simulator) #mobileCharlieTopDock,
+    body:not(.is-mobile-screen):not(.in-simulator) .mobile-charlie-top-dock,
+    body:not(.is-mobile-screen):not(.in-simulator) #mobileCharlieDockCanvas,
+    body:not(.is-mobile-screen):not(.in-simulator) .compact-se-icon {
+      display: none !important;
+      visibility: hidden !important;
+      width: 0 !important;
+      height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      position: absolute !important;
+      left: -99999px !important;
+      pointer-events: none !important;
     }
-    @media (max-width: 768px), (max-height: 550px) and (orientation: landscape) {
-      body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock {
-        display: inline-flex !important;
-      }
+    body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock,
+    body.in-simulator:not(.mobile-chat-open) #mobileCharlieTopDock {
+      display: inline-flex !important;
     }
   </style>
 </head>
@@ -113,10 +110,11 @@
 
   <!-- Ambient Background Glows -->
   <div class="ambient-glow glow-top-left"></div>
-  <div class="ambient-glow glow-top-right"></div>
-  <div class="ambient-glow glow-mid-center"></div>
+  <div class="ambient-glow glow-bottom-right"></div>
 
-  <!-- Navigation Bar -->
+  <!-- =========================================================================
+       Navigation Header (Standard & Mobile Responsive)
+       ========================================================================= -->
   <header class="navbar">
     <div class="nav-container">
       <a href="#hero" class="nav-logo">
@@ -124,7 +122,7 @@
         <span class="logo-text">Rajeev Mutyalu</span>
       </a>
       <!-- Mobile Top Navigation Charlie Dock (Active ONLY on Mobile, Strictly Hidden on Desktop) -->
-      <button type="button" class="mobile-charlie-top-dock" id="mobileCharlieTopDock" style="display: none !important;" title="Chat with Charlie (AI Assistant)" aria-label="Chat with Charlie AI">
+      <button type="button" class="mobile-charlie-top-dock" id="mobileCharlieTopDock" aria-label="Chat with Charlie AI">
         <canvas id="mobileCharlieDockCanvas" width="48" height="48"></canvas>
         <span class="compact-se-icon" aria-hidden="true">🤖</span>
       </button>
@@ -2022,7 +2020,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=188"></script>
+  <script src="app.js?v=189"></script>
 </body>
 
 </html>
