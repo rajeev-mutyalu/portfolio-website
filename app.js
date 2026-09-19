@@ -1198,8 +1198,8 @@
         }
       }
 
-      // Blade Trail following dynamic sword tip across full martial reach
-      if (this.state === 'slash' || this.state === 'run' || (this.state === 'jump' && this.jumpTimer > 20)) {
+      // Blade Trail following dynamic sword tip across full martial reach (only during slash combat or aerial flip)
+      if (this.state === 'slash' || (this.state === 'jump' && this.jumpTimer > 20)) {
         let tipOffsetX = 26;
         let tipOffsetY = -5;
 

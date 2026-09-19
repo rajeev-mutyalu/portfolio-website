@@ -2274,7 +2274,7 @@
         telState.textContent = (this.state === 'cyber_dash') ? 'CYBER DASH' : this.state.toUpperCase();
 
         // 4. Update Blade Trail (originating dynamically from the swinging sword tip across full reach)
-        if (this.state === 'slash' || this.state === 'run' || (this.state === 'jump' && this.jumpTimer > 20)) {
+        if (this.state === 'slash' || (this.state === 'jump' && this.jumpTimer > 20)) {
           let tipOffsetX = 26;
           let tipOffsetY = -5;
 
@@ -4030,7 +4030,6 @@
           charlie.x = startX + (destX - startX) * ease;
           charlie.y = startY + (destY - startY) * ease;
           charlie.facing = destX >= startX ? 1 : -1;
-          charlie.bladeTrails.push({ x: charlie.x + charlie.facing * 18, y: charlie.y, alpha: 0.9 });
           if (Math.random() > 0.3) addSparks(charlie.x, charlie.y, '#00f2fe', 2);
 
           if (progress < 1.0) {
