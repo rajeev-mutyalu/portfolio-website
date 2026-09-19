@@ -1020,6 +1020,8 @@
         }
       }
 
+
+
       // Companion Escort Flight Mode (Accompanies page animation / smooth scroll to specific portfolio section)
       if (this.state === 'escort') {
         this.escortTimer += 1.0 * this.animSpeed;
@@ -4620,12 +4622,14 @@
       if (!cvModalOverlay) return;
       cvModalOverlay.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('cv-modal-open');
     }
 
     function closeCvModal() {
       if (!cvModalOverlay) return;
       cvModalOverlay.classList.add('hidden');
       document.body.style.overflow = '';
+      document.body.classList.remove('cv-modal-open');
     }
 
     if (navCvTrigger) {
@@ -4660,11 +4664,23 @@
       });
     }
 
-    // Auto-close modal when an option link is clicked so bfcache is always clean
+    // Interactive Track Selection: Zero-flicker background page transition
     const cvOptionLinks = document.querySelectorAll('.cv-modal-option');
     cvOptionLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        closeCvModal();
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const href = link.getAttribute('href');
+
+        try {
+          sessionStorage.setItem('cv_modal_transition', '1');
+          sessionStorage.setItem('portfolio_return_top', 'false');
+        } catch (err) { }
+
+        // Keep blurred backdrop visible during redirect so homepage never flashes
+        setTimeout(() => {
+          window.location.href = href;
+        }, 120);
       });
     });
 
@@ -7209,7 +7225,7 @@ This activates Chrome/Edge/Safari/Firefox native responsive mode with precise to
 I am currently operating in <strong>Offline Local-KB Mode</strong>, which is strictly indexed to answer questions about <strong>Rajeev Mutyalu</strong>, his 20+ years of engineering leadership, and his <strong>VFX &amp; GenAI Technical Capabilities</strong>.<br/><br/>
 ⚠️ <strong>Outside Request:</strong> <em>"${cleanQuery}"</em> requires live code generation, algorithm explanation, or general world knowledge outside Rajeev's portfolio database.<br/><br/>
 💡 <strong>How to get this answered:</strong><br/>
-Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.getElementById('aiLlmConfigBtn')?.click()"><strong>🧠 LOCAL KB ⚙️</strong></a> in the top-right header and switch to <strong>Live LLM (OpenAI)</strong> with your API key. In Live mode, I can write recursive functions, debug code, explain complex algorithms, and answer any general question in real time!<br/><br/>
+Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.getElementById('aiLlmConfigBtn')?.click()"><strong>⚡ LOCAL KB ⚙️</strong></a> in the top-right header and switch to <strong>🧠 Live LLM (OpenAI)</strong> with your API key. In Live mode, I can write recursive functions, debug code, explain complex algorithms, and answer any general question in real time!<br/><br/>
 <em>In Local Mode, explore Rajeev's verified technical domains:</em><br/>
 • <strong>🐍 Core Python Architecture:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Core Python &amp; PySide UI Systems" style="display:inline-block; margin-top:2px;">Python &amp; PySide UI</a><br/>
 • <strong>🎬 OpenUSD Pipeline:</strong> <a href="javascript:void(0)" class="ai-followup-btn" data-query="Explain Rajeev's OpenUSD VFX pipeline architecture" style="display:inline-block; margin-top:2px;">OpenUSD Composition</a><br/>
@@ -7687,7 +7703,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               </svg>
               <span>Copy</span>
             </button>
-            <div class="ai-msg-author ai-user-author">You <span>[Terminal Prompt]</span></div>
+            <div class="ai-msg-author ai-user-author">You</div>
           </div>
           ${attachmentsHtml}
           ${trimmedQuery ? `<div class="ai-msg-content">${escapeHtml(trimmedQuery)}</div>` : ''}
@@ -9012,7 +9028,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           );
         }
         if (llmIcon) {
-          llmIcon.textContent = isLive ? '⚡' : '🧠';
+          llmIcon.textContent = isLive ? '🧠' : '⚡';
         }
         if (llmLabel) {
           llmLabel.textContent = isLive ? `OPENAI: ${charlieAiConfig.model.replace('gpt-', '')}` : 'LOCAL KB';
@@ -9040,12 +9056,12 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           if (isLive) {
             modelPillBtn.classList.add('live-active');
             const displayModel = charlieAiConfig.model ? charlieAiConfig.model.replace('gpt-', 'GPT-') : 'Live Model';
-            modelPillLabel.textContent = displayModel;
-            modelPillBtn.setAttribute('title', `Active Model: ${displayModel} (Click to switch or configure)`);
+            modelPillLabel.textContent = '🧠 ' + displayModel;
+            modelPillBtn.setAttribute('title', `Active Model: 🧠 ${displayModel} (Click to switch or configure)`);
           } else {
             modelPillBtn.classList.remove('live-active');
-            modelPillLabel.textContent = 'Local KB';
-            modelPillBtn.setAttribute('title', 'Active Model: Local KB (Click to switch or connect OpenAI API Key)');
+            modelPillLabel.textContent = '⚡ Local KB';
+            modelPillBtn.setAttribute('title', 'Active Model: ⚡ Local KB (Click to switch or connect OpenAI API Key)');
           }
         }
       }
@@ -9070,7 +9086,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           // When no key is cached: Show Local KB active, second option opens key modal (no trailing dots)
           html = `
             <button type="button" class="ai-model-item active" data-action="select-local">
-              <span>● Local KB (Active)</span>
+              <span>● ⚡ Local KB (Active)</span>
               <span class="ai-model-item-check">✓</span>
             </button>
             <div class="ai-model-divider"></div>
@@ -9084,7 +9100,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           const isLocalActive = !isLive;
           html = `
             <button type="button" class="ai-model-item ${isLocalActive ? 'active' : ''}" data-action="select-local">
-              <span>${isLocalActive ? '● Local KB (Active)' : 'Local KB (Offline)'}</span>
+              <span>${isLocalActive ? '● ⚡ Local KB (Active)' : '⚡ Local KB (Offline)'}</span>
               ${isLocalActive ? '<span class="ai-model-item-check">✓</span>' : ''}
             </button>
             <div class="ai-model-divider"></div>
@@ -9095,7 +9111,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             const isModelSelected = isLive && (curModel === m.id);
             html += `
               <button type="button" class="ai-model-item ${isModelSelected ? 'active' : ''}" data-action="select-model" data-model="${m.id}">
-                <span>${escapeHtml(m.label)}</span>
+                <span>🧠 ${escapeHtml(m.label)}</span>
                 ${isModelSelected ? '<span class="ai-model-item-check">✓</span>' : ''}
               </button>
             `;
@@ -9830,26 +9846,56 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       const isMob = () => (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768));
 
-      const deployToSection = () => {
+      let charlieDeployTimer = null;
+
+      const clearDeployTimer = () => {
+        if (charlieDeployTimer) {
+          clearTimeout(charlieDeployTimer);
+          charlieDeployTimer = null;
+        }
+      };
+
+      const deployToSection = (immediate = false) => {
         if (isMob()) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie) return;
         if (engine.isEnabled) return; // Do not interrupt Game Mode!
         if (engine.charlie.sectionActive || engine.charlie.state === 'cyber_dash') return;
 
-        const floatingBtn = document.getElementById('floatingCharlieBtn');
-        const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
-        const dockCenterX = dockRect.left + dockRect.width / 2;
-        const dockCenterY = dockRect.top + dockRect.height / 2;
+        const executeDeploy = () => {
+          if (isMob()) return;
+          const eng = window.portfolioEngine;
+          if (!eng || !eng.charlie || eng.isEnabled) return;
+          if (eng.charlie.sectionActive || eng.charlie.state === 'cyber_dash') return;
 
-        const anchor = engine.charlie.getChatMascotAnchor();
-        if (!anchor.isVisible) return;
+          const anchor = eng.charlie.getChatMascotAnchor();
+          if (!anchor.isVisible) return;
 
-        if (floatingBtn) floatingBtn.classList.add('hidden');
-        engine.charlie.triggerDeploy(dockCenterX, dockCenterY, anchor.x, anchor.y, false);
+          const floatingBtn = document.getElementById('floatingCharlieBtn');
+          const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+          const dockCenterX = dockRect.left + dockRect.width / 2;
+          const dockCenterY = dockRect.top + dockRect.height / 2;
+
+          if (floatingBtn) floatingBtn.classList.add('hidden');
+          eng.charlie.triggerDeploy(dockCenterX, dockCenterY, anchor.x, anchor.y, false);
+        };
+
+        if (immediate) {
+          clearDeployTimer();
+          executeDeploy();
+        } else {
+          // Dwell timer: only deploy if page stays on chat window for at least 1 second (prevents fast scroll disturbance)
+          if (!charlieDeployTimer) {
+            charlieDeployTimer = setTimeout(() => {
+              charlieDeployTimer = null;
+              executeDeploy();
+            }, 1000);
+          }
+        }
       };
 
       const returnToDock = () => {
+        clearDeployTimer();
         if (isMob()) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie) return;
@@ -9871,7 +9917,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            deployToSection();
+            deployToSection(false);
           } else {
             returnToDock();
           }
@@ -9892,9 +9938,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         const anchor = engine.charlie.getChatMascotAnchor();
         if (anchor.isVisible) {
           if (!engine.charlie.sectionActive && engine.charlie.x < -200) {
-            deployToSection();
+            deployToSection(false);
           }
         } else {
+          clearDeployTimer();
           if (engine.charlie.sectionActive && engine.charlie.x > -200) {
             returnToDock();
           }
@@ -9907,7 +9954,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           e.preventDefault();
           scrollToCharlieTerminal();
           setTimeout(() => {
-            deployToSection();
+            deployToSection(true);
           }, 150);
         });
       });
@@ -10336,6 +10383,40 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       window.toggleMobileSimulator = toggleSimulator;
     }
+
+    // 8c. Return from CV Page via "Ask Charlie": Scroll directly to chat & animate Charlie into terminal
+    try {
+      if (sessionStorage.getItem('charlie_nav_to_chat') === '1') {
+        sessionStorage.removeItem('charlie_nav_to_chat');
+        setTimeout(() => {
+          const aiSec = document.getElementById('ai-assistant') || document.getElementById('charlie');
+          if (aiSec) {
+            aiSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          if (window.portfolioEngine?.charlie) {
+            const pc = window.portfolioEngine.charlie;
+            const termDesk = document.getElementById('aiTerminalTitleText') || document.getElementById('charlie');
+            const rect = termDesk ? termDesk.getBoundingClientRect() : { left: window.innerWidth / 2, top: 400 };
+            const targetX = rect.left + 40;
+            const targetY = rect.top + 30;
+
+            // Direct smooth descent into chat terminal
+            pc.x = window.innerWidth / 2;
+            pc.y = -60;
+            pc.deploySpeed = 0.038;
+            pc.triggerDeploy(pc.x, pc.y, targetX, targetY, false);
+            pc.dashType = 'to_write';
+            pc.sectionActive = true;
+            pc.postDashState = 'writing';
+            pc.postDashFace = 'writing';
+          }
+          const inputField = document.getElementById('aiInputField');
+          if (inputField) {
+            setTimeout(() => inputField.focus(), 650);
+          }
+        }, 180);
+      }
+    } catch (e) { }
 
     setupMobileSimulator();
   }

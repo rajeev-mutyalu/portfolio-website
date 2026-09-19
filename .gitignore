@@ -29,3 +29,6 @@ Thumbs.db
 # Screen recording captures
 *.mp4
 *.gif
+
+# Temporary scratch scripts
+scratch/

@@ -9936,6 +9936,37 @@ body.is-local-build .floating-sim-trigger:active {
   pointer-events: none !important;
 }
 
+
+
+/* Seamless CV Transition Overlay */
+.cv-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease;
+  pointer-events: none;
+}
+.cv-transition-overlay.fade-out {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+.cv-transition-card {
+  max-width: 620px;
+  animation: cvTransitionPulse 0.3s ease-out;
+}
+@keyframes cvTransitionPulse {
+  from { transform: scale(0.96); opacity: 0.8; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 .cv-modal-backdrop {
   position: absolute;
   top: 0;

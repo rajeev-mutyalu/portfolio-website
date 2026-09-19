@@ -23,7 +23,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=152" />
+  <link rel="stylesheet" href="style.css?v=155" />
   <style>
     .print-only { display: none !important; }
     @media print {
@@ -1042,6 +1042,43 @@ Jawaharlal Nehru Technological University (JNTU) / SVCET
         });
       });
     }
+  </script>
+
+  <!-- Seamless Modal Background Handoff Overlay -->
+  <div class="cv-transition-overlay" id="cvTransitionOverlay" style="display: none;">
+    <div class="cv-modal-backdrop"></div>
+    <div class="cv-modal-card cv-transition-card">
+      <header class="cv-modal-header">
+        <div class="cv-modal-title-wrap">
+          <div class="cv-modal-icon-badge">📄</div>
+          <div>
+            <h3 class="cv-modal-title">Select Curriculum Vitae Focus</h3>
+            <p class="cv-modal-subtitle">Entering verified Production Technology &amp; Architecture CV...</p>
+          </div>
+        </div>
+      </header>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('cv_modal_transition') === '1' || sessionStorage.getItem('charlie_cv_transition') === '1') {
+          sessionStorage.removeItem('cv_modal_transition');
+          sessionStorage.removeItem('charlie_cv_transition');
+          const transOverlay = document.getElementById('cvTransitionOverlay');
+          if (transOverlay) {
+            transOverlay.style.display = 'flex';
+            setTimeout(() => {
+              transOverlay.classList.add('fade-out');
+              setTimeout(() => {
+                transOverlay.style.display = 'none';
+              }, 300);
+            }, 60);
+          }
+        }
+      } catch (e) { }
+    })();
   </script>
 </body>
 
