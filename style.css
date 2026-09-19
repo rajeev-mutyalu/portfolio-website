@@ -11629,17 +11629,78 @@ body.is-mobile-screen.mobile-chat-open .ai-bot-header {
   justify-content: space-between !important;
 }
 
-body.mobile-chat-open .ai-bot-profile-btn,
-body.is-mobile-screen.mobile-chat-open .ai-bot-profile-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 5px !important;
-  background: rgba(239, 68, 68, 0.15) !important;
-  border: 1px solid rgba(239, 68, 68, 0.4) !important;
-  color: #f87171 !important;
-  font-size: 0.75rem !important;
-  padding: 4px 10px !important;
-  border-radius: 8px !important;
+/* 1. Remove Profile button on mobile & tablets completely */
+@media (max-width: 1024px) {
+  .ai-bot-profile-btn,
+  #aiProfileReturnBtn {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+body.is-mobile-screen .ai-bot-profile-btn,
+body.mobile-chat-open .ai-bot-profile-btn {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 2. Remove Charlie Lab completely in mobile and Tablets */
+@media (max-width: 1024px), (pointer: coarse) {
+  .ai-bot-lab-link,
+  a[href="charlie-lab.html"] {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+body.is-mobile-screen .ai-bot-lab-link,
+body.is-rotated-mobile .ai-bot-lab-link,
+body.mobile-chat-open .ai-bot-lab-link {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 3. Brain icon with cog wheel and NO text on mobile portrait */
+body.is-mobile-screen:not(.is-rotated-mobile) .ai-bot-llm-btn .ai-llm-text,
+@media (max-width: 768px) and (orientation: portrait) {
+  .ai-bot-llm-btn .ai-llm-text {
+    display: none !important;
+  }
+  .ai-bot-llm-btn {
+    padding: 3px 8px !important;
+    gap: 4px !important;
+  }
+}
+
+/* 4. But OpenAI settings full text will appear on rotate mode */
+body.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
+body.is-mobile-screen.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
+@media (max-width: 1024px) and (orientation: landscape),
+(max-height: 550px) and (orientation: landscape) {
+  body.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text,
+  body.is-mobile-screen.is-rotated-mobile .ai-bot-llm-btn .ai-llm-text {
+    display: inline !important;
+  }
 }
 
 body.mobile-chat-open .ai-bot-body-split,

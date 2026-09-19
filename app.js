@@ -9124,11 +9124,16 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             : 'Active AI Mode: Local KB (Offline) • Click to change mode or connect OpenAI key'
           );
         }
+        const isMob = window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
         if (llmIcon) {
-          llmIcon.textContent = isLive ? '🧠' : '⚡';
+          llmIcon.textContent = isMob ? '🧠' : (isLive ? '🧠' : '⚡');
         }
         if (llmLabel) {
-          llmLabel.textContent = isLive ? `OPENAI: ${charlieAiConfig.model.replace('gpt-', '')}` : 'LOCAL KB';
+          if (isMob && !isLive) {
+            llmLabel.textContent = 'OPENAI SETTINGS';
+          } else {
+            llmLabel.textContent = isLive ? `OPENAI: ${charlieAiConfig.model.replace('gpt-', '')}` : 'LOCAL KB';
+          }
         }
 
         // 2. Terminal Header Session Text: charlie-ai --session=assistant-console [LOCAL-KB] vs [OPENAI: ...]
@@ -9624,6 +9629,13 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             if (fullscreen) {
               window.portfolioCharlie.state = 'waiting';
               window.portfolioCharlie.face = 'waiting';
+            } else {
+              // Exiting fullscreen on mobile -> trigger docking animation to mobile top dock!
+              if (window.isMobileWithCharlie && window.isMobileWithCharlie()) {
+                const mobileDock = document.getElementById('mobileCharlieTopDock');
+                const dockRect = mobileDock ? mobileDock.getBoundingClientRect() : { left: 40, top: 20, width: 36, height: 36 };
+                window.portfolioCharlie.triggerDock(dockRect.left + dockRect.width / 2, dockRect.top + dockRect.height / 2);
+              }
             }
           }
         } else {
@@ -9633,11 +9645,15 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (maxBtn) {
           maxBtn.classList.toggle('is-maximized', fullscreen);
           maxBtn.title = fullscreen
-            ? 'Restore Terminal (Exit Full Screen Mode - Esc)'
+            ? (isMob ? 'Close Chat Modal' : 'Restore Terminal (Exit Full Screen Mode - Esc)')
             : 'Maximize Terminal Below Navigation Bar (Full Screen)';
         }
         if (maxText) {
-          maxText.textContent = fullscreen ? 'Restore' : 'Full Screen';
+          if (isMob && fullscreen) {
+            maxText.textContent = 'Close ✕';
+          } else {
+            maxText.textContent = fullscreen ? 'Restore' : 'Full Screen';
+          }
         }
         if (iconExpand && iconCompress) {
           iconExpand.style.display = fullscreen ? 'none' : 'block';
