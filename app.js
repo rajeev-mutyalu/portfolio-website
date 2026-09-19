@@ -750,15 +750,13 @@
         c.save();
         c.translate(ghost.x, ghost.y);
         c.scale(ghost.facing * this.scale * 0.95, this.scale * 0.95);
-        c.globalAlpha = ghost.alpha * 0.55;
+        c.globalAlpha = ghost.alpha * 0.45;
         c.shadowColor = ghost.color;
         c.shadowBlur = 14 * this.bladeGlowIntensity;
         c.fillStyle = ghost.color;
         c.beginPath();
         c.roundRect(-14, -26, 28, 38, 7);
         c.fill();
-        c.fillStyle = '#ffffff';
-        c.fillRect(-10, -14, 20, 4);
         c.restore();
       }
     }
