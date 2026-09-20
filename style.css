@@ -5834,21 +5834,52 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   .hero-badges {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    grid-template-rows: auto auto;
+    gap: 0.55rem;
     width: 100%;
-    max-width: 340px;
+    max-width: 380px;
+    margin: 0.5rem auto 0;
+    align-items: stretch;
   }
 
   .metric-chip {
-    padding: 0.5rem 0.75rem;
+    padding: 0.55rem 0.65rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* 20+ Years Industry Leadership: Col 1, Row 1 */
+  .hero-badges .metric-chip:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* Oscar & Tentpole Selected Production Credits: Col 2, Row 1 to Row 2 (Spans both rows!) */
+  .hero-badges .metric-chip:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    height: 100%;
+  }
+
+  /* Global Teams London • Montreal • Bengaluru: Col 1, Row 2 */
+  .hero-badges .metric-chip:nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
   }
 
   .metric-num {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    margin-bottom: 2px;
   }
 
   .metric-txt {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
+    line-height: 1.35;
   }
 
   .hero-cta-group {
@@ -6351,7 +6382,20 @@ body.in-simulator.is-compact-se .navbar {
 /* 4. Extra Small Phones (< 380px) */
 @media (max-width: 380px) {
   .hero-badges {
-    grid-template-columns: 1fr;
+    max-width: 320px;
+    gap: 0.45rem;
+  }
+
+  .metric-chip {
+    padding: 0.45rem 0.5rem;
+  }
+
+  .metric-num {
+    font-size: 0.95rem;
+  }
+
+  .metric-txt {
+    font-size: 0.62rem;
   }
 
   .status-pill {
@@ -11444,5 +11488,122 @@ screen and (pointer: coarse) and (orientation: landscape) and (max-height: 550px
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
+  }
+}
+
+/* ==========================================================================
+   Hero Badges Portrait & Landscape Responsive System
+   - Portrait: 2-Column Balanced Grid (Left: 20+ & Global Teams; Right: Oscar spanning both rows)
+   - Landscape: Horizontal 3-Card Row
+   - Desktop (> 1024px): Standard Desktop 3-Card Flex Row
+   ========================================================================== */
+
+/* 1. Universal Portrait Mode for All Mobiles and Tablets (<= 1024px) */
+@media (max-width: 1024px) and (orientation: portrait),
+       (max-width: 768px) {
+  .hero-badges {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: auto auto !important;
+    gap: 0.6rem !important;
+    width: 100% !important;
+    max-width: 380px !important;
+    margin: 0.5rem auto 0 !important;
+    align-items: stretch !important;
+  }
+
+  .hero-badges .metric-chip {
+    padding: 0.6rem 0.7rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Box 1: 20+ Years Industry Leadership -> Top Left (Col 1, Row 1) */
+  .hero-badges .metric-chip:nth-child(1) {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  /* Box 2: Oscar & Tentpole Selected Production Credits -> Right Side spanning both rows (Col 2, Row 1 to Row 2) */
+  .hero-badges .metric-chip:nth-child(2) {
+    grid-column: 2 !important;
+    grid-row: 1 / span 2 !important;
+    height: 100% !important;
+  }
+
+  /* Box 3: Global Teams London • Montreal • Bengaluru -> Bottom Left (Col 1, Row 2) */
+  .hero-badges .metric-chip:nth-child(3) {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+  }
+
+  .hero-badges .metric-num {
+    font-size: 1.05rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .hero-badges .metric-txt {
+    font-size: 0.68rem !important;
+    line-height: 1.35 !important;
+  }
+}
+
+/* 2. Tablet Portrait Refinement (iPad Pro / Air, 600px - 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) and (orientation: portrait),
+       body.is-tablet-device:not(.is-rotated-mobile) .hero-badges {
+  .hero-badges {
+    max-width: 440px !important;
+    gap: 0.75rem !important;
+  }
+
+  .hero-badges .metric-chip {
+    padding: 0.75rem 0.9rem !important;
+  }
+
+  .hero-badges .metric-num {
+    font-size: 1.15rem !important;
+  }
+
+  .hero-badges .metric-txt {
+    font-size: 0.74rem !important;
+  }
+}
+
+/* 3. Mobile & Tablet Landscape Mode (Horizontal 3-card layout) */
+@media (orientation: landscape) and (max-height: 650px),
+       body.is-rotated-mobile .hero-badges,
+       body[data-sim-landscape="true"] .hero-badges {
+  .hero-badges {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    max-width: 660px !important;
+    margin: 0.5rem auto 0 !important;
+  }
+
+  .hero-badges .metric-chip {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    padding: 0.45rem 0.6rem !important;
+    height: auto !important;
+  }
+
+  .hero-badges .metric-num {
+    font-size: 0.95rem !important;
+  }
+
+  .hero-badges .metric-txt {
+    font-size: 0.65rem !important;
   }
 }
