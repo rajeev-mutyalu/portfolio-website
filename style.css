@@ -5992,11 +5992,11 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   /* =========================================================================
      🚫 Completely Remove Charlie & AI Assistant from Mobile Screens (<= 768px)
      ========================================================================= */
-  body:not(.mobile-chat-open) #ai-assistant,
-  body:not(.mobile-chat-open) section#ai-assistant,
-  body:not(.mobile-chat-open) .ai-assistant-section,
-  body:not(.mobile-chat-open) #charlie,
-  body:not(.mobile-chat-open) .ai-bot-terminal,
+  #ai-assistant,
+  section#ai-assistant,
+  .ai-assistant-section,
+  #charlie,
+  .ai-bot-terminal,
   .mobile-nav-ai,
   .mobile-nav-link[href="#ai-assistant"],
   a[href="#ai-assistant"],
@@ -6017,6 +6017,7 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   #fxWidget,
   #missionToast,
   #cometCanvas,
+  #charlieCanvas,
   .shatter-popup {
     display: none !important;
     visibility: hidden !important;
@@ -6040,11 +6041,11 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
 (pointer: coarse) and (max-height: 650px) and (orientation: landscape),
 (max-device-width: 1024px) and (orientation: landscape) {
 
-  body:not(.mobile-chat-open) #ai-assistant,
-  body:not(.mobile-chat-open) section#ai-assistant,
-  body:not(.mobile-chat-open) .ai-assistant-section,
-  body:not(.mobile-chat-open) #charlie,
-  body:not(.mobile-chat-open) .ai-bot-terminal,
+  #ai-assistant,
+  section#ai-assistant,
+  .ai-assistant-section,
+  #charlie,
+  .ai-bot-terminal,
   .mobile-nav-ai,
   .mobile-nav-link[href="#ai-assistant"],
   a[href="#ai-assistant"],
@@ -6065,6 +6066,7 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   #fxWidget,
   #missionToast,
   #cometCanvas,
+  #charlieCanvas,
   .shatter-popup {
     display: none !important;
     visibility: hidden !important;
@@ -6192,11 +6194,11 @@ body.charlie-fullscreen-active .section-container:not(#ai-assistant) {
   }
 }
 
-body.is-mobile-screen:not(.mobile-chat-open) #ai-assistant,
-body.is-mobile-screen:not(.mobile-chat-open) section#ai-assistant,
-body.is-mobile-screen:not(.mobile-chat-open) .ai-assistant-section,
-body.is-mobile-screen:not(.mobile-chat-open) #charlie,
-body.is-mobile-screen:not(.mobile-chat-open) .ai-bot-terminal,
+body.is-mobile-screen #ai-assistant,
+body.is-mobile-screen section#ai-assistant,
+body.is-mobile-screen .ai-assistant-section,
+body.is-mobile-screen #charlie,
+body.is-mobile-screen .ai-bot-terminal,
 body.is-mobile-screen .mobile-nav-ai,
 body.is-mobile-screen .mobile-nav-link[href="#ai-assistant"],
 body.is-mobile-screen a[href="#ai-assistant"],
@@ -6219,11 +6221,11 @@ body.is-mobile-screen #fxWidget,
 body.is-mobile-screen #missionToast,
 body.is-mobile-screen #cometCanvas,
 body.is-mobile-screen .shatter-popup,
-body.in-simulator:not(.mobile-chat-open) #ai-assistant,
-body.in-simulator:not(.mobile-chat-open) section#ai-assistant,
-body.in-simulator:not(.mobile-chat-open) .ai-assistant-section,
-body.in-simulator:not(.mobile-chat-open) #charlie,
-body.in-simulator:not(.mobile-chat-open) .ai-bot-terminal,
+body.in-simulator #ai-assistant,
+body.in-simulator section#ai-assistant,
+body.in-simulator .ai-assistant-section,
+body.in-simulator #charlie,
+body.in-simulator .ai-bot-terminal,
 body.in-simulator .mobile-nav-ai,
 body.in-simulator .mobile-nav-link[href="#ai-assistant"],
 body.in-simulator a[href="#ai-assistant"],
@@ -11403,20 +11405,17 @@ screen and (pointer: coarse) and (orientation: landscape) and (max-height: 550px
 }
 
 /* ==========================================================================
-   Mobile Charlie Top Dock, Full-Screen Modal Chat, & Compact Phone Support
+   Desktop-Only Isolation: Charlie AI & Interactive Combat Mascot
+   (Strictly Enabled on Desktop Viewports > 1024px; Removed on Mobile/Tablets)
    ========================================================================== */
 
-/* 1. Desktop Lock: Top dock is strictly hidden on desktop */
 #mobileCharlieTopDock,
 .mobile-charlie-top-dock,
-.compact-se-icon {
-  display: none !important;
-}
-
-body:not(.is-mobile-screen):not(.in-simulator) #mobileCharlieTopDock,
-body:not(.is-mobile-screen):not(.in-simulator) .mobile-charlie-top-dock,
-body:not(.is-mobile-screen):not(.in-simulator) #mobileCharlieDockCanvas,
-body:not(.is-mobile-screen):not(.in-simulator) .compact-se-icon {
+#mobileCharlieDockCanvas,
+.compact-se-icon,
+.mobile-orientation-modal-overlay,
+.mobile-orientation-modal-backdrop,
+.mobile-orientation-modal-card {
   display: none !important;
   visibility: hidden !important;
   width: 0 !important;
@@ -11429,712 +11428,21 @@ body:not(.is-mobile-screen):not(.in-simulator) .compact-se-icon {
   pointer-events: none !important;
 }
 
-/* 2. Mobile Top Navigation Charlie Dock (Active across Mobile/Tablet in both Portrait & Landscape) */
-body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock,
-body.in-simulator:not(.mobile-chat-open) #mobileCharlieTopDock {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 36px;
-  height: 36px;
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(0, 242, 254, 0.4);
-  border-radius: 10px;
-  cursor: pointer;
-  flex-shrink: 0;
-  padding: 0;
-  margin-left: 6px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 242, 254, 0.2);
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-  z-index: 10;
-}
-
-body.is-compact-se:not(.mobile-chat-open) #mobileCharlieTopDock,
-body.is-compact-phone:not(.mobile-chat-open) #mobileCharlieTopDock {
-  width: 32px;
-  height: 32px;
-  margin-left: 4px;
-}
-
-body.is-mobile-screen:not(.mobile-chat-open) #mobileCharlieTopDock:active {
-  transform: scale(0.92);
-}
-
-body.is-mobile-screen #mobileCharlieTopDock canvas,
-body.in-simulator #mobileCharlieTopDock canvas {
-  width: 32px;
-  height: 32px;
-  display: block;
-  pointer-events: none;
-}
-
-body.is-compact-se #mobileCharlieTopDock canvas,
-body.is-compact-phone #mobileCharlieTopDock canvas {
-  width: 28px;
-  height: 28px;
-}
-
-body.is-mobile-screen #mobileCharlieTopDock .compact-se-icon,
-body.in-simulator #mobileCharlieTopDock .compact-se-icon {
-  display: none !important;
-}
-
-/* 3. Mobile Full-Screen Chat Modal */
-body.mobile-chat-open .navbar,
-body.is-mobile-screen.mobile-chat-open .navbar {
-  display: none !important;
-}
-
-body.mobile-chat-open,
-body.is-mobile-screen.mobile-chat-open {
-  overflow: hidden !important;
-  position: fixed !important;
-  width: 100% !important;
-  height: 100% !important;
-}
-
-body.mobile-chat-open #ai-assistant,
-body.mobile-chat-open section#ai-assistant,
-body.is-mobile-screen.mobile-chat-open #ai-assistant,
-body.is-mobile-screen.mobile-chat-open section#ai-assistant {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  position: fixed !important;
-  inset: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  max-height: 100vh !important;
-  max-height: 100dvh !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  z-index: 9999999 !important;
-  background: #030712 !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-}
-
-body.mobile-chat-open #ai-assistant .section-header,
-body.is-mobile-screen.mobile-chat-open #ai-assistant .section-header {
-  display: none !important;
-}
-
-body.mobile-chat-open .ai-bot-terminal,
-body.mobile-chat-open #charlie,
-body.is-mobile-screen.mobile-chat-open .ai-bot-terminal,
-body.is-mobile-screen.mobile-chat-open #charlie {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  position: fixed !important;
-  inset: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  max-height: 100vh !important;
-  max-height: 100dvh !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  border: none !important;
-  z-index: 9999999 !important;
-  flex-direction: column !important;
-  background: #030712 !important;
-  box-shadow: none !important;
-  overflow: hidden !important;
-}
-
-/* Ensure Charlie mascot canvas stays in front of mobile chat modal across all mobile devices */
-body.mobile-chat-open #charlieCanvas,
-body.is-mobile-screen.mobile-chat-open #charlieCanvas {
-  z-index: 10000005 !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: none !important;
-}
-
-body.mobile-chat-open .ai-bot-header,
-body.is-mobile-screen.mobile-chat-open .ai-bot-header {
-  flex-shrink: 0 !important;
-  padding: max(env(safe-area-inset-top, 0px), 12px) 14px 10px 14px !important;
-  background: rgba(10, 15, 30, 0.98) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-}
-
-/* Flag 2: Large Mobile Simulator Dynamic Island Clearance (iPhone 16 Pro Max / Pixel 8) */
-body.in-simulator.is-large-mobile.mobile-chat-open:not(.is-rotated-mobile) .ai-bot-header,
-body.in-simulator.mobile-chat-open:not(.is-tablet-device):not(.is-compact-se):not(.is-rotated-mobile) .ai-bot-header {
-  padding-top: 52px !important;
-  padding-bottom: 10px !important;
-}
-
-/* Flag 1: Tablet Simulator Clearance (iPad Pro / Air) */
-body.in-simulator.is-tablet-device.mobile-chat-open:not(.is-rotated-mobile) .ai-bot-header {
-  padding-top: 20px !important;
-  padding-bottom: 10px !important;
-}
-
-/* Flag 3: Compact SE Simulator Clearance (iPhone SE) */
-body.in-simulator.is-compact-se.mobile-chat-open:not(.is-rotated-mobile) .ai-bot-header {
-  padding-top: 20px !important;
-  padding-bottom: 10px !important;
-}
-
-/* Universal Mobile/Tablet Header: Monitor + charlie-ai on Left, Actions on Right, NO Close Button */
-body.is-mobile-screen .ai-bot-header,
-body.mobile-chat-open .ai-bot-header,
-body.in-simulator .ai-bot-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-}
-
-body.is-mobile-screen .ai-bot-title,
-body.mobile-chat-open .ai-bot-title,
-body.in-simulator .ai-bot-title,
-body.is-large-mobile .ai-bot-title,
-body.is-tablet-device .ai-bot-title,
-body.is-compact-se .ai-bot-title,
-body.is-compact-phone .ai-bot-title {
-  display: flex !important;
-  visibility: visible !important;
-  align-items: center !important;
-  gap: 6px !important;
-  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
-  font-size: 0.78rem !important;
-  font-weight: 700 !important;
-  color: #38bdf8 !important;
-  letter-spacing: 0.02em !important;
-  flex: 0 0 auto !important;
-  min-width: 0 !important;
-  margin: 0 !important;
-}
-
-body.is-mobile-screen .ai-bot-title svg,
-body.mobile-chat-open .ai-bot-title svg,
-body.in-simulator .ai-bot-title svg {
-  width: 14px !important;
-  height: 14px !important;
-  flex-shrink: 0 !important;
-  stroke: #38bdf8 !important;
-  display: block !important;
-}
-
-body.is-mobile-screen .ai-bot-header-actions,
-body.mobile-chat-open .ai-bot-header-actions,
-body.in-simulator .ai-bot-header-actions,
-body.is-large-mobile .ai-bot-header-actions,
-body.is-tablet-device .ai-bot-header-actions,
-body.is-compact-se .ai-bot-header-actions,
-body.is-compact-phone .ai-bot-header-actions {
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  margin-left: auto !important;
-  width: auto !important;
-  flex-shrink: 0 !important;
-}
-
-/* Close Button REMOVED in ALL 3 Profiles (Both Portrait & Landscape) */
-body.is-mobile-screen .ai-bot-maximize-btn,
-body.mobile-chat-open .ai-bot-maximize-btn,
-body.in-simulator .ai-bot-maximize-btn,
-body.is-large-mobile .ai-bot-maximize-btn,
-body.is-tablet-device .ai-bot-maximize-btn,
-body.is-compact-se .ai-bot-maximize-btn,
-body.is-compact-phone .ai-bot-maximize-btn,
-body.is-mobile-screen #aiTerminalMaximizeBtn,
-body.mobile-chat-open #aiTerminalMaximizeBtn,
-body.in-simulator #aiTerminalMaximizeBtn {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Charlie Lab hidden on mobile/tablet */
-body.is-mobile-screen .ai-bot-lab-link,
-body.mobile-chat-open .ai-bot-lab-link,
-body.in-simulator .ai-bot-lab-link {
-  display: none !important;
-}
-
-/* 1. Large Mobile (iPhone 16 Pro Max, Pixel 8) - ALWAYS ICONS ONLY */
-/* Left: 🖥️ charlie-ai | Right: [<-] [🧠 ⚙️] [🔊 ON/OFF] */
-body.is-large-mobile .ai-bot-profile-btn,
-body.in-simulator.is-large-mobile .ai-bot-profile-btn,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn {
-  display: inline-flex !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin-right: 0 !important;
-  padding: 4px 8px !important;
-  border-radius: 16px !important;
-  background: rgba(245, 158, 11, 0.12) !important;
-  border: 1px solid rgba(245, 158, 11, 0.4) !important;
-  color: #f59e0b !important;
-}
-body.is-large-mobile .ai-bot-profile-btn span,
-body.in-simulator.is-large-mobile .ai-bot-profile-btn span,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-profile-btn span {
-  display: none !important;
-}
-
-body.is-large-mobile .ai-bot-llm-btn,
-body.in-simulator.is-large-mobile .ai-bot-llm-btn,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn {
-  display: inline-flex !important;
-  padding: 4px 8px !important;
-  gap: 4px !important;
-  border-radius: 16px !important;
-}
-body.is-large-mobile .ai-bot-llm-btn .ai-llm-text,
-body.in-simulator.is-large-mobile .ai-bot-llm-btn .ai-llm-text,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-llm-btn .ai-llm-text {
-  display: none !important;
-}
-
-body.is-large-mobile .ai-bot-sound-btn,
-body.in-simulator.is-large-mobile .ai-bot-sound-btn,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn {
-  display: inline-flex !important;
-  padding: 4px 8px !important;
-  gap: 4px !important;
-  border-radius: 16px !important;
-}
-body.is-large-mobile .ai-bot-sound-btn .ai-sound-text,
-body.in-simulator.is-large-mobile .ai-bot-sound-btn .ai-sound-text,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn .ai-sound-text {
-  display: none !important;
-}
-body.is-large-mobile .ai-bot-sound-btn .ai-sound-text-short,
-body.in-simulator.is-large-mobile .ai-bot-sound-btn .ai-sound-text-short,
-body.is-mobile-screen:not(.is-tablet-device):not(.is-compact-se) .ai-bot-sound-btn .ai-sound-text-short {
-  display: inline !important;
-}
-
-/* 2. Large Mobile & Compact Phones - ALWAYS PORTRAIT ICONS ONLY */
-/* Left: 🖥️ charlie-ai | Right: [<-] [🧠 ⚙️] [🔊 ON/OFF] */
-body.is-large-mobile .ai-bot-profile-btn,
-body.in-simulator.is-large-mobile .ai-bot-profile-btn,
-body.is-mobile-screen:not(.is-tablet-device) .ai-bot-profile-btn {
-  display: inline-flex !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin-right: 0 !important;
-  padding: 4px 8px !important;
-  border-radius: 16px !important;
-  background: rgba(245, 158, 11, 0.12) !important;
-  border: 1px solid rgba(245, 158, 11, 0.4) !important;
-  color: #f59e0b !important;
-}
-body.is-large-mobile .ai-bot-profile-btn span,
-body.in-simulator.is-large-mobile .ai-bot-profile-btn span,
-body.is-mobile-screen:not(.is-tablet-device) .ai-bot-profile-btn span {
-  display: none !important;
-}
-
-body.is-large-mobile .ai-bot-llm-btn,
-body.in-simulator.is-large-mobile .ai-bot-llm-btn,
-body.is-mobile-screen:not(.is-tablet-device) .ai-bot-llm-btn {
-  display: inline-flex !important;
-  padding: 4px 8px !important;
-  gap: 4px !important;
-  border-radius: 16px !important;
-}
-body.is-large-mobile .ai-bot-llm-btn .ai-llm-text,
-body.in-simulator.is-large-mobile .ai-bot-llm-btn .ai-llm-text,
-body.is-mobile-screen:not(.is-tablet-device) .ai-bot-llm-btn .ai-llm-text {
-  display: none !important;
-}
-
-body.is-large-mobile .ai-bot-sound-btn,
-body.in-simulator.is-large-mobile .ai-bot-sound-btn,
-body.is-mobile-screen:not(.is-tablet-device) .ai-bot-sound-btn {
-  display: inline-flex !important;
-  padding: 4px 8px !important;
-  gap: 4px !important;
-  border-radius: 16px !important;
-}
-body.is-large-mobile .ai-bot-sound-btn .ai-sound-text,
-body.in-simulator.is-large-mobile .ai-bot-sound-btn .ai-sound-text,
-body.is-mobile-screen:not(.is-tablet-device) .ai-bot-sound-btn .ai-sound-text {
-  display: none !important;
-}
-body.is-large-mobile .ai-bot-sound-btn .ai-sound-text-short,
-body.in-simulator.is-large-mobile .ai-bot-sound-btn .ai-sound-text-short,
-body.is-mobile-screen:not(.is-tablet-device) .ai-bot-sound-btn .ai-sound-text-short {
-  display: inline !important;
-}
-
-/* 3. Tablet (iPad Pro / Air) - BOTH PORTRAIT & LANDSCAPE SHOW FULL TEXT & NO CLOSE */
-/* Left: 🖥️ charlie-ai | Right: [<- Profile] [🧠 LOCAL KB ⚙️] [🔊 SFX ON] */
-body.is-tablet-device .ai-bot-profile-btn,
-body.in-simulator.is-tablet-device .ai-bot-profile-btn {
-  display: inline-flex !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  align-items: center !important;
-  margin-right: 0 !important;
-  padding: 3px 10px !important;
-  border-radius: 16px !important;
-  background: rgba(245, 158, 11, 0.12) !important;
-  border: 1px solid rgba(245, 158, 11, 0.4) !important;
-  color: #f59e0b !important;
-}
-body.is-tablet-device .ai-bot-profile-btn span,
-body.in-simulator.is-tablet-device .ai-bot-profile-btn span {
-  display: inline !important;
-}
-body.is-tablet-device .ai-bot-llm-btn,
-body.in-simulator.is-tablet-device .ai-bot-llm-btn {
-  display: inline-flex !important;
-  padding: 3px 10px !important;
-  border-radius: 16px !important;
-}
-body.is-tablet-device .ai-bot-llm-btn .ai-llm-text,
-body.in-simulator.is-tablet-device .ai-bot-llm-btn .ai-llm-text {
-  display: inline !important;
-}
-body.is-tablet-device .ai-bot-sound-btn,
-body.in-simulator.is-tablet-device .ai-bot-sound-btn {
-  display: inline-flex !important;
-  padding: 3px 10px !important;
-  border-radius: 16px !important;
-}
-body.is-tablet-device .ai-bot-sound-btn .ai-sound-text,
-body.in-simulator.is-tablet-device .ai-bot-sound-btn .ai-sound-text {
-  display: inline !important;
-}
-body.is-tablet-device .ai-bot-sound-btn .ai-sound-text-short,
-body.in-simulator.is-tablet-device .ai-bot-sound-btn .ai-sound-text-short {
-  display: none !important;
-}
-
-/* 4. Compact SE (iPhone SE) - BOTH MODES ONLY ICONS */
-/* Left: 🖥️ charlie-ai | Right: [<-] [🧠 ⚙️] [🔊 ON/OFF] */
-body.is-compact-se .ai-bot-profile-btn,
-body.in-simulator.is-compact-se .ai-bot-profile-btn,
-body.is-compact-phone .ai-bot-profile-btn {
-  display: inline-flex !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin-right: 0 !important;
-  padding: 3px 7px !important;
-  border-radius: 14px !important;
-  background: rgba(245, 158, 11, 0.12) !important;
-  border: 1px solid rgba(245, 158, 11, 0.4) !important;
-  color: #f59e0b !important;
-}
-body.is-compact-se .ai-bot-profile-btn span,
-body.in-simulator.is-compact-se .ai-bot-profile-btn span,
-body.is-compact-phone .ai-bot-profile-btn span {
-  display: none !important;
-}
-body.is-compact-se .ai-bot-llm-btn,
-body.in-simulator.is-compact-se .ai-bot-llm-btn,
-body.is-compact-phone .ai-bot-llm-btn {
-  display: inline-flex !important;
-  padding: 3px 7px !important;
-  gap: 3px !important;
-  border-radius: 14px !important;
-}
-body.is-compact-se .ai-bot-llm-btn .ai-llm-text,
-body.in-simulator.is-compact-se .ai-bot-llm-btn .ai-llm-text,
-body.is-compact-phone .ai-bot-llm-btn .ai-llm-text {
-  display: none !important;
-}
-body.is-compact-se .ai-bot-sound-btn,
-body.in-simulator.is-compact-se .ai-bot-sound-btn,
-body.is-compact-phone .ai-bot-sound-btn {
-  display: inline-flex !important;
-  padding: 3px 7px !important;
-  gap: 3px !important;
-  border-radius: 14px !important;
-}
-body.is-compact-se .ai-bot-sound-btn .ai-sound-text,
-body.in-simulator.is-compact-se .ai-bot-sound-btn .ai-sound-text,
-body.is-compact-phone .ai-bot-sound-btn .ai-sound-text {
-  display: none !important;
-}
-body.is-compact-se .ai-bot-sound-btn .ai-sound-text-short,
-body.in-simulator.is-compact-se .ai-bot-sound-btn .ai-sound-text-short,
-body.is-compact-phone .ai-bot-sound-btn .ai-sound-text-short {
-  display: inline !important;
-}
-body.is-compact-se .ai-bot-lab-link,
-body.in-simulator.is-compact-se .ai-bot-lab-link,
-body.is-compact-phone .ai-bot-lab-link {
-  display: none !important;
-}
-
-/* 4. Full-Height Mobile Chat Viewport & Stream Layout */
-body.mobile-chat-open .ai-bot-body-split,
-body.is-mobile-screen.mobile-chat-open .ai-bot-body-split {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  flex-direction: column !important;
-  flex: 1 1 0% !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: hidden !important;
-  position: relative !important;
-}
-
-body.mobile-chat-open:not(.is-tablet-device) .ai-bot-sidebar,
-body.is-mobile-screen.mobile-chat-open:not(.is-tablet-device) .ai-bot-sidebar {
-  width: 100% !important;
-  min-width: 100% !important;
-  max-width: 100% !important;
-  margin-left: 0 !important;
-  border-right: none !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-  max-height: 160px !important;
-  height: auto !important;
-  padding: 8px 10px !important;
-  flex-shrink: 0 !important;
-}
-
-body.mobile-chat-open:not(.is-tablet-device) .ai-bot-terminal.sidebar-collapsed .ai-bot-sidebar,
-body.is-mobile-screen.mobile-chat-open:not(.is-tablet-device) .ai-bot-terminal.sidebar-collapsed .ai-bot-sidebar {
-  display: none !important;
-  max-height: 0 !important;
-  padding: 0 !important;
-  border-bottom: none !important;
-}
-
-body.mobile-chat-open .ai-bot-main,
-body.is-mobile-screen.mobile-chat-open .ai-bot-main {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  flex-direction: column !important;
-  flex: 1 1 0% !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: hidden !important;
-}
-
-body.mobile-chat-open .ai-chat-stream,
-body.is-mobile-screen.mobile-chat-open .ai-chat-stream {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  flex-direction: column !important;
-  flex: 1 1 0% !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-  padding: 16px 14px 20px !important;
-}
-
-body.mobile-chat-open .ai-chat-input-bar,
-body.is-mobile-screen.mobile-chat-open .ai-chat-input-bar {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  flex-shrink: 0 !important;
-  padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
-  background: rgba(10, 15, 30, 0.98) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-
-/* Fix Greeting Message Top Clearance (Eliminates Header / Drawer Overlap) */
-body.mobile-chat-open .ai-chat-stream .ai-message:first-child,
-body.is-mobile-screen.mobile-chat-open .ai-chat-stream .ai-message:first-child {
-  margin-top: 6px !important;
-}
-
-/* Tablet Desktop Parity: 2-Column Split in Landscape Tablet */
-body.is-tablet-device.mobile-chat-open .ai-bot-body-split {
-  flex-direction: row !important;
-}
-body.is-tablet-device.mobile-chat-open .ai-bot-sidebar {
-  width: 260px !important;
-  min-width: 260px !important;
-  max-width: 260px !important;
-  height: 100% !important;
-  max-height: 100% !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-bottom: none !important;
-  display: flex !important;
-}
-body.is-tablet-device.mobile-chat-open .ai-bot-terminal.sidebar-collapsed .ai-bot-sidebar {
-  margin-left: -260px !important;
-  opacity: 0 !important;
-}
-
-/* Ensure messages and copy buttons never overlap Charlie on user side on mobile */
-body.is-mobile-screen .ai-message.ai-user-msg {
-  margin-right: 32px !important;
-}
-
-body.is-mobile-screen .ai-message.ai-bot-msg {
-  max-width: calc(100% - 36px) !important;
-}
-
-/* ==========================================================================
-   Mobile Orientation Warning Modal (Portrait Mode Recommended)
-   ========================================================================== */
-.mobile-orientation-modal-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 10000020 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 16px !important;
-  background: rgba(3, 7, 18, 0.85) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  opacity: 1;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
-}
-
-.mobile-orientation-modal-overlay.hidden {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-
-.mobile-orientation-modal-backdrop {
-  position: absolute !important;
-  inset: 0 !important;
-}
-
-.mobile-orientation-modal-card {
-  position: relative !important;
-  z-index: 2 !important;
-  width: 100% !important;
-  max-width: 380px !important;
-  max-height: 92vh !important;
-  overflow-y: auto !important;
-  padding: 18px 20px 16px !important;
-  border-radius: 20px !important;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(6, 11, 25, 0.98)) !important;
-  border: 1px solid rgba(0, 242, 254, 0.35) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 242, 254, 0.2) !important;
-  text-align: center !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  animation: modalScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes modalScaleIn {
-  from {
-    transform: scale(0.92);
-    opacity: 0;
+@media (max-width: 1024px) {
+  #charlieCanvas,
+  #floatingCharlieBtn,
+  .floating-charlie-btn,
+  #botHudWidget,
+  .bot-hud-widget,
+  #ai-assistant,
+  section#ai-assistant,
+  .ai-assistant-section,
+  #charlie,
+  .ai-bot-terminal,
+  #fxSwitchWrapper,
+  .fx-switch-wrapper {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.mobile-orientation-icon-wrapper {
-  margin-bottom: 10px;
-  position: relative;
-}
-
-.mobile-orientation-phone-icon {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 14px;
-  background: rgba(0, 242, 254, 0.08);
-  border: 1px solid rgba(0, 242, 254, 0.25);
-  box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
-  animation: phoneRotatePulse 2.8s ease-in-out infinite;
-}
-
-@keyframes phoneRotatePulse {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  30%, 70% {
-    transform: rotate(-90deg);
-  }
-}
-
-.mobile-orientation-rotate-arrow {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: rgba(15, 23, 42, 0.9);
-  border-radius: 50%;
-  padding: 2px;
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mobile-orientation-title {
-  font-family: var(--font-heading, 'Outfit', sans-serif) !important;
-  font-size: 1.05rem !important;
-  font-weight: 700 !important;
-  color: #f8fafc !important;
-  margin: 0 0 6px 0 !important;
-  letter-spacing: -0.01em !important;
-}
-
-.mobile-orientation-desc {
-  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif) !important;
-  font-size: 0.82rem !important;
-  line-height: 1.45 !important;
-  color: #94a3b8 !important;
-  margin: 0 0 14px 0 !important;
-}
-
-.mobile-orientation-actions {
-  display: flex !important;
-  justify-content: center !important;
-  width: 100% !important;
-}
-
-.mobile-orientation-dismiss-btn {
-  width: 100% !important;
-  max-width: 220px !important;
-  padding: 8px 18px !important;
-  font-size: 0.85rem !important;
-  font-weight: 600 !important;
-  border-radius: 12px !important;
 }

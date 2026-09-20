@@ -83,44 +83,21 @@
   };
 
   window.isMobileScreen = function () {
-    return window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768);
+    return (window.isMobileOrRotatedMobile && window.isMobileOrRotatedMobile()) || (window.isTabletDevice && window.isTabletDevice()) || (window.innerWidth <= 1024);
   };
 
   window.isMobileWithCharlie = function () {
-    return window.isMobileScreen();
+    return false; // Charlie is strictly desktop only
   };
-
-  let orientationWarningDismissed = false;
-
-  function handleMobileOrientationWarning(isPhone, isRotated) {
-    const modal = document.getElementById('mobileOrientationModal');
-    if (!modal) return;
-
-    const isChatOpen = document.body.classList.contains('mobile-chat-open') || document.body.classList.contains('charlie-fullscreen-active');
-
-    // Only show modal if Charlie chat is actively open when rotating into landscape
-    if (isPhone && isRotated && isChatOpen) {
-      if (!orientationWarningDismissed) {
-        modal.classList.remove('hidden');
-      }
-    } else if (!isRotated) {
-      modal.classList.add('hidden');
-      orientationWarningDismissed = false;
-    }
-  }
 
   function updateMobileOrientationState() {
     const isMob = window.isMobileOrRotatedMobile();
-    const isRotated = window.isRotatedMobileLandscape ? window.isRotatedMobileLandscape() : false;
     const isTablet = window.isTabletDevice ? window.isTabletDevice() : false;
     const isCompact = window.isCompactSE ? window.isCompactSE() : false;
     const isLargeMob = window.isLargeMobile ? window.isLargeMobile() : (!isTablet && !isCompact);
     if (!document.body) return;
 
-    const isPhone = (isCompact || isLargeMob) && !isTablet;
-    handleMobileOrientationWarning(isPhone, isRotated);
-
-    if (isMob || isTablet) {
+    if (isMob || isTablet || window.innerWidth <= 1024) {
       document.body.classList.add('is-mobile-screen');
       document.body.classList.toggle('is-tablet-device', isTablet);
       document.body.classList.toggle('is-compact-se', isCompact);
@@ -132,20 +109,14 @@
       const botHud = document.getElementById('botHudWidget');
       if (botHud) botHud.classList.add('hidden');
 
-      const mobileDock = document.getElementById('mobileCharlieTopDock');
-      if (mobileDock && !document.body.classList.contains('mobile-chat-open')) {
-        mobileDock.style.display = 'inline-flex';
-      }
-
       const charlieCanvas = document.getElementById('charlieCanvas');
-      // Living Charlie mascot is active across ALL mobile devices, tablets, and compact SE!
-      if (charlieCanvas) charlieCanvas.style.display = '';
+      if (charlieCanvas) charlieCanvas.style.display = 'none';
 
       if (window.portfolioEngine && window.portfolioEngine.isEnabled) {
         window.portfolioEngine.toggleState(false);
       }
     } else {
-      // 100% Desktop Lock: strictly restore desktop state exactly as live
+      // 100% Desktop Lock: strictly restore desktop state
       document.body.classList.remove('is-mobile-screen');
       document.body.classList.remove('is-compact-phone');
       document.body.classList.remove('is-compact-se');
@@ -153,14 +124,6 @@
       document.body.classList.remove('is-tablet-device');
       document.body.classList.remove('is-rotated-mobile');
       document.body.classList.remove('mobile-chat-open');
-
-      const modal = document.getElementById('mobileOrientationModal');
-      if (modal) modal.classList.add('hidden');
-
-      const mobileDock = document.getElementById('mobileCharlieTopDock');
-      if (mobileDock) {
-        mobileDock.style.display = 'none';
-      }
 
       const floatingBtn = document.getElementById('floatingCharlieBtn');
       if (floatingBtn) floatingBtn.classList.remove('hidden');
@@ -185,29 +148,6 @@
   }
   document.addEventListener('DOMContentLoaded', () => {
     updateMobileOrientationState();
-
-    const dismissBtn = document.getElementById('dismissOrientationWarning');
-    const backdrop = document.getElementById('mobileOrientationBackdrop');
-    const modal = document.getElementById('mobileOrientationModal');
-
-    const dismissOrientationModal = (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      orientationWarningDismissed = true;
-      if (modal) modal.classList.add('hidden');
-      // Return to profile: exit full screen chat if active
-      if (typeof window.setCharlieFullscreen === 'function') {
-        window.setCharlieFullscreen(false);
-      } else {
-        document.body.classList.remove('mobile-chat-open');
-        document.body.classList.remove('charlie-fullscreen-active');
-      }
-    };
-
-    if (dismissBtn) dismissBtn.addEventListener('click', dismissOrientationModal);
-    if (backdrop) backdrop.addEventListener('click', dismissOrientationModal);
   });
 
   // ==========================================================================
@@ -3279,58 +3219,14 @@
     }
 
     drawMobileTopDockCharlie() {
-      const isMobileScreen = (document.body && (document.body.classList.contains('is-mobile-screen') || document.body.classList.contains('in-simulator'))) || (window.isMobileWithCharlie && window.isMobileWithCharlie());
-      if (!isMobileScreen) return;
-      if (!this.mobileDockCanvas) {
-        this.mobileDockCanvas = document.getElementById('mobileCharlieDockCanvas');
-        if (this.mobileDockCanvas) {
-          this.mobileDockCtx = this.mobileDockCanvas.getContext('2d');
-          this.mobileDockCharlie = new CyberCharlie(24, 25, 0.40);
-          this.mobileDockCharlie.isDockMini = true;
-          this.mobileDockCharlie.bladeGlowIntensity = 2.0;
-          this.mobileDockCharlie.state = 'waiting';
-          this.mobileDockCharlie.face = 'waiting';
-          window.portfolioMobileDockCharlie = this.mobileDockCharlie;
-        }
-      }
-      if (!this.mobileDockCanvas || !this.mobileDockCtx || !this.mobileDockCharlie) return;
-
-      const isChatOpen = document.body.classList.contains('mobile-chat-open') || document.body.classList.contains('charlie-fullscreen-active');
-      const isCharlieDeployed = this.isEnabled || isChatOpen ||
-        (this.charlie && (this.charlie.isEscorting || this.charlie.state === 'cyber_dash' || this.charlie.state === 'escort' || this.charlie.state === 'victory' || this.charlie.sectionActive || (this.charlie.state !== 'waiting' && this.charlie.x > -200)));
-
-      if (isCharlieDeployed) {
-        this.mobileDockCtx.clearRect(0, 0, this.mobileDockCanvas.width, this.mobileDockCanvas.height);
-        return;
-      }
-
-      if (this.mobileDockCharlie.state !== 'waiting') {
-        this.mobileDockCharlie.state = 'waiting';
-        this.mobileDockCharlie.face = 'waiting';
-      }
-
-      this.mobileDockCharlie.update();
-      this.mobileDockCtx.clearRect(0, 0, this.mobileDockCanvas.width, this.mobileDockCanvas.height);
-
-      // Subtle ambient cyber energy aura in mobile dock
-      const pulseAlpha = 0.25 + Math.sin(this.mobileDockCharlie.animTimer * 2.0) * 0.15;
-      this.mobileDockCtx.save();
-      this.mobileDockCtx.beginPath();
-      this.mobileDockCtx.arc(24, 24, 18, 0, Math.PI * 2);
-      this.mobileDockCtx.fillStyle = `rgba(0, 242, 254, ${pulseAlpha * 0.2})`;
-      this.mobileDockCtx.shadowColor = '#00f2fe';
-      this.mobileDockCtx.shadowBlur = 8;
-      this.mobileDockCtx.fill();
-      this.mobileDockCtx.restore();
-
-      this.mobileDockCharlie.draw(this.mobileDockCtx);
+      // Disabled: Charlie is desktop-only
+      return;
     }
 
     animate() {
       this.update();
       this.draw();
       this.drawDockCharlie();
-      this.drawMobileTopDockCharlie();
       requestAnimationFrame(() => this.animate());
     }
   }
@@ -9839,36 +9735,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         });
       }
 
-      // Mobile Top Dock button: opens full screen chat modal on mobile
-      const mobileTopDockBtn = document.getElementById('mobileCharlieTopDock');
-      if (mobileTopDockBtn) {
-        mobileTopDockBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          document.body.classList.remove('combat-cursor-active');
-          if (window.portfolioCharlie) {
-            window.portfolioCharlie.isEscorting = false;
-          }
-
-          const isRotated = window.isRotatedMobileLandscape ? window.isRotatedMobileLandscape() : false;
-          const isTablet = window.isTabletDevice ? window.isTabletDevice() : false;
-          const isCompact = window.isCompactSE ? window.isCompactSE() : false;
-          const isLargeMob = window.isLargeMobile ? window.isLargeMobile() : (!isTablet && !isCompact);
-          const isPhone = (isCompact || isLargeMob) && !isTablet;
-
-          // If mobile is in landscape, show the portrait-only orientation modal
-          if (isPhone && isRotated) {
-            orientationWarningDismissed = false;
-            const modal = document.getElementById('mobileOrientationModal');
-            if (modal) modal.classList.remove('hidden');
-            return;
-          }
-
-          setTerminalFullscreen(true);
-        });
-      }
-
-      // Maximize / Restore button: Toggles fullscreen; Restore just reduces size and stays in chat window
+      // Desktop Maximize / Restore button: Toggles fullscreen; Restore just reduces size and stays in chat window
       if (maxBtn) {
         if (isGameModeCombatActive()) {
           maxBtn.disabled = true;
@@ -10099,7 +9966,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const terminal = document.querySelector('.ai-bot-terminal') || section;
       if (!section || !terminal) return;
 
-      const isMob = () => (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768));
+      const isMob = () => window.isMobileScreen();
 
       let charlieDeployTimer = null;
       let explicitDeployRequested = false;
