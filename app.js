@@ -10062,7 +10062,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           window.portfolioDockCharlie.face = 'wink';
         }
         if (typeof window.deployCharlieToAiSection === 'function') {
-          window.deployCharlieToAiSection();
+          window.deployCharlieToAiSection(true);
         }
         scrollToCharlieTerminal();
       });
@@ -10077,11 +10077,17 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const isMob = () => (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768));
 
       let charlieDeployTimer = null;
+      let explicitDeployRequested = false;
+      let pendingDeployCheckInterval = null;
 
       const clearDeployTimer = () => {
         if (charlieDeployTimer) {
           clearTimeout(charlieDeployTimer);
           charlieDeployTimer = null;
+        }
+        if (pendingDeployCheckInterval) {
+          clearInterval(pendingDeployCheckInterval);
+          pendingDeployCheckInterval = null;
         }
       };
 
@@ -10099,7 +10105,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           if (eng.charlie.sectionActive || eng.charlie.state === 'cyber_dash') return;
 
           const anchor = eng.charlie.getChatMascotAnchor();
-          if (!anchor.isVisible) return;
+          if (!anchor.isVisible) return false;
 
           const floatingBtn = document.getElementById('floatingCharlieBtn');
           const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
@@ -10108,12 +10114,34 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
           if (floatingBtn) floatingBtn.classList.add('hidden');
           eng.charlie.triggerDeploy(dockCenterX, dockCenterY, anchor.x, anchor.y, false);
+          explicitDeployRequested = false;
+          clearDeployTimer();
+          return true;
         };
 
         if (immediate) {
+          explicitDeployRequested = true;
           clearDeployTimer();
-          executeDeploy();
+          if (!executeDeploy()) {
+            // Smooth scrolling to section in progress: poll every 35ms up to 1.5s to deploy immediately upon arrival
+            let checks = 0;
+            pendingDeployCheckInterval = setInterval(() => {
+              checks++;
+              if (!explicitDeployRequested || checks > 45) {
+                clearDeployTimer();
+                return;
+              }
+              if (executeDeploy()) {
+                clearDeployTimer();
+              }
+            }, 35);
+          }
         } else {
+          // If explicit immediate deploy was already requested by a click, do not wait 1s!
+          if (explicitDeployRequested) {
+            executeDeploy();
+            return;
+          }
           // Dwell timer: only deploy if page stays on chat window for at least 1 second (prevents fast scroll disturbance)
           if (!charlieDeployTimer) {
             charlieDeployTimer = setTimeout(() => {
@@ -10125,6 +10153,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       };
 
       const returnToDock = () => {
+        explicitDeployRequested = false;
         clearDeployTimer();
         if (isMob()) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
@@ -10183,9 +10212,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         link.addEventListener('click', (e) => {
           e.preventDefault();
           scrollToCharlieTerminal();
-          setTimeout(() => {
-            deployToSection(true);
-          }, 150);
+          deployToSection(true);
         });
       });
     }
