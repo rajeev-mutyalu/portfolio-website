@@ -44,6 +44,10 @@
   };
 
   window.isRotatedMobileLandscape = function () {
+    if (document.body && document.body.getAttribute('data-sim-landscape') === 'true') {
+      const dev = document.body.getAttribute('data-sim-device') || '';
+      if (dev !== 'tablet' && dev !== 'ipad') return true;
+    }
     if (window.innerWidth > 768 && window.innerHeight > 550) return false;
     const isLandscape = (window.innerWidth > window.innerHeight);
     const isSmallHeight = (window.innerHeight <= 500);
@@ -10430,7 +10434,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
                 const b = f.contentDocument.body;
                 const dev = (f === ipadFrame) ? 'ipad' : currentDev;
                 b.setAttribute('data-sim-device', dev);
-                b.classList.toggle('is-rotated-mobile', !!simState.isLandscape);
+                b.setAttribute('data-sim-landscape', simState.isLandscape ? 'true' : 'false');
                 b.classList.toggle('is-tablet-device', dev === 'tablet' || dev === 'ipad');
                 b.classList.toggle('is-compact-se', dev === 'compact');
                 b.classList.toggle('is-compact-phone', dev === 'compact');
