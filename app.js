@@ -96,11 +96,14 @@
     const modal = document.getElementById('mobileOrientationModal');
     if (!modal) return;
 
-    if (isPhone && isRotated) {
+    const isChatOpen = document.body.classList.contains('mobile-chat-open') || document.body.classList.contains('charlie-fullscreen-active');
+
+    // Only show modal if Charlie chat is actively open when rotating into landscape
+    if (isPhone && isRotated && isChatOpen) {
       if (!orientationWarningDismissed) {
         modal.classList.remove('hidden');
       }
-    } else {
+    } else if (!isRotated) {
       modal.classList.add('hidden');
       orientationWarningDismissed = false;
     }
@@ -194,6 +197,13 @@
       }
       orientationWarningDismissed = true;
       if (modal) modal.classList.add('hidden');
+      // Return to profile: exit full screen chat if active
+      if (typeof window.setCharlieFullscreen === 'function') {
+        window.setCharlieFullscreen(false);
+      } else {
+        document.body.classList.remove('mobile-chat-open');
+        document.body.classList.remove('charlie-fullscreen-active');
+      }
     };
 
     if (dismissBtn) dismissBtn.addEventListener('click', dismissOrientationModal);
@@ -9839,6 +9849,21 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           if (window.portfolioCharlie) {
             window.portfolioCharlie.isEscorting = false;
           }
+
+          const isRotated = window.isRotatedMobileLandscape ? window.isRotatedMobileLandscape() : false;
+          const isTablet = window.isTabletDevice ? window.isTabletDevice() : false;
+          const isCompact = window.isCompactSE ? window.isCompactSE() : false;
+          const isLargeMob = window.isLargeMobile ? window.isLargeMobile() : (!isTablet && !isCompact);
+          const isPhone = (isCompact || isLargeMob) && !isTablet;
+
+          // If mobile is in landscape, show the portrait-only orientation modal
+          if (isPhone && isRotated) {
+            orientationWarningDismissed = false;
+            const modal = document.getElementById('mobileOrientationModal');
+            if (modal) modal.classList.remove('hidden');
+            return;
+          }
+
           setTerminalFullscreen(true);
         });
       }
