@@ -10629,24 +10629,31 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           const header = sec.querySelector('.section-header') || sec.querySelector('.section-title');
           const headerRect = header ? header.getBoundingClientRect() : rect;
 
+          const triggerLine = navHeight + 12;
+          const endLine = navHeight + 30;
+
           // Activate when the header has reached or scrolled above the bottom of the navbar,
           // and until the section content ends.
           // This preserves the natural pause when a section's big header is visible on page,
           // so the small frozen header does NOT clash simultaneously with the main header.
-          if (headerRect.top <= navHeight + 12 && rect.bottom > navHeight + 30) {
+          if (headerRect.top <= triggerLine && rect.bottom > endLine) {
             activeSection = sec;
             const titleEl = sec.querySelector('.section-title');
             activeTitle = titleEl ? titleEl.textContent.trim() : sec.id.toUpperCase();
 
-            // Calculate progress through this specific section
-            const scrolledIntoSection = (navHeight + 20) - rect.top;
-            const totalSectionScrollable = rect.height;
-            activeProgress = Math.max(0, Math.min(100, (scrolledIntoSection / totalSectionScrollable) * 100));
+            // Calculate progress through this specific section while frozen:
+            // Starts at 0% when headerRect.top == triggerLine
+            // Reaches 100% when rect.bottom == endLine
+            const totalFrozenDist = (rect.bottom - headerRect.top) - (endLine - triggerLine);
+            const scrolledDist = triggerLine - headerRect.top;
+            activeProgress = totalFrozenDist > 0 ? Math.max(0, Math.min(100, (scrolledDist / totalFrozenDist) * 100)) : 0;
             break;
           }
         }
 
         if (activeSection) {
+          const sectionChanged = (currentSectionId !== activeSection.id);
+
           if (!hud.classList.contains('is-visible')) {
             // When appearing, set the title SYNCHRONOUSLY FIRST before adding is-visible!
             // This guarantees it NEVER fades in showing the previous section's title!
@@ -10654,7 +10661,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             hudTitle.classList.remove('hud-morphing');
             currentSectionId = activeSection.id;
             hud.classList.add('is-visible');
-          } else if (currentSectionId !== activeSection.id) {
+          } else if (sectionChanged) {
             // Section changed while already visible: smooth title cross-fade
             currentSectionId = activeSection.id;
             if (morphTimeout) clearTimeout(morphTimeout);
@@ -10667,7 +10674,19 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           }
 
           if (hudProgressFill) {
-            hudProgressFill.style.width = activeProgress.toFixed(1) + '%';
+            if (sectionChanged) {
+              // Snap immediately to new section entry progress (0%) without animating from old section width
+              hudProgressFill.style.transition = 'none';
+              hudProgressFill.style.width = activeProgress.toFixed(1) + '%';
+              void hudProgressFill.offsetWidth;
+              requestAnimationFrame(() => {
+                if (hudProgressFill) {
+                  hudProgressFill.style.transition = 'width 0.1s linear';
+                }
+              });
+            } else {
+              hudProgressFill.style.width = activeProgress.toFixed(1) + '%';
+            }
           }
         } else {
           // If we are in the gap where a new section's big header is visible on screen,
@@ -10680,6 +10699,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               morphTimeout = null;
             }
             hudTitle.classList.remove('hud-morphing');
+          }
+          if (hudProgressFill) {
+            hudProgressFill.style.transition = 'none';
+            hudProgressFill.style.width = '0%';
           }
         }
 
