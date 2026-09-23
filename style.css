@@ -1728,19 +1728,27 @@ body.in-simulator #floatingCharlieBtn {
 .frozen-section-hud {
   position: fixed;
   top: 70px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-22px) scale(0.95);
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
   z-index: 990;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(-22px) scale(0.96);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
 }
 
 .frozen-section-hud.is-visible {
   opacity: 1;
-  transform: translateX(-50%) translateY(0) scale(1);
+  transform: translateY(0) scale(1);
+}
+
+.frozen-section-hud.is-visible .hud-pill-inner {
   pointer-events: auto;
 }
 
@@ -1760,6 +1768,9 @@ body.in-simulator #floatingCharlieBtn {
               inset 0 1px 0 rgba(255, 255, 255, 0.14);
   cursor: pointer;
   user-select: none;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  pointer-events: none;
   transition: border-color 0.25s ease,
               box-shadow 0.25s ease,
               transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1839,13 +1850,11 @@ body.in-simulator #floatingCharlieBtn {
   background: linear-gradient(90deg, #ffffff 0%, #00f2fe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+  transition: opacity 0.12s ease-out;
 }
 
 .hud-title.hud-morphing {
   opacity: 0;
-  transform: translateY(-4px);
-  filter: blur(3px);
 }
 
 /* Subtle Progress Bar */
@@ -1872,11 +1881,16 @@ body.in-simulator #floatingCharlieBtn {
 @media (max-width: 768px) {
   .frozen-section-hud {
     top: 56px;
+    left: 0;
+    right: 0;
+    width: 100%;
   }
 
   .hud-pill-inner {
     padding: 0.28rem 0.85rem 0.35rem 0.75rem;
     gap: 0.4rem;
+    max-width: calc(100vw - 24px);
+    box-sizing: border-box;
   }
 
   .hud-prefix {
@@ -1889,6 +1903,11 @@ body.in-simulator #floatingCharlieBtn {
 
   .hud-title {
     font-size: 0.74rem;
+    max-width: calc(100vw - 64px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
   }
 }
 

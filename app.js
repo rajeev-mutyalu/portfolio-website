@@ -10594,6 +10594,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       let currentSectionId = null;
       let ticking = false;
+      let morphTimeout = null;
 
       function updateHUD() {
         const navHeight = getNavHeight();
@@ -10630,11 +10631,13 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
           if (currentSectionId !== activeSection.id) {
             currentSectionId = activeSection.id;
+            if (morphTimeout) clearTimeout(morphTimeout);
             hudTitle.classList.add('hud-morphing');
-            setTimeout(() => {
+            morphTimeout = setTimeout(() => {
               hudTitle.textContent = activeTitle;
               hudTitle.classList.remove('hud-morphing');
-            }, 140);
+              morphTimeout = null;
+            }, 120);
           }
 
           if (hudProgressFill) {
@@ -10645,6 +10648,11 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
           if (hud.classList.contains('is-visible')) {
             hud.classList.remove('is-visible');
             currentSectionId = null;
+            if (morphTimeout) {
+              clearTimeout(morphTimeout);
+              morphTimeout = null;
+            }
+            hudTitle.classList.remove('hud-morphing');
           }
         }
 
