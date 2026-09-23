@@ -10598,53 +10598,19 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       function updateHUD() {
         const navHeight = getNavHeight();
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const triggerLine = navHeight + 16;
 
-        let activeSection = null;
-        let activeTitle = '';
-        let activeProgress = 0;
-
-        for (let i = 0; i < trackedSections.length; i++) {
-          const sec = trackedSections[i];
-          const rect = sec.getBoundingClientRect();
-          const header = sec.querySelector('.section-header') || sec.querySelector('.section-title');
-          const headerRect = header ? header.getBoundingClientRect() : rect;
-
-          // Activate when the header has reached or scrolled above the bottom of the navbar
-          if (headerRect.top <= navHeight + 12 && rect.bottom > navHeight + 30) {
-            activeSection = sec;
-            const titleEl = sec.querySelector('.section-title');
-            activeTitle = titleEl ? titleEl.textContent.trim() : sec.id.toUpperCase();
-
-            // Calculate progress through this specific section
-            const scrolledIntoSection = (navHeight + 20) - rect.top;
-            const totalSectionScrollable = rect.height;
-            activeProgress = Math.max(0, Math.min(100, (scrolledIntoSection / totalSectionScrollable) * 100));
-            break;
-          }
+        if (trackedSections.length === 0) {
+          ticking = false;
+          return;
         }
 
-        if (activeSection) {
-          if (!hud.classList.contains('is-visible')) {
-            hud.classList.add('is-visible');
-          }
+        // Check 1: Are we above the first section's header? (Hero area)
+        const firstSec = trackedSections[0];
+        const firstHeader = firstSec.querySelector('.section-header') || firstSec.querySelector('.section-title');
+        const firstHeaderTop = firstHeader ? firstHeader.getBoundingClientRect().top : firstSec.getBoundingClientRect().top;
 
-          if (currentSectionId !== activeSection.id) {
-            currentSectionId = activeSection.id;
-            if (morphTimeout) clearTimeout(morphTimeout);
-            hudTitle.classList.add('hud-morphing');
-            morphTimeout = setTimeout(() => {
-              hudTitle.textContent = activeTitle;
-              hudTitle.classList.remove('hud-morphing');
-              morphTimeout = null;
-            }, 120);
-          }
-
-          if (hudProgressFill) {
-            hudProgressFill.style.width = activeProgress.toFixed(1) + '%';
-          }
-        } else {
-          // If we are above all section headers (e.g. Hero) or below all sections
+        if (firstHeaderTop > triggerLine) {
           if (hud.classList.contains('is-visible')) {
             hud.classList.remove('is-visible');
             currentSectionId = null;
@@ -10654,6 +10620,73 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             }
             hudTitle.classList.remove('hud-morphing');
           }
+          ticking = false;
+          return;
+        }
+
+        // Check 2: Are we below the last section? (Footer area)
+        const lastSec = trackedSections[trackedSections.length - 1];
+        if (lastSec.getBoundingClientRect().bottom <= navHeight) {
+          if (hud.classList.contains('is-visible')) {
+            hud.classList.remove('is-visible');
+            currentSectionId = null;
+            if (morphTimeout) {
+              clearTimeout(morphTimeout);
+              morphTimeout = null;
+            }
+            hudTitle.classList.remove('hud-morphing');
+          }
+          ticking = false;
+          return;
+        }
+
+        // Check 3: Active Section Determination
+        // Find the deepest section whose header has reached or crossed the triggerLine.
+        // Guarantees zero gaps between consecutive sections so the HUD capsule stays continuously pinned.
+        let activeSection = firstSec;
+        for (let i = trackedSections.length - 1; i >= 0; i--) {
+          const sec = trackedSections[i];
+          const header = sec.querySelector('.section-header') || sec.querySelector('.section-title');
+          const headerTop = header ? header.getBoundingClientRect().top : sec.getBoundingClientRect().top;
+          if (headerTop <= triggerLine) {
+            activeSection = sec;
+            break;
+          }
+        }
+
+        // Calculate progress within this active section
+        const activeIdx = trackedSections.indexOf(activeSection);
+        const nextSec = trackedSections[activeIdx + 1];
+        const secRect = activeSection.getBoundingClientRect();
+        const endY = nextSec ? nextSec.getBoundingClientRect().top : secRect.bottom;
+        const totalDist = endY - secRect.top;
+        const scrolled = triggerLine - secRect.top;
+        const activeProgress = totalDist > 0 ? Math.max(0, Math.min(100, (scrolled / totalDist) * 100)) : 0;
+
+        const titleEl = activeSection.querySelector('.section-title');
+        const activeTitle = titleEl ? titleEl.textContent.trim() : activeSection.id.toUpperCase();
+
+        if (!hud.classList.contains('is-visible')) {
+          // Appearing for the first time: set correct title immediately so it NEVER fades in with stale text
+          hudTitle.textContent = activeTitle;
+          hudTitle.classList.remove('hud-morphing');
+          currentSectionId = activeSection.id;
+          hud.classList.add('is-visible');
+        } else if (currentSectionId !== activeSection.id) {
+          // Transitioning between sections while already visible:
+          // Keep the oval capsule visible and only cross-fade the title text smoothly
+          currentSectionId = activeSection.id;
+          if (morphTimeout) clearTimeout(morphTimeout);
+          hudTitle.classList.add('hud-morphing');
+          morphTimeout = setTimeout(() => {
+            hudTitle.textContent = activeTitle;
+            hudTitle.classList.remove('hud-morphing');
+            morphTimeout = null;
+          }, 100);
+        }
+
+        if (hudProgressFill) {
+          hudProgressFill.style.width = activeProgress.toFixed(1) + '%';
         }
 
         ticking = false;

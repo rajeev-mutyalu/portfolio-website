@@ -1850,7 +1850,7 @@ body.in-simulator #floatingCharlieBtn {
   background: linear-gradient(90deg, #ffffff 0%, #00f2fe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  transition: opacity 0.12s ease-out;
+  transition: opacity 0.1s ease-out;
 }
 
 .hud-title.hud-morphing {
