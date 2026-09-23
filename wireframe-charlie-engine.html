@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wireframe — Charlie Multi-Model Engine, MCP Hub &amp; Frozen HUD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #03060c;
+      --card-bg: rgba(7, 12, 26, 0.88);
+      --card-border: rgba(0, 242, 254, 0.25);
+      --accent-cyan: #00f2fe;
+      --accent-violet: #a855f7;
+      --accent-blue: #38bdf8;
+      --accent-amber: #f59e0b;
+      --accent-emerald: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-dark) radial-gradient(circle at 50% 10%, rgba(0, 242, 254, 0.08), transparent 60%);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 250vh; /* Deliberate scroll height to demonstrate scrolling up and down */
+      padding-bottom: 5rem;
+    }
+
+    /* Fixed Top Navbar */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(5, 8, 17, 0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    .nav-brand-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      background: rgba(0, 242, 254, 0.15);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      color: var(--accent-cyan);
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.82rem;
+      color: #94a3b8;
+    }
+
+    .nav-link.active {
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    /* =========================================================================
+       FROZEN SECTION HEADER HUD (Floats at Top Under Navbar When Scrolling)
+       ========================================================================= */
+    .frozen-section-hud {
+      position: fixed;
+      top: 68px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0) scale(1);
+      z-index: 990;
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+    }
+
+    .hud-pill-inner {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.35rem 1.15rem 0.45rem 0.95rem;
+      background: rgba(6, 11, 25, 0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(0, 242, 254, 0.38);
+      border-radius: 9999px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75),
+                  0 0 18px rgba(0, 242, 254, 0.16),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s ease;
+    }
+
+    .hud-pill-inner:hover {
+      border-color: rgba(0, 242, 254, 0.75);
+      box-shadow: 0 10px 36px rgba(0, 0, 0, 0.85),
+                  0 0 26px rgba(0, 242, 254, 0.35);
+      transform: translateY(1px) scale(1.02);
+    }
+
+    .hud-radar-dot {
+      position: relative;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #00f2fe;
+      box-shadow: 0 0 8px #00f2fe;
+      flex-shrink: 0;
+    }
+
+    .hud-pulse-ring {
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0, 242, 254, 0.75);
+      animation: hudRadarRing 2.2s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+    }
+
+    @keyframes hudRadarRing {
+      0% { transform: scale(0.4); opacity: 1; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+
+    .hud-prefix {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .hud-divider {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(0, 242, 254, 0.45);
+    }
+
+    .hud-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #f8fafc;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffffff 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      white-space: nowrap;
+    }
+
+    .hud-progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 14px;
+      right: 14px;
+      height: 2px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .hud-progress-fill {
+      height: 100%;
+      width: 35%;
+      background: linear-gradient(90deg, #00f2fe, #38bdf8);
+      box-shadow: 0 0 6px rgba(0, 242, 254, 0.8);
+      border-radius: 2px;
+      transition: width 0.1s linear;
+    }
+
+    /* Main Demo Page Wrapper */
+    .page-wrap {
+      max-width: 1040px;
+      margin: 90px auto 0;
+      padding: 0 1.5rem;
+    }
+
+    /* Hero / Intro Banner */
+    .intro-banner {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .wireframe-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+    }
+
+    .wireframe-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .wireframe-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* =========================================================================
+       MODAL CHASSIS
+       ========================================================================= */
+    .modal-chassis {
+      background: rgba(7, 12, 26, 0.92);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 242, 254, 0.15);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      overflow: hidden;
+      margin-bottom: 3.5rem;
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .modal-header-icon {
+      font-size: 1.6rem;
+      filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.6));
+    }
+
+    .modal-headline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+
+    .modal-subline {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    /* =========================================================================
+       NEW: LIVE ACTIVE ENGINE TELEMETRY BANNER (Shows What Is ALREADY Active)
+       ========================================================================= */
+    .active-engine-hud-banner {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.1) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 12px;
+      padding: 0.85rem 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+    }
+
+    .engine-hud-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .engine-pulse-beacon {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981, 0 0 20px rgba(16, 185, 129, 0.7);
+      position: relative;
+    }
+
+    .engine-pulse-beacon::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #10b981;
+      animation: hudRadarRing 2s infinite;
+    }
+
+    .engine-hud-status-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #6ee7b7;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .engine-hud-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+
+    .engine-hud-right {
+      display: flex;
+      align-items: center;
+      gap: 0.95rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    .engine-hud-right strong {
+      color: #38bdf8;
+    }
+
+    .hud-metric-pill {
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      color: var(--accent-cyan);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.68rem;
+      font-weight: 600;
+    }
+
+    /* Section Headings */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* 5-Provider Deck */
+    .providers-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.65rem;
+    }
+
+    .provider-card {
+      background: rgba(12, 19, 36, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 12px;
+      padding: 0.85rem 0.65rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .provider-card:hover {
+      border-color: rgba(0, 242, 254, 0.45);
+      background: rgba(15, 24, 46, 0.9);
+      transform: translateY(-2px);
+    }
+
+    /* Active selected for inspection */
+    .provider-card.selected-inspect {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 242, 254, 0.08);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+    }
+
+    /* Active & LIVE routing model */
+    .provider-card.is-active-routing {
+      border-color: #10b981 !important;
+      background: rgba(16, 185, 129, 0.1) !important;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
+    }
+
+    .provider-state-tag {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 0.12rem 0.45rem;
+      border-radius: 9999px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .provider-state-tag.active-tag {
+      background: #10b981;
+      color: #03060c;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+    }
+
+    .provider-state-tag.configured-tag {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      color: #38bdf8;
+    }
+
+    .provider-state-tag.idle-tag {
+      background: rgba(148, 163, 184, 0.15);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #94a3b8;
+    }
+
+    .provider-icon {
+      font-size: 1.35rem;
+      margin-top: 0.25rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .provider-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .provider-desc {
+      font-size: 0.66rem;
+      color: #94a3b8;
+      line-height: 1.25;
+    }
+
+    /* Context Aggregator Switch Box */
+    .aggregator-bar {
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 12px;
+      padding: 0.85rem 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .aggregator-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .aggregator-icon { font-size: 1.25rem; }
+
+    .aggregator-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #e9d5ff;
+    }
+
+    .aggregator-desc {
+      font-size: 0.74rem;
+      color: #c084fc;
+      margin-top: 1px;
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155;
+      transition: .3s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--accent-violet); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    /* Provider Settings Box */
+    .settings-panel {
+      background: rgba(10, 16, 32, 0.75);
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      border-radius: 14px;
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-end;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+    }
+
+    .field-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .field-tip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: #38bdf8;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .text-input, .select-input {
+      width: 100%;
+      background: rgba(4, 7, 16, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .text-input:focus, .select-input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.25);
+    }
+
+    .btn-test {
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      color: var(--accent-cyan);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.6rem 1.15rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-test:hover {
+      background: var(--accent-cyan);
+      color: #040711;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
+
+    .btn-activate-provider {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border: none;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      white-space: nowrap;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+      transition: all 0.2s;
+    }
+    .btn-activate-provider:hover {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.7);
+      transform: translateY(-1px);
+    }
+
+    /* MCP Hub Section */
+    .mcp-box {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      background: rgba(6, 10, 22, 0.6);
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .mcp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .mcp-card {
+      background: rgba(12, 19, 36, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.65rem;
+    }
+
+    .mcp-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mcp-card-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .mcp-status-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+    }
+
+    .mcp-status-pill.connected {
+      border-color: rgba(16, 185, 129, 0.5);
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+    }
+
+    .mcp-desc {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      line-height: 1.35;
+    }
+
+    .mcp-tools-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .mcp-tool-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      color: #cbd5e1;
+    }
+
+    .btn-connect-google {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      padding: 0.45rem 0.8rem;
+      color: #fff;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      width: fit-content;
+      transition: all 0.2s;
+    }
+    .btn-connect-google:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #fff;
+    }
+
+    .custom-mcp-row {
+      display: flex;
+      gap: 0.65rem;
+      align-items: center;
+      margin-top: 0.2rem;
+    }
+
+    .custom-mcp-input {
+      flex: 1;
+      background: rgba(4, 7, 16, 0.85);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 0.5rem 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    /* Security banner */
+    .sec-banner {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.72rem;
+      color: #a7f3d0;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      line-height: 1.4;
+    }
+
+    /* Footer */
+    .modal-footer {
+      padding: 1.15rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn-clear {
+      background: transparent;
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: #fb7185;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 0.65rem;
+    }
+
+    .btn-cancel {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #cbd5e1;
+      padding: 0.55rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #00f2fe 0%, #38bdf8 100%);
+      border: none;
+      color: #040711;
+      font-weight: 700;
+      padding: 0.55rem 1.45rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 242, 254, 0.35);
+      transition: all 0.2s;
+    }
+
+    /* Demonstration Mock Page Sections (to show scroll-up and scroll-down freeze) */
+    .demo-section {
+      background: rgba(8, 14, 28, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .demo-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-section-desc {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .scroll-hint-box {
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px dashed rgba(0, 242, 254, 0.35);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.82rem;
+      color: #7dd3fc;
+    }
+
+    @media (max-width: 768px) {
+      .providers-grid { grid-template-columns: repeat(2, 1fr); }
+      .mcp-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Fixed Top Navbar -->
+  <header class="top-nav">
+    <div class="nav-brand">
+      <span>RM</span>
+      <span>RAJEEV MUTYALU</span>
+      <span class="nav-brand-badge">VFX &amp; AI SYSTEMS</span>
+    </div>
+    <nav class="nav-links">
+      <span class="nav-link">Capabilities</span>
+      <span class="nav-link active">Charlie AI</span>
+      <span class="nav-link">Filmography</span>
+      <span class="nav-link">Architecture</span>
+      <span class="nav-link">Timeline</span>
+    </nav>
+  </header>
+
+  <!-- 2. Creative Frozen Section Header HUD (Frozen on Scroll) -->
+  <div id="frozenSectionHUD" class="frozen-section-hud" title="Click to scroll to top of section">
+    <div class="hud-pill-inner">
+      <span class="hud-radar-dot">
+        <span class="hud-pulse-ring"></span>
+      </span>
+      <span class="hud-prefix">Active Section</span>
+      <span class="hud-divider">//</span>
+      <span id="hudSectionTitle" class="hud-title">CHARLIE MULTI-MODEL ENGINE &amp; MCP HUB</span>
+      <div class="hud-progress-bar">
+        <div id="hudProgressFill" class="hud-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-wrap">
+    <!-- Intro / Overview -->
+    <div class="intro-banner" id="topIntro">
+      <div class="wireframe-badge">⚡ Interactive Live Wireframe Demo</div>
+      <h1 class="wireframe-title">Charlie Intelligence Engine &amp; MCP Hub</h1>
+      <p class="wireframe-desc">
+        Demonstrating <strong>Active vs. Configured Model Indicators</strong>, <strong>Claude Opus</strong>, <strong>Astra Models</strong>, <strong>MSTY Localhost</strong>, <strong>Gmail MCP</strong>, and the <strong>Creative Frozen Section Header HUD</strong> when scrolling up and down.
+      </p>
+    </div>
+
+    <!-- The Intelligence Engine Modal Chassis -->
+    <div class="modal-chassis" id="engineModalSection">
+      <!-- Header -->
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <span class="modal-header-icon">🧠</span>
+          <div>
+            <div class="modal-headline">CHARLIE INTELLIGENCE ENGINE &amp; MCP HUB</div>
+            <div class="modal-subline">Universal Model Aggregator &bull; Continuous Context &bull; Model Context Protocol (MCP)</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" title="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Live Active Engine Telemetry Banner (SHOWS WHAT IS CURRENTLY ACTIVE) -->
+        <div class="active-engine-hud-banner" id="activeEngineHudBanner">
+          <div class="engine-hud-left">
+            <span class="engine-pulse-beacon"></span>
+            <div>
+              <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:2px;">
+                <span class="engine-hud-status-badge">CURRENTLY ACTIVE ENGINE</span>
+                <span style="font-size:0.68rem; color:#a7f3d0;">(Routing All Queries)</span>
+              </div>
+              <div class="engine-hud-name" id="currentActiveEngineName">Anthropic Claude 3.5 Sonnet (BYOK)</div>
+            </div>
+          </div>
+          <div class="engine-hud-right">
+            <span>LATENCY: <strong>24ms</strong></span>
+            <span>CONTEXT: <strong>200K</strong></span>
+            <span class="hud-metric-pill" id="hudActiveMcpBadge">📧 GMAIL MCP READY</span>
+          </div>
+        </div>
+
+        <!-- 1. Five Provider Selector Grid with State Badges -->
+        <div>
+          <div class="section-label">
+            <span>1. Select &amp; Switch Inference Provider</span>
+            <span style="color: #6ee7b7;" id="providerHeaderHint">● Active: Anthropic Claude</span>
+          </div>
+          <div class="providers-grid">
+            <!-- Local KB -->
+            <div class="provider-card" data-provider="local">
+              <span class="provider-state-tag idle-tag">READY</span>
+              <div class="provider-icon">⚡</div>
+              <div class="provider-name">Local KB</div>
+              <div class="provider-desc">Zero Key • Offline Verified RAG</div>
+            </div>
+
+            <!-- Google Gemini -->
+            <div class="provider-card" data-provider="gemini">
+              <span class="provider-state-tag configured-tag">CONFIGURED</span>
+              <div class="provider-icon">✨</div>
+              <div class="provider-name">Google Gemini</div>
+              <div class="provider-desc">Gemini 2.0 Flash / Pro 1M+ Context</div>
+            </div>
+
+            <!-- Anthropic Claude (Currently Active) -->
+            <div class="provider-card selected-inspect is-active-routing" data-provider="claude">
+              <span class="provider-state-tag active-tag">● ACTIVE ENGINE</span>
+              <div class="provider-icon">🏛️</div>
+              <div class="provider-name">Anthropic</div>
+              <div class="provider-desc">Claude 3.5 Sonnet &amp; Opus Architecture</div>
+            </div>
+
+            <!-- OpenAI / Astra -->
+            <div class="provider-card" data-provider="openai">
+              <span class="provider-state-tag configured-tag">CONFIGURED</span>
+              <div class="provider-icon">🧠</div>
+              <div class="provider-name">OpenAI / Astra</div>
+              <div class="provider-desc">GPT-4o, o3, Astra Models &amp; Fine-Tunes</div>
+            </div>
+
+            <!-- MSTY & Local -->
+            <div class="provider-card" data-provider="msty">
+              <span class="provider-state-tag idle-tag">READY (10808)</span>
+              <div class="provider-icon">⚡</div>
+              <div class="provider-name">MSTY &amp; Local</div>
+              <div class="provider-desc">Msty Local App, Ollama &amp; Custom API</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Continuous Context Aggregator Switch -->
+        <div class="aggregator-bar">
+          <div class="aggregator-info">
+            <span class="aggregator-icon">🔄</span>
+            <div>
+              <div class="aggregator-title">Continuous Context Aggregator</div>
+              <div class="aggregator-desc">Switching models preserves full conversation history &amp; memory seamlessly across providers.</div>
+            </div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="aggregatorToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- 3. Provider Settings Panel (Dynamic per provider) -->
+        <div class="settings-panel" id="providerSettingsPanel">
+          <!-- Populated dynamically via JavaScript below -->
+        </div>
+
+        <!-- 4. Model Context Protocol (MCP) Hub -->
+        <div class="mcp-box">
+          <div class="section-label">
+            <span>2. Model Context Protocol (MCP) Tool Integrations</span>
+            <span style="color: var(--accent-emerald);">Standardized JSON-RPC Tools</span>
+          </div>
+
+          <div class="mcp-grid">
+            <!-- Gmail MCP -->
+            <div class="mcp-card">
+              <div class="mcp-card-top">
+                <div class="mcp-card-brand">
+                  <span>📧</span>
+                  <span>Gmail MCP Connector</span>
+                </div>
+                <span class="mcp-status-pill connected" id="gmailStatusPill">✓ Authorized (OAuth 2.0)</span>
+              </div>
+              <div class="mcp-desc">Allows Charlie to inspect unread threads, search inbox, and draft executive responses directly in conversation.</div>
+              <div class="mcp-tools-list">
+                <span class="mcp-tool-tag">search_threads</span>
+                <span class="mcp-tool-tag">read_email</span>
+                <span class="mcp-tool-tag">create_draft</span>
+                <span class="mcp-tool-tag">send_email</span>
+              </div>
+              <div style="font-size:0.7rem; color:#6ee7b7;">Connected: <strong>rajeev.mutyalu@gmail.com</strong></div>
+            </div>
+
+            <!-- GitHub MCP -->
+            <div class="mcp-card">
+              <div class="mcp-card-top">
+                <div class="mcp-card-brand">
+                  <span>🐙</span>
+                  <span>GitHub MCP Connector</span>
+                </div>
+                <span class="mcp-status-pill connected">Active (Public API)</span>
+              </div>
+              <div class="mcp-desc">Gives Charlie live read access to inspect Rajeev's repositories, commit histories, PR workflows, and OpenUSD architecture scripts.</div>
+              <div class="mcp-tools-list">
+                <span class="mcp-tool-tag">inspect_repo</span>
+                <span class="mcp-tool-tag">list_commits</span>
+                <span class="mcp-tool-tag">read_file_tree</span>
+              </div>
+              <div style="font-size: 0.72rem; color: #10b981;">✓ Connected to github.com/rajeev-mutyalu</div>
+            </div>
+          </div>
+
+          <!-- Custom MCP Endpoint -->
+          <div class="custom-mcp-row">
+            <input type="text" class="custom-mcp-input" placeholder="➕ Add Custom MCP Server Endpoint (e.g. http://localhost:8124/sse or custom JSON-RPC schema)...">
+            <button class="btn-test" style="padding: 0.45rem 0.85rem; font-size: 0.75rem;">+ Add Tool</button>
+          </div>
+        </div>
+
+        <!-- Security Guarantee -->
+        <div class="sec-banner">
+          <span>🔒</span>
+          <div><strong>Client-Side BYOK Security Guarantee:</strong> All API keys (Google, Anthropic, OpenAI) and OAuth tokens are stored strictly inside your browser's private <code>localStorage</code>. Requests are sent directly over TLS to official provider endpoints. Zero data is ever stored on any intermediary server.</div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button class="btn-clear">Clear All Keys &amp; Reset</button>
+        <div class="footer-actions">
+          <button class="btn-cancel">Cancel</button>
+          <button class="btn-save">Save &amp; Activate Engine</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demonstration Sections to Test Scrolling UP & DOWN with the Frozen Header -->
+    <section class="demo-section" id="capabilitiesSection">
+      <div class="demo-section-title">Core Architecture &amp; Technical Capabilities</div>
+      <p class="demo-section-desc">
+        Combining 20+ years of software engineering and production technology with OpenUSD, AI systems, workflow automation, and modern creative tooling. Notice how the frozen header at the top under the navbar maintains your active context as you scroll down and scroll back up!
+      </p>
+      <div class="scroll-hint-box">
+        <span>👇 <strong>Scroll Up and Down:</strong> Watch the cyber frozen header capsule stay pinned at the top under the navbar with the live progress bar and radar beacon!</span>
+      </div>
+    </section>
+
+    <section class="demo-section" id="filmographySection">
+      <div class="demo-section-title">Selected Filmography (1917, RRR, Mufasa)</div>
+      <p class="demo-section-desc">
+        Software architecture and production technology platforms supporting major motion pictures, Academy Award winners, and global visual effects productions.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    // State Tracking
+    let activeEngineId = 'claude';
+    let currentlyInspectingId = 'claude';
+
+    const engineDisplayNames = {
+      claude: 'Anthropic Claude 3.5 Sonnet (BYOK • Flagship)',
+      gemini: 'Google Gemini 2.0 Flash (BYOK • 1M+ Context)',
+      openai: 'OpenAI GPT-4o / Astra Studio (BYOK)',
+      msty: 'MSTY Localhost (http://localhost:10808/v1)',
+      local: 'Local Knowledge Base (Offline Ground Truth)'
+    };
+
+    const hudSectionTitle = document.getElementById('hudSectionTitle');
+    const currentActiveEngineName = document.getElementById('currentActiveEngineName');
+    const providerHeaderHint = document.getElementById('providerHeaderHint');
+    const panel = document.getElementById('providerSettingsPanel');
+    const cards = document.querySelectorAll('.provider-card');
+    const hudProgressFill = document.getElementById('hudProgressFill');
+
+    function updateActiveEngineUI() {
+      // 1. Update Top Banner
+      currentActiveEngineName.textContent = engineDisplayNames[activeEngineId];
+      providerHeaderHint.textContent = `● Active: ${engineDisplayNames[activeEngineId].split(' ')[0]} ${engineDisplayNames[activeEngineId].split(' ')[1] || ''}`;
+
+      // 2. Update Card Badges
+      cards.forEach(c => {
+        const pId = c.getAttribute('data-provider');
+        const badge = c.querySelector('.provider-state-tag');
+        
+        if (pId === activeEngineId) {
+          c.classList.add('is-active-routing');
+          badge.className = 'provider-state-tag active-tag';
+          badge.textContent = '● ACTIVE ENGINE';
+        } else {
+          c.classList.remove('is-active-routing');
+          if (pId === 'gemini' || pId === 'openai') {
+            badge.className = 'provider-state-tag configured-tag';
+            badge.textContent = 'CONFIGURED';
+          } else {
+            badge.className = 'provider-state-tag idle-tag';
+            badge.textContent = 'READY';
+          }
+        }
+      });
+
+      // 3. Update Frozen Header HUD Title
+      if (window.pageYOffset > 100) {
+        hudSectionTitle.textContent = `CHARLIE ENGINE // ACTIVE: ${engineDisplayNames[activeEngineId].toUpperCase()}`;
+      }
+    }
+
+    function renderProviderSettings(pId) {
+      currentlyInspectingId = pId;
+      const isCurrentlyActive = (pId === activeEngineId);
+
+      const activateBtnHtml = isCurrentlyActive 
+        ? `<div style="display:flex; align-items:center; gap:0.4rem; color:#10b981; font-size:0.8rem; font-weight:700;"><span style="font-size:1rem;">✓</span> This is currently your active routing engine</div>`
+        : `<button type="button" class="btn-activate-provider" onclick="setAsActiveEngine('${pId}')">
+             <span>🚀</span>
+             <span>Activate as Current Engine</span>
+           </button>`;
+
+      if (pId === 'claude') {
+        panel.innerHTML = `
+          <div class="section-label">
+            <span>Anthropic Claude Configuration (BYOK • Claude 3.5 Sonnet &amp; Claude 3 Opus)</span>
+            <a href="https://console.anthropic.com/" target="_blank" style="color: var(--accent-cyan); font-size: 0.68rem; text-decoration: none;">Get Anthropic Key &rarr;</a>
+          </div>
+          <div class="field-group">
+            <div class="field-label">
+              <span>Anthropic API Key</span>
+              <span class="field-tip">Never leaves your browser (localStorage)</span>
+            </div>
+            <div class="input-wrap">
+              <input type="password" class="text-input" value="sk-ant-api03-sample-key-encrypted-locally" placeholder="sk-ant-...">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">Model Selection</div>
+              <select class="select-input">
+                <option selected>claude-3-5-sonnet-20241022 (Recommended • Flagship Architecture &amp; Code)</option>
+                <option>claude-3-opus-20240229 (Claude 3 Opus • Deep Frontier Reasoning)</option>
+                <option>claude-3-5-haiku-20241022 (Ultra-Fast Lightweight Chat)</option>
+                <option>⚙️ Custom Model Identifier (e.g. Fabel, experimental Claude IDs)...</option>
+              </select>
+            </div>
+            <button class="btn-test">
+              <span>⚡</span>
+              <span>Test Connection</span>
+            </button>
+            ${activateBtnHtml}
+          </div>
+        `;
+      } else if (pId === 'msty') {
+        panel.innerHTML = `
+          <div class="section-label">
+            <span>MSTY Local AI &amp; OpenAI-Compatible Local Endpoint</span>
+            <span style="color: var(--accent-amber); font-size: 0.68rem;">Desktop App • Localhost API</span>
+          </div>
+          <div class="field-row">
+            <div class="field-group flex-2">
+              <div class="field-label">
+                <span>MSTY / Localhost Server URL</span>
+                <span class="field-tip">Msty default: http://localhost:10808/v1</span>
+              </div>
+              <input type="text" class="text-input" value="http://localhost:10808/v1" placeholder="http://localhost:10808/v1 or http://localhost:11434/v1">
+            </div>
+            <div class="field-group flex-1">
+              <div class="field-label">API Key (Optional)</div>
+              <input type="password" class="text-input" placeholder="Optional local token">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">Model Identifier (e.g. Fabel, Mistral, Llama, Astra Local)</div>
+              <input type="text" class="text-input" value="fable-vfx-70b" placeholder="e.g. fable, mistral-large, llama-3.3, astra-local">
+            </div>
+            <button class="btn-test">
+              <span>⚡</span>
+              <span>Ping MSTY App</span>
+            </button>
+            ${activateBtnHtml}
+          </div>
+          <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+            💡 <strong>How MSTY Works:</strong> Launch the <a href="https://msty.app" target="_blank" style="color: var(--accent-cyan);">MSTY desktop application</a> on your machine, activate its local server toggle, and Charlie in the browser will route prompts directly to your locally hosted models (Fabel, Mistral, Llama, Astra local weights) with zero cloud exposure!
+          </div>
+        `;
+      } else if (pId === 'openai') {
+        panel.innerHTML = `
+          <div class="section-label">
+            <span>OpenAI &amp; Astra Studio Systems (BYOK • GPT-4o, o3 &amp; Astra Custom Models)</span>
+            <a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--accent-cyan); font-size: 0.68rem; text-decoration: none;">Get OpenAI Key &rarr;</a>
+          </div>
+          <div class="field-group">
+            <div class="field-label">
+              <span>OpenAI API Key</span>
+              <span class="field-tip">Stored securely in localStorage</span>
+            </div>
+            <div class="input-wrap">
+              <input type="password" class="text-input" value="sk-proj-sample-open-ai-key-authenticated" placeholder="sk-proj-...">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">Model Selection</div>
+              <select class="select-input">
+                <option selected>gpt-4o (High Precision • Flagship)</option>
+                <option>gpt-4o-mini (Fast &amp; Cost-Effective)</option>
+                <option>o3-mini (Advanced Reasoning)</option>
+                <option>o1 (Frontier Reasoning)</option>
+                <option>astra-vfx-pipeline-v3 (Astra Studio Custom Model)</option>
+                <option>⚙️ Custom Fine-Tune / Astra Model ID...</option>
+              </select>
+            </div>
+            <button class="btn-test">
+              <span>⚡</span>
+              <span>Test Connection</span>
+            </button>
+            ${activateBtnHtml}
+          </div>
+        `;
+      } else if (pId === 'gemini') {
+        panel.innerHTML = `
+          <div class="section-label">
+            <span>Google Gemini Configuration (BYOK • Gemini 2.0 Flash &amp; Pro)</span>
+            <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent-cyan); font-size: 0.68rem; text-decoration: none;">Get Gemini Key from Google AI Studio &rarr;</a>
+          </div>
+          <div class="field-group">
+            <div class="field-label">
+              <span>Google AI Studio Key</span>
+              <span class="field-tip">1M+ Token Context Window</span>
+            </div>
+            <div class="input-wrap">
+              <input type="password" class="text-input" value="AIzaSySampleKeyAuthenticatedLive" placeholder="AIzaSy...">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">Model Selection</div>
+              <select class="select-input">
+                <option selected>gemini-2.0-flash (Recommended • Multimodal &amp; Fast)</option>
+                <option>gemini-1.5-pro (Deep Multimodal Analysis • 2M Context)</option>
+                <option>gemini-2.0-flash-thinking-exp (Reasoning Mode)</option>
+                <option>⚙️ Custom Gemini Model ID...</option>
+              </select>
+            </div>
+            <button class="btn-test">
+              <span>⚡</span>
+              <span>Test Connection</span>
+            </button>
+            ${activateBtnHtml}
+          </div>
+        `;
+      } else if (pId === 'local') {
+        panel.innerHTML = `
+          <div class="section-label">
+            <span>Local Knowledge Base Mode (Offline • Built-In RAG)</span>
+            <span style="color: var(--accent-emerald); font-size: 0.68rem;">✓ 100% Client-Side Ready</span>
+          </div>
+          <div style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; padding: 0.5rem 0;">
+            ⚡ <strong>Zero Setup Required:</strong> Charlie operates using the built-in, indexed Ground Truth Knowledge Base. Charlie can answer in-depth questions about Rajeev Mutyalu's 20-year career, OpenUSD VFX pipeline, Astra Studios, Technicolor R&amp;D, Oscar-winning credits (<em>1917, RRR, Mufasa</em>), and architecture blueprints instantaneously without an external API key.
+          </div>
+          <div style="margin-top: 0.5rem;">
+            ${activateBtnHtml}
+          </div>
+        `;
+      }
+    }
+
+    window.setAsActiveEngine = function(pId) {
+      activeEngineId = pId;
+      updateActiveEngineUI();
+      renderProviderSettings(pId);
+    };
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => c.classList.remove('selected-inspect'));
+        card.classList.add('selected-inspect');
+        const pId = card.getAttribute('data-provider');
+        renderProviderSettings(pId);
+      });
+    });
+
+    // =========================================================================
+    // SCROLL LISTENER: Frozen Section Header HUD Behavior
+    // =========================================================================
+    window.addEventListener('scroll', () => {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = Math.min(100, Math.max(0, (scrollY / maxScroll) * 100));
+      hudProgressFill.style.width = progress.toFixed(1) + '%';
+
+      const hud = document.getElementById('frozenSectionHUD');
+      const modalSec = document.getElementById('engineModalSection');
+      const capSec = document.getElementById('capabilitiesSection');
+      const filmSec = document.getElementById('filmographySection');
+
+      const modalRect = modalSec.getBoundingClientRect();
+      const capRect = capSec.getBoundingClientRect();
+      const filmRect = filmSec.getBoundingClientRect();
+
+      // Dynamic title morphing based on active scroll section
+      if (filmRect.top <= 100) {
+        hudSectionTitle.textContent = 'SELECTED FILMOGRAPHY (1917, RRR, MUFASA)';
+      } else if (capRect.top <= 100) {
+        hudSectionTitle.textContent = 'CORE ARCHITECTURE & TECHNICAL CAPABILITIES';
+      } else if (modalRect.top <= 100) {
+        hudSectionTitle.textContent = `CHARLIE ENGINE // ACTIVE: ${engineDisplayNames[activeEngineId].toUpperCase()}`;
+      } else {
+        hudSectionTitle.textContent = 'CHARLIE MULTI-MODEL ENGINE & MCP HUB';
+      }
+    }, { passive: true });
+
+    // Initial setup
+    renderProviderSettings('claude');
+    updateActiveEngineUI();
+  </script>
+</body>
+</html>
