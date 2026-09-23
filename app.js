@@ -10575,6 +10575,113 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       }
     } catch (e) { }
 
+    // =========================================================================
+    // 📌 Creative Frozen Section HUD (Active Section Title Freeze)
+    // =========================================================================
+    function initFrozenSectionHUD() {
+      const hud = document.getElementById('frozenSectionHUD');
+      const hudTitle = document.getElementById('hudSectionTitle');
+      const hudProgressFill = document.getElementById('hudProgressFill');
+      if (!hud || !hudTitle) return;
+
+      const nav = document.querySelector('.navbar');
+      const getNavHeight = () => (nav && window.getComputedStyle(nav).display !== 'none') ? nav.offsetHeight : 64;
+
+      // Track sections that have headers
+      const trackedSections = Array.from(document.querySelectorAll('section[id]')).filter(sec => {
+        return sec.id !== 'hero' && sec.querySelector('.section-title');
+      });
+
+      let currentSectionId = null;
+      let ticking = false;
+
+      function updateHUD() {
+        const navHeight = getNavHeight();
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+        let activeSection = null;
+        let activeTitle = '';
+        let activeProgress = 0;
+
+        for (let i = 0; i < trackedSections.length; i++) {
+          const sec = trackedSections[i];
+          const rect = sec.getBoundingClientRect();
+          const header = sec.querySelector('.section-header') || sec.querySelector('.section-title');
+          const headerRect = header ? header.getBoundingClientRect() : rect;
+
+          // Activate when the header has reached or scrolled above the bottom of the navbar
+          if (headerRect.top <= navHeight + 12 && rect.bottom > navHeight + 30) {
+            activeSection = sec;
+            const titleEl = sec.querySelector('.section-title');
+            activeTitle = titleEl ? titleEl.textContent.trim() : sec.id.toUpperCase();
+
+            // Calculate progress through this specific section
+            const scrolledIntoSection = (navHeight + 20) - rect.top;
+            const totalSectionScrollable = rect.height;
+            activeProgress = Math.max(0, Math.min(100, (scrolledIntoSection / totalSectionScrollable) * 100));
+            break;
+          }
+        }
+
+        if (activeSection) {
+          if (!hud.classList.contains('is-visible')) {
+            hud.classList.add('is-visible');
+          }
+
+          if (currentSectionId !== activeSection.id) {
+            currentSectionId = activeSection.id;
+            hudTitle.classList.add('hud-morphing');
+            setTimeout(() => {
+              hudTitle.textContent = activeTitle;
+              hudTitle.classList.remove('hud-morphing');
+            }, 140);
+          }
+
+          if (hudProgressFill) {
+            hudProgressFill.style.width = activeProgress.toFixed(1) + '%';
+          }
+        } else {
+          // If we are above all section headers (e.g. Hero) or below all sections
+          if (hud.classList.contains('is-visible')) {
+            hud.classList.remove('is-visible');
+            currentSectionId = null;
+          }
+        }
+
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(updateHUD);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(updateHUD);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Click HUD pill to smoothly jump to the top of the currently frozen section
+      hud.addEventListener('click', () => {
+        if (currentSectionId) {
+          const sec = document.getElementById(currentSectionId);
+          if (sec) {
+            const navHeight = getNavHeight();
+            const targetY = sec.getBoundingClientRect().top + window.pageYOffset - navHeight - 10;
+            window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+          }
+        }
+      });
+
+      // Initial check
+      updateHUD();
+    }
+
+    initFrozenSectionHUD();
     setupMobileSimulator();
   }
 
