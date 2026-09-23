@@ -10587,6 +10587,15 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const nav = document.querySelector('.navbar');
       const getNavHeight = () => (nav && window.getComputedStyle(nav).display !== 'none') ? nav.offsetHeight : 64;
 
+      function isSectionVisible(sec) {
+        if (!sec) return false;
+        if (sec.offsetParent === null && window.getComputedStyle(sec).position !== 'fixed') {
+          return false;
+        }
+        const style = window.getComputedStyle(sec);
+        return style.display !== 'none' && style.visibility !== 'hidden' && sec.offsetHeight > 0;
+      }
+
       // Track sections that have headers
       const trackedSections = Array.from(document.querySelectorAll('section[id]')).filter(sec => {
         return sec.id !== 'hero' && sec.querySelector('.section-title');
@@ -10598,95 +10607,80 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
       function updateHUD() {
         const navHeight = getNavHeight();
-        const triggerLine = navHeight + 16;
 
-        if (trackedSections.length === 0) {
-          ticking = false;
-          return;
-        }
-
-        // Check 1: Are we above the first section's header? (Hero area)
-        const firstSec = trackedSections[0];
-        const firstHeader = firstSec.querySelector('.section-header') || firstSec.querySelector('.section-title');
-        const firstHeaderTop = firstHeader ? firstHeader.getBoundingClientRect().top : firstSec.getBoundingClientRect().top;
-
-        if (firstHeaderTop > triggerLine) {
+        // Dynamically filter sections visible on current screen (omits #ai-assistant on mobile)
+        const visibleSections = trackedSections.filter(isSectionVisible);
+        if (visibleSections.length === 0) {
           if (hud.classList.contains('is-visible')) {
             hud.classList.remove('is-visible');
             currentSectionId = null;
-            if (morphTimeout) {
-              clearTimeout(morphTimeout);
-              morphTimeout = null;
-            }
-            hudTitle.classList.remove('hud-morphing');
           }
           ticking = false;
           return;
         }
 
-        // Check 2: Are we below the last section? (Footer area)
-        const lastSec = trackedSections[trackedSections.length - 1];
-        if (lastSec.getBoundingClientRect().bottom <= navHeight) {
-          if (hud.classList.contains('is-visible')) {
-            hud.classList.remove('is-visible');
-            currentSectionId = null;
-            if (morphTimeout) {
-              clearTimeout(morphTimeout);
-              morphTimeout = null;
-            }
-            hudTitle.classList.remove('hud-morphing');
-          }
-          ticking = false;
-          return;
-        }
+        let activeSection = null;
+        let activeTitle = '';
+        let activeProgress = 0;
 
-        // Check 3: Active Section Determination
-        // Find the deepest section whose header has reached or crossed the triggerLine.
-        // Guarantees zero gaps between consecutive sections so the HUD capsule stays continuously pinned.
-        let activeSection = firstSec;
-        for (let i = trackedSections.length - 1; i >= 0; i--) {
-          const sec = trackedSections[i];
+        for (let i = 0; i < visibleSections.length; i++) {
+          const sec = visibleSections[i];
+          const rect = sec.getBoundingClientRect();
           const header = sec.querySelector('.section-header') || sec.querySelector('.section-title');
-          const headerTop = header ? header.getBoundingClientRect().top : sec.getBoundingClientRect().top;
-          if (headerTop <= triggerLine) {
+          const headerRect = header ? header.getBoundingClientRect() : rect;
+
+          // Activate when the header has reached or scrolled above the bottom of the navbar,
+          // and until the section content ends.
+          // This preserves the natural pause when a section's big header is visible on page,
+          // so the small frozen header does NOT clash simultaneously with the main header.
+          if (headerRect.top <= navHeight + 12 && rect.bottom > navHeight + 30) {
             activeSection = sec;
+            const titleEl = sec.querySelector('.section-title');
+            activeTitle = titleEl ? titleEl.textContent.trim() : sec.id.toUpperCase();
+
+            // Calculate progress through this specific section
+            const scrolledIntoSection = (navHeight + 20) - rect.top;
+            const totalSectionScrollable = rect.height;
+            activeProgress = Math.max(0, Math.min(100, (scrolledIntoSection / totalSectionScrollable) * 100));
             break;
           }
         }
 
-        // Calculate progress within this active section
-        const activeIdx = trackedSections.indexOf(activeSection);
-        const nextSec = trackedSections[activeIdx + 1];
-        const secRect = activeSection.getBoundingClientRect();
-        const endY = nextSec ? nextSec.getBoundingClientRect().top : secRect.bottom;
-        const totalDist = endY - secRect.top;
-        const scrolled = triggerLine - secRect.top;
-        const activeProgress = totalDist > 0 ? Math.max(0, Math.min(100, (scrolled / totalDist) * 100)) : 0;
-
-        const titleEl = activeSection.querySelector('.section-title');
-        const activeTitle = titleEl ? titleEl.textContent.trim() : activeSection.id.toUpperCase();
-
-        if (!hud.classList.contains('is-visible')) {
-          // Appearing for the first time: set correct title immediately so it NEVER fades in with stale text
-          hudTitle.textContent = activeTitle;
-          hudTitle.classList.remove('hud-morphing');
-          currentSectionId = activeSection.id;
-          hud.classList.add('is-visible');
-        } else if (currentSectionId !== activeSection.id) {
-          // Transitioning between sections while already visible:
-          // Keep the oval capsule visible and only cross-fade the title text smoothly
-          currentSectionId = activeSection.id;
-          if (morphTimeout) clearTimeout(morphTimeout);
-          hudTitle.classList.add('hud-morphing');
-          morphTimeout = setTimeout(() => {
+        if (activeSection) {
+          if (!hud.classList.contains('is-visible')) {
+            // When appearing, set the title SYNCHRONOUSLY FIRST before adding is-visible!
+            // This guarantees it NEVER fades in showing the previous section's title!
             hudTitle.textContent = activeTitle;
             hudTitle.classList.remove('hud-morphing');
-            morphTimeout = null;
-          }, 100);
-        }
+            currentSectionId = activeSection.id;
+            hud.classList.add('is-visible');
+          } else if (currentSectionId !== activeSection.id) {
+            // Section changed while already visible: smooth title cross-fade
+            currentSectionId = activeSection.id;
+            if (morphTimeout) clearTimeout(morphTimeout);
+            hudTitle.classList.add('hud-morphing');
+            morphTimeout = setTimeout(() => {
+              hudTitle.textContent = activeTitle;
+              hudTitle.classList.remove('hud-morphing');
+              morphTimeout = null;
+            }, 100);
+          }
 
-        if (hudProgressFill) {
-          hudProgressFill.style.width = activeProgress.toFixed(1) + '%';
+          if (hudProgressFill) {
+            hudProgressFill.style.width = activeProgress.toFixed(1) + '%';
+          }
+        } else {
+          // If we are in the gap where a new section's big header is visible on screen,
+          // or above all sections (Hero) or below all sections (Footer):
+          if (hud.classList.contains('is-visible')) {
+            hud.classList.remove('is-visible');
+            currentSectionId = null;
+            if (morphTimeout) {
+              clearTimeout(morphTimeout);
+              morphTimeout = null;
+            }
+            hudTitle.classList.remove('hud-morphing');
+          }
         }
 
         ticking = false;
