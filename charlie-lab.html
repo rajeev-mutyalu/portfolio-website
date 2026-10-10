@@ -213,12 +213,13 @@
       padding: 24px;
       width: 100%;
       display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 24px;
+      grid-template-columns: 1fr 420px;
+      gap: 16px;
       flex: 1;
+      align-items: start;
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 820px) {
       main.lab-main {
         grid-template-columns: 1fr;
       }
@@ -229,6 +230,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      align-self: start;
     }
 
     .canvas-card {
@@ -439,24 +441,38 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      box-sizing: border-box;
     }
 
     .control-card {
       background: var(--bg-panel);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 14px;
-      padding: 16px;
+      border-radius: 12px;
+      padding: 12px 14px;
       backdrop-filter: blur(20px);
+      box-sizing: border-box;
     }
 
     #cardAiLifecycle {
-      height: 350px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      padding: 16px;
+      gap: 9px;
+      padding: 12px 14px;
       overflow: hidden;
+      height: auto;
+    }
+
+    #cardAiLifecycle h3 {
+      margin-bottom: 0;
+      padding-bottom: 6px;
+    }
+
+    #cardAiLifecycle p {
+      margin-bottom: 3px !important;
+      font-size: 0.74rem;
+      color: #94a3b8;
+      line-height: 1.35;
     }
 
     #cardAiLifecycle .button-stack {
@@ -466,14 +482,15 @@
     }
 
     #cardAiLifecycle #chatStatusText {
-      margin-top: 6px !important;
-      max-height: 70px;
+      margin-top: 2px !important;
+      max-height: 68px;
       overflow-y: auto;
       overflow-x: hidden;
       overscroll-behavior: contain;
       box-sizing: border-box;
-      line-height: 1.42;
+      line-height: 1.38;
       word-break: break-word;
+      padding: 7px 10px;
       scrollbar-width: thin;
       scrollbar-color: rgba(0, 242, 254, 0.45) rgba(0, 242, 254, 0.05);
     }
@@ -496,26 +513,105 @@
       background: rgba(0, 242, 254, 0.85);
     }
 
+    /* Charlie Wardrobe & Character Skins Card (Top of Right Deck) */
+    #cardCharlieWardrobe {
+      background: linear-gradient(180deg, rgba(8, 16, 32, 0.95), rgba(5, 10, 22, 0.95));
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.08);
+      backdrop-filter: blur(20px);
+      box-sizing: border-box;
+    }
+
+    .skin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+
+    .skin-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 9px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      color: #e2e8f0;
+      position: relative;
+      font-family: var(--font-sans);
+      text-align: center;
+      user-select: none;
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .skin-btn:hover {
+      background: rgba(0, 242, 254, 0.10);
+      border-color: rgba(0, 242, 254, 0.45);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 242, 254, 0.22);
+      color: #fff;
+    }
+
+    .skin-btn.active {
+      background: rgba(0, 242, 254, 0.18);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.35), inset 0 0 10px rgba(0, 242, 254, 0.12);
+      color: #fff;
+    }
+
+    .skin-btn.active::after {
+      content: 'EQUIPPED';
+      position: absolute;
+      top: 3px;
+      right: 4px;
+      font-size: 0.52rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: #00f2fe;
+      background: rgba(0, 242, 254, 0.22);
+      padding: 1px 4px;
+      border-radius: 3px;
+      letter-spacing: 0.04em;
+    }
+
+    .skin-icon {
+      font-size: 1.4rem;
+      line-height: 1.2;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .skin-name {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #fff;
+      display: block;
+      white-space: nowrap;
+    }
+
+    .skin-sub {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      font-family: var(--font-mono);
+      display: block;
+      white-space: nowrap;
+    }
+
     #cardVisorLed {
-      height: 262px;
+      height: auto;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      padding: 16px;
-    }
-
-    #cardVisorLed .face-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 6px;
-    }
-
-    #cardVisorLed .face-btn {
-      padding: 5px 3px;
-      justify-content: center;
-      min-width: 0;
+      padding: 0;
     }
 
     .control-card h3 {
@@ -544,31 +640,18 @@
       margin-bottom: 12px;
     }
 
-    #cardMotionTweaks,
     #cardTelemetry {
-      height: 182px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      padding: 12px 16px;
+      padding: 12px 14px;
+      height: 197px;
     }
 
-    #cardMotionTweaks h3,
     #cardTelemetry h3 {
-      margin-bottom: 8px;
-      padding-bottom: 6px;
-    }
-
-    #cardMotionTweaks .tweaks-slider-stack {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    #cardMotionTweaks .slider-row {
-      margin-bottom: 0;
-      gap: 3px;
+      margin-bottom: 6px;
+      padding-bottom: 5px;
+      font-size: 0.85rem;
     }
 
     #cardTelemetry .telemetry-box {
@@ -577,20 +660,17 @@
       flex-direction: column;
       justify-content: space-around;
       margin-bottom: 0;
-      padding: 6px 10px;
-      font-size: 0.71rem;
-      line-height: 1.35;
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      line-height: 1.55;
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 820px) {
 
       .quick-actions-bar,
       #cardAiLifecycle,
-      #cardVisorLed,
-      #cardMotionTweaks,
       #cardTelemetry {
         height: auto;
-        min-height: 170px;
       }
     }
 
@@ -629,8 +709,8 @@
     /* Face Expression Buttons */
     .face-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(3, 1fr);
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(2, auto);
       gap: 6px;
     }
 
@@ -698,6 +778,347 @@
     .telemetry-val {
       color: var(--accent-cyan);
     }
+  
+    /* Unified Stage Controls Panel: Visor LED (Compact Width) + Quick Actions (Generous Width) */
+    .unified-stage-panel,
+    #cardStageControls {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 12px;
+      background: linear-gradient(180deg, rgba(8, 16, 32, 0.95), rgba(4, 8, 18, 0.95));
+      border: 1px solid rgba(0, 242, 254, 0.30);
+      border-radius: 12px;
+      padding: 9px 12px !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 242, 254, 0.08);
+      backdrop-filter: blur(20px);
+      box-sizing: border-box;
+      height: fit-content !important;
+      min-height: unset !important;
+      align-items: start !important;
+    }
+
+    @media (max-width: 1024px) {
+      .unified-stage-panel,
+      #cardStageControls {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+
+    .unified-panel-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-width: 0;
+      height: auto;
+    }
+
+    .section-visor-led,
+    #cardVisorLed {
+      min-width: 0;
+      height: auto !important;
+      padding: 0 !important;
+    }
+
+    .section-quick-actions,
+    #cardQuickActions {
+      min-width: 0;
+      height: auto !important;
+      border-left: 1px solid rgba(0, 242, 254, 0.18);
+      padding-left: 12px;
+    }
+
+    @media (max-width: 1024px) {
+      .section-quick-actions,
+      #cardQuickActions {
+        border-left: none;
+        border-top: 1px solid rgba(0, 242, 254, 0.18);
+        padding-left: 0;
+        padding-top: 10px;
+      }
+    }
+
+    .panel-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .panel-section-header h3 {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 0;
+    }
+
+    .panel-sub-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: #64748b;
+      letter-spacing: 0.05em;
+    }
+
+    /* Visor LED 12-Button Grid: Strictly 2 Rows (6 Buttons per Row - 60px Height + 8px Space After Row 1) */
+    .section-visor-led .face-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr) !important;
+      grid-template-rows: repeat(2, auto) !important;
+      column-gap: 5px;
+      row-gap: 8px;
+      width: 100%;
+    }
+
+    .section-visor-led .face-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 7px;
+      padding: 4px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 0;
+      width: 100%;
+      height: 64px;
+      box-sizing: border-box;
+    }
+
+    .section-visor-led .face-btn:hover {
+      background: rgba(0, 242, 254, 0.12);
+      border-color: var(--accent-cyan);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 242, 254, 0.25);
+    }
+
+    .section-visor-led .face-btn.active {
+      background: rgba(0, 242, 254, 0.20);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.35);
+    }
+
+    .section-visor-led .face-preview {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      letter-spacing: -0.3px;
+      line-height: 1.1;
+    }
+
+    .section-visor-led .face-tag {
+      font-family: var(--font-sans);
+      font-size: 0.57rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      line-height: 1.1;
+    }
+
+    /* Quick Actions: Row 1 Locomotion, Glowing Separator, Row 2 (3 Lines Stunts), Glowing Separator, Row 3 Bottom Toggles */
+    .quick-actions-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .quick-loco-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      width: 100%;
+    }
+
+    /* Glowing High-Visibility Laser Separator */
+    .quick-horizontal-separator {
+      height: 1.5px;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.15) 0%, rgba(0, 242, 254, 0.95) 25%, rgba(0, 242, 254, 0.95) 75%, rgba(0, 242, 254, 0.15) 100%);
+      box-shadow: 0 0 8px rgba(0, 242, 254, 0.70), 0 0 2px rgba(0, 242, 254, 0.95);
+      margin: 3px 0;
+      flex-shrink: 0;
+      border-radius: 1px;
+    }
+
+    .quick-stunts-three-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      width: 100%;
+    }
+
+    .quick-stunts-line-1,
+    .quick-stunts-line-2 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      width: 100%;
+    }
+
+    .quick-stunts-line-3 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+      width: 100%;
+    }
+
+    .quick-bottom-toggles-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 5px;
+      width: 100%;
+      margin-top: 0;
+    }
+
+    .quick-actions-compact .action-btn {
+      min-width: 0;
+      padding: 2px 4px;
+      height: 21.5px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      justify-content: center;
+      white-space: nowrap;
+      border-radius: 6px;
+      gap: 3px;
+      text-align: center;
+      box-sizing: border-box;
+      line-height: 1.1;
+    }
+
+    .quick-bottom-toggles-row .action-btn {
+      height: 22.5px;
+      padding: 2px 6px;
+      font-size: 0.66rem;
+    }
+
+    .quick-bottom-toggles-row #btnFollowMouse {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .quick-actions-compact .action-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Theme, Motion & Scale Card */
+    #cardMotionTweaks {
+      width: 100%;
+      background: linear-gradient(180deg, rgba(8, 16, 32, 0.95), rgba(4, 8, 18, 0.95));
+      border: 1px solid rgba(0, 242, 254, 0.30);
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 242, 254, 0.08);
+      backdrop-filter: blur(20px);
+      box-sizing: border-box;
+      height: auto !important;
+      min-height: unset !important;
+    }
+
+    #cardMotionTweaks h3 {
+      margin-bottom: 8px;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .stage-tweaks-body {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .stage-tweaks-body .theme-select-stack {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .stage-tweaks-body .tweaks-slider-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .stage-tweaks-body .slider-row {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 900px) {
+      .stage-tweaks-body {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+
+    .theme-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.69rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+
+    .theme-label-row span:last-child {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .theme-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .theme-chip-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      padding: 7px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #e2e8f0;
+    }
+
+    .theme-chip-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 242, 254, 0.2);
+    }
+
+    .theme-chip-btn.active {
+      background: rgba(0, 242, 254, 0.16);
+      border-color: var(--accent-cyan) !important;
+      color: #fff;
+      box-shadow: 0 0 14px rgba(0, 242, 254, 0.35);
+    }
+
+    .theme-chip-icon {
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .theme-chip-name {
+      font-size: 0.65rem;
+      font-weight: 700;
+      font-family: var(--font-sans);
+    }
+  
   </style>
 </head>
 
@@ -756,7 +1177,7 @@
   <main class="lab-main">
 
     <!-- Left Stage Canvas Column -->
-    <div class="stage-container">
+        <div class="stage-container">
       <div class="canvas-card">
         <div class="stage-hud">
           <div class="hud-left-stack">
@@ -771,116 +1192,267 @@
         <canvas id="stageCanvas"></canvas>
       </div>
 
-      <!-- Quick Action Strip (Balanced 2-Line Layout with Vertical Separators) -->
-      <div class="quick-actions-bar">
-        <!-- Line 1: Locomotion Stance & Combat/Movement Stunts -->
-        <div class="quick-line quick-line-top">
-          <!-- Locomotion Stance Modes (Base Movement: Exactly one always active) -->
-          <button type="button" class="action-btn loco-btn active" id="btnIdle" data-mode="idle"
-            title="Combat Idle: Hover &amp; Bob while following cursor">🧘 Idle</button>
-          <button type="button" class="action-btn loco-btn" id="btnWalk" data-mode="walk"
-            title="Walk: Articulated Stride towards cursor">🚶 Walk</button>
-          <button type="button" class="action-btn loco-btn" id="btnRun" data-mode="run"
-            title="Sprint: Supersonic Run towards cursor">🏃 Sprint</button>
+      <!-- Unified Stage Controls Panel (Visor LED Expressions 2/3rd + Quick Actions 1/3rd) -->
+      <div class="control-card unified-stage-panel" id="cardStageControls">
+        
+        <!-- Left Section: Visor LED Expressions (2/3rd Area - Strictly 2 Rows) -->
+        <div class="unified-panel-section section-visor-led" id="cardVisorLed">
+          <div class="panel-section-header">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <h3><span>🎭</span> Visor LED Expressions</h3>
+              <span class="hud-chip" style="font-size: 0.62rem; padding: 1px 6px; color: #00f2fe; border-color: rgba(0,242,254,0.35);">
+                12 FACIAL MODES
+              </span>
+            </div>
+          </div>
 
-          <!-- Visual Vertical Separator between Base Locomotion State and Action Triggers -->
-          <div class="quick-divider" title="Current Locomotion Mode | Action Stunts"></div>
-
-          <!-- Action Triggers: Combat & Movement Stunts -->
-          <button type="button" class="action-btn action-trigger-btn" id="btnJump" data-action="jump"
-            title="Aerial 360° Somersault Flip">🦘 Jump Flip</button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnSlash" data-action="slash"
-            title="Astra Plasma Blade 4-Phase Combo Slash">🗡️ 3-Hit Slash</button>
-          <button type="button" class="action-btn action-trigger-btn btn-bonk" id="btnBonk" data-action="bonk"
-            title="Comet Bonk Stun Simulation">💥 Comet Bonk!</button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnDizzy" data-action="dizzy"
-            title="Dizzy Wobble &amp; Orbiting Stars">😵 Dizzy</button>
+          <div class="face-grid">
+            <button type="button" class="face-btn active" data-face="happy" title="Happy Cyber Visor">
+              <span class="face-preview">[●]‿[●]</span>
+              <span class="face-tag">Happy</span>
+            </button>
+            <button type="button" class="face-btn" data-face="battle" title="Combat Battle Visor">
+              <span class="face-preview">◣ ‿ ◢</span>
+              <span class="face-tag">Battle</span>
+            </button>
+            <button type="button" class="face-btn" data-face="sprint" title="Supersonic Sprint Visor">
+              <span class="face-preview">&gt; ⤙ &lt;</span>
+              <span class="face-tag">Sprint</span>
+            </button>
+            <button type="button" class="face-btn" data-face="shocked" title="Electric Shock Visor">
+              <span class="face-preview">⊙ ﹏ ⊙</span>
+              <span class="face-tag">Shock</span>
+            </button>
+            <button type="button" class="face-btn" data-face="dizzy" title="Dizzy Stun Visor">
+              <span class="face-preview">@ ‿ @</span>
+              <span class="face-tag">Dizzy</span>
+            </button>
+            <button type="button" class="face-btn" data-face="thinking" title="Thinking Visor">
+              <span class="face-preview">• • •</span>
+              <span class="face-tag">Thinking</span>
+            </button>
+            <button type="button" class="face-btn" data-face="writing" title="Focused Writing Visor (Sweat Drop)">
+              <span class="face-preview">&gt; ⤙ &lt;’</span>
+              <span class="face-tag">Writing</span>
+            </button>
+            <button type="button" class="face-btn" data-face="waiting" title="AI Chatbot Mascot Visor">
+              <span class="face-preview">[✧]‿[✧]</span>
+              <span class="face-tag">Mascot</span>
+            </button>
+            <button type="button" class="face-btn" data-face="sad" title="Sad Visor">
+              <span class="face-preview">T ⤙ T</span>
+              <span class="face-tag">Sad</span>
+            </button>
+            <button type="button" class="face-btn" data-face="victory" title="Celebratory Stars Visor">
+              <span class="face-preview">★ ‿ ★</span>
+              <span class="face-tag">Stars</span>
+            </button>
+            <button type="button" class="face-btn" data-face="wink" title="Playful Wink Visor">
+              <span class="face-preview">&gt; ‿ ●</span>
+              <span class="face-tag">Wink</span>
+            </button>
+            <button type="button" class="face-btn" data-face="love" title="Cyber Pink Heart Eyes Visor">
+              <span class="face-preview">♥ ‿ ♥</span>
+              <span class="face-tag">Love</span>
+            </button>
+          </div>
         </div>
 
-        <!-- Line 2: AI Companion Modes, Victory, Vertical Separator & Laboratory System Controls -->
-        <div class="quick-line quick-line-bottom">
-          <!-- Companion & AI Action Stunts -->
-          <button type="button" class="action-btn action-trigger-btn" id="btnThinking" data-action="thinking"
-            title="AI Agent Thinking with Holographic Gear">🤔 Thinking</button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnWriting" data-action="writing"
-            title="AI Agent Writing Answer on Holographic Pad">✍️ Writing Ans</button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnWaiting" data-action="waiting"
-            title="Restful Chatbot Companion Mode">
-            <svg width="15" height="15" viewBox="0 0 36 36" fill="none"
-              style="vertical-align: -2px; display: inline-block; margin-right: 3px;">
-              <line x1="18" y1="3" x2="18" y2="9" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
-              <circle cx="18" cy="3" r="2.8" fill="#00f2fe" />
-              <rect x="4" y="9" width="28" height="23" rx="6" fill="#090f1f" stroke="#00f2fe" stroke-width="2" />
-              <circle cx="3" cy="20" r="2.2" fill="#00f2fe" />
-              <circle cx="33" cy="20" r="2.2" fill="#00f2fe" />
-              <rect x="8" y="13" width="20" height="13" rx="3.5" fill="#02060f" stroke="rgba(0, 242, 254, 0.45)"
-                stroke-width="1" />
-              <rect x="11" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe" />
-              <circle cx="14" cy="17.5" r="0.9" fill="#ffffff" />
-              <rect x="20.5" y="16" width="4.5" height="5.5" rx="1.5" fill="#00f2fe" />
-              <circle cx="23.5" cy="17.5" r="0.9" fill="#ffffff" />
-              <path d="M15 23.5 Q18 26 21 23.5" stroke="#00f2fe" stroke-width="1.4" stroke-linecap="round"
-                fill="none" />
-            </svg>Chat Mascot
-          </button>
-          <button type="button" class="action-btn action-trigger-btn" id="btnVictory" data-action="victory"
-            title="Celebratory Victory Spin &amp; Joy Sparks">🌟 Victory</button>
+        <!-- Right Section: Quick Actions & Stunts (1/3rd Area - Snug Height Match) -->
+        <div class="unified-panel-section section-quick-actions" id="cardQuickActions">
+          <div class="panel-section-header">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <h3><span>⚡</span> Quick Actions</h3>
+              <span class="hud-chip" id="hudQuickModeChip" style="font-size: 0.62rem; padding: 1px 6px; color: #00f2fe; border-color: rgba(0,242,254,0.35);">
+                STANCE &amp; STUNTS
+              </span>
+            </div>
+          </div>
 
-          <!-- Vertical Separator after Victory -->
-          <div class="quick-divider" title="Victory | System Controls"></div>
+          <div class="quick-actions-compact">
+            <!-- Row 1: Locomotion Stances (3 Buttons) -->
+            <div class="quick-loco-row">
+              <button type="button" class="action-btn loco-btn active" id="btnIdle" data-mode="idle"
+                title="Combat Idle: Hover &amp; Bob while following cursor">🧘 Idle</button>
+              <button type="button" class="action-btn loco-btn" id="btnWalk" data-mode="walk"
+                title="Walk: Articulated Stride towards cursor">🚶 Walk</button>
+              <button type="button" class="action-btn loco-btn" id="btnRun" data-mode="run"
+                title="Sprint: Supersonic Run towards cursor">🏃 Sprint</button>
+            </div>
 
-          <!-- Secondary Options: Follow Cursor, Sound -->
-          <button type="button" class="action-btn active" id="btnFollowMouse" title="Toggle real-time cursor following">
-            <span>🎯 Follow Cursor: <strong id="followState">ON</strong></span>
-          </button>
-          <button type="button" class="action-btn" id="btnLabSoundQuick" title="Toggle Lab Sound Effects (SFX)">
-            <span id="labSoundQuickIcon">🔊</span>
-            <span>Sound: <strong id="labSoundQuickState">ON</strong></span>
-          </button>
+            <!-- Horizontal Separator between Stances and Stunts -->
+            <div class="quick-horizontal-separator" title="Stances | Stunts"></div>
+
+            <!-- Row 2: Stunts Matrix in 3 Lines (Full Titles Restored) -->
+            <div class="quick-stunts-three-lines">
+              <!-- Line 1: 3 Stunt Buttons -->
+              <div class="quick-stunts-line-1">
+                <button type="button" class="action-btn action-trigger-btn" id="btnJump" data-action="jump"
+                  title="Aerial 360° Somersault Flip">🦘 Jump Flip</button>
+                <button type="button" class="action-btn action-trigger-btn" id="btnSlash" data-action="slash"
+                  title="Astra Plasma Blade 4-Phase Combo Slash">🗡️ 3-Hit Slash</button>
+                <button type="button" class="action-btn action-trigger-btn" id="btnVictory" data-action="victory"
+                  title="Celebratory Victory Spin &amp; Joy Sparks">🌟 Victory</button>
+              </div>
+
+              <!-- Line 2: 3 Stunt Buttons -->
+              <div class="quick-stunts-line-2">
+                <button type="button" class="action-btn action-trigger-btn" id="btnDizzy" data-action="dizzy"
+                  title="Dizzy Wobble &amp; Orbiting Stars">😵 Dizzy</button>
+                <button type="button" class="action-btn action-trigger-btn" id="btnThinking" data-action="thinking"
+                  title="AI Agent Thinking with Holographic Gear">🤔 Thinking</button>
+                <button type="button" class="action-btn action-trigger-btn" id="btnWriting" data-action="writing"
+                  title="AI Agent Writing Answer on Holographic Pad">✍️ Writing Ans</button>
+              </div>
+
+              <!-- Line 3: 2 Stunt Buttons -->
+              <div class="quick-stunts-line-3">
+                <button type="button" class="action-btn action-trigger-btn" id="btnWaiting" data-action="waiting"
+                  title="Restful Chatbot Companion Mode">🤖 Chat Mascot</button>
+                <button type="button" class="action-btn action-trigger-btn btn-bonk" id="btnBonk" data-action="bonk"
+                  title="Comet Bonk Stun Simulation">💥 Comet Bonk!</button>
+              </div>
+            </div>
+
+            <!-- Horizontal Separator between Row 2 (Stunts) and Row 3 (Bottom Toggles) -->
+            <div class="quick-horizontal-separator" title="Stunts | System Toggles"></div>
+
+            <!-- Row 3: Separated Bottom Row (Follow with Dynamic Text Expansion + Sound SFX) -->
+            <div class="quick-bottom-toggles-row">
+              <button type="button" class="action-btn active" id="btnFollowMouse" title="Toggle real-time cursor following">
+                <span>🎯 Follow: <strong id="followState">ON</strong></span>
+              </button>
+              <button type="button" class="action-btn" id="btnLabSoundQuick" title="Toggle Lab Sound Effects (SFX)">
+                <span id="labSoundQuickIcon">🔊</span>
+                <span>Sound: <strong id="labSoundQuickState">ON</strong></span>
+              </button>
+            </div>
+          </div>
         </div>
+
       </div>
 
-      <!-- Physics & Scale Controls -->
-      <div class="control-card" id="cardMotionTweaks">
-        <h3 style="display: flex; align-items: center; justify-content: space-between;">
-          <span><span>⚙️</span> Motion &amp; Scale Tweaks</span>
+      <!-- Theme, Motion & Scale Controls (Below Visor LED & Quick Actions Panel) -->
+      <div class="control-card stage-motion-tweaks-card" id="cardMotionTweaks">
+        <h3 style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span><span>🎨</span> Theme, Motion &amp; Scale</span>
+            <span class="hud-chip" id="hudThemeChip" style="font-size: 0.62rem; padding: 1px 6px; color: var(--accent-cyan); border-color: rgba(0,242,254,0.35);">
+              ACTIVE PALETTE &amp; ENGINE TWEAKS
+            </span>
+          </div>
           <button type="button" class="btn btn-ghost" id="btnResetTweaks"
-            title="Reset Scale, Speed &amp; Glow to Defaults"
+            title="Reset Theme, Scale, Speed &amp; Glow to Defaults"
             style="padding: 3px 9px; font-size: 0.72rem; gap: 4px; border-radius: 6px; border-color: rgba(255,255,255,0.18);">
-            <span>🔄 Reset</span>
+            <span>🔄 Reset Defaults</span>
           </button>
         </h3>
 
-        <div class="tweaks-slider-stack">
-          <div class="slider-row">
-            <div class="slider-label">
-              <span>Character Scale</span>
-              <span id="scaleVal">1.0x</span>
+        <div class="stage-tweaks-body">
+          <!-- Cyber Theme Palette Picker (Left Column) -->
+          <div class="theme-select-stack">
+            <div class="theme-label-row">
+              <span>CYBER THEME PALETTE</span>
+              <span id="currentThemeName">COMET CYAN</span>
             </div>
-            <input type="range" id="scaleSlider" min="0.25" max="1.5" step="0.05" value="1.0" />
+            <div class="theme-chips-grid">
+              <button type="button" class="theme-chip-btn active" data-lab-theme="comet" title="Comet Cyan: Deep Space Plasma" style="border-color: #00f2fe;">
+                <span class="theme-chip-icon">🌌</span>
+                <span class="theme-chip-name">Comet</span>
+              </button>
+              <button type="button" class="theme-chip-btn" data-lab-theme="solar" title="Solar Gold: Blazing Amber Radiance" style="border-color: rgba(251, 191, 36, 0.45);">
+                <span class="theme-chip-icon">☀️</span>
+                <span class="theme-chip-name">Solar</span>
+              </button>
+              <button type="button" class="theme-chip-btn" data-lab-theme="aurora" title="Aurora Emerald: Cosmic Jade Aurora" style="border-color: rgba(16, 185, 129, 0.45);">
+                <span class="theme-chip-icon">🌿</span>
+                <span class="theme-chip-name">Aurora</span>
+              </button>
+              <button type="button" class="theme-chip-btn" data-lab-theme="diamond" title="Diamond Magenta: Cyber Shinobi Neon" style="border-color: rgba(236, 72, 153, 0.45);">
+                <span class="theme-chip-icon">💎</span>
+                <span class="theme-chip-name">Diamond</span>
+              </button>
+            </div>
           </div>
 
-          <div class="slider-row">
-            <div class="slider-label">
-              <span>Animation Speed</span>
-              <span id="speedVal">1.0x (Sprint 1.0x, Rest 0.5x)</span>
+          <!-- Motion & Scale Sliders (Right Column) -->
+          <div class="tweaks-slider-stack">
+            <div class="slider-row">
+              <div class="slider-label">
+                <span>Character Scale</span>
+                <span id="scaleVal">1.0x</span>
+              </div>
+              <input type="range" id="scaleSlider" min="0.25" max="1.5" step="0.05" value="1.0" />
             </div>
-            <input type="range" id="speedSlider" min="0.2" max="2.0" step="0.1" value="1.0" />
-          </div>
 
-          <div class="slider-row">
-            <div class="slider-label">
-              <span>Plasma Blade Glow Intensity</span>
-              <span id="glowVal">2.5x</span>
+            <div class="slider-row">
+              <div class="slider-label">
+                <span>Animation Speed</span>
+                <span id="speedVal">1.0x (Sprint 1.0x, Rest 0.5x)</span>
+              </div>
+              <input type="range" id="speedSlider" min="0.2" max="2.0" step="0.1" value="1.0" />
             </div>
-            <input type="range" id="glowSlider" min="0.4" max="2.5" step="0.1" value="2.5" />
+
+            <div class="slider-row">
+              <div class="slider-label">
+                <span>Plasma Blade Glow Intensity</span>
+                <span id="glowVal">2.5x</span>
+              </div>
+              <input type="range" id="glowSlider" min="0.4" max="2.5" step="0.1" value="2.5" />
+            </div>
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- Right Control Deck -->
     <aside class="control-deck">
+
+      <!-- Charlie Wardrobe & Character Skins (Top of Right Deck) -->
+      <div class="control-card" id="cardCharlieWardrobe">
+        <h3 style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; white-space: nowrap;">
+          <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.84rem; font-weight: 700;"><span>👔</span> Charlie Wardrobe &amp; Skins</span>
+          <span class="hud-chip" style="font-size: 0.58rem; padding: 1px 5px; color: #00f2fe; border-color: rgba(0,242,254,0.35); white-space: nowrap;">
+            ⚡ LIVE SYNCED
+          </span>
+        </h3>
+        <p style="font-size: 0.70rem; color: #94a3b8; margin-bottom: 6px; line-height: 1.3;">
+          Equip custom hair, spectacles, or festive outfits. Changes render live and sync across the portfolio!
+        </p>
+        <div class="skin-grid">
+          <button type="button" class="skin-btn active" data-skin="classic" title="Classic Cyan &amp; Obsidian Cyber Android">
+            <span class="skin-icon">🤖</span>
+            <span class="skin-name">Classic Cyber</span>
+            <span class="skin-sub">Iconic Android</span>
+          </button>
+          <button type="button" class="skin-btn" data-skin="senior_architect" title="Senior Architect: Distinguished Jet-Black Hair &amp; Designer Spectacles">
+            <span class="skin-icon">👓</span>
+            <span class="skin-name">Senior Architect</span>
+            <span class="skin-sub">Hair &amp; Spectacles</span>
+          </button>
+          <button type="button" class="skin-btn" data-skin="santa" title="Santa Claus: Velvet Hat, Snow-Fur Trim &amp; Fluffy Beard">
+            <span class="skin-icon">🎅</span>
+            <span class="skin-name">Santa Claus</span>
+            <span class="skin-sub">Holiday Hat &amp; Beard</span>
+          </button>
+          <button type="button" class="skin-btn" data-skin="super_hero" title="Super Hero: Hero Mask, Dynamic Cape &amp; Star Shield">
+            <span class="skin-icon">🦸</span>
+            <span class="skin-name">Super Hero</span>
+            <span class="skin-sub">Cape &amp; Star Shield</span>
+          </button>
+          <button type="button" class="skin-btn" data-skin="cyber_ninja" title="Cyber Ninja: Shadow Cowl, Titanium Hitai-Ate, Dual Flowing Scarf &amp; Muramasa Ninjato">
+            <span class="skin-icon">🥷</span>
+            <span class="skin-name">Cyber Ninja</span>
+            <span class="skin-sub">Shadow Shinobi</span>
+          </button>
+          <button type="button" class="skin-btn" data-skin="ai_wizard" title="AI Archmage: Starry Celestial Hat &amp; Cosmic Sigil">
+            <span class="skin-icon">🧙</span>
+            <span class="skin-name">AI Archmage</span>
+            <span class="skin-sub">Cosmic Wizard</span>
+          </button>
+        </div>
+      </div>
 
       <!-- AI Assistant & Chatbot Life Cycle Simulator -->
       <div class="control-card" id="cardAiLifecycle"
@@ -938,62 +1510,7 @@
         </div>
       </div>
 
-      <!-- Expression Matrix -->
-      <div class="control-card" id="cardVisorLed">
-        <h3><span>🎭</span> Visor LED Expressions</h3>
-        <div class="face-grid">
-          <button type="button" class="face-btn active" data-face="happy" title="Happy Cyber Visor">
-            <span class="face-preview">[●]‿[●]</span>
-            <span class="face-tag">Happy</span>
-          </button>
-          <button type="button" class="face-btn" data-face="battle" title="Combat Battle Visor">
-            <span class="face-preview">◣ ‿ ◢</span>
-            <span class="face-tag">Battle</span>
-          </button>
-          <button type="button" class="face-btn" data-face="sprint" title="Supersonic Sprint Visor">
-            <span class="face-preview">&gt; ⤙ &lt;</span>
-            <span class="face-tag">Sprint</span>
-          </button>
-          <button type="button" class="face-btn" data-face="shocked" title="Electric Shock Visor">
-            <span class="face-preview">⊙ ﹏ ⊙</span>
-            <span class="face-tag">Shock</span>
-          </button>
-          <button type="button" class="face-btn" data-face="dizzy" title="Dizzy Stun Visor">
-            <span class="face-preview">@ ‿ @</span>
-            <span class="face-tag">Dizzy</span>
-          </button>
-          <button type="button" class="face-btn" data-face="thinking" title="Thinking Visor">
-            <span class="face-preview">• • •</span>
-            <span class="face-tag">Thinking</span>
-          </button>
-          <button type="button" class="face-btn" data-face="writing" title="Focused Writing Visor (Sweat Drop)">
-            <span class="face-preview">&gt; ⤙ &lt;’</span>
-            <span class="face-tag">Writing</span>
-          </button>
-          <button type="button" class="face-btn" data-face="waiting" title="AI Chatbot Mascot Visor">
-            <span class="face-preview">[✧]‿[✧]</span>
-            <span class="face-tag">Mascot</span>
-          </button>
-          <button type="button" class="face-btn" data-face="sad" title="Sad Visor">
-            <span class="face-preview">T ⤙ T</span>
-            <span class="face-tag">Sad</span>
-          </button>
-          <button type="button" class="face-btn" data-face="victory" title="Celebratory Stars Visor">
-            <span class="face-preview">★ ‿ ★</span>
-            <span class="face-tag">Stars</span>
-          </button>
-          <button type="button" class="face-btn" data-face="wink" title="Playful Wink Visor">
-            <span class="face-preview">&gt; ‿ ●</span>
-            <span class="face-tag">Wink</span>
-          </button>
-          <button type="button" class="face-btn" data-face="love" title="Cyber Pink Heart Eyes Visor">
-            <span class="face-preview">♥ ‿ ♥</span>
-            <span class="face-tag">Love</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Live Telemetry Box -->
+      <!-- Live Telemetry Box (At Bottom of Deck) -->
       <div class="control-card" id="cardTelemetry">
         <h3><span>📊</span> Live Telemetry</h3>
         <div class="telemetry-box">
@@ -1016,9 +1533,10 @@
     class LabSoundEngine {
       constructor() {
         this.ctx = null;
+        this.masterGain = null;
         this.isMuted = false;
         try {
-          this.isMuted = localStorage.getItem('charlie_lab_sfx_muted') === 'true';
+          this.isMuted = (localStorage.getItem('charlie_lab_sfx_muted') === 'true' || localStorage.getItem('sound_muted') === 'true');
         } catch (e) { }
       }
 
@@ -1027,6 +1545,9 @@
         try {
           const AudioCtx = window.AudioContext || window.webkitAudioContext;
           this.ctx = new AudioCtx();
+          this.masterGain = this.ctx.createGain();
+          this.masterGain.gain.setValueAtTime(this.isMuted ? 0.0001 : 1.0, this.ctx.currentTime);
+          this.masterGain.connect(this.ctx.destination);
         } catch (e) {
           console.warn('Web Audio not supported', e);
         }
@@ -1041,8 +1562,14 @@
 
       setMuted(muted) {
         this.isMuted = muted;
+        if (this.masterGain && this.ctx) {
+          const target = muted ? 0.0001 : 1.0;
+          this.masterGain.gain.setValueAtTime(target, this.ctx.currentTime);
+        }
         try {
           localStorage.setItem('charlie_lab_sfx_muted', muted ? 'true' : 'false');
+          localStorage.setItem('portfolio_sound_muted', muted ? 'true' : 'false');
+          localStorage.setItem('sound_muted', muted ? 'true' : 'false');
         } catch (e) { }
       }
 
@@ -1051,10 +1578,14 @@
         return this.isMuted;
       }
 
+      getDestination() {
+        return this.masterGain || (this.ctx ? this.ctx.destination : null);
+      }
+
       playLaserSlice() {
         if (this.isMuted) return;
         this.ensureContext();
-        if (!this.ctx) return;
+        if (!this.ctx || !this.getDestination()) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
@@ -1065,7 +1596,7 @@
           gain.gain.setValueAtTime(0.20, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.getDestination());
           osc.start(now);
           osc.stop(now + 0.10);
         } catch (e) { }
@@ -1074,7 +1605,7 @@
       playLaserDeflect() {
         if (this.isMuted) return;
         this.ensureContext();
-        if (!this.ctx) return;
+        if (!this.ctx || !this.getDestination()) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
@@ -1085,7 +1616,7 @@
           gain.gain.setValueAtTime(0.22, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.getDestination());
           osc.start(now);
           osc.stop(now + 0.12);
         } catch (e) { }
@@ -1094,7 +1625,7 @@
       playComboDing() {
         if (this.isMuted) return;
         this.ensureContext();
-        if (!this.ctx) return;
+        if (!this.ctx || !this.getDestination()) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
@@ -1105,7 +1636,7 @@
           gain.gain.setValueAtTime(0.25, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.getDestination());
           osc.start(now);
           osc.stop(now + 0.24);
         } catch (e) { }
@@ -1114,7 +1645,7 @@
       playJump() {
         if (this.isMuted) return;
         this.ensureContext();
-        if (!this.ctx) return;
+        if (!this.ctx || !this.getDestination()) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
@@ -1125,7 +1656,7 @@
           gain.gain.setValueAtTime(0.22, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.getDestination());
           osc.start(now);
           osc.stop(now + 0.24);
         } catch (e) { }
@@ -1134,7 +1665,7 @@
       playBonk() {
         if (this.isMuted) return;
         this.ensureContext();
-        if (!this.ctx) return;
+        if (!this.ctx || !this.getDestination()) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
@@ -1145,7 +1676,7 @@
           gain.gain.setValueAtTime(0.32, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.getDestination());
           osc.start(now);
           osc.stop(now + 0.20);
         } catch (e) { }
@@ -1154,7 +1685,7 @@
       playDizzy() {
         if (this.isMuted) return;
         this.ensureContext();
-        if (!this.ctx) return;
+        if (!this.ctx || !this.getDestination()) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
@@ -1168,7 +1699,7 @@
           gain.gain.setValueAtTime(0.24, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.58);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.getDestination());
           osc.start(now);
           osc.stop(now + 0.60);
         } catch (e) { }
@@ -1177,7 +1708,7 @@
       playFanfare() {
         if (this.isMuted) return;
         this.ensureContext();
-        if (!this.ctx) return;
+        if (!this.ctx || !this.getDestination()) return;
         try {
           const now = this.ctx.currentTime;
           const chord = [523.25, 659.25, 783.99, 1046.50];
@@ -1191,7 +1722,7 @@
             gain.gain.linearRampToValueAtTime(0.26, start + 0.02);
             gain.gain.exponentialRampToValueAtTime(0.001, start + (idx === 3 ? 0.45 : 0.15));
             osc.connect(gain);
-            gain.connect(this.ctx.destination);
+            gain.connect(this.getDestination());
             osc.start(start);
             osc.stop(start + 0.50);
           });
@@ -1433,6 +1964,63 @@
     });
 
     /* =========================================================================
+       Cyber Charlie Lab Themes Specification
+       ========================================================================= */
+    const LAB_THEMES = {
+      comet: {
+        id: 'comet',
+        name: 'COMET CYAN',
+        primary: '#00f2fe',
+        secondary: '#38bdf8',
+        glow: 'rgba(0, 242, 254, 0.85)',
+        glowSoft: 'rgba(0, 242, 254, 0.20)',
+        cardBg: 'radial-gradient(circle at center, #070d1a 0%, #03060c 100%)',
+        cardBorder: 'rgba(0, 242, 254, 0.35)',
+        cardShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 242, 254, 0.15)'
+      },
+      solar: {
+        id: 'solar',
+        name: 'SOLAR GOLD',
+        primary: '#fbbf24',
+        secondary: '#f59e0b',
+        glow: 'rgba(251, 191, 36, 0.85)',
+        glowSoft: 'rgba(251, 191, 36, 0.20)',
+        cardBg: 'radial-gradient(circle at center, #1c1304 0%, #090601 100%)',
+        cardBorder: 'rgba(251, 191, 36, 0.40)',
+        cardShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(251, 191, 36, 0.18)'
+      },
+      aurora: {
+        id: 'aurora',
+        name: 'AURORA EMERALD',
+        primary: '#10b981',
+        secondary: '#34d399',
+        glow: 'rgba(16, 185, 129, 0.85)',
+        glowSoft: 'rgba(16, 185, 129, 0.20)',
+        cardBg: 'radial-gradient(circle at center, #041b12 0%, #010a06 100%)',
+        cardBorder: 'rgba(16, 185, 129, 0.40)',
+        cardShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(16, 185, 129, 0.18)'
+      },
+      diamond: {
+        id: 'diamond',
+        name: 'DIAMOND MAGENTA',
+        primary: '#ec4899',
+        secondary: '#f472b6',
+        glow: 'rgba(236, 72, 153, 0.85)',
+        glowSoft: 'rgba(236, 72, 153, 0.20)',
+        cardBg: 'radial-gradient(circle at center, #1f0417 0%, #0a0107 100%)',
+        cardBorder: 'rgba(236, 72, 153, 0.40)',
+        cardShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(236, 72, 153, 0.18)'
+      }
+    };
+    let currentLabTheme = 'comet';
+    try {
+      const savedLabTheme = localStorage.getItem('charlie_lab_theme');
+      if (savedLabTheme && LAB_THEMES[savedLabTheme]) {
+        currentLabTheme = savedLabTheme;
+      }
+    } catch (e) { }
+
+    /* =========================================================================
        Cyber Charlie Character Class (High-Precision Articulated Engine)
        ========================================================================= */
     class CyberCharlie {
@@ -1456,6 +2044,12 @@
         this.bonkTimer = 0;
         this.dizzyTimer = 0;
         this.dizzyAngle = 0;
+
+        // Theme Palette State (Comet Cyan, Solar Gold, Aurora Emerald, Diamond Magenta)
+        this.theme = currentLabTheme || 'comet';
+
+        // Skin / Character Outfit State (Classic, Senior Architect, Santa, VFX Director, Cyber Ninja, AI Archmage)
+        this.skin = (typeof localStorage !== 'undefined' ? localStorage.getItem('charlie_avatar_skin') : null) || 'classic';
 
         // Chatbot Lifecycle & Supersonic Dash Mechanics
         this.deployTimer = 0;
@@ -1501,6 +2095,26 @@
 
         // Blade Ribbon Trails
         this.bladeTrails = [];
+      }
+
+      getThemeColor() {
+        const t = LAB_THEMES[this.theme] || LAB_THEMES.comet;
+        return t.primary;
+      }
+
+      getThemeSecondary() {
+        const t = LAB_THEMES[this.theme] || LAB_THEMES.comet;
+        return t.secondary;
+      }
+
+      getThemeGlow() {
+        const t = LAB_THEMES[this.theme] || LAB_THEMES.comet;
+        return t.glow;
+      }
+
+      getThemeSoft() {
+        const t = LAB_THEMES[this.theme] || LAB_THEMES.comet;
+        return t.glowSoft;
       }
 
       setMode(mode) {
@@ -1666,17 +2280,42 @@
         if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
+      setSkin(skinId) {
+        this.skin = skinId || 'classic';
+        try {
+          localStorage.setItem('charlie_avatar_skin', this.skin);
+        } catch (e) { }
+        window.dispatchEvent(new CustomEvent('charlie_skin_change', { detail: { skin: this.skin } }));
+        addSparks(this.x, this.y - 10 * charlieScale, '#00f2fe', 16);
+        addSparks(this.x, this.y - 22 * charlieScale, '#f59e0b', 14);
+        if (typeof syncSkinUI === 'function') {
+          syncSkinUI(this.skin);
+        }
+      }
+
       triggerDizzy() {
-        this.state = 'dizzy';
-        this.face = 'dizzy';
-        this.dizzyTimer = 180;
-        this.isShielded = true;
-        this.shieldTimer = 180;
-        hudMode.textContent = 'DIZZY STUN 😵';
-        telState.textContent = 'DIZZY';
-        telBonk.textContent = 'STUNNED!';
-        telBonk.style.color = '#f59e0b';
-        addSparks(this.x, this.y - 20 * charlieScale, '#f59e0b', 12);
+        if (this.state === 'dizzy') {
+          // Toggle off: Recover immediately!
+          this.state = this.locomotionMode || 'idle';
+          if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
+          this.dizzyTimer = 0;
+          if (!this.manualShieldActive) this.isShielded = false;
+          telBonk.textContent = 'NORMAL';
+          telBonk.style.color = '#00f2fe';
+          hudMode.textContent = 'RECOVERED! ✨';
+          telState.textContent = (this.locomotionMode || 'idle').toUpperCase();
+        } else {
+          this.state = 'dizzy';
+          this.face = 'dizzy';
+          this.dizzyTimer = 180;
+          this.isShielded = true;
+          this.shieldTimer = 180;
+          hudMode.textContent = 'DIZZY STUN 😵';
+          telState.textContent = 'DIZZY';
+          telBonk.textContent = 'STUNNED!';
+          telBonk.style.color = '#f59e0b';
+          addSparks(this.x, this.y - 20 * charlieScale, '#f59e0b', 12);
+        }
         if (typeof syncLocoUI === 'function') syncLocoUI();
       }
 
@@ -1853,7 +2492,7 @@
       drawLightningArcs(c) {
         if (this.state === 'cyber_dash' && this.deployTimer < 1.0) {
           c.save();
-          const color = '#00f2fe';
+          const color = this.getThemeColor();
           c.strokeStyle = color;
           c.shadowColor = color;
           c.shadowBlur = 12 * glowMult;
@@ -2126,6 +2765,10 @@
         // --- DIZZY SEQUENCE ---
         if (this.state === 'dizzy') {
           this.dizzyTimer -= 1.0 * animSpeed;
+          this.dizzyAngle += 0.09 * animSpeed;
+          if (Math.floor(this.dizzyTimer) % 18 === 0) {
+            addSparks(this.x + Math.sin(this.dizzyAngle) * 16 * charlieScale, this.y - 28 * charlieScale, '#f59e0b', 2);
+          }
           if (this.dizzyTimer <= 0) {
             this.state = this.locomotionMode || 'idle';
             if (this.faceTimer <= 0) this.face = this.state === 'run' ? 'sprint' : 'happy';
@@ -2191,7 +2834,7 @@
           this.y = this.deployStartY + (this.deployTargetY - this.deployStartY) * ease;
 
           // Speed ghost afterimage trail
-          const ghostColor = '#00f2fe';
+          const ghostColor = this.getThemeColor();
           this.afterimages.push({
             x: this.x,
             y: this.y,
@@ -2660,27 +3303,29 @@
         c.scale(this.facing * charlieScale * squashX, charlieScale * squashY);
         c.rotate(leanAngle + somersaultRotation);
 
+        const currentSkin = this.skin || 'classic';
+
         // 1. Draw Two-Bone Articulated Legs & Boots
         this.drawLeg(c, -7, 10 + bobY, hipL, kneeL, thrusterL);
         this.drawLeg(c, 7, 10 + bobY, hipR, kneeR, thrusterR);
 
-        // 2. Draw Torso with Arc Reactor Core
+        // 2. Draw Torso
         c.save();
         c.translate(0, bobY);
 
         // Chassis Box (Obsidian Dark Cyber Armor)
         c.fillStyle = '#070d1a';
-        c.strokeStyle = '#00f2fe';
+        c.strokeStyle = this.getThemeColor();
         c.lineWidth = 2.0;
         c.beginPath();
         c.roundRect(-12, -5, 24, 18, 5);
         c.fill();
         c.stroke();
 
-        // Glowing Core Reactor
-        c.shadowColor = '#00f2fe';
+        // Glowing Core Reactor (Front-Facing Signature)
+        c.shadowColor = this.getThemeGlow();
         c.shadowBlur = 12 * glowMult;
-        c.fillStyle = '#00f2fe';
+        c.fillStyle = this.getThemeColor();
         c.beginPath();
         c.arc(0, 4, 3.8, 0, Math.PI * 2);
         c.fill();
@@ -2690,38 +3335,47 @@
         c.beginPath();
         c.arc(0, 4, 1.8, 0, Math.PI * 2);
         c.fill();
+
+        // 🌟 Draw Skin Torso Accessories (Cape, Santa Trim, etc.)
+        this.drawSkinTorsoAccessories(c);
+
         c.restore();
 
         // 3. Draw Head & Visor
         c.save();
         c.translate(0, -19 + bobY);
 
-        // Spring Antenna
-        let antennaBend = (this.state === 'run' ? -0.4 : 0) + (this.state === 'sad' ? -1.2 : 0);
-        c.save();
-        c.translate(0, -15);
-        c.rotate(antennaBend);
-        c.strokeStyle = '#38bdf8';
-        c.lineWidth = 1.8;
-        c.beginPath();
-        c.moveTo(0, 0);
-        c.lineTo(0, -9);
-        c.stroke();
+        // Standard Robot & Executive Head
+        const hideAntenna = (currentSkin === 'senior_architect' || currentSkin === 'santa' || currentSkin === 'ai_wizard' || currentSkin === 'cyber_ninja');
 
-        // Antenna Tip Beacon
-        c.shadowColor = '#00f2fe';
-        c.shadowBlur = 10 * glowMult;
-        c.fillStyle = this.state === 'bonk' ? '#f59e0b' : '#00f2fe';
-        c.beginPath();
-        c.arc(0, -11, 3.0, 0, Math.PI * 2);
-        c.fill();
-        c.restore();
+        if (!hideAntenna) {
+          // Spring Antenna
+          let antennaBend = (this.state === 'run' ? -0.4 : 0) + (this.state === 'sad' ? -1.2 : 0);
+          c.save();
+          c.translate(0, -15);
+          c.rotate(antennaBend);
+          c.strokeStyle = this.getThemeSecondary();
+          c.lineWidth = 1.8;
+          c.beginPath();
+          c.moveTo(0, 0);
+          c.lineTo(0, -9);
+          c.stroke();
+
+          // Antenna Tip Beacon
+          c.shadowColor = this.getThemeGlow();
+          c.shadowBlur = 10 * glowMult;
+          c.fillStyle = this.state === 'bonk' ? '#f59e0b' : this.getThemeColor();
+          c.beginPath();
+          c.arc(0, -11, 3.0, 0, Math.PI * 2);
+          c.fill();
+          c.restore();
+        }
 
         // Helmet Armor Box
         c.fillStyle = '#090f1f';
-        c.strokeStyle = '#00f2fe';
+        c.strokeStyle = this.getThemeColor();
         c.lineWidth = 2.2;
-        c.shadowColor = 'rgba(0, 242, 254, 0.4)';
+        c.shadowColor = this.getThemeSoft();
         c.shadowBlur = 8;
         c.beginPath();
         c.roundRect(-16, -16, 32, 23, 7);
@@ -2729,7 +3383,7 @@
         c.stroke();
 
         // Ear Audio/Comms Nodes
-        c.fillStyle = '#00f2fe';
+        c.fillStyle = this.getThemeColor();
         c.beginPath();
         c.arc(-16.5, -4, 2.6, 0, Math.PI * 2);
         c.arc(16.5, -4, 2.6, 0, Math.PI * 2);
@@ -2738,14 +3392,14 @@
         // Dark Glass Visor
         c.shadowBlur = 0;
         c.fillStyle = '#02060f';
-        c.strokeStyle = 'rgba(0, 242, 254, 0.35)';
+        c.strokeStyle = this.getThemeSoft();
         c.lineWidth = 1.1;
         c.beginPath();
         c.roundRect(-12, -12, 24, 15, 4);
         c.fill();
         c.stroke();
 
-        // LED Visor Facial Expressions
+        // LED Visor Facial Expressions (Eyes, Smile, Expressions)
         this.drawFace(c);
 
         // Cartoon Band-aid if dizzy/bonk
@@ -2760,6 +3414,9 @@
           c.strokeRect(-3, -2, 6, 4);
           c.restore();
         }
+
+        // 🌟 Draw Skin Head Accessories (Rajeev Hair & Spectacles, Santa Hat, Ninja Scarf)
+        this.drawSkinHeadAccessories(c);
 
         c.restore(); // end head
 
@@ -3121,65 +3778,8 @@
         c.translate(6.5, 0);
 
         if (handMode === 'knife' || handMode === true) {
-          // --- WEAPON HAND (Gripping Astra Plasma Dagger) ---
-          c.rotate(customKnifeAngle);
-
-          // Knife Tang / Handle (sits firmly INSIDE the gauntlet grip)
-          c.fillStyle = '#0a101f';
-          c.strokeStyle = '#475569';
-          c.lineWidth = 1.0;
-          c.fillRect(-3, -2, 6, 4);
-
-          // Pommel Energy Node (rear cap)
-          c.fillStyle = '#00f2fe';
-          c.beginPath();
-          c.arc(-3, 0, 1.3, 0, Math.PI * 2);
-          c.fill();
-
-          // Cyber Gauntlet Glove (wrapped securely around hilt)
-          c.fillStyle = '#091124';
-          c.strokeStyle = '#00f2fe';
-          c.lineWidth = 1.3;
-          c.beginPath();
-          c.roundRect(-2, -3, 5, 6, 2);
-          c.fill();
-          c.stroke();
-
-          // Knuckle Energy Light
-          c.fillStyle = '#00f2fe';
-          c.beginPath();
-          c.arc(0.5, 0, 1.1, 0, Math.PI * 2);
-          c.fill();
-
-          // Forward Crossguard
-          c.strokeStyle = '#00f2fe';
-          c.lineWidth = 1.4;
-          c.beginPath();
-          c.moveTo(3, -4);
-          c.lineTo(3, 4);
-          c.stroke();
-
-          // Glowing Plasma Blade (Energy Dagger)
-          c.shadowColor = '#00f2fe';
-          c.shadowBlur = 14 * glowMult;
-          c.fillStyle = '#00f2fe';
-          c.beginPath();
-          c.moveTo(3, -2.8);
-          c.lineTo(18, -1);
-          c.lineTo(24, 0); // sharp lethal laser tip
-          c.lineTo(18, 2);
-          c.lineTo(3, 2.8);
-          c.closePath();
-          c.fill();
-
-          // White-Hot Energy Core
-          c.fillStyle = '#ffffff';
-          c.beginPath();
-          c.moveTo(4, -1);
-          c.lineTo(20, 0);
-          c.lineTo(4, 1);
-          c.closePath();
-          c.fill();
+          // --- CHARACTER WEAPON PROP (Customized for each skin) ---
+          this.drawSkinWeaponProp(c, this.skin || 'classic', customKnifeAngle, glowMult);
 
         } else if (handMode === 'stylus') {
           // --- WRITING STYLUS HAND (Holding sleek cyber laser pen - NO KNIFE!) ---
@@ -3232,41 +3832,8 @@
           c.fill();
 
         } else if (handMode === 'shield') {
-          // --- OFF-HAND (Tactical Cyber Gauntlet with Holo-Shield Emitter) ---
-          // Gauntlet Glove
-          c.fillStyle = '#091124';
-          c.strokeStyle = '#00f2fe';
-          c.lineWidth = 1.3;
-          c.beginPath();
-          c.roundRect(-2, -3, 5, 6, 2);
-          c.fill();
-          c.stroke();
-
-          // Knuckle Core Light
-          c.fillStyle = '#00f2fe';
-          c.beginPath();
-          c.arc(0.5, 0, 1.2, 0, Math.PI * 2);
-          c.fill();
-
-          // Holographic Mini Energy Shield / Buckler Emitter
-          c.save();
-          c.shadowColor = '#00f2fe';
-          c.shadowBlur = 10 * glowMult;
-          c.strokeStyle = 'rgba(0, 242, 254, 0.85)';
-          c.lineWidth = 1.5;
-          c.fillStyle = 'rgba(0, 242, 254, 0.2)';
-          c.beginPath();
-          // Stylish cyber energy buckler disc
-          c.arc(3.5, 0, 5, -Math.PI * 0.48, Math.PI * 0.48);
-          c.fill();
-          c.stroke();
-
-          // Shield core pulse node
-          c.fillStyle = '#ffffff';
-          c.beginPath();
-          c.arc(2.5, 0, 1.2, 0, Math.PI * 2);
-          c.fill();
-          c.restore();
+          // --- CHARACTER OFF-HAND PROP (Customized for each skin) ---
+          this.drawSkinShieldProp(c, this.skin || 'classic', glowMult);
 
         } else {
           // --- BARE CYBER GAUNTLET (Clean, unarmed robot hand - NO KNIFE & NO SHIELD!) ---
@@ -3293,10 +3860,12 @@
 
       drawFace(c) {
         c.save();
-        c.shadowColor = '#00f2fe';
+        const tc = this.getThemeColor();
+        const tg = this.getThemeGlow();
+        c.shadowColor = tg;
         c.shadowBlur = 8 * glowMult;
-        c.fillStyle = '#00f2fe';
-        c.strokeStyle = '#00f2fe';
+        c.fillStyle = tc;
+        c.strokeStyle = tc;
         c.lineWidth = 1.8;
 
         if (this.face === 'happy') {
@@ -3311,8 +3880,8 @@
           } else {
             // Open glowing cyber eyes with lively pupils & white specular shine
             const glanceX = Math.sin(this.animTimer * 0.8) * 0.8;
-            c.fillStyle = '#00f2fe';
-            c.shadowColor = '#00f2fe';
+            c.fillStyle = tc;
+            c.shadowColor = tg;
             c.shadowBlur = 8 * glowMult;
             c.beginPath();
             c.roundRect(-7 + glanceX, -7, 4.5, 6, 2);
@@ -3328,8 +3897,8 @@
             c.fill();
           }
           // Cheerful cyber smile
-          c.strokeStyle = '#00f2fe';
-          c.shadowColor = '#00f2fe';
+          c.strokeStyle = tc;
+          c.shadowColor = tg;
           c.beginPath();
           c.arc(0, -1, 3.2, 0.2, Math.PI - 0.2);
           c.stroke();
@@ -3363,14 +3932,33 @@
           c.arc(0, 0, 2.2, 0, Math.PI * 2);
           c.stroke();
         } else if (this.face === 'dizzy') {
-          // Swirling spiral eyes @  @
+          // Animated swirling spiral eyes @  @ with rotation and wobbly mouth
           c.strokeStyle = '#f59e0b';
           c.shadowColor = '#f59e0b';
+          c.shadowBlur = 8 * glowMult;
+          c.lineWidth = 1.4;
+          // Left eye swirl
+          c.save();
+          c.translate(-4.5, -5);
+          c.rotate(this.dizzyAngle * 1.6);
           c.beginPath();
-          c.arc(-4.5, -5, 2.8, 0, Math.PI * 1.8);
+          c.arc(0, 0, 3.0, 0, Math.PI * 1.8);
           c.stroke();
+          c.restore();
+          // Right eye swirl
+          c.save();
+          c.translate(4.5, -5);
+          c.rotate(-this.dizzyAngle * 1.6);
           c.beginPath();
-          c.arc(4.5, -5, 2.8, 0, Math.PI * 1.8);
+          c.arc(0, 0, 3.0, 0, Math.PI * 1.8);
+          c.stroke();
+          c.restore();
+          // Wobbly dizzy mouth
+          c.strokeStyle = '#f59e0b';
+          c.beginPath();
+          const wobble = Math.sin(this.dizzyAngle * 2.5) * 1.2;
+          c.moveTo(-3, 0.5 + wobble);
+          c.quadraticCurveTo(0, -1, 3, 0.5 - wobble);
           c.stroke();
         } else if (this.face === 'sad') {
           // T  T
@@ -3424,8 +4012,8 @@
           c.stroke();
         } else if (this.face === 'thinking') {
           // Animated wave dots: • • •
-          c.fillStyle = '#00f2fe';
-          c.shadowColor = '#00f2fe';
+          c.fillStyle = tc;
+          c.shadowColor = tg;
           c.shadowBlur = 8 * glowMult;
           for (let d = 0; d < 3; d++) {
             const dotX = -6 + d * 6;
@@ -3454,8 +4042,8 @@
           const pulse = 0.88 + Math.sin(this.animTimer * 3.2) * 0.12;
           const outerR = 4.2 * pulse;
 
-          c.fillStyle = '#00f2fe';
-          c.shadowColor = '#00f2fe';
+          c.fillStyle = tc;
+          c.shadowColor = tg;
           c.shadowBlur = 10 * glowMult;
 
           // Left radiant sparkle star ✦
@@ -3488,14 +4076,14 @@
           c.fill();
 
           // Cheerful friendly mascot smile
-          c.strokeStyle = '#00f2fe';
-          c.shadowColor = '#00f2fe';
+          c.strokeStyle = tc;
+          c.shadowColor = tg;
           c.beginPath();
           c.arc(0, 0, 2.8, 0.2, Math.PI - 0.2);
           c.stroke();
 
           // Cute cyber cheek sensor nodes
-          c.fillStyle = 'rgba(0, 242, 254, 0.7)';
+          c.fillStyle = this.getThemeSoft();
           c.beginPath();
           c.arc(-8.5, -0.5, 0.9, 0, Math.PI * 2);
           c.arc(8.5, -0.5, 0.9, 0, Math.PI * 2);
@@ -3503,11 +4091,1241 @@
         }
 
         c.restore();
+      }
 
+          drawSkinWeaponProp(c, skin, customKnifeAngle, glowMult) {
+      c.rotate(customKnifeAngle);
+
+      // Cyber Gauntlet Grip
+      c.fillStyle = '#0a101f';
+      c.strokeStyle = '#475569';
+      c.lineWidth = 1.0;
+      c.fillRect(-3, -2, 6, 4);
+
+      c.fillStyle = '#091124';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 1.3;
+      c.beginPath();
+      c.roundRect(-2, -3, 5, 6, 2);
+      c.fill();
+      c.stroke();
+
+      c.fillStyle = '#00f2fe';
+      c.beginPath();
+      c.arc(0.5, 0, 1.1, 0, Math.PI * 2);
+      c.fill();
+
+      if (skin === 'senior_architect') {
+        // 🏛️ Senior Architect Hand Prop: Executive Holographic Laser Drafting Stylus
+        c.save();
+        // Stylus Shaft (Titanium & Obsidian Body)
+        c.fillStyle = '#0f172a';
+        c.strokeStyle = '#f59e0b';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.roundRect(2, -2, 14, 4, 1.5);
+        c.fill();
+        c.stroke();
+
+        // Polished Gold Grip Bands
+        c.fillStyle = '#f59e0b';
+        c.fillRect(5, -2, 2.2, 4);
+        c.fillRect(9, -2, 1.8, 4);
+
+        // Holographic Precision Laser Tip
+        c.fillStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 8 * glowMult;
+        c.beginPath();
+        c.moveTo(16, -1.5);
+        c.lineTo(20.5, 0);
+        c.lineTo(16, 1.5);
+        c.closePath();
+        c.fill();
+
+        // Laser Aim Guide Beam
+        c.strokeStyle = 'rgba(0, 242, 254, 0.75)';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.moveTo(20.5, 0);
+        c.lineTo(27, 0);
+        c.stroke();
+
+        c.restore();
+      } else if (skin === 'santa') {
+        // 🎅 Santa Claus Prop: Peppermint Candy Cane Staff with Golden Holiday Star
+        c.lineWidth = 2.8;
+        c.lineCap = 'round';
+        c.strokeStyle = '#ef4444';
+        c.beginPath();
+        c.moveTo(2, 0);
+        c.lineTo(16, 0);
+        c.quadraticCurveTo(22, 0, 22, -6);
+        c.quadraticCurveTo(22, -11, 16, -11);
+        c.quadraticCurveTo(12, -11, 12, -7);
+        c.stroke();
+
+        // White candy stripes overlay
+        c.strokeStyle = '#ffffff';
+        c.lineWidth = 1.2;
+        c.setLineDash([2.5, 3]);
+        c.beginPath();
+        c.moveTo(2, 0);
+        c.lineTo(16, 0);
+        c.quadraticCurveTo(22, 0, 22, -6);
+        c.quadraticCurveTo(22, -11, 16, -11);
+        c.stroke();
+        c.setLineDash([]);
+
+        // Glowing Holiday Golden Star at cane tip
+        c.fillStyle = '#ffd700';
+        c.shadowColor = '#ffd700';
+        c.shadowBlur = 10 * glowMult;
+        c.font = '8px sans-serif';
+        c.fillText('⭐', 12, -9);
+
+      } else if (skin === 'super_hero') {
+        // 🦸 Super Hero Prop: Cosmic Photon Energy Saber / Plasma Hammer
+        c.fillStyle = '#1e3a8a';
+        c.fillRect(2, -2, 4, 4);
+        c.fillStyle = '#fbbf24';
+        c.fillRect(5, -3.5, 2, 7);
+
+        // Blazing Cosmic Energy Blade / Photon Ray
+        c.shadowColor = '#38bdf8';
+        c.shadowBlur = 16 * glowMult;
+        c.fillStyle = '#38bdf8';
+        c.beginPath();
+        c.moveTo(7, -3.5);
+        c.lineTo(21, -1.8);
+        c.lineTo(27, 0);
+        c.lineTo(21, 1.8);
+        c.lineTo(7, 3.5);
+        c.closePath();
+        c.fill();
+
+        // White-hot solar core
+        c.fillStyle = '#ffffff';
+        c.shadowColor = '#ffffff';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.moveTo(7, -1.5);
+        c.lineTo(23, 0);
+        c.lineTo(7, 1.5);
+        c.closePath();
+        c.fill();
+
+        // Electric lightning plasma crackles
+        c.strokeStyle = '#fbbf24';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(10, -4); c.lineTo(13, -1); c.lineTo(16, -4.5);
+        c.moveTo(12, 4); c.lineTo(15, 1); c.lineTo(18, 4.5);
+        c.stroke();
+
+      } else if (skin === 'cyber_ninja') {
+        // 🥷 Cyber Shinobi Prop: High-Frequency Muramasa Ninjato (Plasma Cyber Katana)
+        // 1. Two-Handed Cyber Tsuka (Hilt) & Tsukamaki Wrap
+        c.fillStyle = '#090d16';
+        c.fillRect(-7, -2.5, 11, 5);
+
+        // Gold Pommel Cap (Kashira) & Lanyard Ring
+        c.fillStyle = '#64748b';
+        c.fillRect(-8.5, -3, 2, 6);
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        c.arc(-9.5, 0, 1.2, 0, Math.PI * 2);
+        c.fill();
+
+        // Authentic Diamond-Pattern Tsukamaki Grip Braid
+        c.fillStyle = '#ec4899';
+        for (let x = -6; x <= 2; x += 2.5) {
+          c.beginPath();
+          c.moveTo(x, -2.2);
+          c.lineTo(x + 1.2, 0);
+          c.lineTo(x, 2.2);
+          c.lineTo(x - 1.2, 0);
+          c.closePath();
+          c.fill();
+        }
+
+        // 2. Slotted Titanium Cyber Tsuba (Sword Guard)
+        c.fillStyle = '#334155';
+        c.strokeStyle = '#64748b';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.roundRect(3.5, -4.5, 2.2, 9.0, 0.8);
+        c.fill();
+        c.stroke();
+
+        // Polished Gold Habaki (Blade Collar)
+        c.fillStyle = '#fbbf24';
+        c.fillRect(5.7, -2.5, 1.6, 5);
+
+        // 3. High-Frequency Razor Chisel-Tip Ninjato Blade
+        // Titanium Blade Spine
+        c.fillStyle = '#1e293b';
+        c.beginPath();
+        c.moveTo(7.3, -2.2);
+        c.lineTo(24, -2.2);
+        c.lineTo(29.5, -0.6); // Aggressive chisel tanto point
+        c.lineTo(26, 0.8);
+        c.lineTo(7.3, 0.8);
+        c.closePath();
+        c.fill();
+
+        // Searing High-Frequency Plasma Cutting Edge (Neon Magenta Hamon)
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 18 * glowMult;
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        c.moveTo(7.3, -0.5);
+        c.lineTo(26, -0.5);
+        c.lineTo(30, 0.5); // Tip apex
+        c.lineTo(25, 2.2);
+        c.lineTo(7.3, 2.2);
+        c.closePath();
+        c.fill();
+
+        // White-Hot Plasma Laser Edge
+        c.fillStyle = '#ffffff';
+        c.shadowColor = '#ffffff';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.moveTo(7.3, 0.2);
+        c.lineTo(25.5, 0.2);
+        c.lineTo(29.2, 0.6);
+        c.lineTo(24.5, 1.4);
+        c.lineTo(7.3, 1.4);
+        c.closePath();
+        c.fill();
+
+        // Plasma Hamon Wave Teeth & Fuller Groove Sparks
+        c.strokeStyle = '#fbcfe8';
+        c.lineWidth = 0.6;
+        c.beginPath();
+        c.moveTo(8, -0.8);
+        c.lineTo(12, -1.5);
+        c.lineTo(15, -0.8);
+        c.lineTo(19, -1.5);
+        c.lineTo(23, -0.8);
+        c.stroke();
+
+      } else if (skin === 'ai_wizard') {
+        // 🧙‍♂️ AI Archmage Prop: Celestial Archmage Staff with Floating Crystal Orb
+        c.strokeStyle = '#7c3aed';
+        c.lineWidth = 2.2;
+        c.lineCap = 'round';
+        c.beginPath();
+        c.moveTo(-10, 3);
+        c.lineTo(17, -1);
+        c.stroke();
+
+        c.strokeStyle = '#fbbf24';
+        c.lineWidth = 1.3;
+        c.beginPath();
+        c.moveTo(15, -4); c.quadraticCurveTo(18, -5, 21, -2);
+        c.moveTo(15, 2); c.quadraticCurveTo(18, 3, 21, 0);
+        c.stroke();
+
+        c.shadowColor = '#c084fc';
+        c.shadowBlur = 14 * glowMult;
+        c.fillStyle = '#a855f7';
+        c.beginPath();
+        c.arc(22, -1, 4.2, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(21, -2, 1.8, 0, Math.PI * 2);
+        c.fill();
+
+        const sparkPhase = this.animTimer * 4;
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(22 + Math.cos(sparkPhase) * 6, -1 + Math.sin(sparkPhase) * 4, 1.0, 0, Math.PI * 2);
+        c.arc(22 - Math.cos(sparkPhase) * 6, -1 - Math.sin(sparkPhase) * 4, 1.0, 0, Math.PI * 2);
+        c.fill();
+
+      } else {
+        // 🤖 Classic Cyber Bot Prop: Astra Plasma Dagger
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.4;
+        c.beginPath();
+        c.moveTo(3, -4); c.lineTo(3, 4);
+        c.stroke();
+
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 14 * glowMult;
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.moveTo(3, -2.8);
+        c.lineTo(18, -1);
+        c.lineTo(24, 0);
+        c.lineTo(18, 2);
+        c.lineTo(3, 2.8);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.moveTo(4, -1);
+        c.lineTo(20, 0);
+        c.lineTo(4, 1);
+        c.closePath();
+        c.fill();
       }
     }
 
-    const charlie = new CyberCharlie();
+    drawSkinShieldProp(c, skin, glowMult) {
+      // Gauntlet Glove
+      c.fillStyle = '#091124';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 1.3;
+      c.beginPath();
+      c.roundRect(-2, -3, 5, 6, 2);
+      c.fill();
+      c.stroke();
+
+      // Knuckle Core Light
+      c.fillStyle = '#00f2fe';
+      c.beginPath();
+      c.arc(0.5, 0, 1.2, 0, Math.PI * 2);
+      c.fill();
+
+      if (skin === 'senior_architect') {
+        // 🏛️ Senior Architect Off-Hand: Holographic Glass Architectural Tablet (Datapad)
+        c.save();
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 10 * glowMult;
+
+        c.fillStyle = 'rgba(8, 20, 38, 0.85)';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.roundRect(1, -7, 11, 14, 2);
+        c.fill();
+        c.stroke();
+
+        c.strokeStyle = 'rgba(0, 242, 254, 0.45)';
+        c.lineWidth = 0.6;
+        c.beginPath();
+        c.moveTo(3, -4); c.lineTo(10, -4);
+        c.moveTo(3, -1); c.lineTo(10, -1);
+        c.moveTo(3, 2); c.lineTo(10, 2);
+        c.moveTo(3, 5); c.lineTo(10, 5);
+        c.stroke();
+
+        c.strokeStyle = '#f59e0b';
+        c.lineWidth = 0.9;
+        c.beginPath();
+        c.moveTo(5, 4); c.lineTo(5, -2); c.lineTo(8, -4); c.lineTo(8, 2);
+        c.stroke();
+        c.restore();
+
+      } else if (skin === 'santa') {
+        // 🎅 Santa Claus Off-Hand: Festive Holiday Gift Box 🎁
+        c.save();
+        c.shadowColor = 'rgba(239, 68, 68, 0.6)';
+        c.shadowBlur = 8;
+
+        c.fillStyle = '#dc2626';
+        c.strokeStyle = '#991b1b';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.roundRect(1, -5.5, 11, 11, 1.8);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#ffd700';
+        c.fillRect(5.5, -5.5, 2, 11);
+        c.fillRect(1, -1, 11, 2);
+
+        c.strokeStyle = '#ffd700';
+        c.lineWidth = 1.3;
+        c.beginPath();
+        c.arc(5, -6.5, 1.8, 0, Math.PI * 2);
+        c.arc(8, -6.5, 1.8, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+
+      } else if (skin === 'super_hero') {
+        // 🦸 Super Hero Off-Hand: Legendary Concentric Star Shield 🛡️
+        c.save();
+        c.shadowColor = '#3b82f6';
+        c.shadowBlur = 12 * glowMult;
+
+        // Outer Crimson Red Ring
+        c.fillStyle = '#ef4444';
+        c.strokeStyle = '#b91c1c';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.arc(6, 0, 7.5, 0, Math.PI * 2);
+        c.fill();
+        c.stroke();
+
+        // Second Silver/White Ring
+        c.fillStyle = '#f8fafc';
+        c.beginPath();
+        c.arc(6, 0, 5.6, 0, Math.PI * 2);
+        c.fill();
+
+        // Third Crimson Red Ring
+        c.fillStyle = '#ef4444';
+        c.beginPath();
+        c.arc(6, 0, 4.0, 0, Math.PI * 2);
+        c.fill();
+
+        // Inner Deep Azure Blue Center Circle
+        c.fillStyle = '#1d4ed8';
+        c.beginPath();
+        c.arc(6, 0, 2.7, 0, Math.PI * 2);
+        c.fill();
+
+        // Radiant White 5-Point Star in Center
+        c.fillStyle = '#ffffff';
+        c.font = '5px sans-serif';
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText('★', 6, 0.3);
+        c.restore();
+
+      } else if (skin === 'cyber_ninja') {
+        // 🥷 Cyber Shinobi Off-Hand: Kinetic Fuma Shuriken / Plasma Nanotech Aegis
+        c.save();
+
+        // Kinetic Rotation with Animation Timer
+        const rot = this.animTimer * 6.5;
+        c.translate(5, 0);
+        c.rotate(rot);
+
+        // Searing Kinetic Plasma Afterimage Trail / Blur Ring
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 14 * glowMult;
+        c.fillStyle = 'rgba(236, 72, 153, 0.22)';
+        c.beginPath();
+        c.arc(0, 0, 8.5, 0, Math.PI * 2);
+        c.fill();
+
+        // 4 Razor-Sharp Curved Scythe Blades
+        for (let i = 0; i < 4; i++) {
+          c.save();
+          c.rotate((Math.PI / 2) * i);
+
+          // Blade Core (Carbon-Titanium)
+          c.fillStyle = '#0f172a';
+          c.beginPath();
+          c.moveTo(0, -2.5);
+          c.quadraticCurveTo(3, -5.5, 8.5, -8.5); // Razor tip
+          c.lineTo(5.5, -4.0);
+          c.lineTo(2.5, -0.8);
+          c.closePath();
+          c.fill();
+
+          // Plasma Cutting Edge (Neon Magenta)
+          c.fillStyle = '#ec4899';
+          c.beginPath();
+          c.moveTo(1.0, -1.5);
+          c.quadraticCurveTo(4, -4.5, 9.2, -8.8);
+          c.lineTo(6.5, -4.5);
+          c.lineTo(2.0, -0.5);
+          c.closePath();
+          c.fill();
+
+          // White-Hot Razor Edge
+          c.fillStyle = '#ffffff';
+          c.beginPath();
+          c.moveTo(3.0, -3.0);
+          c.lineTo(8.8, -8.4);
+          c.lineTo(6.8, -4.8);
+          c.closePath();
+          c.fill();
+
+          c.restore();
+        }
+
+        // Metallic Center Grip Hub & High-Tech Gyro Ring
+        c.shadowBlur = 6 * glowMult;
+        c.fillStyle = '#1e293b';
+        c.beginPath();
+        c.arc(0, 0, 3.2, 0, Math.PI * 2);
+        c.fill();
+
+        // Glowing Cyan Inner Gyro Void Ring
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(0, 0, 2.0, 0, Math.PI * 2);
+        c.fill();
+
+        // Center Void Hole (Traditional Shuriken Grip)
+        c.fillStyle = '#070d1a';
+        c.beginPath();
+        c.arc(0, 0, 1.1, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+
+      } else if (skin === 'ai_wizard') {
+        // 🧙‍♂️ AI Archmage Off-Hand: Floating Ancient Spell Tome (Grimoire)
+        c.save();
+        c.shadowColor = '#a855f7';
+        c.shadowBlur = 10 * glowMult;
+
+        c.fillStyle = '#2e1065';
+        c.strokeStyle = '#c084fc';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.roundRect(1, -6, 10, 12, 1.5);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#fef3c7';
+        c.fillRect(3, -5, 7.5, 10);
+
+        c.strokeStyle = '#9333ea';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.moveTo(4, -3); c.lineTo(9, -3);
+        c.moveTo(4, 0); c.lineTo(8, 0);
+        c.moveTo(4, 3); c.lineTo(9, 3);
+        c.stroke();
+
+        c.fillStyle = '#fbbf24';
+        c.fillRect(6, 4.5, 1.8, 3.5);
+        c.restore();
+
+      } else {
+        // 🤖 Classic Cyber Bot Off-Hand: Holographic Mini Energy Buckler
+        c.save();
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 10 * glowMult;
+        c.strokeStyle = 'rgba(0, 242, 254, 0.85)';
+        c.lineWidth = 1.5;
+        c.fillStyle = 'rgba(0, 242, 254, 0.2)';
+        c.beginPath();
+        c.arc(3.5, 0, 5, -Math.PI * 0.48, Math.PI * 0.48);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(2.5, 0, 1.2, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+
+    drawSkinHeadAccessories(c) {
+      const skin = this.skin || 'classic';
+
+      if (skin === 'senior_architect') {
+        // 🏛️ Distinguished Senior Architect Hair (Natural Rich Jet-Black Executive Pompadour)
+        c.save();
+
+        // 1. Deep Jet-Black Shadow Base & Sculpted Hair Silhouette (Organic Multi-Crest Profile)
+        c.fillStyle = '#060709'; // Rich deep jet-black shadow root
+        c.beginPath();
+        // Left temple fade above visor
+        c.moveTo(-16, -11);
+        c.lineTo(-15.5, -15);
+        c.quadraticCurveTo(-16, -19, -13, -20);
+        c.lineTo(-8.8, -21);
+        // Sharp side-part indentation groove
+        c.lineTo(-8.2, -23.5);
+        // Wave Crest 1: High sweeping pompadour peak
+        c.quadraticCurveTo(-5.5, -29, -1.5, -28.5);
+        // Wave Dip 1
+        c.quadraticCurveTo(2.5, -28, 4, -25.5);
+        // Wave Crest 2: Rolling executive wave crest
+        c.quadraticCurveTo(7.5, -28, 11, -26.5);
+        // Wave Crest 3: Flowing side tier
+        c.quadraticCurveTo(15, -24, 16.5, -19.5);
+        c.lineTo(16, -11);
+        c.lineTo(13.5, -13);
+        // Natural curved brow hairline above the visor (Y <= -13, 100% CLEAR OF EYES!)
+        c.quadraticCurveTo(10, -14.5, 4, -14);
+        c.quadraticCurveTo(-1, -13.5, -5, -14.2);
+        c.quadraticCurveTo(-9, -14.5, -13.5, -13);
+        c.closePath();
+        c.fill();
+
+        // 2. Left Side Tapered Fade Body (Deep obsidian black, neat & combed)
+        c.fillStyle = '#0e0f14';
+        c.beginPath();
+        c.moveTo(-16, -11);
+        c.lineTo(-15.5, -15);
+        c.quadraticCurveTo(-16, -19, -13, -20);
+        c.lineTo(-8.8, -21);
+        c.lineTo(-8.5, -14);
+        c.lineTo(-13.5, -13);
+        c.closePath();
+        c.fill();
+
+        // 3. Volumetric Swept Pompadour Body (Luxurious deep black body)
+        c.fillStyle = '#15161d';
+        c.beginPath();
+        c.moveTo(-8.2, -21.8);
+        c.quadraticCurveTo(-5.5, -29, -1.5, -28.5);
+        c.quadraticCurveTo(2.5, -28, 4, -25.5);
+        c.quadraticCurveTo(7.5, -28, 11, -26.5);
+        c.quadraticCurveTo(15, -24, 16, -18);
+        c.quadraticCurveTo(10, -21, 3, -21);
+        c.quadraticCurveTo(-3, -20.5, -8.2, -21.8);
+        c.closePath();
+        c.fill();
+
+        // 4. Layered Wave Lock 1 (Soft dark tone contour on quiff - #20222a)
+        c.fillStyle = '#20222a';
+        c.beginPath();
+        c.moveTo(-7.8, -22);
+        c.quadraticCurveTo(-4.5, -28, -1.5, -27.5);
+        c.quadraticCurveTo(1.5, -27, 3.5, -24.5);
+        c.quadraticCurveTo(-1.5, -23.5, -7.8, -22);
+        c.closePath();
+        c.fill();
+
+        // 5. Layered Wave Lock 2 (Right Sweeping Wave - #20222a)
+        c.beginPath();
+        c.moveTo(3.5, -24.5);
+        c.quadraticCurveTo(7, -27, 10.5, -25.5);
+        c.quadraticCurveTo(14.5, -23, 15.5, -17.5);
+        c.quadraticCurveTo(10.5, -19.5, 4, -19.5);
+        c.quadraticCurveTo(3, -22, 3.5, -24.5);
+        c.closePath();
+        c.fill();
+
+        // 6. Distinct Side-Part Line Groove (Crisp pitch black #000000)
+        c.strokeStyle = '#000000';
+        c.lineWidth = 1.3;
+        c.lineCap = 'round';
+        c.beginPath();
+        c.moveTo(-8.8, -19.5);
+        c.lineTo(-8.2, -22.5);
+        c.stroke();
+
+        // 7. Fine Directional Comb Grooming Strokes (Subtle natural dark hair sheen #30333f)
+        c.strokeStyle = '#30333f';
+        c.lineWidth = 0.9;
+        c.lineCap = 'round';
+        c.beginPath();
+        // Left fade comb lines
+        c.moveTo(-14, -10); c.lineTo(-10.5, -17);
+        c.moveTo(-12.5, -8); c.lineTo(-9.2, -15);
+        // Lifted quiff comb lines
+        c.moveTo(-6.5, -20); c.quadraticCurveTo(-4, -26.5, -1.5, -26.5);
+        c.moveTo(-5, -18.5); c.quadraticCurveTo(-2.5, -25.5, 1, -25);
+        c.moveTo(-3, -16); c.quadraticCurveTo(0, -23.5, 4, -23);
+        // Right sweep wave lines
+        c.moveTo(1, -22); c.quadraticCurveTo(5, -25, 9, -24);
+        c.moveTo(3, -19); c.quadraticCurveTo(7.5, -23, 12, -21);
+        c.moveTo(5, -16); c.quadraticCurveTo(9.5, -20.5, 14, -18);
+        c.moveTo(7, -13.5); c.quadraticCurveTo(11, -17.5, 15, -15);
+        // Forehead fringe wisp
+        c.moveTo(-1, -13); c.quadraticCurveTo(2, -12, 4.5, -11);
+        c.stroke();
+
+        // 8. Subtle Natural Dark Hair Sheen / Luster Strands (#454958, gentle specular sheen on black hair)
+        c.strokeStyle = '#454958';
+        c.lineWidth = 0.75;
+        c.beginPath();
+        c.moveTo(-5, -22); c.quadraticCurveTo(-3, -27, -1, -27);
+        c.moveTo(2, -23.5); c.quadraticCurveTo(6, -26, 9.5, -25);
+        c.moveTo(5, -19.5); c.quadraticCurveTo(8.5, -22.5, 12, -20.5);
+        c.stroke();
+
+        // 9. Sideburn Grooming Tapers
+        c.fillStyle = '#060709';
+        c.beginPath();
+        c.moveTo(-15, -4); c.lineTo(-13.5, -4); c.lineTo(-14, -1.5); c.lineTo(-15, -2.5);
+        c.closePath();
+        c.fill();
+        c.beginPath();
+        c.moveTo(15, -4); c.lineTo(13.5, -4); c.lineTo(14, -1.5); c.lineTo(15, -2.5);
+        c.closePath();
+        c.fill();
+
+        c.restore();
+
+        // 7. Designer Senior Architect Spectacles / Glasses
+        c.save();
+        const frameColor = '#f59e0b'; // Refined amber-gold metallic frames
+        c.strokeStyle = frameColor;
+        c.lineWidth = 1.5;
+        c.shadowColor = 'rgba(245, 158, 11, 0.45)';
+        c.shadowBlur = 4;
+
+        // Left Eye Rim (Rounded Rect with soft modern corners)
+        c.beginPath();
+        c.roundRect(-9.5, -8.5, 8.5, 7.5, 2.5);
+        c.stroke();
+
+        // Right Eye Rim
+        c.beginPath();
+        c.roundRect(1.0, -8.5, 8.5, 7.5, 2.5);
+        c.stroke();
+
+        // Arched metallic bridge over the nose
+        c.beginPath();
+        c.moveTo(-1.0, -5.8);
+        c.quadraticCurveTo(0, -7.6, 1.0, -5.8);
+        c.stroke();
+
+        // Temple arms extending back towards ear nodes
+        c.beginPath();
+        c.moveTo(-9.5, -5.8);
+        c.lineTo(-15.5, -4.5);
+        c.moveTo(9.5, -5.8);
+        c.lineTo(15.5, -4.5);
+        c.stroke();
+
+        // Anti-Reflective Cyan Lens Sheen
+        c.fillStyle = 'rgba(0, 242, 254, 0.16)';
+        c.beginPath();
+        c.roundRect(-9.0, -8.0, 7.5, 6.5, 2.0);
+        c.roundRect(1.5, -8.0, 7.5, 6.5, 2.0);
+        c.fill();
+
+        // White diagonal glint / light gleams on glass
+        c.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+        c.lineWidth = 0.9;
+        c.beginPath();
+        c.moveTo(-7.5, -7.0); c.lineTo(-4.5, -3.5);
+        c.moveTo(3.0, -7.0); c.lineTo(6.0, -3.5);
+        c.stroke();
+        c.restore();
+
+      } else if (skin === 'santa') {
+        // Santa Claus: Festive Red Velvet Cap, Fur Trim, Pom-pom & Beard
+        c.save();
+        c.fillStyle = '#dc2626';
+        c.beginPath();
+        c.moveTo(-16, -15);
+        c.quadraticCurveTo(-14, -28, -2, -31);
+        c.quadraticCurveTo(10, -31, 16, -21);
+        c.quadraticCurveTo(18, -17, 15, -15);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#991b1b';
+        c.beginPath();
+        c.moveTo(8, -27);
+        c.quadraticCurveTo(14, -26, 17, -20);
+        c.quadraticCurveTo(13, -20, 8, -23);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.shadowColor = 'rgba(255, 255, 255, 0.5)';
+        c.shadowBlur = 4;
+        for (let x = -15; x <= 15; x += 5) {
+          c.beginPath();
+          c.arc(x, -15, 3.2, 0, Math.PI * 2);
+          c.fill();
+        }
+
+        c.beginPath();
+        c.arc(17.5, -20, 4.2, 0, Math.PI * 2);
+        c.fill();
+        c.fillStyle = '#f1f5f9';
+        c.beginPath();
+        c.arc(18, -19.5, 2.5, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.shadowColor = 'rgba(255, 255, 255, 0.35)';
+        c.shadowBlur = 3;
+        const beardPuffs = [
+          { x: -11, y: 1.5, r: 3.2 },
+          { x: -7,  y: 4.0, r: 3.6 },
+          { x: -2.5, y: 5.5, r: 4.0 },
+          { x: 2.5,  y: 5.5, r: 4.0 },
+          { x: 7,   y: 4.0, r: 3.6 },
+          { x: 11,  y: 1.5, r: 3.2 },
+          { x: 0,   y: 7.2, r: 3.8 }
+        ];
+        beardPuffs.forEach(p => {
+          c.beginPath();
+          c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          c.fill();
+        });
+        c.restore();
+
+      } else if (skin === 'super_hero') {
+        // 🦸 Super Hero: Sleek Hero Cowl / Mask & Golden Forehead Star Emblem
+        c.save();
+        c.fillStyle = '#1e3a8a';
+        c.strokeStyle = '#3b82f6';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.moveTo(-16, -11);
+        c.lineTo(-13, -16);
+        c.lineTo(0, -18);
+        c.lineTo(13, -16);
+        c.lineTo(16, -11);
+        c.lineTo(13, -7);
+        c.lineTo(7, -9);
+        c.lineTo(0, -6);
+        c.lineTo(-7, -9);
+        c.lineTo(-13, -7);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        // Golden Winged Hero Forehead Star Crest
+        c.fillStyle = '#fbbf24';
+        c.shadowColor = '#fbbf24';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.moveTo(0, -19);
+        c.lineTo(2.5, -14.5);
+        c.lineTo(7, -14.5);
+        c.lineTo(3.5, -11.5);
+        c.lineTo(5, -6.5);
+        c.lineTo(0, -9.5);
+        c.lineTo(-5, -6.5);
+        c.lineTo(-3.5, -11.5);
+        c.lineTo(-7, -14.5);
+        c.lineTo(-2.5, -14.5);
+        c.closePath();
+        c.fill();
+        c.restore();
+
+      } else if (skin === 'cyber_ninja') {
+        // 🥷 Cyber Ninja / Cyber Shinobi: Stealth Cowl, Forged Hitai-Ate, Menpo Mask & Dual Flowing Scarf
+        c.save();
+
+        // 1. Sleek Matte-Obsidian Stealth Cowl / Ninja Hood framing the crown & temples
+        c.fillStyle = '#090d16';
+        c.beginPath();
+        c.moveTo(-16, -11);
+        c.quadraticCurveTo(-16, -17, -10, -17.5);
+        c.lineTo(10, -17.5);
+        c.quadraticCurveTo(16, -17, 16, -11);
+        c.lineTo(15, -4);
+        c.quadraticCurveTo(14, 2, 10, 4);
+        c.lineTo(-10, 4);
+        c.quadraticCurveTo(-14, 2, -15, -4);
+        c.closePath();
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 1.0;
+        c.stroke();
+
+        // 2. Lower Shinobi Face Mask (Menpo / Cyber Respirator)
+        c.fillStyle = '#070b14';
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(-11.5, -2);
+        c.lineTo(-9, 4.5);
+        c.lineTo(0, 6.2);
+        c.lineTo(9, 4.5);
+        c.lineTo(11.5, -2);
+        c.lineTo(7, -0.5);
+        c.lineTo(0, 1.2);
+        c.lineTo(-7, -0.5);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        // Dual Cybernetic Breather Vents / Neon Filtration Slits
+        c.fillStyle = '#ec4899';
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 6 * glowMult;
+        // Left vent slit
+        c.fillRect(-6.5, 1.5, 3.2, 0.9);
+        c.fillRect(-5.5, 3.0, 2.5, 0.8);
+        // Right vent slit
+        c.fillRect(3.3, 1.5, 3.2, 0.9);
+        c.fillRect(3.0, 3.0, 2.5, 0.8);
+        c.shadowBlur = 0;
+
+        // 3. Neon Crimson Silk Headband Wrap
+        c.fillStyle = '#be185d';
+        c.fillRect(-16, -15.5, 32, 5.0);
+        c.fillStyle = '#ec4899';
+        c.fillRect(-16, -14.5, 32, 3.0);
+
+        // 4. Forged Titanium Hitai-Ate (Shinobi Forehead Protector)
+        c.fillStyle = '#1e293b';
+        c.strokeStyle = '#64748b';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.roundRect(-10.5, -16.0, 21, 6.0, 2.0);
+        c.fill();
+        c.stroke();
+
+        // Metallic Plate Top Bevel Highlight
+        c.fillStyle = '#475569';
+        c.fillRect(-9.5, -15.5, 19, 1.2);
+
+        // Metallic Corner Hex Rivets (Left and Right)
+        c.fillStyle = '#cbd5e1';
+        c.beginPath();
+        c.arc(-8.2, -13.0, 0.85, 0, Math.PI * 2);
+        c.arc(8.2, -13.0, 0.85, 0, Math.PI * 2);
+        c.fill();
+
+        // Engraved Glowing Clan Crest (Cyber Shuriken Star + Center Ruby Core)
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 8 * glowMult;
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        // 4-point cyber shuriken emblem
+        c.moveTo(0, -15.2);
+        c.lineTo(1.2, -13.5);
+        c.lineTo(3.2, -13.0);
+        c.lineTo(1.2, -12.5);
+        c.lineTo(0, -10.8);
+        c.lineTo(-1.2, -12.5);
+        c.lineTo(-3.2, -13.0);
+        c.lineTo(-1.2, -13.5);
+        c.closePath();
+        c.fill();
+
+        // Radiant Pure-White Core Beacon
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(0, -13.0, 0.8, 0, Math.PI * 2);
+        c.fill();
+        c.shadowBlur = 0;
+
+        // 5. Headband Knot & Dual Dynamic Flowing Silk Scarf Tails (Dynamic Wind Physics)
+        // Scarf Knot Block at temple/back
+        c.fillStyle = '#9d174d';
+        c.beginPath();
+        c.roundRect(-17.5, -14.8, 3.5, 4.5, 1.2);
+        c.fill();
+
+        // Tail 1: Primary Long Cascading Ribbon (Gentle, silky, stabilized flow — NO rapid shaking)
+        const wave1 = Math.sin(this.animTimer * 1.2) * 1.5;
+        const wave1Mid = wave1 * 0.35; // Kept anchored near the temple knot so the head is stable
+        c.fillStyle = '#ec4899';
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 6 * glowMult;
+        c.beginPath();
+        c.moveTo(-16.5, -14.0);
+        c.quadraticCurveTo(-24, -13.5 + wave1Mid, -33, -9.0 + wave1);
+        c.lineTo(-30, -5.5 + wave1);
+        c.quadraticCurveTo(-22, -10.0 + wave1Mid, -16.5, -11.0);
+        c.closePath();
+        c.fill();
+
+        // Tail 1 Underside Shadow Fold
+        c.fillStyle = '#9d174d';
+        c.shadowBlur = 0;
+        c.beginPath();
+        c.moveTo(-16.5, -13.5);
+        c.quadraticCurveTo(-23, -12.5 + wave1Mid, -31, -8.0 + wave1);
+        c.lineTo(-30, -6.0 + wave1);
+        c.quadraticCurveTo(-22, -10.0 + wave1Mid, -16.5, -11.5);
+        c.closePath();
+        c.fill();
+
+        // Tail 1 Searing White-Hot Energy Spine
+        c.strokeStyle = '#ffffff';
+        c.lineWidth = 0.7;
+        c.beginPath();
+        c.moveTo(-16.5, -13.8);
+        c.quadraticCurveTo(-24, -13.2 + wave1Mid, -32.5, -8.8 + wave1);
+        c.stroke();
+
+        // Tail 2: Secondary Fluttering Ribbon (Gentle harmonic phase)
+        const wave2 = Math.sin(this.animTimer * 1.0 + 0.9) * 1.2;
+        const wave2Mid = wave2 * 0.35;
+        c.fillStyle = '#f43f5e';
+        c.shadowColor = '#f43f5e';
+        c.shadowBlur = 5 * glowMult;
+        c.beginPath();
+        c.moveTo(-16.5, -12.5);
+        c.quadraticCurveTo(-23, -10.0 + wave2Mid, -29, -4.5 + wave2);
+        c.lineTo(-27, -1.8 + wave2);
+        c.quadraticCurveTo(-21, -7.5 + wave2Mid, -16.5, -10.2);
+        c.closePath();
+        c.fill();
+
+        // Tail 2 Highlights
+        c.strokeStyle = '#fbcfe8';
+        c.lineWidth = 0.6;
+        c.beginPath();
+        c.moveTo(-16.5, -12.2);
+        c.quadraticCurveTo(-23, -9.8 + wave2Mid, -28.5, -4.2 + wave2);
+        c.stroke();
+
+        c.restore();
+
+      } else if (skin === 'ai_wizard') {
+        c.save();
+        c.fillStyle = '#1e1b4b';
+        c.beginPath();
+        c.ellipse(0, -15, 19, 4, 0, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = '#a855f7';
+        c.lineWidth = 1.2;
+        c.stroke();
+
+        c.fillStyle = '#312e81';
+        c.beginPath();
+        c.moveTo(-13, -15);
+        c.quadraticCurveTo(-8, -26, 3, -34);
+        c.quadraticCurveTo(10, -26, 13, -15);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#fbbf24';
+        c.shadowColor = '#fbbf24';
+        c.shadowBlur = 6;
+        c.font = '8px sans-serif';
+        c.fillText('🌙', -3, -21);
+
+        const ringAngle = this.animTimer * 2.5;
+        c.strokeStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 8;
+        c.lineWidth = 1.1;
+        c.beginPath();
+        c.ellipse(3, -33, 7, 2.5, ringAngle * 0.4, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+      }
+    }
+
+drawSkinTorsoAccessories(c) {
+      const skin = this.skin || 'classic';
+
+      if (skin === 'senior_architect') {
+        c.save();
+        // Executive Gold Architect Lapel Crest (Chassis & Core Reactor 100% visible & front-facing!)
+        c.fillStyle = '#f59e0b';
+        c.shadowColor = 'rgba(245, 158, 11, 0.6)';
+        c.shadowBlur = 6;
+        c.beginPath();
+        c.arc(8, -1.5, 1.8, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      } else if (skin === 'santa') {
+        c.save();
+        c.fillStyle = 'rgba(220, 38, 38, 0.85)';
+        c.beginPath();
+        c.roundRect(-10, -4, 20, 16, 3);
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.fillRect(-2, -4, 4, 16);
+
+        c.fillStyle = '#0f172a';
+        c.fillRect(-11, 5, 22, 3.5);
+
+        c.strokeStyle = '#ffd700';
+        c.lineWidth = 1.3;
+        c.strokeRect(-3.5, 4.2, 7, 5);
+        c.fillStyle = '#ffd700';
+        c.fillRect(-0.8, 5.2, 1.6, 3);
+        c.restore();
+
+      } else if (skin === 'super_hero') {
+        // 🦸 Super Hero: Flowing Crimson Superhero Cape & Golden Chest Shield Crest
+        c.save();
+        const capeFlutter = Math.sin(this.animTimer * 4.5) * 3.5;
+        const capeFlutter2 = Math.cos(this.animTimer * 4.0) * 2.5;
+
+        c.fillStyle = '#dc2626';
+        c.shadowColor = 'rgba(220, 38, 38, 0.55)';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.moveTo(-10, -3);
+        c.quadraticCurveTo(-14, 8 + capeFlutter, -18, 17 + capeFlutter);
+        c.lineTo(-4, 15 + capeFlutter2);
+        c.lineTo(4, 15 + capeFlutter);
+        c.quadraticCurveTo(10, 8 + capeFlutter2, 10, -3);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#991b1b';
+        c.beginPath();
+        c.moveTo(-8, 2);
+        c.lineTo(-12, 16 + capeFlutter);
+        c.lineTo(-6, 15 + capeFlutter2);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#ffd700';
+        c.shadowColor = '#ffd700';
+        c.shadowBlur = 4;
+        c.beginPath();
+        c.arc(-8, -3, 1.8, 0, Math.PI * 2);
+        c.arc(8, -3, 1.8, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = '#fbbf24';
+        c.strokeStyle = '#d97706';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(0, 0);
+        c.lineTo(4, 3);
+        c.lineTo(3, 7);
+        c.lineTo(0, 9);
+        c.lineTo(-3, 7);
+        c.lineTo(-4, 3);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#ffffff';
+        c.font = '5px sans-serif';
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText('★', 0, 4.5);
+
+        c.fillStyle = '#0f172a';
+        c.fillRect(-11, 7.5, 22, 2.8);
+        c.fillStyle = '#ffd700';
+        c.fillRect(-2, 7, 4, 3.8);
+        c.restore();
+
+      } else if (skin === 'cyber_ninja') {
+        // 🥷 Cyber Ninja / Cyber Shinobi: Stealth Shozoku Cuirass, Tactical Bandolier & Flowing Obi Sash
+        c.save();
+
+        // 1. Stealth Cuirass Overlay (Matte Obsidian Stealth Armor Vest)
+        c.fillStyle = '#090d16';
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.roundRect(-12.5, -5, 25, 18.5, 4.5);
+        c.fill();
+        c.stroke();
+
+        // Angular Pectoral Armor Plates
+        c.fillStyle = '#0f172a';
+        c.beginPath();
+        // Left chest plate
+        c.moveTo(-11, -3.5);
+        c.lineTo(-2, -3.5);
+        c.lineTo(-1, 3.5);
+        c.lineTo(-10, 4.5);
+        c.closePath();
+        c.fill();
+        // Right chest plate
+        c.beginPath();
+        c.moveTo(11, -3.5);
+        c.lineTo(2, -3.5);
+        c.lineTo(1, 3.5);
+        c.lineTo(10, 4.5);
+        c.closePath();
+        c.fill();
+
+        // 2. Crossed Tactical Harness (Shinobi Bandolier Webbing)
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 2.4;
+        c.beginPath();
+        // Diagonal strap 1 (top-left to bottom-right)
+        c.moveTo(-11, -4.5);
+        c.lineTo(10, 7.5);
+        // Diagonal strap 2 (top-right to bottom-left)
+        c.moveTo(11, -4.5);
+        c.lineTo(-10, 7.5);
+        c.stroke();
+
+        c.strokeStyle = '#334155';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(-11, -4.5); c.lineTo(10, 7.5);
+        c.moveTo(11, -4.5); c.lineTo(-10, 7.5);
+        c.stroke();
+
+        // Tactical Harness Gunmetal Buckles
+        c.fillStyle = '#64748b';
+        c.fillRect(-4.5, -0.5, 2.5, 1.8);
+        c.fillRect(2.0, -0.5, 2.5, 1.8);
+
+        // Throwing Kunai Holster on Left Strap
+        c.fillStyle = '#0f172a';
+        c.fillRect(-9.5, -3.0, 3.0, 5.0);
+        // Silver Kunai Handles
+        c.strokeStyle = '#cbd5e1';
+        c.lineWidth = 1.1;
+        c.beginPath();
+        c.moveTo(-8.8, -4.8); c.lineTo(-8.8, -3.0);
+        c.moveTo(-7.2, -4.8); c.lineTo(-7.2, -3.0);
+        c.stroke();
+        // Kunai ring pommels
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        c.arc(-8.8, -5.2, 0.75, 0, Math.PI * 2);
+        c.arc(-7.2, -5.2, 0.75, 0, Math.PI * 2);
+        c.fill();
+
+        // 3. Glowing Cyber Shinobi Core Seal (Dragon/Lotus Shuriken Reactor)
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 14 * glowMult;
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        // Diamond ninja core
+        c.moveTo(0, -1.0);
+        c.lineTo(3.2, 2.5);
+        c.lineTo(0, 6.0);
+        c.lineTo(-3.2, 2.5);
+        c.closePath();
+        c.fill();
+
+        // Radiant White Energy Heart
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(0, 2.5, 1.4, 0, Math.PI * 2);
+        c.fill();
+
+        // Neon magenta energy conduit lines
+        c.strokeStyle = '#ec4899';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.moveTo(-3.2, 2.5); c.lineTo(-8, 3.5);
+        c.moveTo(3.2, 2.5); c.lineTo(8, 3.5);
+        c.stroke();
+        c.shadowBlur = 0;
+
+        // 4. Traditional Shinobi Obi (Waist Sash) with Knot & Flowing Tails
+        // Wide Silk Sash Belt
+        c.fillStyle = '#9d174d';
+        c.fillRect(-12, 6.5, 24, 4.0);
+        c.fillStyle = '#ec4899';
+        c.fillRect(-12, 7.5, 24, 2.0);
+
+        // Ornate Center Obi Knot
+        c.fillStyle = '#be185d';
+        c.beginPath();
+        c.roundRect(-2.8, 6.0, 5.6, 5.0, 1.5);
+        c.fill();
+        c.strokeStyle = '#ec4899';
+        c.lineWidth = 0.8;
+        c.stroke();
+
+        // Flowing Sash Tails dangling downward over hip (Dynamic sway)
+        const sashSway = Math.sin(this.animTimer * 1.2) * 0.8;
+        c.fillStyle = '#ec4899';
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 6 * glowMult;
+        c.beginPath();
+        // Left sash tail
+        c.moveTo(-1.8, 10.5);
+        c.quadraticCurveTo(-3.5 + sashSway, 14, -4.5 + sashSway, 17.5);
+        c.lineTo(-2.2 + sashSway, 17.5);
+        c.quadraticCurveTo(-1.2 + sashSway, 14, -0.2, 10.5);
+        c.closePath();
+        // Right sash tail
+        c.moveTo(0.2, 10.5);
+        c.quadraticCurveTo(1.5 + sashSway, 14, 2.8 + sashSway, 18.5);
+        c.lineTo(4.8 + sashSway, 18.5);
+        c.quadraticCurveTo(3.2 + sashSway, 14, 1.8, 10.5);
+        c.closePath();
+        c.fill();
+        c.shadowBlur = 0;
+
+        c.restore();
+      }
+    }
+  }
+  window.CyberCharlie = CyberCharlie;
+
+  const charlie = new CyberCharlie();
 
     // Holographic Chat Delivery Bubble on Stage Canvas
     let labChatDelivery = {
@@ -3577,11 +5395,12 @@
       // 4. Draw Blade Light Ribbon Trail
       if (charlie.bladeTrails.length > 1) {
         ctx.save();
+        const trailColor = charlie ? charlie.getThemeColor() : '#00f2fe';
         for (let i = 1; i < charlie.bladeTrails.length; i++) {
           const pt1 = charlie.bladeTrails[i - 1];
           const pt2 = charlie.bladeTrails[i];
-          ctx.strokeStyle = `rgba(0, 242, 254, ${pt2.alpha * glowMult})`;
-          ctx.shadowColor = '#00f2fe';
+          ctx.strokeStyle = trailColor;
+          ctx.shadowColor = trailColor;
           ctx.shadowBlur = 12 * glowMult;
           ctx.lineWidth = 4 * pt2.alpha * charlieScale;
           ctx.beginPath();
@@ -3670,6 +5489,96 @@
     }
     requestAnimationFrame(animate);
 
+
+    /* =========================================================================
+       Cyber Theme Palette Engine
+       ========================================================================= */
+    function applyLabTheme(themeKey, playSound = false) {
+      if (!LAB_THEMES[themeKey]) themeKey = 'comet';
+      currentLabTheme = themeKey;
+      const theme = LAB_THEMES[themeKey];
+
+      try {
+        localStorage.setItem('charlie_lab_theme', themeKey);
+      } catch (e) { }
+
+      if (charlie) {
+        charlie.theme = themeKey;
+      }
+
+      // 1. Update Current Theme Name Label
+      const currentThemeName = document.getElementById('currentThemeName');
+      if (currentThemeName) {
+        currentThemeName.textContent = theme.name;
+        currentThemeName.style.color = theme.primary;
+        currentThemeName.style.textShadow = `0 0 10px ${theme.glow}`;
+      }
+
+      // 2. Update Theme Chip Buttons
+      document.querySelectorAll('.theme-chip-btn').forEach(btn => {
+        const isSelected = (btn.dataset.labTheme === themeKey);
+        btn.classList.toggle('active', isSelected);
+        if (isSelected) {
+          btn.style.borderColor = theme.primary;
+          btn.style.boxShadow = `0 0 14px ${theme.glowSoft}, inset 0 0 8px ${theme.glowSoft}`;
+          btn.style.background = theme.glowSoft;
+          btn.style.color = '#ffffff';
+        } else {
+          const btnThemeKey = btn.dataset.labTheme;
+          const bTheme = LAB_THEMES[btnThemeKey];
+          btn.style.borderColor = bTheme ? bTheme.primary + '55' : 'rgba(255, 255, 255, 0.14)';
+          btn.style.boxShadow = 'none';
+          btn.style.background = 'rgba(255, 255, 255, 0.04)';
+          btn.style.color = '#e2e8f0';
+        }
+      });
+
+      // 3. Update CSS Root Variables
+      document.documentElement.style.setProperty('--accent-cyan', theme.primary);
+      document.documentElement.style.setProperty('--theme-glow', theme.glow);
+      document.documentElement.style.setProperty('--theme-soft', theme.glowSoft);
+
+      // 4. Update Canvas Card & Stage Panels Background & Glow
+      const canvasCard = document.querySelector('.canvas-card');
+      if (canvasCard) {
+        canvasCard.style.background = theme.cardBg;
+        canvasCard.style.borderColor = theme.cardBorder;
+        canvasCard.style.boxShadow = theme.cardShadow;
+      }
+
+      // 5. Update Quick Actions Horizontal Laser Separators
+      document.querySelectorAll('.quick-horizontal-separator').forEach(sep => {
+        sep.style.background = `linear-gradient(90deg, rgba(255,255,255,0.05) 0%, ${theme.primary} 30%, ${theme.primary} 70%, rgba(255,255,255,0.05) 100%)`;
+        sep.style.boxShadow = `0 0 8px ${theme.glow}, 0 0 2px ${theme.primary}`;
+      });
+
+      // 6. Update HUD chip accents
+      const hudQuickModeChip = document.getElementById('hudQuickModeChip');
+      if (hudQuickModeChip) {
+        hudQuickModeChip.style.color = theme.primary;
+        hudQuickModeChip.style.borderColor = theme.cardBorder;
+      }
+      const hudVisorChip = document.querySelector('#cardVisorLed .hud-chip');
+      if (hudVisorChip) {
+        hudVisorChip.style.color = theme.primary;
+        hudVisorChip.style.borderColor = theme.cardBorder;
+      }
+      const hudThemeChip = document.getElementById('hudThemeChip');
+      if (hudThemeChip) {
+        hudThemeChip.style.color = theme.primary;
+        hudThemeChip.style.borderColor = theme.cardBorder;
+      }
+
+      // 7. Visual & Audio Feedback
+      if (playSound && sound && !sound.isMuted) {
+        sound.playComboDing();
+      }
+      if (charlie && typeof addSparks === 'function') {
+        addSparks(charlie.x, charlie.y, theme.primary, 24);
+        charlie.setEmote(`⚡ ${theme.name}!`, 75);
+      }
+    }
+
     /* =========================================================================
        UI Event Listeners
        ========================================================================= */
@@ -3724,16 +5633,17 @@
           charlie.state === 'jump' ||
           charlie.state === 'bonk' ||
           charlie.state === 'slash' ||
-          charlie.state === 'dizzy' ||
           charlie.state === 'deploying' ||
           charlie.state === 'cyber_dash'
         );
 
-        if (!isActionLocked) {
+        if (!isActionLocked || charlie.state === 'dizzy') {
+          charlie.state = mode;
           charlie.setMode(mode);
         } else {
-          // If in a sustained companion mode like thinking/waiting/victory, clicking locomotion immediately wakes him up!
-          if (charlie.state === 'thinking' || charlie.state === 'writing' || charlie.state === 'waiting' || charlie.state === 'victory') {
+          // If in a sustained companion mode like thinking/writing/waiting/victory/dizzy, clicking locomotion immediately wakes him up!
+          if (charlie.state === 'thinking' || charlie.state === 'writing' || charlie.state === 'waiting' || charlie.state === 'victory' || charlie.state === 'dizzy') {
+            charlie.state = mode;
             charlie.setMode(mode);
           }
         }
@@ -3743,14 +5653,19 @@
 
     // Action Trigger Buttons (Jump Flip, 3-Hit Slash, Comet Bonk, Dizzy, Thinking, Writing, Chat Mascot, Victory)
     const actionTriggers = [
-      { id: 'btnJump', action: 'jump', fn: () => { charlie.triggerJump(); sound.playJump(); } },
-      { id: 'btnSlash', action: 'slash', fn: () => { charlie.triggerSlash(); sound.playLaserSlice(); } },
-      { id: 'btnBonk', action: 'bonk', fn: () => { charlie.triggerBonk(); sound.playBonk(); } },
-      { id: 'btnDizzy', action: 'dizzy', fn: () => { charlie.triggerDizzy(); sound.playDizzy(); } },
+      { id: 'btnJump', action: 'jump', fn: () => { charlie.triggerJump(); if (!sound.isMuted) sound.playJump(); } },
+      { id: 'btnSlash', action: 'slash', fn: () => { charlie.triggerSlash(); if (!sound.isMuted) sound.playLaserSlice(); } },
+      { id: 'btnBonk', action: 'bonk', fn: () => { charlie.triggerBonk(); if (!sound.isMuted) sound.playBonk(); } },
+      { id: 'btnDizzy', action: 'dizzy', fn: () => {
+          const wasDizzy = (charlie.state === 'dizzy');
+          charlie.triggerDizzy();
+          if (!wasDizzy && !sound.isMuted) sound.playDizzy();
+        }
+      },
       { id: 'btnThinking', action: 'thinking', fn: () => { charlie.triggerThinking(); } },
-      { id: 'btnWriting', action: 'writing', fn: () => { charlie.triggerWriting(); sound.playComboDing(); } },
+      { id: 'btnWriting', action: 'writing', fn: () => { charlie.triggerWriting(); if (!sound.isMuted) sound.playComboDing(); } },
       { id: 'btnWaiting', action: 'waiting', fn: () => { charlie.triggerWaiting(); } },
-      { id: 'btnVictory', action: 'victory', fn: () => { charlie.triggerVictory(); sound.playFanfare(); } }
+      { id: 'btnVictory', action: 'victory', fn: () => { charlie.triggerVictory(); if (!sound.isMuted) sound.playFanfare(); } }
     ];
 
     actionTriggers.forEach(item => {
@@ -3763,8 +5678,47 @@
       }
     });
 
+    // Wardrobe & Character Skin Buttons Handler
+    function syncSkinUI(skinName) {
+      const activeSkin = skinName || (charlie ? charlie.skin : 'classic');
+      document.querySelectorAll('.skin-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-skin') === activeSkin);
+      });
+    }
+
+    document.querySelectorAll('.skin-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetSkin = btn.getAttribute('data-skin') || 'classic';
+        charlie.setSkin(targetSkin);
+      });
+    });
+
+    // Listen for storage events and custom events to keep skin & sound in sync!
+    window.addEventListener('charlie_skin_change', (e) => {
+      if (e.detail && e.detail.skin) {
+        if (charlie && charlie.skin !== e.detail.skin) charlie.skin = e.detail.skin;
+        syncSkinUI(e.detail.skin);
+      }
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'charlie_avatar_skin' && e.newValue) {
+        if (charlie) charlie.skin = e.newValue;
+        syncSkinUI(e.newValue);
+      }
+      if (e.key === 'charlie_lab_sfx_muted' || e.key === 'portfolio_sound_muted' || e.key === 'sound_muted') {
+        const isMuted = (e.newValue === 'true');
+        sound.isMuted = isMuted;
+        if (sound.masterGain && sound.ctx) {
+          sound.masterGain.gain.setValueAtTime(isMuted ? 0.0001 : 1.0, sound.ctx.currentTime);
+        }
+        syncLabSoundUI(isMuted);
+      }
+    });
+
     // Initialize UI active selection states
     syncLocoUI();
+    syncSkinUI(charlie.skin);
 
     // Sound Effects ON/OFF Toggle Buttons & UI Synchronization
     const labSoundBtn = document.getElementById('btnLabSound');
@@ -4107,11 +6061,27 @@
         glowMult = 2.5;
         glowVal.textContent = '2.5x';
 
+        applyLabTheme('comet', false);
+
         if (sound && !sound.isMuted) {
           sound.playComboDing();
         }
       });
     }
+
+
+    // Cyber Theme Palette Click Listeners
+    document.querySelectorAll('.theme-chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const themeKey = btn.dataset.labTheme;
+        if (themeKey) {
+          applyLabTheme(themeKey, true);
+        }
+      });
+    });
+
+    // Initial Lab Theme Boot
+    applyLabTheme(currentLabTheme, false);
 
     // Periodically spawn background test comets for practice slicing
     setInterval(() => {

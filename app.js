@@ -167,6 +167,7 @@
       this.scale = scale;              // Character Scale: 1.0x
       this.bladeGlowIntensity = 2.5;   // Plasma Blade Glow Intensity: 2.5x
       this.animSpeed = 1.0;
+      this.skin = (typeof localStorage !== 'undefined' ? localStorage.getItem('charlie_avatar_skin') : null) || 'classic';
 
       // Animation & Face States
       this.state = 'waiting'; // idle, walk, run, jump, slash, bonk, dizzy, victory, thinking, writing, waiting, cyber_dash
@@ -246,6 +247,18 @@
           alpha: 1.0,
           decay: 0.03 + Math.random() * 0.03
         });
+      }
+    }
+
+    setSkin(skinId) {
+      this.skin = skinId || 'classic';
+      try {
+        localStorage.setItem('charlie_avatar_skin', this.skin);
+      } catch (e) { }
+      window.dispatchEvent(new CustomEvent('charlie_skin_change', { detail: { skin: this.skin } }));
+      if (typeof this.addSparks === 'function') {
+        this.addSparks(this.x, this.y - 10 * this.scale, '#00f2fe', 16);
+        this.addSparks(this.x, this.y - 22 * this.scale, '#f59e0b', 14);
       }
     }
 
@@ -394,6 +407,16 @@
     }
 
     triggerDizzy() {
+      if (this.state === 'dizzy') {
+        // Toggle recovery: return to normal immediately
+        this.state = 'idle';
+        this.face = 'happy';
+        this.dizzyTimer = 0;
+        this.invincibleTimer = 0;
+        this.setEmote('RECOVERED! ✨', 45);
+        this.syncHudFace('[•‿•]');
+        return;
+      }
       this.state = 'dizzy';
       this.face = 'dizzy';
       this.dizzyTimer = 95; // ~1.6s of dizzy stun
@@ -1536,6 +1559,8 @@
       c.scale(this.facing * this.scale * squashX, this.scale * squashY);
       c.rotate(leanAngle + somersaultRotation);
 
+      const currentSkin = this.skin || 'classic';
+
       // 1. Draw Legs
       this.drawLeg(c, -7, 10 + bobY, hipL, kneeL, thrusterL);
       this.drawLeg(c, 7, 10 + bobY, hipR, kneeR, thrusterR);
@@ -1543,88 +1568,153 @@
       // 2. Draw Torso
       c.save();
       c.translate(0, bobY);
-      c.fillStyle = '#070d1a';
-      c.strokeStyle = '#00f2fe';
-      c.lineWidth = 2.0;
-      c.beginPath();
-      c.roundRect(-12, -5, 24, 18, 5);
-      c.fill();
-      c.stroke();
 
-      c.shadowColor = '#00f2fe';
-      c.shadowBlur = 12 * this.bladeGlowIntensity;
-      c.fillStyle = '#00f2fe';
-      c.beginPath();
-      c.arc(0, 4, 3.8, 0, Math.PI * 2);
-      c.fill();
+      if (currentSkin === 'senior_architect') {
+        // 👔 Senior Architect: Bespoke Tailored Executive Suit (No robot chassis, no reactor)
+        this.drawSkinTorsoAccessories(c);
+      } else {
+        // Chassis Box (Obsidian Dark Cyber Armor)
+        c.fillStyle = '#070d1a';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 2.0;
+        c.beginPath();
+        c.roundRect(-12, -5, 24, 18, 5);
+        c.fill();
+        c.stroke();
 
-      c.fillStyle = '#ffffff';
-      c.beginPath();
-      c.arc(0, 4, 1.8, 0, Math.PI * 2);
-      c.fill();
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 12 * this.bladeGlowIntensity;
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(0, 4, 3.8, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(0, 4, 1.8, 0, Math.PI * 2);
+        c.fill();
+
+        // 🌟 Draw Skin Torso Accessories (Santa coat trim, Cape, etc.)
+        this.drawSkinTorsoAccessories(c);
+      }
+
       c.restore();
 
       // 3. Draw Head & Visor
       c.save();
       c.translate(0, -19 + bobY);
 
-      let antennaBend = (this.state === 'run' ? -0.4 : 0) + (this.state === 'sad' ? -1.2 : 0);
-      c.save();
-      c.translate(0, -15);
-      c.rotate(antennaBend);
-      c.strokeStyle = '#38bdf8';
-      c.lineWidth = 1.8;
-      c.beginPath();
-      c.moveTo(0, 0);
-      c.lineTo(0, -9);
-      c.stroke();
+      if (currentSkin === 'senior_architect') {
+        // 🏛️ Senior Architect Head (Sculpted Humanoid Head, NO cyan helmet box, NO cap brim!)
+        c.shadowBlur = 0;
+        c.fillStyle = '#0a1020';
+        c.beginPath();
+        c.roundRect(-13.5, -13, 27, 20, 5.5);
+        c.fill();
 
-      c.shadowColor = '#00f2fe';
-      c.shadowBlur = 10 * this.bladeGlowIntensity;
-      c.fillStyle = this.state === 'bonk' ? '#f59e0b' : '#00f2fe';
-      c.beginPath();
-      c.arc(0, -11, 3.0, 0, Math.PI * 2);
-      c.fill();
-      c.restore();
+        // Sleek Executive Visor Face Plate
+        c.fillStyle = '#020612';
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.roundRect(-11.5, -11, 23, 14, 3.5);
+        c.fill();
+        c.stroke();
 
-      c.fillStyle = '#090f1f';
-      c.strokeStyle = '#00f2fe';
-      c.lineWidth = 2.2;
-      c.shadowColor = 'rgba(0, 242, 254, 0.4)';
-      c.shadowBlur = 8;
-      c.beginPath();
-      c.roundRect(-16, -16, 32, 23, 7);
-      c.fill();
-      c.stroke();
+        // Natural Ears (Subtle tone, NO glowing cyan comms knobs!)
+        c.fillStyle = '#1e293b';
+        c.beginPath();
+        c.roundRect(-14.8, -6, 2.0, 5.5, 1.0);
+        c.roundRect(12.8, -6, 2.0, 5.5, 1.0);
+        c.fill();
 
-      c.fillStyle = '#00f2fe';
-      c.beginPath();
-      c.arc(-16.5, -4, 2.6, 0, Math.PI * 2);
-      c.arc(16.5, -4, 2.6, 0, Math.PI * 2);
-      c.fill();
+        // LED Visor Facial Expressions
+        this.drawFace(c);
 
-      c.shadowBlur = 0;
-      c.fillStyle = '#02060f';
-      c.strokeStyle = 'rgba(0, 242, 254, 0.35)';
-      c.lineWidth = 1.1;
-      c.beginPath();
-      c.roundRect(-12, -12, 24, 15, 4);
-      c.fill();
-      c.stroke();
+        // Cartoon Band-aid if dizzy/bonk
+        if (this.state === 'sad' || this.state === 'dizzy') {
+          c.save();
+          c.translate(-7, -10);
+          c.rotate(0.3);
+          c.fillStyle = '#f59e0b';
+          c.fillRect(-3, -2, 6, 4);
+          c.strokeStyle = '#fff';
+          c.lineWidth = 0.8;
+          c.strokeRect(-3, -2, 6, 4);
+          c.restore();
+        }
 
-      this.drawFace(c);
+        // 🌟 Senior Architect Hair & Designer Spectacles
+        this.drawSkinHeadAccessories(c);
 
-      if (this.state === 'sad' || this.state === 'dizzy') {
-        c.save();
-        c.translate(-7, -10);
-        c.rotate(0.3);
-        c.fillStyle = '#f59e0b';
-        c.fillRect(-3, -2, 6, 4);
-        c.strokeStyle = '#fff';
-        c.lineWidth = 0.8;
-        c.strokeRect(-3, -2, 6, 4);
-        c.restore();
+      } else {
+        // Standard Robot Head
+        const hideAntenna = (currentSkin === 'santa' || currentSkin === 'ai_wizard' || currentSkin === 'cyber_ninja');
+
+        if (!hideAntenna) {
+          let antennaBend = (this.state === 'run' ? -0.4 : 0) + (this.state === 'sad' ? -1.2 : 0);
+          c.save();
+          c.translate(0, -15);
+          c.rotate(antennaBend);
+          c.strokeStyle = '#38bdf8';
+          c.lineWidth = 1.8;
+          c.beginPath();
+          c.moveTo(0, 0);
+          c.lineTo(0, -9);
+          c.stroke();
+
+          c.shadowColor = '#00f2fe';
+          c.shadowBlur = 10 * this.bladeGlowIntensity;
+          c.fillStyle = this.state === 'bonk' ? '#f59e0b' : '#00f2fe';
+          c.beginPath();
+          c.arc(0, -11, 3.0, 0, Math.PI * 2);
+          c.fill();
+          c.restore();
+        }
+
+        c.fillStyle = '#090f1f';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 2.2;
+        c.shadowColor = 'rgba(0, 242, 254, 0.4)';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.roundRect(-16, -16, 32, 23, 7);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(-16.5, -4, 2.6, 0, Math.PI * 2);
+        c.arc(16.5, -4, 2.6, 0, Math.PI * 2);
+        c.fill();
+
+        c.shadowBlur = 0;
+        c.fillStyle = '#02060f';
+        c.strokeStyle = 'rgba(0, 242, 254, 0.35)';
+        c.lineWidth = 1.1;
+        c.beginPath();
+        c.roundRect(-12, -12, 24, 15, 4);
+        c.fill();
+        c.stroke();
+
+        this.drawFace(c);
+
+        if (this.state === 'sad' || this.state === 'dizzy') {
+          c.save();
+          c.translate(-7, -10);
+          c.rotate(0.3);
+          c.fillStyle = '#f59e0b';
+          c.fillRect(-3, -2, 6, 4);
+          c.strokeStyle = '#fff';
+          c.lineWidth = 0.8;
+          c.strokeRect(-3, -2, 6, 4);
+          c.restore();
+        }
+
+        // 🌟 Draw Skin Head Accessories
+        this.drawSkinHeadAccessories(c);
       }
+
       c.restore();
 
       // Hand Equipment Modes (Unarmed sheathed during writing, thinking, waiting)
@@ -1967,58 +2057,8 @@
       c.translate(6.5, 0);
 
       if (handMode === 'knife' || handMode === true) {
-        c.rotate(customKnifeAngle);
-
-        c.fillStyle = '#0a101f';
-        c.strokeStyle = '#475569';
-        c.lineWidth = 1.0;
-        c.fillRect(-3, -2, 6, 4);
-
-        c.fillStyle = '#00f2fe';
-        c.beginPath();
-        c.arc(-3, 0, 1.3, 0, Math.PI * 2);
-        c.fill();
-
-        c.fillStyle = '#091124';
-        c.strokeStyle = '#00f2fe';
-        c.lineWidth = 1.3;
-        c.beginPath();
-        c.roundRect(-2, -3, 5, 6, 2);
-        c.fill();
-        c.stroke();
-
-        c.fillStyle = '#00f2fe';
-        c.beginPath();
-        c.arc(0.5, 0, 1.1, 0, Math.PI * 2);
-        c.fill();
-
-        c.strokeStyle = '#00f2fe';
-        c.lineWidth = 1.4;
-        c.beginPath();
-        c.moveTo(3, -4);
-        c.lineTo(3, 4);
-        c.stroke();
-
-        // Astra Plasma Dagger with 2.5x Glow
-        c.shadowColor = '#00f2fe';
-        c.shadowBlur = 14 * this.bladeGlowIntensity;
-        c.fillStyle = '#00f2fe';
-        c.beginPath();
-        c.moveTo(3, -2.8);
-        c.lineTo(18, -1);
-        c.lineTo(24, 0);
-        c.lineTo(18, 2);
-        c.lineTo(3, 2.8);
-        c.closePath();
-        c.fill();
-
-        c.fillStyle = '#ffffff';
-        c.beginPath();
-        c.moveTo(4, -1);
-        c.lineTo(20, 0);
-        c.lineTo(4, 1);
-        c.closePath();
-        c.fill();
+        // --- CHARACTER WEAPON PROP (Customized for each skin) ---
+        this.drawSkinWeaponProp(c, this.skin || 'classic', customKnifeAngle, this.bladeGlowIntensity || 2.5);
 
       } else if (handMode === 'stylus') {
         c.rotate(customKnifeAngle);
@@ -2064,35 +2104,8 @@
         c.fill();
 
       } else if (handMode === 'shield') {
-        c.fillStyle = '#091124';
-        c.strokeStyle = '#00f2fe';
-        c.lineWidth = 1.3;
-        c.beginPath();
-        c.roundRect(-2, -3, 5, 6, 2);
-        c.fill();
-        c.stroke();
-
-        c.fillStyle = '#00f2fe';
-        c.beginPath();
-        c.arc(0.5, 0, 1.2, 0, Math.PI * 2);
-        c.fill();
-
-        c.save();
-        c.shadowColor = '#00f2fe';
-        c.shadowBlur = 10 * this.bladeGlowIntensity;
-        c.strokeStyle = 'rgba(0, 242, 254, 0.85)';
-        c.lineWidth = 1.5;
-        c.fillStyle = 'rgba(0, 242, 254, 0.2)';
-        c.beginPath();
-        c.arc(3.5, 0, 5, -Math.PI * 0.48, Math.PI * 0.48);
-        c.fill();
-        c.stroke();
-
-        c.fillStyle = '#ffffff';
-        c.beginPath();
-        c.arc(2.5, 0, 1.2, 0, Math.PI * 2);
-        c.fill();
-        c.restore();
+        // --- CHARACTER OFF-HAND PROP (Customized for each skin) ---
+        this.drawSkinShieldProp(c, this.skin || 'classic', this.bladeGlowIntensity || 2.5);
 
       } else {
         c.fillStyle = '#091124';
@@ -2185,11 +2198,26 @@
       } else if (this.face === 'dizzy') {
         c.strokeStyle = '#f59e0b';
         c.shadowColor = '#f59e0b';
+        c.lineWidth = 1.4;
+        // Animated swirling dizzy spiral eyes
+        const dAng = this.dizzyAngle || (this.animTimer * 5.0);
+        [-4.5, 4.5].forEach(ex => {
+          c.save();
+          c.translate(ex, -5);
+          c.rotate(dAng * (ex < 0 ? 1 : -1));
+          c.beginPath();
+          c.arc(0, 0, 3.2, 0, Math.PI * 1.6);
+          c.stroke();
+          c.beginPath();
+          c.arc(0, 0, 1.4, Math.PI * 0.8, Math.PI * 2.2);
+          c.stroke();
+          c.restore();
+        });
+        // Wobbly dizzy mouth
         c.beginPath();
-        c.arc(-4.5, -5, 2.8, 0, Math.PI * 1.8);
-        c.stroke();
-        c.beginPath();
-        c.arc(4.5, -5, 2.8, 0, Math.PI * 1.8);
+        c.moveTo(-3, 0.5);
+        c.quadraticCurveTo(-1.5, -1, 0, 0.5);
+        c.quadraticCurveTo(1.5, 2, 3, 0.5);
         c.stroke();
       } else if (this.face === 'sad') {
         c.beginPath();
@@ -2312,7 +2340,1374 @@
 
       c.restore();
     }
+
+        drawSkinWeaponProp(c, skin, customKnifeAngle, glowMult) {
+      c.rotate(customKnifeAngle);
+
+      // Cyber Gauntlet Grip
+      c.fillStyle = '#0a101f';
+      c.strokeStyle = '#475569';
+      c.lineWidth = 1.0;
+      c.fillRect(-3, -2, 6, 4);
+
+      c.fillStyle = '#091124';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 1.3;
+      c.beginPath();
+      c.roundRect(-2, -3, 5, 6, 2);
+      c.fill();
+      c.stroke();
+
+      c.fillStyle = '#00f2fe';
+      c.beginPath();
+      c.arc(0.5, 0, 1.1, 0, Math.PI * 2);
+      c.fill();
+
+      if (skin === 'senior_architect') {
+        // 🏛️ Senior Architect Hand Prop: Executive Holographic Laser Drafting Stylus
+        c.save();
+        // Stylus Shaft (Titanium & Obsidian Body)
+        c.fillStyle = '#0f172a';
+        c.strokeStyle = '#f59e0b';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.roundRect(2, -2, 14, 4, 1.5);
+        c.fill();
+        c.stroke();
+
+        // Polished Gold Grip Bands
+        c.fillStyle = '#f59e0b';
+        c.fillRect(5, -2, 2.2, 4);
+        c.fillRect(9, -2, 1.8, 4);
+
+        // Holographic Precision Laser Tip
+        c.fillStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 8 * glowMult;
+        c.beginPath();
+        c.moveTo(16, -1.5);
+        c.lineTo(20.5, 0);
+        c.lineTo(16, 1.5);
+        c.closePath();
+        c.fill();
+
+        // Laser Aim Guide Beam
+        c.strokeStyle = 'rgba(0, 242, 254, 0.75)';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.moveTo(20.5, 0);
+        c.lineTo(27, 0);
+        c.stroke();
+
+        c.restore();
+      } else if (skin === 'santa') {
+        // 🎅 Santa Claus Prop: Peppermint Candy Cane Staff with Golden Holiday Star
+        c.lineWidth = 2.8;
+        c.lineCap = 'round';
+        c.strokeStyle = '#ef4444';
+        c.beginPath();
+        c.moveTo(2, 0);
+        c.lineTo(16, 0);
+        c.quadraticCurveTo(22, 0, 22, -6);
+        c.quadraticCurveTo(22, -11, 16, -11);
+        c.quadraticCurveTo(12, -11, 12, -7);
+        c.stroke();
+
+        // White candy stripes overlay
+        c.strokeStyle = '#ffffff';
+        c.lineWidth = 1.2;
+        c.setLineDash([2.5, 3]);
+        c.beginPath();
+        c.moveTo(2, 0);
+        c.lineTo(16, 0);
+        c.quadraticCurveTo(22, 0, 22, -6);
+        c.quadraticCurveTo(22, -11, 16, -11);
+        c.stroke();
+        c.setLineDash([]);
+
+        // Glowing Holiday Golden Star at cane tip
+        c.fillStyle = '#ffd700';
+        c.shadowColor = '#ffd700';
+        c.shadowBlur = 10 * glowMult;
+        c.font = '8px sans-serif';
+        c.fillText('⭐', 12, -9);
+
+      } else if (skin === 'super_hero') {
+        // 🦸 Super Hero Prop: Cosmic Photon Energy Saber / Plasma Hammer
+        c.fillStyle = '#1e3a8a';
+        c.fillRect(2, -2, 4, 4);
+        c.fillStyle = '#fbbf24';
+        c.fillRect(5, -3.5, 2, 7);
+
+        // Blazing Cosmic Energy Blade / Photon Ray
+        c.shadowColor = '#38bdf8';
+        c.shadowBlur = 16 * glowMult;
+        c.fillStyle = '#38bdf8';
+        c.beginPath();
+        c.moveTo(7, -3.5);
+        c.lineTo(21, -1.8);
+        c.lineTo(27, 0);
+        c.lineTo(21, 1.8);
+        c.lineTo(7, 3.5);
+        c.closePath();
+        c.fill();
+
+        // White-hot solar core
+        c.fillStyle = '#ffffff';
+        c.shadowColor = '#ffffff';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.moveTo(7, -1.5);
+        c.lineTo(23, 0);
+        c.lineTo(7, 1.5);
+        c.closePath();
+        c.fill();
+
+        // Electric lightning plasma crackles
+        c.strokeStyle = '#fbbf24';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(10, -4); c.lineTo(13, -1); c.lineTo(16, -4.5);
+        c.moveTo(12, 4); c.lineTo(15, 1); c.lineTo(18, 4.5);
+        c.stroke();
+
+      } else if (skin === 'cyber_ninja') {
+        // 🥷 Cyber Shinobi Prop: High-Frequency Muramasa Ninjato (Plasma Cyber Katana)
+        // 1. Two-Handed Cyber Tsuka (Hilt) & Tsukamaki Wrap
+        c.fillStyle = '#090d16';
+        c.fillRect(-7, -2.5, 11, 5);
+
+        // Gold Pommel Cap (Kashira) & Lanyard Ring
+        c.fillStyle = '#64748b';
+        c.fillRect(-8.5, -3, 2, 6);
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        c.arc(-9.5, 0, 1.2, 0, Math.PI * 2);
+        c.fill();
+
+        // Authentic Diamond-Pattern Tsukamaki Grip Braid
+        c.fillStyle = '#ec4899';
+        for (let x = -6; x <= 2; x += 2.5) {
+          c.beginPath();
+          c.moveTo(x, -2.2);
+          c.lineTo(x + 1.2, 0);
+          c.lineTo(x, 2.2);
+          c.lineTo(x - 1.2, 0);
+          c.closePath();
+          c.fill();
+        }
+
+        // 2. Slotted Titanium Cyber Tsuba (Sword Guard)
+        c.fillStyle = '#334155';
+        c.strokeStyle = '#64748b';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.roundRect(3.5, -4.5, 2.2, 9.0, 0.8);
+        c.fill();
+        c.stroke();
+
+        // Polished Gold Habaki (Blade Collar)
+        c.fillStyle = '#fbbf24';
+        c.fillRect(5.7, -2.5, 1.6, 5);
+
+        // 3. High-Frequency Razor Chisel-Tip Ninjato Blade
+        // Titanium Blade Spine
+        c.fillStyle = '#1e293b';
+        c.beginPath();
+        c.moveTo(7.3, -2.2);
+        c.lineTo(24, -2.2);
+        c.lineTo(29.5, -0.6); // Aggressive chisel tanto point
+        c.lineTo(26, 0.8);
+        c.lineTo(7.3, 0.8);
+        c.closePath();
+        c.fill();
+
+        // Searing High-Frequency Plasma Cutting Edge (Neon Magenta Hamon)
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 18 * glowMult;
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        c.moveTo(7.3, -0.5);
+        c.lineTo(26, -0.5);
+        c.lineTo(30, 0.5); // Tip apex
+        c.lineTo(25, 2.2);
+        c.lineTo(7.3, 2.2);
+        c.closePath();
+        c.fill();
+
+        // White-Hot Plasma Laser Edge
+        c.fillStyle = '#ffffff';
+        c.shadowColor = '#ffffff';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.moveTo(7.3, 0.2);
+        c.lineTo(25.5, 0.2);
+        c.lineTo(29.2, 0.6);
+        c.lineTo(24.5, 1.4);
+        c.lineTo(7.3, 1.4);
+        c.closePath();
+        c.fill();
+
+        // Plasma Hamon Wave Teeth & Fuller Groove Sparks
+        c.strokeStyle = '#fbcfe8';
+        c.lineWidth = 0.6;
+        c.beginPath();
+        c.moveTo(8, -0.8);
+        c.lineTo(12, -1.5);
+        c.lineTo(15, -0.8);
+        c.lineTo(19, -1.5);
+        c.lineTo(23, -0.8);
+        c.stroke();
+
+      } else if (skin === 'ai_wizard') {
+        // 🧙‍♂️ AI Archmage Prop: Celestial Archmage Staff with Floating Crystal Orb
+        c.strokeStyle = '#7c3aed';
+        c.lineWidth = 2.2;
+        c.lineCap = 'round';
+        c.beginPath();
+        c.moveTo(-10, 3);
+        c.lineTo(17, -1);
+        c.stroke();
+
+        c.strokeStyle = '#fbbf24';
+        c.lineWidth = 1.3;
+        c.beginPath();
+        c.moveTo(15, -4); c.quadraticCurveTo(18, -5, 21, -2);
+        c.moveTo(15, 2); c.quadraticCurveTo(18, 3, 21, 0);
+        c.stroke();
+
+        c.shadowColor = '#c084fc';
+        c.shadowBlur = 14 * glowMult;
+        c.fillStyle = '#a855f7';
+        c.beginPath();
+        c.arc(22, -1, 4.2, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(21, -2, 1.8, 0, Math.PI * 2);
+        c.fill();
+
+        const sparkPhase = this.animTimer * 4;
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(22 + Math.cos(sparkPhase) * 6, -1 + Math.sin(sparkPhase) * 4, 1.0, 0, Math.PI * 2);
+        c.arc(22 - Math.cos(sparkPhase) * 6, -1 - Math.sin(sparkPhase) * 4, 1.0, 0, Math.PI * 2);
+        c.fill();
+
+      } else {
+        // 🤖 Classic Cyber Bot Prop: Astra Plasma Dagger
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.4;
+        c.beginPath();
+        c.moveTo(3, -4); c.lineTo(3, 4);
+        c.stroke();
+
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 14 * glowMult;
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.moveTo(3, -2.8);
+        c.lineTo(18, -1);
+        c.lineTo(24, 0);
+        c.lineTo(18, 2);
+        c.lineTo(3, 2.8);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.moveTo(4, -1);
+        c.lineTo(20, 0);
+        c.lineTo(4, 1);
+        c.closePath();
+        c.fill();
+      }
+    }
+
+    drawSkinShieldProp(c, skin, glowMult) {
+      // Gauntlet Glove
+      c.fillStyle = '#091124';
+      c.strokeStyle = '#00f2fe';
+      c.lineWidth = 1.3;
+      c.beginPath();
+      c.roundRect(-2, -3, 5, 6, 2);
+      c.fill();
+      c.stroke();
+
+      // Knuckle Core Light
+      c.fillStyle = '#00f2fe';
+      c.beginPath();
+      c.arc(0.5, 0, 1.2, 0, Math.PI * 2);
+      c.fill();
+
+      if (skin === 'senior_architect') {
+        // 🏛️ Senior Architect Off-Hand: Holographic Glass Architectural Tablet (Datapad)
+        c.save();
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 10 * glowMult;
+
+        c.fillStyle = 'rgba(8, 20, 38, 0.85)';
+        c.strokeStyle = '#00f2fe';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.roundRect(1, -7, 11, 14, 2);
+        c.fill();
+        c.stroke();
+
+        c.strokeStyle = 'rgba(0, 242, 254, 0.45)';
+        c.lineWidth = 0.6;
+        c.beginPath();
+        c.moveTo(3, -4); c.lineTo(10, -4);
+        c.moveTo(3, -1); c.lineTo(10, -1);
+        c.moveTo(3, 2); c.lineTo(10, 2);
+        c.moveTo(3, 5); c.lineTo(10, 5);
+        c.stroke();
+
+        c.strokeStyle = '#f59e0b';
+        c.lineWidth = 0.9;
+        c.beginPath();
+        c.moveTo(5, 4); c.lineTo(5, -2); c.lineTo(8, -4); c.lineTo(8, 2);
+        c.stroke();
+        c.restore();
+
+      } else if (skin === 'santa') {
+        // 🎅 Santa Claus Off-Hand: Festive Holiday Gift Box 🎁
+        c.save();
+        c.shadowColor = 'rgba(239, 68, 68, 0.6)';
+        c.shadowBlur = 8;
+
+        c.fillStyle = '#dc2626';
+        c.strokeStyle = '#991b1b';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.roundRect(1, -5.5, 11, 11, 1.8);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#ffd700';
+        c.fillRect(5.5, -5.5, 2, 11);
+        c.fillRect(1, -1, 11, 2);
+
+        c.strokeStyle = '#ffd700';
+        c.lineWidth = 1.3;
+        c.beginPath();
+        c.arc(5, -6.5, 1.8, 0, Math.PI * 2);
+        c.arc(8, -6.5, 1.8, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+
+      } else if (skin === 'super_hero') {
+        // 🦸 Super Hero Off-Hand: Legendary Concentric Star Shield 🛡️
+        c.save();
+        c.shadowColor = '#3b82f6';
+        c.shadowBlur = 12 * glowMult;
+
+        // Outer Crimson Red Ring
+        c.fillStyle = '#ef4444';
+        c.strokeStyle = '#b91c1c';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.arc(6, 0, 7.5, 0, Math.PI * 2);
+        c.fill();
+        c.stroke();
+
+        // Second Silver/White Ring
+        c.fillStyle = '#f8fafc';
+        c.beginPath();
+        c.arc(6, 0, 5.6, 0, Math.PI * 2);
+        c.fill();
+
+        // Third Crimson Red Ring
+        c.fillStyle = '#ef4444';
+        c.beginPath();
+        c.arc(6, 0, 4.0, 0, Math.PI * 2);
+        c.fill();
+
+        // Inner Deep Azure Blue Center Circle
+        c.fillStyle = '#1d4ed8';
+        c.beginPath();
+        c.arc(6, 0, 2.7, 0, Math.PI * 2);
+        c.fill();
+
+        // Radiant White 5-Point Star in Center
+        c.fillStyle = '#ffffff';
+        c.font = '5px sans-serif';
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText('★', 6, 0.3);
+        c.restore();
+
+      } else if (skin === 'cyber_ninja') {
+        // 🥷 Cyber Shinobi Off-Hand: Kinetic Fuma Shuriken / Plasma Nanotech Aegis
+        c.save();
+
+        // Kinetic Rotation with Animation Timer
+        const rot = this.animTimer * 6.5;
+        c.translate(5, 0);
+        c.rotate(rot);
+
+        // Searing Kinetic Plasma Afterimage Trail / Blur Ring
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 14 * glowMult;
+        c.fillStyle = 'rgba(236, 72, 153, 0.22)';
+        c.beginPath();
+        c.arc(0, 0, 8.5, 0, Math.PI * 2);
+        c.fill();
+
+        // 4 Razor-Sharp Curved Scythe Blades
+        for (let i = 0; i < 4; i++) {
+          c.save();
+          c.rotate((Math.PI / 2) * i);
+
+          // Blade Core (Carbon-Titanium)
+          c.fillStyle = '#0f172a';
+          c.beginPath();
+          c.moveTo(0, -2.5);
+          c.quadraticCurveTo(3, -5.5, 8.5, -8.5); // Razor tip
+          c.lineTo(5.5, -4.0);
+          c.lineTo(2.5, -0.8);
+          c.closePath();
+          c.fill();
+
+          // Plasma Cutting Edge (Neon Magenta)
+          c.fillStyle = '#ec4899';
+          c.beginPath();
+          c.moveTo(1.0, -1.5);
+          c.quadraticCurveTo(4, -4.5, 9.2, -8.8);
+          c.lineTo(6.5, -4.5);
+          c.lineTo(2.0, -0.5);
+          c.closePath();
+          c.fill();
+
+          // White-Hot Razor Edge
+          c.fillStyle = '#ffffff';
+          c.beginPath();
+          c.moveTo(3.0, -3.0);
+          c.lineTo(8.8, -8.4);
+          c.lineTo(6.8, -4.8);
+          c.closePath();
+          c.fill();
+
+          c.restore();
+        }
+
+        // Metallic Center Grip Hub & High-Tech Gyro Ring
+        c.shadowBlur = 6 * glowMult;
+        c.fillStyle = '#1e293b';
+        c.beginPath();
+        c.arc(0, 0, 3.2, 0, Math.PI * 2);
+        c.fill();
+
+        // Glowing Cyan Inner Gyro Void Ring
+        c.fillStyle = '#00f2fe';
+        c.beginPath();
+        c.arc(0, 0, 2.0, 0, Math.PI * 2);
+        c.fill();
+
+        // Center Void Hole (Traditional Shuriken Grip)
+        c.fillStyle = '#070d1a';
+        c.beginPath();
+        c.arc(0, 0, 1.1, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+
+      } else if (skin === 'ai_wizard') {
+        // 🧙‍♂️ AI Archmage Off-Hand: Floating Ancient Spell Tome (Grimoire)
+        c.save();
+        c.shadowColor = '#a855f7';
+        c.shadowBlur = 10 * glowMult;
+
+        c.fillStyle = '#2e1065';
+        c.strokeStyle = '#c084fc';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.roundRect(1, -6, 10, 12, 1.5);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#fef3c7';
+        c.fillRect(3, -5, 7.5, 10);
+
+        c.strokeStyle = '#9333ea';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.moveTo(4, -3); c.lineTo(9, -3);
+        c.moveTo(4, 0); c.lineTo(8, 0);
+        c.moveTo(4, 3); c.lineTo(9, 3);
+        c.stroke();
+
+        c.fillStyle = '#fbbf24';
+        c.fillRect(6, 4.5, 1.8, 3.5);
+        c.restore();
+
+      } else {
+        // 🤖 Classic Cyber Bot Off-Hand: Holographic Mini Energy Buckler
+        c.save();
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 10 * glowMult;
+        c.strokeStyle = 'rgba(0, 242, 254, 0.85)';
+        c.lineWidth = 1.5;
+        c.fillStyle = 'rgba(0, 242, 254, 0.2)';
+        c.beginPath();
+        c.arc(3.5, 0, 5, -Math.PI * 0.48, Math.PI * 0.48);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(2.5, 0, 1.2, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+
+    drawSkinHeadAccessories(c) {
+      const skin = this.skin || 'classic';
+
+      if (skin === 'senior_architect') {
+        // 🏛️ Distinguished Senior Architect Hair (Natural Rich Jet-Black Executive Pompadour)
+        c.save();
+
+        // 1. Deep Jet-Black Shadow Base & Sculpted Hair Silhouette (Organic Multi-Crest Profile, Sits cleanly on top of helmet)
+        c.fillStyle = '#060709'; // Rich deep jet-black shadow root
+        c.beginPath();
+        // Left temple fade above visor
+        c.moveTo(-16, -11);
+        c.lineTo(-15.5, -15);
+        c.quadraticCurveTo(-16, -19, -13, -20);
+        c.lineTo(-8.8, -21);
+        // Sharp side-part indentation groove
+        c.lineTo(-8.2, -23.5);
+        // Wave Crest 1: High sweeping pompadour peak
+        c.quadraticCurveTo(-5.5, -29, -1.5, -28.5);
+        // Wave Dip 1
+        c.quadraticCurveTo(2.5, -28, 4, -25.5);
+        // Wave Crest 2: Rolling executive wave crest
+        c.quadraticCurveTo(7.5, -28, 11, -26.5);
+        // Wave Crest 3: Flowing side tier
+        c.quadraticCurveTo(15, -24, 16.5, -19.5);
+        c.lineTo(16, -11);
+        c.lineTo(13.5, -13);
+        // Natural curved brow hairline above the visor (Y <= -13, 100% CLEAR OF EYES!)
+        c.quadraticCurveTo(10, -14.5, 4, -14);
+        c.quadraticCurveTo(-1, -13.5, -5, -14.2);
+        c.quadraticCurveTo(-9, -14.5, -13.5, -13);
+        c.closePath();
+        c.fill();
+
+        // 2. Left Side Tapered Fade Body (Deep obsidian black, neat & combed)
+        c.fillStyle = '#0e0f14';
+        c.beginPath();
+        c.moveTo(-16, -11);
+        c.lineTo(-15.5, -15);
+        c.quadraticCurveTo(-16, -19, -13, -20);
+        c.lineTo(-8.8, -21);
+        c.lineTo(-8.5, -14);
+        c.lineTo(-13.5, -13);
+        c.closePath();
+        c.fill();
+
+        // 3. Volumetric Swept Pompadour Body (Luxurious deep black body)
+        c.fillStyle = '#15161d';
+        c.beginPath();
+        c.moveTo(-8.2, -21.8);
+        c.quadraticCurveTo(-5.5, -29, -1.5, -28.5);
+        c.quadraticCurveTo(2.5, -28, 4, -25.5);
+        c.quadraticCurveTo(7.5, -28, 11, -26.5);
+        c.quadraticCurveTo(15, -24, 16, -18);
+        c.quadraticCurveTo(10, -21, 3, -21);
+        c.quadraticCurveTo(-3, -20.5, -8.2, -21.8);
+        c.closePath();
+        c.fill();
+
+        // 4. Layered Wave Lock 1 (Soft dark tone contour on quiff - #20222a)
+        c.fillStyle = '#20222a';
+        c.beginPath();
+        c.moveTo(-7.8, -22);
+        c.quadraticCurveTo(-4.5, -28, -1.5, -27.5);
+        c.quadraticCurveTo(1.5, -27, 3.5, -24.5);
+        c.quadraticCurveTo(-1.5, -23.5, -7.8, -22);
+        c.closePath();
+        c.fill();
+
+        // 5. Layered Wave Lock 2 (Right Sweeping Wave - #20222a)
+        c.beginPath();
+        c.moveTo(3.5, -24.5);
+        c.quadraticCurveTo(7, -27, 10.5, -25.5);
+        c.quadraticCurveTo(14.5, -23, 15.5, -17.5);
+        c.quadraticCurveTo(10.5, -19.5, 4, -19.5);
+        c.quadraticCurveTo(3, -22, 3.5, -24.5);
+        c.closePath();
+        c.fill();
+
+        // 6. Distinct Side-Part Line Groove (Crisp pitch black #000000)
+        c.strokeStyle = '#000000';
+        c.lineWidth = 1.3;
+        c.lineCap = 'round';
+        c.beginPath();
+        c.moveTo(-8.8, -19.5);
+        c.lineTo(-8.2, -22.5);
+        c.stroke();
+
+        // 7. Fine Directional Comb Grooming Strokes (Subtle natural dark hair sheen #30333f)
+        c.strokeStyle = '#30333f';
+        c.lineWidth = 0.9;
+        c.lineCap = 'round';
+        c.beginPath();
+        // Left fade comb lines
+        c.moveTo(-14, -10); c.lineTo(-10.5, -17);
+        c.moveTo(-12.5, -8); c.lineTo(-9.2, -15);
+        // Lifted quiff comb lines
+        c.moveTo(-6.5, -20); c.quadraticCurveTo(-4, -26.5, -1.5, -26.5);
+        c.moveTo(-5, -18.5); c.quadraticCurveTo(-2.5, -25.5, 1, -25);
+        c.moveTo(-3, -16); c.quadraticCurveTo(0, -23.5, 4, -23);
+        // Right sweep wave lines
+        c.moveTo(1, -22); c.quadraticCurveTo(5, -25, 9, -24);
+        c.moveTo(3, -19); c.quadraticCurveTo(7.5, -23, 12, -21);
+        c.moveTo(5, -16); c.quadraticCurveTo(9.5, -20.5, 14, -18);
+        c.moveTo(7, -13.5); c.quadraticCurveTo(11, -17.5, 15, -15);
+        // Forehead fringe wisp
+        c.moveTo(-1, -13); c.quadraticCurveTo(2, -12, 4.5, -11);
+        c.stroke();
+
+        // 8. Subtle Natural Dark Hair Sheen / Luster Strands (#454958, gentle specular sheen on black hair)
+        c.strokeStyle = '#454958';
+        c.lineWidth = 0.75;
+        c.beginPath();
+        c.moveTo(-5, -22); c.quadraticCurveTo(-3, -27, -1, -27);
+        c.moveTo(2, -23.5); c.quadraticCurveTo(6, -26, 9.5, -25);
+        c.moveTo(5, -19.5); c.quadraticCurveTo(8.5, -22.5, 12, -20.5);
+        c.stroke();
+
+        // 9. Sideburn Grooming Tapers
+        c.fillStyle = '#060709';
+        c.beginPath();
+        c.moveTo(-15, -4); c.lineTo(-13.5, -4); c.lineTo(-14, -1.5); c.lineTo(-15, -2.5);
+        c.closePath();
+        c.fill();
+        c.beginPath();
+        c.moveTo(15, -4); c.lineTo(13.5, -4); c.lineTo(14, -1.5); c.lineTo(15, -2.5);
+        c.closePath();
+        c.fill();
+
+        c.restore();
+
+        // 7. Designer Senior Architect Spectacles / Glasses
+        c.save();
+        const frameColor = '#f59e0b'; // Refined amber-gold metallic frames
+        c.strokeStyle = frameColor;
+        c.lineWidth = 1.5;
+        c.shadowColor = 'rgba(245, 158, 11, 0.45)';
+        c.shadowBlur = 4;
+
+        // Left Eye Rim (Rounded Rect with soft modern corners)
+        c.beginPath();
+        c.roundRect(-9.5, -8.5, 8.5, 7.5, 2.5);
+        c.stroke();
+
+        // Right Eye Rim
+        c.beginPath();
+        c.roundRect(1.0, -8.5, 8.5, 7.5, 2.5);
+        c.stroke();
+
+        // Arched metallic bridge over the nose
+        c.beginPath();
+        c.moveTo(-1.0, -5.8);
+        c.quadraticCurveTo(0, -7.6, 1.0, -5.8);
+        c.stroke();
+
+        // Temple arms extending back towards ear nodes
+        c.beginPath();
+        c.moveTo(-9.5, -5.8);
+        c.lineTo(-15.5, -4.5);
+        c.moveTo(9.5, -5.8);
+        c.lineTo(15.5, -4.5);
+        c.stroke();
+
+        // Anti-Reflective Cyan Lens Sheen
+        c.fillStyle = 'rgba(0, 242, 254, 0.16)';
+        c.beginPath();
+        c.roundRect(-9.0, -8.0, 7.5, 6.5, 2.0);
+        c.roundRect(1.5, -8.0, 7.5, 6.5, 2.0);
+        c.fill();
+
+        // White diagonal glint / light gleams on glass
+        c.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+        c.lineWidth = 0.9;
+        c.beginPath();
+        c.moveTo(-7.5, -7.0); c.lineTo(-4.5, -3.5);
+        c.moveTo(3.0, -7.0); c.lineTo(6.0, -3.5);
+        c.stroke();
+        c.restore();
+
+      } else if (skin === 'santa') {
+        // Santa Claus: Festive Red Velvet Cap, Fur Trim, Pom-pom & Beard
+        c.save();
+        c.fillStyle = '#dc2626';
+        c.beginPath();
+        c.moveTo(-16, -15);
+        c.quadraticCurveTo(-14, -28, -2, -31);
+        c.quadraticCurveTo(10, -31, 16, -21);
+        c.quadraticCurveTo(18, -17, 15, -15);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#991b1b';
+        c.beginPath();
+        c.moveTo(8, -27);
+        c.quadraticCurveTo(14, -26, 17, -20);
+        c.quadraticCurveTo(13, -20, 8, -23);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.shadowColor = 'rgba(255, 255, 255, 0.5)';
+        c.shadowBlur = 4;
+        for (let x = -15; x <= 15; x += 5) {
+          c.beginPath();
+          c.arc(x, -15, 3.2, 0, Math.PI * 2);
+          c.fill();
+        }
+
+        c.beginPath();
+        c.arc(17.5, -20, 4.2, 0, Math.PI * 2);
+        c.fill();
+        c.fillStyle = '#f1f5f9';
+        c.beginPath();
+        c.arc(18, -19.5, 2.5, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.shadowColor = 'rgba(255, 255, 255, 0.35)';
+        c.shadowBlur = 3;
+        const beardPuffs = [
+          { x: -11, y: 1.5, r: 3.2 },
+          { x: -7,  y: 4.0, r: 3.6 },
+          { x: -2.5, y: 5.5, r: 4.0 },
+          { x: 2.5,  y: 5.5, r: 4.0 },
+          { x: 7,   y: 4.0, r: 3.6 },
+          { x: 11,  y: 1.5, r: 3.2 },
+          { x: 0,   y: 7.2, r: 3.8 }
+        ];
+        beardPuffs.forEach(p => {
+          c.beginPath();
+          c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          c.fill();
+        });
+        c.restore();
+
+      } else if (skin === 'super_hero') {
+        // 🦸 Super Hero: Sleek Hero Cowl / Mask & Golden Forehead Star Emblem
+        c.save();
+        c.fillStyle = '#1e3a8a';
+        c.strokeStyle = '#3b82f6';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.moveTo(-16, -11);
+        c.lineTo(-13, -16);
+        c.lineTo(0, -18);
+        c.lineTo(13, -16);
+        c.lineTo(16, -11);
+        c.lineTo(13, -7);
+        c.lineTo(7, -9);
+        c.lineTo(0, -6);
+        c.lineTo(-7, -9);
+        c.lineTo(-13, -7);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        // Golden Winged Hero Forehead Star Crest
+        c.fillStyle = '#fbbf24';
+        c.shadowColor = '#fbbf24';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.moveTo(0, -19);
+        c.lineTo(2.5, -14.5);
+        c.lineTo(7, -14.5);
+        c.lineTo(3.5, -11.5);
+        c.lineTo(5, -6.5);
+        c.lineTo(0, -9.5);
+        c.lineTo(-5, -6.5);
+        c.lineTo(-3.5, -11.5);
+        c.lineTo(-7, -14.5);
+        c.lineTo(-2.5, -14.5);
+        c.closePath();
+        c.fill();
+        c.restore();
+
+      } else if (skin === 'cyber_ninja') {
+        // 🥷 Cyber Ninja / Cyber Shinobi: Stealth Cowl, Forged Hitai-Ate, Menpo Mask & Dual Flowing Scarf
+        c.save();
+
+        // 1. Sleek Matte-Obsidian Stealth Cowl / Ninja Hood framing the crown & temples
+        c.fillStyle = '#090d16';
+        c.beginPath();
+        c.moveTo(-16, -11);
+        c.quadraticCurveTo(-16, -17, -10, -17.5);
+        c.lineTo(10, -17.5);
+        c.quadraticCurveTo(16, -17, 16, -11);
+        c.lineTo(15, -4);
+        c.quadraticCurveTo(14, 2, 10, 4);
+        c.lineTo(-10, 4);
+        c.quadraticCurveTo(-14, 2, -15, -4);
+        c.closePath();
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 1.0;
+        c.stroke();
+
+        // 2. Lower Shinobi Face Mask (Menpo / Cyber Respirator)
+        c.fillStyle = '#070b14';
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(-11.5, -2);
+        c.lineTo(-9, 4.5);
+        c.lineTo(0, 6.2);
+        c.lineTo(9, 4.5);
+        c.lineTo(11.5, -2);
+        c.lineTo(7, -0.5);
+        c.lineTo(0, 1.2);
+        c.lineTo(-7, -0.5);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        // Dual Cybernetic Breather Vents / Neon Filtration Slits
+        c.fillStyle = '#ec4899';
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 6 * glowMult;
+        // Left vent slit
+        c.fillRect(-6.5, 1.5, 3.2, 0.9);
+        c.fillRect(-5.5, 3.0, 2.5, 0.8);
+        // Right vent slit
+        c.fillRect(3.3, 1.5, 3.2, 0.9);
+        c.fillRect(3.0, 3.0, 2.5, 0.8);
+        c.shadowBlur = 0;
+
+        // 3. Neon Crimson Silk Headband Wrap
+        c.fillStyle = '#be185d';
+        c.fillRect(-16, -15.5, 32, 5.0);
+        c.fillStyle = '#ec4899';
+        c.fillRect(-16, -14.5, 32, 3.0);
+
+        // 4. Forged Titanium Hitai-Ate (Shinobi Forehead Protector)
+        c.fillStyle = '#1e293b';
+        c.strokeStyle = '#64748b';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.roundRect(-10.5, -16.0, 21, 6.0, 2.0);
+        c.fill();
+        c.stroke();
+
+        // Metallic Plate Top Bevel Highlight
+        c.fillStyle = '#475569';
+        c.fillRect(-9.5, -15.5, 19, 1.2);
+
+        // Metallic Corner Hex Rivets (Left and Right)
+        c.fillStyle = '#cbd5e1';
+        c.beginPath();
+        c.arc(-8.2, -13.0, 0.85, 0, Math.PI * 2);
+        c.arc(8.2, -13.0, 0.85, 0, Math.PI * 2);
+        c.fill();
+
+        // Engraved Glowing Clan Crest (Cyber Shuriken Star + Center Ruby Core)
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 8 * glowMult;
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        // 4-point cyber shuriken emblem
+        c.moveTo(0, -15.2);
+        c.lineTo(1.2, -13.5);
+        c.lineTo(3.2, -13.0);
+        c.lineTo(1.2, -12.5);
+        c.lineTo(0, -10.8);
+        c.lineTo(-1.2, -12.5);
+        c.lineTo(-3.2, -13.0);
+        c.lineTo(-1.2, -13.5);
+        c.closePath();
+        c.fill();
+
+        // Radiant Pure-White Core Beacon
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(0, -13.0, 0.8, 0, Math.PI * 2);
+        c.fill();
+        c.shadowBlur = 0;
+
+        // 5. Headband Knot & Dual Dynamic Flowing Silk Scarf Tails (Dynamic Wind Physics)
+        // Scarf Knot Block at temple/back
+        c.fillStyle = '#9d174d';
+        c.beginPath();
+        c.roundRect(-17.5, -14.8, 3.5, 4.5, 1.2);
+        c.fill();
+
+        // Tail 1: Primary Long Cascading Ribbon (Gentle, silky, stabilized flow — NO rapid shaking)
+        const wave1 = Math.sin(this.animTimer * 1.2) * 1.5;
+        const wave1Mid = wave1 * 0.35; // Kept anchored near the temple knot so the head is stable
+        c.fillStyle = '#ec4899';
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 6 * glowMult;
+        c.beginPath();
+        c.moveTo(-16.5, -14.0);
+        c.quadraticCurveTo(-24, -13.5 + wave1Mid, -33, -9.0 + wave1);
+        c.lineTo(-30, -5.5 + wave1);
+        c.quadraticCurveTo(-22, -10.0 + wave1Mid, -16.5, -11.0);
+        c.closePath();
+        c.fill();
+
+        // Tail 1 Underside Shadow Fold
+        c.fillStyle = '#9d174d';
+        c.shadowBlur = 0;
+        c.beginPath();
+        c.moveTo(-16.5, -13.5);
+        c.quadraticCurveTo(-23, -12.5 + wave1Mid, -31, -8.0 + wave1);
+        c.lineTo(-30, -6.0 + wave1);
+        c.quadraticCurveTo(-22, -10.0 + wave1Mid, -16.5, -11.5);
+        c.closePath();
+        c.fill();
+
+        // Tail 1 Searing White-Hot Energy Spine
+        c.strokeStyle = '#ffffff';
+        c.lineWidth = 0.7;
+        c.beginPath();
+        c.moveTo(-16.5, -13.8);
+        c.quadraticCurveTo(-24, -13.2 + wave1Mid, -32.5, -8.8 + wave1);
+        c.stroke();
+
+        // Tail 2: Secondary Fluttering Ribbon (Gentle harmonic phase)
+        const wave2 = Math.sin(this.animTimer * 1.0 + 0.9) * 1.2;
+        const wave2Mid = wave2 * 0.35;
+        c.fillStyle = '#f43f5e';
+        c.shadowColor = '#f43f5e';
+        c.shadowBlur = 5 * glowMult;
+        c.beginPath();
+        c.moveTo(-16.5, -12.5);
+        c.quadraticCurveTo(-23, -10.0 + wave2Mid, -29, -4.5 + wave2);
+        c.lineTo(-27, -1.8 + wave2);
+        c.quadraticCurveTo(-21, -7.5 + wave2Mid, -16.5, -10.2);
+        c.closePath();
+        c.fill();
+
+        // Tail 2 Highlights
+        c.strokeStyle = '#fbcfe8';
+        c.lineWidth = 0.6;
+        c.beginPath();
+        c.moveTo(-16.5, -12.2);
+        c.quadraticCurveTo(-23, -9.8 + wave2Mid, -28.5, -4.2 + wave2);
+        c.stroke();
+
+        c.restore();
+
+      } else if (skin === 'ai_wizard') {
+        c.save();
+        c.fillStyle = '#1e1b4b';
+        c.beginPath();
+        c.ellipse(0, -15, 19, 4, 0, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = '#a855f7';
+        c.lineWidth = 1.2;
+        c.stroke();
+
+        c.fillStyle = '#312e81';
+        c.beginPath();
+        c.moveTo(-13, -15);
+        c.quadraticCurveTo(-8, -26, 3, -34);
+        c.quadraticCurveTo(10, -26, 13, -15);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#fbbf24';
+        c.shadowColor = '#fbbf24';
+        c.shadowBlur = 6;
+        c.font = '8px sans-serif';
+        c.fillText('🌙', -3, -21);
+
+        const ringAngle = this.animTimer * 2.5;
+        c.strokeStyle = '#00f2fe';
+        c.shadowColor = '#00f2fe';
+        c.shadowBlur = 8;
+        c.lineWidth = 1.1;
+        c.beginPath();
+        c.ellipse(3, -33, 7, 2.5, ringAngle * 0.4, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+      }
+    }
+
+    drawSkinTorsoAccessories(c) {
+      const skin = this.skin || 'classic';
+
+      if (skin === 'senior_architect') {
+        c.save();
+        // === BESPOKE TAILORED EXECUTIVE SUIT ===
+        // 1. Midnight-Charcoal Tailored Suit Body
+        c.fillStyle = '#0c1322'; // Deepest midnight charcoal wool
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        // Tailored blazer shape with structured shoulders and tapered waist
+        c.roundRect(-12.5, -5, 25, 18.5, 4.5);
+        c.fill();
+        c.stroke();
+
+        // 2. Crisp White Collared Dress Shirt (V-opening)
+        c.fillStyle = '#f8fafc';
+        c.beginPath();
+        c.moveTo(-5.5, -5);
+        c.lineTo(0, 3.5);
+        c.lineTo(5.5, -5);
+        c.closePath();
+        c.fill();
+
+        // Stiff Executive Spread Shirt Collars
+        c.fillStyle = '#ffffff';
+        c.strokeStyle = '#cbd5e1';
+        c.lineWidth = 0.7;
+        // Left collar tab
+        c.beginPath();
+        c.moveTo(-5.8, -5);
+        c.lineTo(-1.2, -0.8);
+        c.lineTo(-6.0, -1.2);
+        c.closePath();
+        c.fill();
+        c.stroke();
+        // Right collar tab
+        c.beginPath();
+        c.moveTo(5.8, -5);
+        c.lineTo(1.2, -0.8);
+        c.lineTo(6.0, -1.2);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        // 3. Luxurious Blueprint-Cyan Silk Necktie & Gold Tie Bar
+        c.fillStyle = '#0284c7'; // Rich cyan silk
+        c.beginPath();
+        // Tie knot
+        c.moveTo(-1.6, -1.0);
+        c.lineTo(1.6, -1.0);
+        c.lineTo(1.2, 0.8);
+        c.lineTo(-1.2, 0.8);
+        c.closePath();
+        c.fill();
+        // Tie blade cascading down
+        c.fillStyle = '#00c2cb';
+        c.beginPath();
+        c.moveTo(-1.3, 0.8);
+        c.lineTo(1.3, 0.8);
+        c.lineTo(2.2, 7.8);
+        c.lineTo(0, 10.5);
+        c.lineTo(-2.2, 7.8);
+        c.closePath();
+        c.fill();
+
+        // Horizontal Polished Gold Tie Bar / Clip
+        c.fillStyle = '#fbbf24';
+        c.shadowColor = 'rgba(251, 191, 36, 0.4)';
+        c.shadowBlur = 3;
+        c.fillRect(-2.2, 3.8, 4.4, 1.2);
+        c.shadowBlur = 0;
+
+        // 4. Tailored Peak/Notch Lapels (Midnight Navy Slate)
+        c.fillStyle = '#172239';
+        c.strokeStyle = '#334155';
+        c.lineWidth = 1.0;
+        // Left lapel
+        c.beginPath();
+        c.moveTo(-12, -5);
+        c.lineTo(-8.5, -0.5);
+        c.lineTo(-10.2, 0.5);
+        c.lineTo(-1.5, 5.0);
+        c.lineTo(-5.2, -5);
+        c.closePath();
+        c.fill();
+        c.stroke();
+        // Right lapel
+        c.beginPath();
+        c.moveTo(12, -5);
+        c.lineTo(8.5, -0.5);
+        c.lineTo(10.2, 0.5);
+        c.lineTo(1.5, 5.0);
+        c.lineTo(5.2, -5);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        // 5. Breast Welt Pocket, Crisp White Pocket Square & Gold Architect Stylus
+        // Pocket Welt
+        c.fillStyle = '#101a2d';
+        c.fillRect(5.5, -1.2, 5.5, 1.5);
+        // Folded Silk Pocket Square (Architectural 2-point fold)
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.moveTo(6.2, -1.2);
+        c.lineTo(7.5, -3.8);
+        c.lineTo(8.6, -1.2);
+        c.lineTo(9.5, -3.4);
+        c.lineTo(10.2, -1.2);
+        c.closePath();
+        c.fill();
+        // Gold Executive Drafting Stylus / Fountain Pen Clip
+        c.strokeStyle = '#f59e0b';
+        c.lineWidth = 1.1;
+        c.beginPath();
+        c.moveTo(5.0, -2.5);
+        c.lineTo(5.0, 1.2);
+        c.stroke();
+        c.fillStyle = '#f59e0b';
+        c.beginPath();
+        c.arc(5.0, -2.5, 0.7, 0, Math.PI * 2);
+        c.fill();
+
+        // 6. Polished Amber-Gold Blazer Buttons
+        c.fillStyle = '#f59e0b';
+        c.shadowColor = 'rgba(245, 158, 11, 0.4)';
+        c.shadowBlur = 2;
+        // Top button
+        c.beginPath();
+        c.arc(0, 6.2, 1.1, 0, Math.PI * 2);
+        c.fill();
+        // Bottom button
+        c.beginPath();
+        c.arc(0, 9.6, 1.1, 0, Math.PI * 2);
+        c.fill();
+        c.shadowBlur = 0;
+
+        // 7. Subtle Blazer Vent Center Seam at Hem
+        c.strokeStyle = '#070b13';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(0, 10.8);
+        c.lineTo(0, 13.5);
+        c.stroke();
+
+        c.restore();
+
+      } else if (skin === 'santa') {
+        c.save();
+        c.fillStyle = 'rgba(220, 38, 38, 0.85)';
+        c.beginPath();
+        c.roundRect(-10, -4, 20, 16, 3);
+        c.fill();
+
+        c.fillStyle = '#ffffff';
+        c.fillRect(-2, -4, 4, 16);
+
+        c.fillStyle = '#0f172a';
+        c.fillRect(-11, 5, 22, 3.5);
+
+        c.strokeStyle = '#ffd700';
+        c.lineWidth = 1.3;
+        c.strokeRect(-3.5, 4.2, 7, 5);
+        c.fillStyle = '#ffd700';
+        c.fillRect(-0.8, 5.2, 1.6, 3);
+        c.restore();
+
+      } else if (skin === 'super_hero') {
+        // 🦸 Super Hero: Flowing Crimson Superhero Cape & Golden Chest Shield Crest
+        c.save();
+        const capeFlutter = Math.sin(this.animTimer * 4.5) * 3.5;
+        const capeFlutter2 = Math.cos(this.animTimer * 4.0) * 2.5;
+
+        c.fillStyle = '#dc2626';
+        c.shadowColor = 'rgba(220, 38, 38, 0.55)';
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.moveTo(-10, -3);
+        c.quadraticCurveTo(-14, 8 + capeFlutter, -18, 17 + capeFlutter);
+        c.lineTo(-4, 15 + capeFlutter2);
+        c.lineTo(4, 15 + capeFlutter);
+        c.quadraticCurveTo(10, 8 + capeFlutter2, 10, -3);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#991b1b';
+        c.beginPath();
+        c.moveTo(-8, 2);
+        c.lineTo(-12, 16 + capeFlutter);
+        c.lineTo(-6, 15 + capeFlutter2);
+        c.closePath();
+        c.fill();
+
+        c.fillStyle = '#ffd700';
+        c.shadowColor = '#ffd700';
+        c.shadowBlur = 4;
+        c.beginPath();
+        c.arc(-8, -3, 1.8, 0, Math.PI * 2);
+        c.arc(8, -3, 1.8, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = '#fbbf24';
+        c.strokeStyle = '#d97706';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(0, 0);
+        c.lineTo(4, 3);
+        c.lineTo(3, 7);
+        c.lineTo(0, 9);
+        c.lineTo(-3, 7);
+        c.lineTo(-4, 3);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = '#ffffff';
+        c.font = '5px sans-serif';
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText('★', 0, 4.5);
+
+        c.fillStyle = '#0f172a';
+        c.fillRect(-11, 7.5, 22, 2.8);
+        c.fillStyle = '#ffd700';
+        c.fillRect(-2, 7, 4, 3.8);
+        c.restore();
+
+      } else if (skin === 'cyber_ninja') {
+        // 🥷 Cyber Ninja / Cyber Shinobi: Stealth Shozoku Cuirass, Tactical Bandolier & Flowing Obi Sash
+        c.save();
+
+        // 1. Stealth Cuirass Overlay (Matte Obsidian Stealth Armor Vest)
+        c.fillStyle = '#090d16';
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 1.2;
+        c.beginPath();
+        c.roundRect(-12.5, -5, 25, 18.5, 4.5);
+        c.fill();
+        c.stroke();
+
+        // Angular Pectoral Armor Plates
+        c.fillStyle = '#0f172a';
+        c.beginPath();
+        // Left chest plate
+        c.moveTo(-11, -3.5);
+        c.lineTo(-2, -3.5);
+        c.lineTo(-1, 3.5);
+        c.lineTo(-10, 4.5);
+        c.closePath();
+        c.fill();
+        // Right chest plate
+        c.beginPath();
+        c.moveTo(11, -3.5);
+        c.lineTo(2, -3.5);
+        c.lineTo(1, 3.5);
+        c.lineTo(10, 4.5);
+        c.closePath();
+        c.fill();
+
+        // 2. Crossed Tactical Harness (Shinobi Bandolier Webbing)
+        c.strokeStyle = '#1e293b';
+        c.lineWidth = 2.4;
+        c.beginPath();
+        // Diagonal strap 1 (top-left to bottom-right)
+        c.moveTo(-11, -4.5);
+        c.lineTo(10, 7.5);
+        // Diagonal strap 2 (top-right to bottom-left)
+        c.moveTo(11, -4.5);
+        c.lineTo(-10, 7.5);
+        c.stroke();
+
+        c.strokeStyle = '#334155';
+        c.lineWidth = 1.0;
+        c.beginPath();
+        c.moveTo(-11, -4.5); c.lineTo(10, 7.5);
+        c.moveTo(11, -4.5); c.lineTo(-10, 7.5);
+        c.stroke();
+
+        // Tactical Harness Gunmetal Buckles
+        c.fillStyle = '#64748b';
+        c.fillRect(-4.5, -0.5, 2.5, 1.8);
+        c.fillRect(2.0, -0.5, 2.5, 1.8);
+
+        // Throwing Kunai Holster on Left Strap
+        c.fillStyle = '#0f172a';
+        c.fillRect(-9.5, -3.0, 3.0, 5.0);
+        // Silver Kunai Handles
+        c.strokeStyle = '#cbd5e1';
+        c.lineWidth = 1.1;
+        c.beginPath();
+        c.moveTo(-8.8, -4.8); c.lineTo(-8.8, -3.0);
+        c.moveTo(-7.2, -4.8); c.lineTo(-7.2, -3.0);
+        c.stroke();
+        // Kunai ring pommels
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        c.arc(-8.8, -5.2, 0.75, 0, Math.PI * 2);
+        c.arc(-7.2, -5.2, 0.75, 0, Math.PI * 2);
+        c.fill();
+
+        // 3. Glowing Cyber Shinobi Core Seal (Dragon/Lotus Shuriken Reactor)
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 14 * glowMult;
+        c.fillStyle = '#ec4899';
+        c.beginPath();
+        // Diamond ninja core
+        c.moveTo(0, -1.0);
+        c.lineTo(3.2, 2.5);
+        c.lineTo(0, 6.0);
+        c.lineTo(-3.2, 2.5);
+        c.closePath();
+        c.fill();
+
+        // Radiant White Energy Heart
+        c.fillStyle = '#ffffff';
+        c.beginPath();
+        c.arc(0, 2.5, 1.4, 0, Math.PI * 2);
+        c.fill();
+
+        // Neon magenta energy conduit lines
+        c.strokeStyle = '#ec4899';
+        c.lineWidth = 0.8;
+        c.beginPath();
+        c.moveTo(-3.2, 2.5); c.lineTo(-8, 3.5);
+        c.moveTo(3.2, 2.5); c.lineTo(8, 3.5);
+        c.stroke();
+        c.shadowBlur = 0;
+
+        // 4. Traditional Shinobi Obi (Waist Sash) with Knot & Flowing Tails
+        // Wide Silk Sash Belt
+        c.fillStyle = '#9d174d';
+        c.fillRect(-12, 6.5, 24, 4.0);
+        c.fillStyle = '#ec4899';
+        c.fillRect(-12, 7.5, 24, 2.0);
+
+        // Ornate Center Obi Knot
+        c.fillStyle = '#be185d';
+        c.beginPath();
+        c.roundRect(-2.8, 6.0, 5.6, 5.0, 1.5);
+        c.fill();
+        c.strokeStyle = '#ec4899';
+        c.lineWidth = 0.8;
+        c.stroke();
+
+        // Flowing Sash Tails dangling downward over hip (Dynamic sway)
+        const sashSway = Math.sin(this.animTimer * 1.2) * 0.8;
+        c.fillStyle = '#ec4899';
+        c.shadowColor = '#ec4899';
+        c.shadowBlur = 6 * glowMult;
+        c.beginPath();
+        // Left sash tail
+        c.moveTo(-1.8, 10.5);
+        c.quadraticCurveTo(-3.5 + sashSway, 14, -4.5 + sashSway, 17.5);
+        c.lineTo(-2.2 + sashSway, 17.5);
+        c.quadraticCurveTo(-1.2 + sashSway, 14, -0.2, 10.5);
+        c.closePath();
+        // Right sash tail
+        c.moveTo(0.2, 10.5);
+        c.quadraticCurveTo(1.5 + sashSway, 14, 2.8 + sashSway, 18.5);
+        c.lineTo(4.8 + sashSway, 18.5);
+        c.quadraticCurveTo(3.2 + sashSway, 14, 1.8, 10.5);
+        c.closePath();
+        c.fill();
+        c.shadowBlur = 0;
+
+        c.restore();
+      }
+    }
   }
+  window.CyberCharlie = CyberCharlie;
 
   // ==========================================================================
   // 1. Dynamic Comet & Particle Engine
@@ -4467,6 +5862,104 @@
       if (localStorage.getItem('portfolio_audio_muted') === 'true') {
         setPortfolioAudioMute(true);
       }
+    } catch (e) { }
+
+    // =========================================================================
+    // 4b. Setup Charlie Avatar Wardrobe & Skin System
+    // =========================================================================
+    const aiSkinConfigBtn = document.getElementById('aiSkinConfigBtn');
+    const aiSkinDropdownMenu = document.getElementById('aiSkinDropdownMenu');
+    const aiSkinActiveIcon = document.getElementById('aiSkinActiveIcon');
+    const aiSkinModeLabel = document.getElementById('aiSkinModeLabel');
+    const skinItems = document.querySelectorAll('.ai-skin-item');
+
+    const SKIN_DATA = {
+      classic: { name: 'CLASSIC', icon: '🤖', desc: 'Classic Cyber Bot' },
+      senior_architect: { name: 'ARCHITECT', icon: '👓', desc: 'Senior Architect (Hair & Glasses)' },
+      santa: { name: 'SANTA', icon: '🎅', desc: 'Santa Claus (Hat & Beard)' },
+      super_hero: { name: 'HERO', icon: '🦸', desc: 'Super Hero (Cape & Star Shield)' },
+      cyber_ninja: { name: 'SHINOBI', icon: '🥷', desc: 'Cyber Ninja (Shadow Cowl & Ninjato)' },
+      ai_wizard: { name: 'ARCHMAGE', icon: '🧙‍♂️', desc: 'AI Archmage (Starry Hat)' }
+    };
+
+    function applyCharlieSkinGlobally(skinId, announce = false) {
+      const skinKey = SKIN_DATA[skinId] ? skinId : 'classic';
+      const info = SKIN_DATA[skinKey];
+
+      try {
+        localStorage.setItem('charlie_avatar_skin', skinKey);
+      } catch (e) { }
+
+      if (window.portfolioCharlie) {
+        window.portfolioCharlie.skin = skinKey;
+        if (typeof window.portfolioCharlie.addSparks === 'function') {
+          window.portfolioCharlie.addSparks(window.portfolioCharlie.x, window.portfolioCharlie.y - 12 * window.portfolioCharlie.scale, '#00f2fe', 16);
+          window.portfolioCharlie.addSparks(window.portfolioCharlie.x, window.portfolioCharlie.y - 20 * window.portfolioCharlie.scale, '#f59e0b', 14);
+        }
+      }
+      if (window.portfolioDockCharlie) {
+        window.portfolioDockCharlie.skin = skinKey;
+        if (typeof window.portfolioDockCharlie.addSparks === 'function') {
+          window.portfolioDockCharlie.addSparks(36, 25, '#00f2fe', 12);
+        }
+      }
+
+      if (aiSkinActiveIcon) aiSkinActiveIcon.textContent = info.icon;
+      if (aiSkinModeLabel) aiSkinModeLabel.textContent = info.name;
+
+      skinItems.forEach(item => {
+        const itemSkin = item.getAttribute('data-skin');
+        item.classList.toggle('active', itemSkin === skinKey);
+      });
+
+      if (announce && scoreboard) {
+        scoreboard.setMessage(`Wardrobe equipped: ${info.desc}! ✨`);
+      }
+    }
+    window.applyCharlieSkinGlobally = applyCharlieSkinGlobally;
+
+    if (aiSkinConfigBtn && aiSkinDropdownMenu) {
+      aiSkinConfigBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = aiSkinDropdownMenu.style.display !== 'none';
+        aiSkinDropdownMenu.style.display = isOpen ? 'none' : 'block';
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#aiSkinPickerContainer')) {
+          if (aiSkinDropdownMenu) aiSkinDropdownMenu.style.display = 'none';
+        }
+      });
+    }
+
+    skinItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const skinId = item.getAttribute('data-skin');
+        applyCharlieSkinGlobally(skinId, true);
+        if (aiSkinDropdownMenu) aiSkinDropdownMenu.style.display = 'none';
+      });
+    });
+
+    // Cross-tab and Charlie Lab synchronization
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'charlie_avatar_skin' && e.newValue) {
+        applyCharlieSkinGlobally(e.newValue, false);
+      }
+    });
+
+    window.addEventListener('charlie_skin_change', (e) => {
+      if (e.detail && e.detail.skin) {
+        applyCharlieSkinGlobally(e.detail.skin, false);
+      }
+    });
+
+    // Initialize persisted skin on startup
+    try {
+      const savedSkin = localStorage.getItem('charlie_avatar_skin') || 'classic';
+      applyCharlieSkinGlobally(savedSkin, false);
     } catch (e) { }
 
     // 5. Setup Floating FX Preset Switcher
