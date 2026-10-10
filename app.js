@@ -251,6 +251,7 @@
     }
 
     setSkin(skinId) {
+      if (skinId === 'ninja') skinId = 'cyber_ninja';
       this.skin = skinId || 'classic';
       try {
         localStorage.setItem('charlie_avatar_skin', this.skin);
@@ -1649,7 +1650,7 @@
 
       } else {
         // Standard Robot Head
-        const hideAntenna = (currentSkin === 'santa' || currentSkin === 'ai_wizard' || currentSkin === 'cyber_ninja');
+        const hideAntenna = (currentSkin === 'senior_architect' || currentSkin === 'santa' || currentSkin === 'ai_wizard' || currentSkin === 'cyber_ninja' || currentSkin === 'ninja');
 
         if (!hideAntenna) {
           let antennaBend = (this.state === 'run' ? -0.4 : 0) + (this.state === 'sad' ? -1.2 : 0);
@@ -2471,7 +2472,7 @@
         c.moveTo(12, 4); c.lineTo(15, 1); c.lineTo(18, 4.5);
         c.stroke();
 
-      } else if (skin === 'cyber_ninja') {
+      } else if (skin === 'cyber_ninja' || skin === 'ninja') {
         // 🥷 Cyber Shinobi Prop: High-Frequency Muramasa Ninjato (Plasma Cyber Katana)
         // 1. Two-Handed Cyber Tsuka (Hilt) & Tsukamaki Wrap
         c.fillStyle = '#090d16';
@@ -2738,7 +2739,7 @@
         c.fillText('★', 6, 0.3);
         c.restore();
 
-      } else if (skin === 'cyber_ninja') {
+      } else if (skin === 'cyber_ninja' || skin === 'ninja') {
         // 🥷 Cyber Shinobi Off-Hand: Kinetic Fuma Shuriken / Plasma Nanotech Aegis
         c.save();
 
@@ -2863,7 +2864,8 @@
     }
 
     drawSkinHeadAccessories(c) {
-      const skin = this.skin || 'classic';
+      const skin = (this.skin === 'ninja' ? 'cyber_ninja' : this.skin) || 'classic';
+      const glowMult = this.bladeGlowIntensity || 2.5;
 
       if (skin === 'senior_architect') {
         // 🏛️ Distinguished Senior Architect Hair (Natural Rich Jet-Black Executive Pompadour)
@@ -3337,7 +3339,8 @@
     }
 
     drawSkinTorsoAccessories(c) {
-      const skin = this.skin || 'classic';
+      const skin = (this.skin === 'ninja' ? 'cyber_ninja' : this.skin) || 'classic';
+      const glowMult = this.bladeGlowIntensity || 2.5;
 
       if (skin === 'senior_architect') {
         c.save();
@@ -5878,11 +5881,13 @@
       senior_architect: { name: 'ARCHITECT', icon: '👓', desc: 'Senior Architect (Hair & Glasses)' },
       santa: { name: 'SANTA', icon: '🎅', desc: 'Santa Claus (Hat & Beard)' },
       super_hero: { name: 'HERO', icon: '🦸', desc: 'Super Hero (Cape & Star Shield)' },
-      cyber_ninja: { name: 'SHINOBI', icon: '🥷', desc: 'Cyber Ninja (Shadow Cowl & Ninjato)' },
+      cyber_ninja: { name: 'NINJA', icon: '🥷', desc: 'Cyber Ninja (Shadow Cowl & Ninjato)' },
+      ninja: { name: 'NINJA', icon: '🥷', desc: 'Cyber Ninja (Shadow Cowl & Ninjato)' },
       ai_wizard: { name: 'ARCHMAGE', icon: '🧙‍♂️', desc: 'AI Archmage (Starry Hat)' }
     };
 
     function applyCharlieSkinGlobally(skinId, announce = false) {
+      if (skinId === 'ninja') skinId = 'cyber_ninja';
       const skinKey = SKIN_DATA[skinId] ? skinId : 'classic';
       const info = SKIN_DATA[skinKey];
 
