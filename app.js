@@ -27,6 +27,15 @@
     if (document.body && document.body.classList.contains('in-simulator')) return true;
     if (window.self !== window.top && Math.min(window.innerWidth, window.innerHeight) <= 768) return true;
 
+    // Strict Desktop Guard: Any environment with a fine pointer (mouse / trackpad) is DESKTOP
+    const isFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if (isFine && !isCoarse) return false;
+
+    // Strict Desktop Guard: Fine pointer (mouse) environments wider than 600px are desktop
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || isCoarse;
+    if (!isTouch && window.innerWidth >= 600) return false;
+
     // 2. Strict Desktop Guard: Any screen wider than 768px and taller than 550px is ALWAYS desktop
     if (window.innerWidth > 768 && window.innerHeight > 550) return false;
 
@@ -34,10 +43,9 @@
     if (window.innerWidth <= 768 && window.innerWidth <= window.innerHeight) return true;
 
     // 4. Rotated mobile landscape: phone turned sideways has small height (<= 500px) and width <= 956px
-    if (window.innerWidth > window.innerHeight && window.innerHeight <= 500 && window.innerWidth <= 956) return true;
+    if (isTouch && window.innerWidth > window.innerHeight && window.innerHeight <= 500 && window.innerWidth <= 956) return true;
 
     // 5. Touch phone: minimum dimension <= 500px covers all mobile smartphones (iPhone 16 Pro Max is 440x956)
-    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
     if (isTouch && Math.min(window.innerWidth, window.innerHeight) <= 500) return true;
 
     return false;
@@ -48,6 +56,11 @@
       const dev = document.body.getAttribute('data-sim-device') || '';
       if (dev !== 'tablet' && dev !== 'ipad') return true;
     }
+    const isFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if (isFine && !isCoarse) return false;
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || isCoarse;
+    if (!isTouch && window.innerWidth >= 600) return false;
     if (window.innerWidth > 768 && window.innerHeight > 550) return false;
     const isLandscape = (window.innerWidth > window.innerHeight);
     const isSmallHeight = (window.innerHeight <= 500);
@@ -59,7 +72,11 @@
   window.isTabletDevice = function () {
     if (window.location.search && (window.location.search.includes('device=tablet') || window.location.search.includes('device=ipad'))) return true;
     if (document.body && (document.body.classList.contains('is-tablet-device') || document.body.getAttribute('data-sim-device') === 'tablet' || document.body.getAttribute('data-sim-device') === 'ipad')) return true;
-    if (window.innerWidth >= 600 && window.innerWidth <= 1024 && !window.isRotatedMobileLandscape()) return true;
+    const isFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if (isFine && !isCoarse) return false;
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || isCoarse;
+    if (isTouch && window.innerWidth >= 600 && window.innerWidth <= 1024 && !window.isRotatedMobileLandscape()) return true;
     return false;
   };
 
@@ -83,7 +100,12 @@
   };
 
   window.isMobileScreen = function () {
-    return (window.isMobileOrRotatedMobile && window.isMobileOrRotatedMobile()) || (window.isTabletDevice && window.isTabletDevice()) || (window.innerWidth <= 1024);
+    const isFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if (isFine && !isCoarse) return false;
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || isCoarse;
+    if (!isTouch && window.innerWidth >= 768) return false;
+    return (window.isMobileOrRotatedMobile && window.isMobileOrRotatedMobile()) || (window.isTabletDevice && window.isTabletDevice()) || (window.innerWidth <= 768);
   };
 
   window.isMobileWithCharlie = function () {
@@ -91,28 +113,37 @@
   };
 
   function updateMobileOrientationState() {
-    const isMob = window.isMobileOrRotatedMobile();
-    const isTablet = window.isTabletDevice ? window.isTabletDevice() : false;
-    const isCompact = window.isCompactSE ? window.isCompactSE() : false;
-    const isLargeMob = window.isLargeMobile ? window.isLargeMobile() : (!isTablet && !isCompact);
+    const isFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    const isSimulator = (document.body && document.body.classList.contains('in-simulator')) || (window.location.search && window.location.search.includes('sim=1'));
+    const isPureDesktop = isFine && !isCoarse && !isSimulator;
+
+    const isMob = !isPureDesktop && window.isMobileOrRotatedMobile();
+    const isTablet = !isPureDesktop && (window.isTabletDevice ? window.isTabletDevice() : false);
+    const isCompact = !isPureDesktop && (window.isCompactSE ? window.isCompactSE() : false);
+    const isLargeMob = !isPureDesktop && (window.isLargeMobile ? window.isLargeMobile() : (!isTablet && !isCompact));
     if (!document.body) return;
 
-    if (isMob || isTablet || window.innerWidth <= 1024) {
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || isCoarse;
+    const isMobileViewport = !isPureDesktop && (isMob || isTablet || (isTouch && window.innerWidth <= 1024) || (window.innerWidth <= 768));
+
+    if (isMobileViewport) {
       document.body.classList.add('is-mobile-screen');
       document.body.classList.toggle('is-tablet-device', isTablet);
       document.body.classList.toggle('is-compact-se', isCompact);
       document.body.classList.toggle('is-compact-phone', isCompact);
       document.body.classList.toggle('is-large-mobile', isLargeMob);
 
+      const isGameActive = (window.portfolioEngine && window.portfolioEngine.isEnabled) || document.body.classList.contains('combat-cursor-active');
       const floatingBtn = document.getElementById('floatingCharlieBtn');
-      if (floatingBtn) floatingBtn.classList.add('hidden');
+      if (floatingBtn && !isGameActive) floatingBtn.classList.add('hidden');
       const botHud = document.getElementById('botHudWidget');
-      if (botHud) botHud.classList.add('hidden');
+      if (botHud && !isGameActive) botHud.classList.add('hidden');
 
       const charlieCanvas = document.getElementById('charlieCanvas');
-      if (charlieCanvas) charlieCanvas.style.display = 'none';
+      if (charlieCanvas && !isGameActive) charlieCanvas.style.display = 'none';
 
-      if (window.portfolioEngine && window.portfolioEngine.isEnabled) {
+      if (window.portfolioEngine && window.portfolioEngine.isEnabled && !isGameActive) {
         window.portfolioEngine.toggleState(false);
       }
     } else {
@@ -125,8 +156,9 @@
       document.body.classList.remove('is-rotated-mobile');
       document.body.classList.remove('mobile-chat-open');
 
+      const isGameActive = (window.portfolioEngine && window.portfolioEngine.isEnabled) || document.body.classList.contains('combat-cursor-active');
       const floatingBtn = document.getElementById('floatingCharlieBtn');
-      if (floatingBtn) floatingBtn.classList.remove('hidden');
+      if (floatingBtn && !isGameActive) floatingBtn.classList.remove('hidden');
       const charlieCanvas = document.getElementById('charlieCanvas');
       if (charlieCanvas) charlieCanvas.style.display = '';
     }
@@ -3784,6 +3816,8 @@
       this.shards = [];
       this.ripples = [];
       this.particleCount = 100;
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
       this.dpr = Math.min(window.devicePixelRatio || 1, 2);
       this.onShatter = null;
       this.lastGlitterySpawn = Date.now() - 6000; // First glitter comet ready after brief combat start
@@ -3812,26 +3846,27 @@
 
     init() {
       if (this.canvas) this.canvas.classList.add('fx-disabled');
+      this.resize();
       if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
         this.isEnabled = false;
-      } else {
-        this.resize();
       }
 
       window.addEventListener('resize', () => {
-        if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
+        this.resize();
+        const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || isCoarse;
+        if (isTouch && (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768))) {
           if (this.isEnabled) this.toggleState(false);
-        } else {
-          this.resize();
         }
       });
 
       window.addEventListener('orientationchange', () => {
         setTimeout(() => {
-          if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
+          this.resize();
+          const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+          const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || isCoarse;
+          if (isTouch && (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768))) {
             if (this.isEnabled) this.toggleState(false);
-          } else {
-            this.resize();
           }
         }, 120);
       });
@@ -3928,14 +3963,30 @@
     resize() {
       this.width = window.innerWidth;
       this.height = window.innerHeight;
-      this.canvas.width = this.width * this.dpr;
-      this.canvas.height = this.height * this.dpr;
-      this.ctx.scale(this.dpr, this.dpr);
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      if (this.canvas) {
+        this.canvas.width = this.width * this.dpr;
+        this.canvas.height = this.height * this.dpr;
+        if (this.ctx) {
+          this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+          this.ctx.scale(this.dpr, this.dpr);
+        }
+      }
       if (this.charlieCanvas) {
         this.charlieCanvas.width = this.width * this.dpr;
         this.charlieCanvas.height = this.height * this.dpr;
         if (this.charlieCtx) {
+          this.charlieCtx.setTransform(1, 0, 0, 1, 0, 0);
           this.charlieCtx.scale(this.dpr, this.dpr);
+        }
+      }
+      // Re-validate particles if any coordinates were NaN or non-finite
+      if (this.particles && this.particles.length > 0) {
+        for (let i = 0; i < this.particles.length; i++) {
+          const p = this.particles[i];
+          if (!p || !isFinite(p.x) || !isFinite(p.y)) {
+            this.particles[i] = this.createParticle(false);
+          }
         }
       }
     }
@@ -3955,6 +4006,10 @@
       this.isEnabled = (typeof enable === 'boolean') ? enable : !this.isEnabled;
       if (this.isEnabled) {
         this.canvas.classList.remove('fx-disabled');
+        if (this.charlieCanvas) {
+          this.charlieCanvas.style.display = '';
+        }
+        this.resize();
       } else {
         this.canvas.classList.add('fx-disabled');
       }
@@ -3981,9 +4036,12 @@
         }
       }
 
+      const w = (isFinite(this.width) && this.width > 0) ? this.width : (window.innerWidth || 1200);
+      const h = (isFinite(this.height) && this.height > 0) ? this.height : (window.innerHeight || 800);
+
       if (isGlittery) {
         const glitterSpeed = 1.35 + Math.random() * 0.65; // Smooth majestic glide speed so Charlie/player can catch it
-        const spawnX = Math.random() * (this.width + 400) - 200;
+        const spawnX = Math.random() * (w + 400) - 200;
         const spawnY = -90 - Math.random() * 80;
         return {
           x: spawnX,
@@ -4024,8 +4082,8 @@
       const radius = isOrb ? (1.5 + Math.random() * 3.6) : (isSuperFast ? (1.2 + Math.random() * 1.5) : (1.0 + Math.random() * 1.4));
       const length = isOrb ? 0 : ((28 + Math.random() * 55) * (isSuperFast ? 1.45 : 1.0));
 
-      const spawnX = initial ? Math.random() * (this.width + 600) - 300 : Math.random() * (this.width + 800) - 400;
-      const spawnY = initial ? Math.random() * this.height : -80 - Math.random() * 140;
+      const spawnX = initial ? Math.random() * (w + 600) - 300 : Math.random() * (w + 800) - 400;
+      const spawnY = initial ? Math.random() * h : -80 - Math.random() * 140;
 
       return {
         x: spawnX,
@@ -4517,38 +4575,48 @@
 
         } else {
           // STREAMING RAIN STREAK / COMET
-          const speed = Math.hypot(p.vx, p.vy);
+          const speed = Math.hypot(p.vx, p.vy) || 1;
           const normVx = p.vx / speed;
           const normVy = p.vy / speed;
 
-          const tailX = p.x - normVx * p.length;
-          const tailY = p.y - normVy * p.length;
+          const pX = isFinite(p.x) ? p.x : 0;
+          const pY = isFinite(p.y) ? p.y : 0;
+          const pLen = isFinite(p.length) ? p.length : 30;
+          const tailX = isFinite(pX - normVx * pLen) ? (pX - normVx * pLen) : pX;
+          const tailY = isFinite(pY - normVy * pLen) ? (pY - normVy * pLen) : pY;
 
-          const linGrad = this.ctx.createLinearGradient(p.x, p.y, tailX, tailY);
+          let linGrad;
+          try {
+            linGrad = this.ctx.createLinearGradient(pX, pY, tailX, tailY);
+          } catch (e) {
+            linGrad = null;
+          }
 
-          if (p.shadeTier >= 2) {
-            linGrad.addColorStop(0, this.theme.highlight);
-            linGrad.addColorStop(0.3, this.theme.midBright);
-            linGrad.addColorStop(0.8, this.theme.midDark);
-            linGrad.addColorStop(1, 'transparent');
-          } else {
-            linGrad.addColorStop(0, this.theme.midBright);
-            linGrad.addColorStop(0.4, this.theme.midDark);
-            linGrad.addColorStop(0.9, this.theme.deepDark);
-            linGrad.addColorStop(1, 'transparent');
+          if (linGrad && typeof linGrad.addColorStop === 'function') {
+            if (p.shadeTier >= 2) {
+              linGrad.addColorStop(0, this.theme.highlight);
+              linGrad.addColorStop(0.3, this.theme.midBright);
+              linGrad.addColorStop(0.8, this.theme.midDark);
+              linGrad.addColorStop(1, 'transparent');
+            } else {
+              linGrad.addColorStop(0, this.theme.midBright);
+              linGrad.addColorStop(0.4, this.theme.midDark);
+              linGrad.addColorStop(0.9, this.theme.deepDark);
+              linGrad.addColorStop(1, 'transparent');
+            }
           }
 
           this.ctx.beginPath();
-          this.ctx.moveTo(p.x, p.y);
+          this.ctx.moveTo(pX, pY);
           this.ctx.lineTo(tailX, tailY);
-          this.ctx.strokeStyle = linGrad;
-          this.ctx.lineWidth = p.radius * 1.3;
+          this.ctx.strokeStyle = linGrad || this.theme.midBright;
+          this.ctx.lineWidth = Math.max(1.0, (p.radius || 1.2) * 1.3);
           this.ctx.lineCap = 'round';
           this.ctx.stroke();
 
           // Subtle head glow
           this.ctx.beginPath();
-          this.ctx.arc(p.x, p.y, p.radius * 0.8, 0, Math.PI * 2);
+          this.ctx.arc(pX, pY, Math.max(0.6, (p.radius || 1.2) * 0.8), 0, Math.PI * 2);
           this.ctx.fillStyle = this.theme.highlight;
           this.ctx.fill();
         }
@@ -4556,10 +4624,12 @@
 
       // 3. Draw Shatter Shards
       this.shards.forEach(s => {
+        const sX = isFinite(s.x) ? s.x : 0;
+        const sY = isFinite(s.y) ? s.y : 0;
         this.ctx.beginPath();
-        this.ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        this.ctx.arc(sX, sY, Math.max(0.5, s.radius || 1.2), 0, Math.PI * 2);
         this.ctx.fillStyle = s.color || this.theme.spark;
-        this.ctx.globalAlpha = s.alpha;
+        this.ctx.globalAlpha = Math.max(0, Math.min(1, s.alpha || 0));
         this.ctx.shadowBlur = 6;
         this.ctx.shadowColor = s.color || this.theme.midBright;
         this.ctx.fill();
@@ -4622,9 +4692,13 @@
     }
 
     animate() {
-      this.update();
-      this.draw();
-      this.drawDockCharlie();
+      try {
+        this.update();
+        this.draw();
+        this.drawDockCharlie();
+      } catch (err) {
+        console.warn('ParticleEngine animation frame caught:', err);
+      }
       requestAnimationFrame(() => this.animate());
     }
   }
@@ -5609,11 +5683,19 @@
 
     function toggleFunMode(forceState) {
       const floatingBtn = document.getElementById('floatingCharlieBtn');
-      const dockRect = floatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
+      const hasFloatingBtn = floatingBtn && floatingBtn.offsetWidth > 0 && floatingBtn.offsetHeight > 0;
+      const dockRect = hasFloatingBtn ? floatingBtn.getBoundingClientRect() : { left: window.innerWidth - 60, top: window.innerHeight - 60, width: 44, height: 44 };
       const dockCenterX = dockRect.left + dockRect.width / 2;
       const dockCenterY = dockRect.top + dockRect.height / 2;
 
-      if (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768)) {
+      const isFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+      const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+      const isSimulator = (document.body && document.body.classList.contains('in-simulator')) || (window.location.search && window.location.search.includes('sim=1'));
+      const isPureDesktop = isFine && !isCoarse && !isSimulator;
+
+      const isMobileScreenActive = !isPureDesktop && (window.isMobileOrRotatedMobile ? window.isMobileOrRotatedMobile() : (window.innerWidth <= 768));
+
+      if (isMobileScreenActive) {
         if (forceState === false) {
           if (desktopNoticeToast) desktopNoticeToast.classList.add('hidden');
         } else {
@@ -5684,8 +5766,8 @@
         }
 
         // Charlie Supersonic Cyber Dash: directly to Cursor!
-        const targetX = (engine.mouse && engine.mouse.x > 0) ? engine.mouse.x : (window.innerWidth / 2);
-        const targetY = (engine.mouse && engine.mouse.y > 0) ? engine.mouse.y : (window.innerHeight / 2);
+        const targetX = (engine.mouse && isFinite(engine.mouse.x) && engine.mouse.x > 0) ? engine.mouse.x : (window.innerWidth / 2);
+        const targetY = (engine.mouse && isFinite(engine.mouse.y) && engine.mouse.y > 0) ? engine.mouse.y : (window.innerHeight / 2);
 
         // Lockout the chatbot in normal section view so Charlie is visibly deployed into combat,
         // with instant "Disable Game to Use Bot" and "Return to Profile" buttons
@@ -5720,11 +5802,24 @@
         if (engine && engine.charlie) {
           engine.charlie.sectionActive = false;
           engine.charlie.isGameModeDeploy = true;
-          const startX = (engine.charlie.x > -200) ? engine.charlie.x : dockCenterX;
-          const startY = (engine.charlie.y > -200) ? engine.charlie.y : dockCenterY;
+          const startX = (isFinite(engine.charlie.x) && engine.charlie.x > -200) ? engine.charlie.x : dockCenterX;
+          const startY = (isFinite(engine.charlie.y) && engine.charlie.y > -200) ? engine.charlie.y : dockCenterY;
+          if (engine.charlieCanvas) {
+            engine.charlieCanvas.style.display = '';
+            engine.charlieCanvas.classList.add('combat-mode-visible');
+          }
+          if (engine.canvas) {
+            engine.canvas.classList.add('combat-mode-visible');
+          }
           engine.charlie.triggerDeploy(startX, startY, targetX, targetY, true);
         }
       } else {
+        if (engine && engine.charlieCanvas) {
+          engine.charlieCanvas.classList.remove('combat-mode-visible');
+        }
+        if (engine && engine.canvas) {
+          engine.canvas.classList.remove('combat-mode-visible');
+        }
         soundEngine.stopBGM();
         if (navFxToggle) navFxToggle.classList.remove('active');
         if (fxWidget) {
