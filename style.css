@@ -12070,12 +12070,10 @@ screen and (pointer: coarse) and (orientation: landscape) and (max-height: 550px
 
 /* ==========================================================================
    ⚡ ABSOLUTE GAME MODE CANVASES & MASCOT OVERRIDE (Desktop, Zoom & Resolution Resilient)
-   Charlie and Comets MUST NEVER be hidden while Game Mode is actively running!
+   Charlie foreground mascot must be z-index: 99990; Comet cascade background must stay at z-index: 0!
    ========================================================================== */
 body.combat-cursor-active #charlieCanvas,
-body.combat-cursor-active #cometCanvas,
-#charlieCanvas.combat-mode-visible,
-#cometCanvas.combat-mode-visible {
+#charlieCanvas.combat-mode-visible {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
@@ -12086,6 +12084,20 @@ body.combat-cursor-active #cometCanvas,
   top: 0 !important;
   left: 0 !important;
   z-index: 99990 !important;
+}
+
+body.combat-cursor-active #cometCanvas,
+#cometCanvas.combat-mode-visible {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 0 !important;
 }
 
 body.combat-cursor-active #botHudWidget,
