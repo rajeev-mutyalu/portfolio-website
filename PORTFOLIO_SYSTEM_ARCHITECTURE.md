@@ -12,12 +12,15 @@
 ## 📑 Table of Contents
 1. [Executive Summary & Design Philosophy](#1-executive-summary--design-philosophy)
 2. [Visual Design System: Obsidian Dark Glassmorphism](#2-visual-design-system-obsidian-dark-glassmorphism)
+   - [Interactive Navigation & Frozen Section Scroll HUD (`#frozenSectionHUD`)](#-interactive-navigation--frozen-section-scroll-hud-frozensectionhud)
 3. [🤖 Cyber Charlie AI & Character System](#3--cyber-charlie-ai--character-system)
-   - [Conversational Knowledge Base & RAG Engine](#conversational-knowledge-base--rag-engine)
+   - [Charlie Docking Stations & Escort Architecture](#-charlie-docking-stations--escort-architecture)
+   - [Air-Gapped Offline Local Mode Architecture](#-air-gapped-offline-local-mode-architecture)
    - [Supersonic Cyber Dash & Combat Deployment](#supersonic-cyber-dash--combat-deployment)
    - [Multi-Skin Wardrobe System (Cyber, Architect, Shinobi)](#multi-skin-wardrobe-system)
    - [Cyber Charlie Character Lab (`charlie-lab.html`)](#cyber-charlie-character-lab)
 4. [🎮 10/10 Arcade Gamification & Comet Cascade Engine](#4-1010-arcade-gamification--comet-cascade-engine)
+   - [Game Mode Lifecycle & UI Transformations](#-game-mode-lifecycle--ui-transformations)
    - [Canvas Physics & Raycasting](#canvas-physics--raycasting)
    - [Visual Shaders & FX Presets](#visual-shaders--fx-presets)
    - [Arcade Scoring, Shockwaves & Milestones](#arcade-scoring-shockwaves--milestones)
@@ -65,6 +68,31 @@ Built upon the bespoke **Vetric Design System**, the visual presentation establi
 | **Typography (Body)** | `Plus Jakarta Sans` / `Inter` (`400–500` weight) | High legibility technical prose |
 | **Typography (Code & Stats)** | `JetBrains Mono` (`0.82rem`) | Telemetry, stats, shell commands, chips |
 
+### 📌 Interactive Navigation & Frozen Section Scroll HUD (`#frozenSectionHUD`)
+A key UX innovation of the portfolio is the **Real-Time Frozen Section HUD**, an active section title bar pinned immediately beneath the fixed glassmorphic navbar:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ [RM] Rajeev Mutyalu          [Architecture] [Endorsements] [Contact]   [Game Mode] ( ) │ ← Fixed Navbar
+├────────────────────────────────────────────────────────────────────────────────────────┤
+│ (●) Active Section // What Leaders Say   [▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░] 52.4%              │ ← Frozen HUD
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Active Title Freeze & Dynamic Visibility:**
+   - As the user scrolls through the portfolio, the HUD detects when a section header reaches the bottom edge of the navbar (`triggerLine = navHeight + 12px`).
+   - The HUD smoothly slides in (`.is-visible`), freezing the active section's title so the visitor always maintains clear spatial orientation.
+   - When a section ends, or while in the natural buffer gap between major sections (such as Hero and Footer), the HUD gracefully slides away.
+2. **Smooth Cross-Fade Title Morphing (`.hud-morphing`):**
+   - When crossing from one section into the next, the title does not jump abruptly. A 100ms cubic-bezier transition fades the text out and morphs cleanly into the incoming section name.
+3. **Live Section Scroll Percentage Indicator (`#hudProgressFill`):**
+   - Embedded directly within the frozen pill is a precision progress bar calculating exactly how much of that specific section has been traversed:
+     $$\text{activeProgress} = \min\left(100, \max\left(0, \frac{\text{triggerLine} - \text{headerRect.top}}{\text{totalFrozenDist}} \times 100\right)\right)$$
+   - Provides immediate, dynamic visual feedback on section depth and content remaining.
+   - When transitioning into a new section, the progress bar snaps to `0%` without backward tweening, then resumes linear tracking.
+4. **1-Click Scroll-to-Top Navigation:**
+   - Clicking anywhere on the frozen HUD pill automatically triggers a smooth scroll back to the top anchor of that active section.
+
 ---
 
 ## 3. 🤖 Cyber Charlie AI & Character System
@@ -87,18 +115,40 @@ Built upon the bespoke **Vetric Design System**, the visual presentation establi
   - Webpage Active Control                      - Multi-Skin Wardrobe System
 ```
 
-### Conversational Knowledge Base & RAG Engine
-* **Sub-Millisecond Local Latency:** Operates entirely client-side without external API keys or server roundtrips, ensuring instantaneous response times and zero downtime.
-* **Dynamic Multi-Variation Knowledge Engine:** Every technical question features **3 to 4 distinct curated response variations** combined with rotating conversational lead-in archetypes. Answers alternate between system scaling, enterprise ROI, low-level mechanics, and team leadership.
-* **Executive 4-Pillar Deep Dives:** All architecture explanations strictly follow the four-pillar format:
-  1. **What it is** (System architecture & definition)
-  2. **Where it is used** (Production context & DCC integrations)
-  3. **Why it is used** (Technical rationale & benchmarks)
-  4. **How it helps production** (Business ROI, error reduction, throughput gains)
-* **Active Interactive Webpage Control:**
-  - Asking Charlie about *OpenUSD* or *n8n Automation* automatically switches tabs on the live **Architecture Visualizer**.
-  - Asking to *"turn on game mode"* or *"switch fx to solar"* dynamically triggers the particle engine and cycles visual shaders.
-* **Context-Aware Dynamic Chips:** Quick-action query pills shuffle dynamically after each interaction. When Game Mode is active, chips contextually switch to game controls (`⚡ Solar Flare`, `🌌 Aurora`, `🔇 Mute Sound`, `🛑 Turn Off Game`).
+### ⚓ Charlie Docking Stations & Escort Architecture
+Charlie maintains two permanent, context-aware docking stations on the webpage:
+
+1. **Floating Quick-Access Launcher (`#floatingCharlieBtn`):**
+   - **Location:** Anchored to the bottom-right corner of the viewport (`bottom: 24px; right: 24px; z-index: 9998`).
+   - **Live Miniature Canvas (`#charlieDockCanvas`):** Hosts a live, rendered 72×72 miniature version of Charlie looking around, blinking, and standing guard.
+   - **Pulsing Energy Beacon (`.floating-charlie-pulse`):** Emits gentle periodic cyan light rings inviting recruiter interaction.
+   - **Escort Flight Navigation:** Clicking the launcher does not just pop open a window; Charlie escorts the user with smooth page scrolling directly to the `#ai-assistant` terminal, automatically focusing the input field and presenting fresh suggested prompts.
+   - **Combat Hiding:** When Game Mode is engaged, Charlie launches *out* of this dock into the battlefield, and the floating button smoothly hides to prevent UI clutter.
+
+2. **Terminal Mascot Station (`#botAvatarBox`):**
+   - **Location:** Integrated directly into the header of the AI Assistant terminal (`#charlie`).
+   - **Mascot Perch:** When the terminal is scrolled into view, Charlie docks onto this perch, actively reflecting conversational states:
+     - `waiting`: Scanning the visitor with calm eye blinks.
+     - `writing`: Typing response letters with rapid focused visor animations.
+     - `celebrating`: Triumphant hops and celebratory particle sparks.
+   - If the user scrolls away from the chat terminal while Charlie is perched there, he smoothly executes a return dash back to the bottom-right floating dock!
+
+### 🔒 Air-Gapped Offline Local Mode Architecture
+Charlie is engineered to function **100% offline without relying on external cloud LLM APIs**:
+
+* **Zero External Dependencies & Zero Data Leakage:** All inference, keyword matching, and knowledge retrieval occurs entirely in-browser memory. Recruiter questions and interactions never leave the client device.
+* **Deterministic Keyword & Semantic Scoring Engine:**
+  - Evaluates user queries against a comprehensive multi-domain matrix: OpenUSD, n8n automation, on-premise private LLMs, MCP, production filmography, leadership pedigree, and why to hire Rajeev.
+  - Computes match confidence across technical tokens and semantic synonyms with sub-millisecond local latency.
+* **Dynamic Multi-Variation Response Trees:**
+  - To prevent robotic repetition, every single core topic contains **3 to 4 distinctly authored response variations**:
+    - *Variation A:* Architectural scalability, data structures, and pipeline throughput.
+    - *Variation B:* Business ROI, production cost reduction, and turnaround times.
+    - *Variation C:* Low-level DCC integration mechanics (Maya, Houdini, Nuke, ShotGrid).
+    - *Variation D:* Team leadership, mentorship, and engineering culture.
+  - Each response randomly cycles between conversational opening phrases (*"Let's break down Rajeev's OpenUSD architecture...", "From a systems scalability standpoint...", "In high-throughput feature film pipelines..."*).
+* **Optional BYOK (Bring Your Own Key) Modal:**
+  - For visitors wishing to test frontier models, an optional configuration modal (`#aiConfigModal`) allows users to supply their own OpenAI API key stored strictly in `localStorage`, but offline local mode remains the default, high-speed baseline.
 
 ### Supersonic Cyber Dash & Combat Deployment
 * **Launch Dash (`to_cursor`):** When Game Mode is toggled ON, Charlie performs a supersonic dash with electric cyan spark bursts directly from his dock/mascot station to the user's cursor position.
@@ -139,6 +189,42 @@ A dedicated standalone character engineering workbench accessible via `/charlie-
 ---
 
 ## 4. 🎮 10/10 Arcade Gamification & Comet Cascade Engine
+
+The portfolio features a fully interactive 60 FPS HTML5 Canvas physics engine (`#cometCanvas`) running behind the UI.
+
+### 🕹️ Game Mode Lifecycle & UI Transformations
+
+Game Mode is engineered as a complete ambient state transformation of the portfolio:
+
+#### A. Trigger Mechanisms
+Game Mode can be engaged through three seamless entry points:
+1. **Navbar Toggle Switch:** Clicking `#fxSwitchWrapper` in the top right navigation bar.
+2. **Chat Command:** Asking Charlie in chat: *"turn on game mode"*, *"play game"*, or *"deploy charlie"*.
+3. **Dynamic Quick Chips:** Clicking the `🎮 Turn On Game Mode` chip in the suggested prompts.
+
+#### B. Active UI Transformations
+When Game Mode turns ON, the portfolio transforms into an interactive arcade environment:
+1. **Combat Cursor Activation:** `body.combat-cursor-active` is applied across the DOM, switching the mouse pointer into a precision crosshair reticle.
+2. **Mission Toast Banner (`#missionToast`):** Slides into view announcing:
+   > ⚡ **COSMIC WEAPONS ONLINE!** Use your mouse pointer weapon or click anywhere to vaporize incoming comets & level up your score!
+3. **Live Scoreboard HUD (`#botHudWidget`):** Deploys to the bottom-left of the viewport:
+   - Displays real-time **Shattered Score** counter.
+   - Shows active **Combo Multiplier** (`COMBO x3!`, `COMBO x5!`).
+   - Houses the audio mute/unmute speaker toggle.
+   - Displays the current **Sentinel-X Rank Badge** (`Cadet` &rarr; `Vanguard`).
+4. **Floating FX Preset Widget (`#fxWidget`):** Appears on screen, allowing 1-click switching between particle shaders (`Comet Cascade`, `Solar Flare`, `Aurora Borealis`, `Hyper Diamond`).
+5. **Chatbot Terminal Lockout (`.game-mode-lockout`):**
+   - Because Charlie is physically deployed in the skies defending the page, the chat input field is locked with the placeholder: *"Charlie is busy destroying comets... Click 'Disable Game to Use Bot' to chat"*.
+   - A dedicated **`[ Disable Game to Use Bot ]`** button appears inside the chat card, giving recruiters instant 1-click access to return to conversational mode whenever they wish.
+6. **Full-Screen Terminal Auto-Restore:** If the visitor had expanded the terminal to full-screen before turning on the game, Game Mode automatically restores the terminal to normal bounds so the user is never trapped in a full-screen view.
+
+#### C. Restoration Lifecycle
+When Game Mode is toggled OFF:
+1. Procedural cosmic BGM stops immediately.
+2. `body.combat-cursor-active` is removed, restoring standard system pointers.
+3. Scoreboard HUD, FX widget, and mission toast slide away.
+4. Chatbot terminal unlocks, restoring the input field and normal query chips.
+5. Charlie executes a supersonic return dash back to his dock or mascot station.
 
 The portfolio features a fully interactive 60 FPS HTML5 Canvas physics engine (`#cometCanvas`) running behind the UI.
 
