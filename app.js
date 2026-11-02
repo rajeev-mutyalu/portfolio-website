@@ -5668,6 +5668,7 @@
       } else {
         if (welcomeLabel) welcomeLabel.innerText = "Rajeev's Executive Quick Links:";
         welcomeChips.innerHTML = `
+          <button type="button" class="ai-followup-btn" data-query="What is Learn with Charlie?">🚀 Learn with Charlie</button>
           <button type="button" class="ai-followup-btn" data-query="Who is Rajeev Mutyalu and why should we hire him?">🌟 Why Hire Rajeev?</button>
           <button type="button" class="ai-followup-btn" data-query="Tell me about Rajeev's AI certifications, accelerator credentials, and hackathons">📜 AI Certifications &amp; Hackathon</button>
           <button type="button" class="ai-followup-btn" data-query="Tell me about Rajeev's 20-year engineering leadership and mentorship background">🏆 Leadership &amp; Filmography</button>
@@ -7843,9 +7844,11 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         ],
         responses: [
           `Rajeev Mutyalu has 20+ years of software architecture, production technology, and R&amp;D engineering leadership across world-class studios and technology organizations:<br/><br/>
-1. 🚀 <strong>Astra Studios</strong> (London, UK &bull; Sept 2025 &ndash; Present)<br/>
+1. 🚀 <strong>Charlie AI &bull; Learn with Charlie</strong> (London, UK &bull; August 2026 &ndash; Present)<br/>
+   &bull; <em>Founder:</em> Founded Charlie AI and built Learn with Charlie (https://learnwithcharlie.ai), a curriculum-bound AI maths tutor for Indian school children. Teaches page by page from the child's school textbook with voice and a live blackboard. Owned end to end: product, UX, architecture, build, brand, launch, social media and publisher partnerships.<br/><br/>
+2. 🎬 <strong>Astra Studios</strong> (London, UK &bull; Sept 2025 &ndash; Present)<br/>
    &bull; <em>Lead Software Architect:</em> Leading development of the <strong>Studio.AI GenAI Platform</strong> (Veo, Kling, ComfyUI, ACES conforming), end-to-end <strong>OpenUSD pipeline</strong>, Editorial Turnover / Conform / I/O, and zero-touch <strong>n8n</strong> studio automation.<br/><br/>
-2. 🎥 <strong>Technicolor Group</strong> (London, UK &amp; Bengaluru, India &bull; Jan 2022 &ndash; Feb 2025, Jul 2012 &ndash; Jun 2017)<br/>
+3. 🎥 <strong>Technicolor Group</strong> (London, UK &amp; Bengaluru, India &bull; Jan 2022 &ndash; Feb 2025, Jul 2012 &ndash; Jun 2017)<br/>
    &bull; <em>R&amp;D Supervisor &amp; Technology Lead:</em> Led globally distributed 2D/3D R&amp;D software engineering teams across London, Montreal, and Bengaluru. Architected <strong>ReviewTool</strong> (real-time 4K+ media caching &amp; RV sync), <strong>ProNuke</strong> modular shot assembly ecosystem, Meshroom photogrammetry integration, and macOS AVFoundation media engines.<br/><br/>
 3. 🦁 <strong>MPC Film (Moving Picture Company)</strong> (Bengaluru, India &bull; Jul 2017 &ndash; Dec 2021)<br/>
    &bull; <em>Lead Pipeline Software Developer:</em> Spearheaded <strong>RPM Unification</strong> across MPC, MR.X, and The Mill. Engineered <strong>Nuke Bridge</strong> with Tractor render farm and ShotGrid on Oscar-winning productions (<em>1917, RRR, The Lion King</em>).<br/><br/>
@@ -8584,6 +8587,7 @@ The <strong>Cyber Charlie Character Lab</strong> (<code>charlie-lab.html</code>)
     }
 
     function matchQueryToKnowledge(query) {
+      window.matchQueryToKnowledge = matchQueryToKnowledge;
       const raw = (query || '').trim();
       const q = raw.toLowerCase();
       const cleanQ = q.replace(/[\s?!.,;:_~#*`"']+/g, ' ').trim();
@@ -9016,6 +9020,133 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
         }
       }
 
+      // 4e-1. Learn with Charlie: Overview & What is Rajeev Building
+      if (
+        /\b(what\s+is\s+learn\s+with\s+charlie|learn\s+with\s+charlie|about\s+learn\s+with\s+charlie|charlie\s+ai|what\s+is\s+rajeev\s+building|what\s+is\s+he\s+building|what\s+are\s+you\s+building|founder\s+product|his\s+startup|edtech|maths?\s+tutor)\b/i.test(q)
+      ) {
+        return {
+          id: 'learn_with_charlie_overview',
+          title: 'Learn with Charlie (Charlie AI) — Founder Product',
+          response: `🚀 <strong>LEARN WITH CHARLIE // CHARLIE AI</strong><br/><br/>
+Rajeev founded <strong>Charlie AI</strong> in <strong>London in August 2026</strong> and owns <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) end to end: product, UX, architecture, build, brand, launch, social media and publisher partnerships.<br/><br/>
+• <strong>What It Is:</strong> A curriculum-bound AI maths tutor for Indian school children. It teaches from the child's own school textbook, page by page, with a natural voice and a blackboard that writes the working line by line.<br/>
+• <strong>Scope:</strong> Starts with CBSE maths from Class 9 (NCERT). Classes 8 to 10 come first, then classes 5 to 7, then other subjects such as science.<br/>
+• <strong>Button-Led Teaching (No Chatbox):</strong> No free-text prompts for children. They use intuitive buttons: <em>"I don't get it"</em>, <em>"Explain another way"</em>, <em>"Make it simpler"</em>, <em>"Show me an example"</em>, <em>"Say that again"</em>, plus Break and play controls. Explanations switch between styles such as the working, balance scales, and smaller steps.<br/>
+• <strong>Safety &amp; Accuracy:</strong> The AI never decides a maths answer. Every answer and worked step comes from a SymPy maths engine over parameterised templates, and only human-reviewed and approved teaching content reaches children.<br/>
+• <strong>Learning Features:</strong> End-of-topic checks, practice exercises marked line by line (pointing to the mistake without giving the answer away), two-question quick checks for earlier-class gaps (signs, fractions) with warm-ups, ticks/stars progress, and a parent view.<br/>
+• <strong>Privacy by Design:</strong> Minimal personal data collected, with pseudonymous IDs in analytics.<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie Section &rarr;</a>
+<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" class="ai-section-link">🌐 Visit learnwithcharlie.ai &rarr;</a>
+<a href="https://www.youtube.com/playlist?list=PLNXnnSc2KXYQ" target="_blank" rel="noopener" class="ai-section-link">📺 Watch Feature Videos on YouTube &rarr;</a>
+<div style="margin-top:0.85rem;padding:0.5rem 0.75rem;background:rgba(56,189,248,0.08);border-left:3px solid var(--accent-cyan);border-radius:4px;font-size:0.82rem;color:var(--text-secondary);">ℹ️ <em>Please note: I am Rajeev's portfolio assistant (Cyber Charlie), which is separate from the product Learn with Charlie.</em></div>`,
+          followups: getDynamicFollowups([
+            'How does Charlie avoid wrong answers?',
+            'What stack is Learn with Charlie built on?',
+            'How does he use AI agents to build it?',
+            'When does Learn with Charlie launch?'
+          ], 4)
+        };
+      }
+
+      // 4e-2. How Charlie Avoids Wrong Answers / SymPy Maths Engine
+      if (
+        /\b(how\s+does\s+(charlie\s+|it\s+)?avoid\s+wrong\s+answers|avoid\s+wrong\s+answers|maths?\s+engine|sympy|never\s+guesses?|hallucinat(ion|ions|e)|how\s+are\s+answers\s+verified|verified\s+answers)\b/i.test(q)
+      ) {
+        return {
+          id: 'learn_with_charlie_maths_engine',
+          title: 'SymPy Maths Engine — Never Guesses an Answer',
+          response: `⚙️ <strong>HOW CHARLIE AVOIDS WRONG ANSWERS // SYMPY ENGINE</strong><br/><br/>
+<strong>The AI never decides a maths answer.</strong><br/><br/>
+• <strong>Symbolic Math Engine:</strong> Answers and every single worked step are generated and verified by a <strong>SymPy maths engine</strong> running over parameterised problem templates in FastAPI, guaranteeing 100% mathematical validity with zero AI hallucinations.<br/>
+• <strong>Line-by-Line Marking:</strong> Practice exercises are evaluated step by step. When a child makes an error, the system highlights the exact line where the working went wrong and provides a gentle pointer without giving the answer away.<br/>
+• <strong>Human-Approved Content:</strong> Teaching content generated during offline authoring starts as draft. Only content that has been reviewed and approved by human teachers is ever served to children.<br/>
+• <strong>Prerequisite Gap Spotting:</strong> If a student gets stuck due to foundational confusion from an earlier grade (such as minus signs or fraction operations), a two-question quick check identifies the gap, provides a short warm-up, and returns straight back to the same textbook page.<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🔍 View Live SymPy Verifier Demo &rarr;</a>
+<div style="margin-top:0.85rem;padding:0.5rem 0.75rem;background:rgba(56,189,248,0.08);border-left:3px solid var(--accent-cyan);border-radius:4px;font-size:0.82rem;color:var(--text-secondary);">ℹ️ <em>Please note: I am Rajeev's portfolio assistant (Cyber Charlie), which is separate from the product Learn with Charlie.</em></div>`,
+          followups: getDynamicFollowups([
+            'What stack is Learn with Charlie built on?',
+            'How does he use AI agents to build it?',
+            'When does Learn with Charlie launch?',
+            'What is Learn with Charlie?'
+          ], 4)
+        };
+      }
+
+      // 4e-3. Learn with Charlie: Technology Stack & Platform Architecture
+      if (
+        /\b(what\s+stack|tech\s*stack(\s+of\s+learn\s+with\s+charlie)?|architecture\s+of\s+learn\s+with\s+charlie|how\s+is\s+learn\s+with\s+charlie\s+built|charlie\s+ai\s+stack)\b/i.test(q)
+      ) {
+        return {
+          id: 'learn_with_charlie_stack',
+          title: 'Learn with Charlie Architecture & Tech Stack',
+          response: `🏗️ <strong>LEARN WITH CHARLIE // ARCHITECTURE &amp; TECH STACK</strong><br/><br/>
+Rajeev architected the entire platform with a modern, resilient, safety-first stack:<br/><br/>
+• <strong>Front End:</strong> React and TypeScript with Vite, KaTeX for crisp mathematical typography, and dynamic SVG figures. Structured with child-friendly buttons instead of free-text chatboxes.<br/>
+• <strong>Back End:</strong> Python 3.12 and FastAPI, PostgreSQL database.<br/>
+• <strong>Voice Synthesis:</strong> ElevenLabs natural voice engine delivering warm, patient audio explanations.<br/>
+• <strong>Offline Content Pipeline:</strong> PyMuPDF and SymPy turn school textbook chapters into structured lesson scripts, parameterised problem templates, and end-of-topic checks.<br/>
+• <strong>Infrastructure &amp; Hosting:</strong> Docker Compose and Caddy reverse proxy; marketing website hosted on Cloudflare Workers with country-based pricing and a waiting list.<br/>
+• <strong>Internationalisation:</strong> All learner-facing text is keyed by locale, built ready for expansion into multiple languages.<br/>
+• <strong>Privacy by Design:</strong> Minimal personal data, pseudonymous IDs in analytics.<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🏗️ View Layered Architecture Diagram &rarr;</a>
+<div style="margin-top:0.85rem;padding:0.5rem 0.75rem;background:rgba(56,189,248,0.08);border-left:3px solid var(--accent-cyan);border-radius:4px;font-size:0.82rem;color:var(--text-secondary);">ℹ️ <em>Please note: I am Rajeev's portfolio assistant (Cyber Charlie), which is separate from the product Learn with Charlie.</em></div>`,
+          followups: getDynamicFollowups([
+            'How does he use AI agents to build it?',
+            'How does Charlie avoid wrong answers?',
+            'When does Learn with Charlie launch?',
+            'What is Learn with Charlie?'
+          ], 4)
+        };
+      }
+
+      // 4e-4. AI Coding Agents & Directed Engineering Method
+      if (
+        /\b(how\s+does\s+(he|rajeev)\s+use\s+ai\s+agents|ai\s+agents|claude\s+code\s+agents|coding\s+agents|student\s+agents|simulated\s+student|engineering\s+method|adr|adrs|team\s+of\s+agents)\b/i.test(q)
+      ) {
+        return {
+          id: 'learn_with_charlie_ai_agents',
+          title: 'Directed AI Coding Agents & Governance Method',
+          response: `🤖 <strong>DIRECTED AI CODING AGENTS // ENGINEERING METHOD</strong><br/><br/>
+Rajeev serves as <strong>Product Owner and Architect</strong>, directing a specialised team of autonomous AI coding agents inside <strong>Claude Code</strong>:<br/><br/>
+• <strong>Builder Agents:</strong> Dedicated agents for Backend (FastAPI/Python 3.12), Frontend (React/TypeScript/KaTeX), and the Offline Content Pipeline (PyMuPDF/SymPy).<br/>
+• <strong>Reviewer Agents:</strong> An independent test reviewer ensuring rigorous code quality, and a dedicated maths reviewer verifying pedagogical accuracy and symbolic constraints.<br/>
+• <strong>3 Simulated Student Agents:</strong> Below-average, average, and above-average student personas that autonomously navigate the real web application in a browser via Playwright to discover usability friction, edge cases, and regressions.<br/>
+• <strong>Strict Governance:</strong> Written requirements document, versioned data contracts, nearly 50 Architecture Decision Records (ADRs), one concern per pull request (over 115 PRs merged to date), automated unit/E2E test suites in CI, and Rajeev's personal review and approval on every merge.<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">👥 Inspect Interactive AI Engineering Team Graph &rarr;</a>
+<div style="margin-top:0.85rem;padding:0.5rem 0.75rem;background:rgba(56,189,248,0.08);border-left:3px solid var(--accent-cyan);border-radius:4px;font-size:0.82rem;color:var(--text-secondary);">ℹ️ <em>Please note: I am Rajeev's portfolio assistant (Cyber Charlie), which is separate from the product Learn with Charlie.</em></div>`,
+          followups: getDynamicFollowups([
+            'How does Charlie avoid wrong answers?',
+            'What stack is Learn with Charlie built on?',
+            'When does Learn with Charlie launch?',
+            'What is Learn with Charlie?'
+          ], 4)
+        };
+      }
+
+      // 4e-5. Launch Date & Roadmap
+      if (
+        /\b(when\s+does\s+(it|learn\s+with\s+charlie|charlie)\s+launch|launch\s+date|release\s+date|when\s+launch|early\s+access|15\s+november|15\s+december)\b/i.test(q)
+      ) {
+        return {
+          id: 'learn_with_charlie_launch',
+          title: 'Learn with Charlie Launch Roadmap & Dates',
+          response: `📅 <strong>LEARN WITH CHARLIE // LAUNCH TIMELINE &amp; ROADMAP</strong><br/><br/>
+• <strong>Free Early Access:</strong> Opens on <strong>15 November 2026</strong>.<br/>
+• <strong>Full Commercial Launch:</strong> Scheduled for <strong>15 December 2026</strong>.<br/>
+• <strong>Initial Scope:</strong> Starts with CBSE maths from Class 9 (NCERT). Classes 8 to 10 come first at launch.<br/>
+• <strong>Expansion Roadmap:</strong> Followed by Classes 5 to 7, and subsequent expansion into other subjects such as science.<br/>
+• <strong>Access:</strong> Visit <a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a> to join the early access waiting list with country-based pricing.<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">⏳ View Live Countdown &amp; Roadmap &rarr;</a>
+<div style="margin-top:0.85rem;padding:0.5rem 0.75rem;background:rgba(56,189,248,0.08);border-left:3px solid var(--accent-cyan);border-radius:4px;font-size:0.82rem;color:var(--text-secondary);">ℹ️ <em>Please note: I am Rajeev's portfolio assistant (Cyber Charlie), which is separate from the product Learn with Charlie.</em></div>`,
+          followups: getDynamicFollowups([
+            'What is Learn with Charlie?',
+            'How does Charlie avoid wrong answers?',
+            'What stack is Learn with Charlie built on?',
+            'How does he use AI agents to build it?'
+          ], 4)
+        };
+      }
+
       // 4d-1. Resilient "Who built you / Who build you / Who made you / Who is your creator" Check
       if (
         /\b(who\s+(built?|created?|made|designed|programmed|coded|engineered|developed)\s+(you|u|charlie|this(\s*bot)?)|who\s+is\s+your\s+(creator|maker|author|developer|designer|architect|engineer|father|parent)|who\s+owns\s+(you|u|charlie)|who\s+invented\s+(you|u|charlie)|who\s+is\s+behind\s+(you|charlie))\b/i.test(q)
@@ -9204,6 +9335,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         ], 4)
       };
     }
+    window.matchQueryToKnowledge = matchQueryToKnowledge;
 
     function escapeHtml(str) {
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -12332,6 +12464,407 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       updateHUD();
     }
 
+    // =========================================================================
+    // 🚀 Learn with Charlie Interactive Centerpiece Controller
+    // =========================================================================
+    function initLearnWithCharlieCenterpiece() {
+      const section = document.getElementById('learn-with-charlie');
+      if (!section) return;
+
+      // 1. Live Launch Countdown Timer (15 Nov 2026 early access -> 15 Dec 2026 full launch)
+      const cntWrap = document.getElementById('charlieCountdownWrap');
+      const cntLabel = document.getElementById('cntLabel');
+      const cntDays = document.getElementById('cntDays');
+      const cntHours = document.getElementById('cntHours');
+      const cntMins = document.getElementById('cntMins');
+      const cntSecs = document.getElementById('cntSecs');
+      const cntNote = document.getElementById('cntNote');
+
+      const earlyAccessDate = new Date('2026-11-15T00:00:00Z').getTime();
+      const fullLaunchDate = new Date('2026-12-15T00:00:00Z').getTime();
+
+      function updateCountdown() {
+        if (!cntWrap || !cntDays) return;
+        const now = Date.now();
+        let target = earlyAccessDate;
+
+        if (now >= earlyAccessDate && now < fullLaunchDate) {
+          target = fullLaunchDate;
+          if (cntLabel) cntLabel.textContent = 'Full Launch Countdown';
+          if (cntNote) cntNote.innerHTML = 'Free Early Access is live! Full launch on 15 December 2026.';
+        } else if (now >= fullLaunchDate) {
+          cntWrap.style.display = 'none';
+          return;
+        }
+
+        const diff = Math.max(0, target - now);
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const mins = Math.floor((diff / (1000 * 60)) % 60);
+        const secs = Math.floor((diff / 1000) % 60);
+
+        cntDays.textContent = String(days).padStart(2, '0');
+        cntHours.textContent = String(hours).padStart(2, '0');
+        cntMins.textContent = String(mins).padStart(2, '0');
+        cntSecs.textContent = String(secs).padStart(2, '0');
+      }
+
+      updateCountdown();
+      let countdownTimer = setInterval(updateCountdown, 1000);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          if (countdownTimer) clearInterval(countdownTimer);
+        } else {
+          updateCountdown();
+          countdownTimer = setInterval(updateCountdown, 1000);
+        }
+      });
+
+      // 2. Interactive Teaching & Architecture Flow (guarded if present)
+      if (section.querySelector('.edu-interactive-card')) {
+        const tabBtns = section.querySelectorAll('.edu-tab-btn');
+        const flowViews = section.querySelectorAll('.edu-flow-view');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const flow = btn.getAttribute('data-flow');
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          flowViews.forEach(v => {
+            if (v.id === `flow-${flow}`) {
+              v.style.display = 'block';
+              v.classList.add('active');
+            } else {
+              v.style.display = 'none';
+              v.classList.remove('active');
+            }
+          });
+        });
+      });
+
+      // 3. Explanation Mode Chips (Working / Balance scales / Smaller steps)
+      const modeChips = section.querySelectorAll('.edu-mode-chip');
+      const modeContents = section.querySelectorAll('.edu-mode-content');
+
+      function setExplanationMode(mode) {
+        modeChips.forEach(c => {
+          c.classList.toggle('active', c.getAttribute('data-mode') === mode);
+        });
+        modeContents.forEach(mc => {
+          if (mc.id === `mode-${mode}`) {
+            mc.style.display = 'block';
+            mc.classList.add('active');
+          } else {
+            mc.style.display = 'none';
+            mc.classList.remove('active');
+          }
+        });
+      }
+
+      modeChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          const mode = chip.getAttribute('data-mode');
+          setExplanationMode(mode);
+          if (mode === 'scales') {
+            updateCaption('Think of the equation like a balance scale that always stays level.');
+          } else if (mode === 'simpler') {
+            updateCaption('Let us break the problem into smaller addition steps.');
+          } else {
+            updateCaption("Let's solve line by line: put x = 4, subtract 4, and halve both sides.");
+          }
+        });
+      });
+
+      // 4. Blackboard Speech & Word-by-Word Caption Highlight Simulation
+      const captionTextEl = document.getElementById('bbSpokenCaption');
+      const speechToggleBtn = document.getElementById('btnSpeechToggle');
+      const badgeUnlockedEl = document.getElementById('charlieBadgeUnlocked');
+      let speechEnabled = false;
+      let activeWordTimeouts = [];
+
+      function speakIfEnabled(text) {
+        if (!speechEnabled || !('speechSynthesis' in window)) return;
+        try {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.rate = 0.95;
+          utterance.pitch = 1.05;
+          window.speechSynthesis.speak(utterance);
+        } catch (e) { }
+      }
+
+      if (speechToggleBtn) {
+        speechToggleBtn.addEventListener('click', () => {
+          speechEnabled = !speechEnabled;
+          speechToggleBtn.classList.toggle('active', speechEnabled);
+          speechToggleBtn.innerHTML = speechEnabled ? '<span>🔊 Voice: On</span>' : '<span>🔇 Voice: Off</span>';
+          if (speechEnabled) {
+            updateCaption("Narration enabled. Press any child button to hear and watch Charlie explain.");
+          } else if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+          }
+        });
+      }
+
+      function updateCaption(fullText) {
+        if (!captionTextEl) return;
+        activeWordTimeouts.forEach(t => clearTimeout(t));
+        activeWordTimeouts = [];
+
+        const words = fullText.split(/\s+/).filter(Boolean);
+        captionTextEl.innerHTML = words.map(w => `<span class="caption-word">${escapeHtml(w)}</span>`).join(' ');
+        const wordSpans = captionTextEl.querySelectorAll('.caption-word');
+
+        // Sequentially highlight words to simulate natural speech cadence
+        words.forEach((w, idx) => {
+          const delay = idx * 175;
+          const t = setTimeout(() => {
+            wordSpans.forEach(s => s.classList.remove('speaking'));
+            if (wordSpans[idx]) wordSpans[idx].classList.add('speaking');
+          }, delay);
+          activeWordTimeouts.push(t);
+        });
+
+        const endT = setTimeout(() => {
+          wordSpans.forEach(s => s.classList.remove('speaking'));
+        }, words.length * 175 + 500);
+        activeWordTimeouts.push(endT);
+
+        speakIfEnabled(fullText);
+      }
+
+      // Animated line-by-line rewrite demo
+      let bbStepTimer = null;
+      let isPlaying = false;
+      const bbLines = [
+        document.getElementById('bbLine0'),
+        document.getElementById('bbLine1'),
+        document.getElementById('bbLine2'),
+        document.getElementById('bbLine3')
+      ];
+
+      function showStep(stepIdx) {
+        bbLines.forEach((line, idx) => {
+          if (!line) return;
+          if (idx <= stepIdx) {
+            line.style.opacity = '1';
+            line.style.transform = 'translateY(0)';
+          } else {
+            line.style.opacity = '0.2';
+            line.style.transform = 'translateY(3px)';
+          }
+        });
+
+        if (stepIdx === 0) {
+          updateCaption("Given the equation x + 2y = 6. We are asked: if x is 4, what is y?");
+        } else if (stepIdx === 1) {
+          updateCaption("First step: put x = 4 into the equation, giving 4 + 2y = 6.");
+        } else if (stepIdx === 2) {
+          updateCaption("Second step: take 4 off both sides to isolate 2y, leaving 2y = 2.");
+        } else if (stepIdx === 3) {
+          updateCaption("Final step: halve both sides to find y = 1. Solution verified!");
+          triggerEasterEggSolved();
+        }
+      }
+
+      function triggerEasterEggSolved() {
+        if (badgeUnlockedEl) {
+          badgeUnlockedEl.style.display = 'flex';
+          setTimeout(() => {
+            if (badgeUnlockedEl) badgeUnlockedEl.style.display = 'none';
+          }, 4500);
+        }
+        // Optional celebration burst
+        if (typeof window.triggerGlobalConfetti === 'function') {
+          window.triggerGlobalConfetti();
+        } else if (window.charlieEngine && typeof window.charlieEngine.triggerCelebrationBurst === 'function') {
+          window.charlieEngine.triggerCelebrationBurst();
+        }
+      }
+
+      function playFullDemo() {
+        setExplanationMode('working');
+        let current = 0;
+        showStep(0);
+        isPlaying = true;
+        const playBtn = document.getElementById('btnBbPlayPause');
+        if (playBtn) playBtn.innerHTML = '<span>⏸️ Pause</span>';
+
+        if (bbStepTimer) clearInterval(bbStepTimer);
+        bbStepTimer = setInterval(() => {
+          current++;
+          if (current > 3) {
+            clearInterval(bbStepTimer);
+            isPlaying = false;
+            if (playBtn) playBtn.innerHTML = '<span>▶️ Replay</span>';
+            return;
+          }
+          showStep(current);
+        }, 2200);
+      }
+
+      // Child mock buttons interactions
+      const childBtns = section.querySelectorAll('.child-mock-btn');
+      childBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = btn.getAttribute('data-action');
+          if (action === 'dont-get-it') {
+            setExplanationMode('working');
+            updateCaption("No problem! Let's take it step by step from the beginning.");
+            setTimeout(playFullDemo, 900);
+          } else if (action === 'another-way') {
+            setExplanationMode('scales');
+            updateCaption("Think of the equation like a balance scale that always stays level.");
+          } else if (action === 'simpler') {
+            setExplanationMode('simpler');
+            updateCaption("Let's break 4 + 2y = 6 into smaller addition steps: what number makes 6?");
+          } else if (action === 'say-again') {
+            updateCaption("Listening again: put x = 4, subtract 4 from both sides, then halve both sides to get y = 1.");
+          } else if (action === 'break') {
+            if (bbStepTimer) clearInterval(bbStepTimer);
+            isPlaying = false;
+            const playBtn = document.getElementById('btnBbPlayPause');
+            if (playBtn) playBtn.innerHTML = '<span>▶️ Resume</span>';
+            updateCaption("Taking a short break. Rest your eyes and come back whenever you're ready!");
+          } else if (action === 'play-pause') {
+            if (isPlaying) {
+              if (bbStepTimer) clearInterval(bbStepTimer);
+              isPlaying = false;
+              btn.innerHTML = '<span>▶️ Play</span>';
+              updateCaption("Paused. Press Play or any child button to continue.");
+            } else {
+              playFullDemo();
+            }
+          }
+        });
+      });
+
+      // Initial caption state
+      updateCaption("Let's solve: if x is 4, what is y? Put 4 in place of x, take 4 off both sides, then halve both sides.");
+
+      // 5. Interactive SymPy Line Verifier Widget
+      const btnVerifCorrect = document.getElementById('btnVerifCorrect');
+      const btnVerifMistake = document.getElementById('btnVerifMistake');
+      const verifierLineText = document.getElementById('verifierLineText');
+      const verifierResultBox = document.getElementById('verifierResultBox');
+      const verifierBadge = document.getElementById('verifierBadge');
+      const verifierMessage = document.getElementById('verifierMessage');
+
+      if (btnVerifCorrect && btnVerifMistake && verifierResultBox) {
+        btnVerifCorrect.addEventListener('click', () => {
+          btnVerifCorrect.classList.add('active');
+          btnVerifMistake.classList.remove('active');
+          if (verifierLineText) verifierLineText.textContent = '4 + 2y = 6 → 2y = 2';
+          verifierResultBox.className = 'verifier-result-box correct';
+          if (verifierBadge) verifierBadge.textContent = '✅ Line Verified Correct';
+          if (verifierMessage) verifierMessage.textContent = 'Algebraic equivalence holds: 4 + 2y = 6 ⇒ 2y = 6 - 4 = 2. Verified by SymPy.';
+        });
+
+        btnVerifMistake.addEventListener('click', () => {
+          btnVerifMistake.classList.add('active');
+          btnVerifCorrect.classList.remove('active');
+          if (verifierLineText) verifierLineText.textContent = '4 + 2y = 6 → 2y = 3';
+          verifierResultBox.className = 'verifier-result-box mistake';
+          if (verifierBadge) verifierBadge.textContent = '⚠️ Gentle Line Pointer';
+          if (verifierMessage) verifierMessage.textContent = 'Line 2 mistake: take 4 from 6 to get 2, not 3. Checked by SymPy, not by the AI.';
+        });
+      }
+    }
+
+      // 6. Interactive AI Engineering Team Node Graph
+      const teamNodes = section.querySelectorAll('.team-node');
+      const teamTooltipTitle = document.getElementById('teamTooltipTitle');
+      const teamTooltipBody = document.getElementById('teamTooltipBody');
+
+      const TEAM_DESCRIPTIONS = {
+        'owner': {
+          title: 'Rajeev Mutyalu — Product Owner & Lead Architect',
+          body: 'Directs the engineering team, authors written requirements, defines versioned data contracts, and approves every pull request into main.'
+        },
+        'backend': {
+          title: 'Backend Builder Agent (Claude Code)',
+          body: 'Builds Python 3.12 FastAPI microservices, parameterised SymPy maths templates, PostgreSQL schema, Docker Compose, and Caddy proxy.'
+        },
+        'frontend': {
+          title: 'Frontend Builder Agent (Claude Code)',
+          body: 'Implements the React & TypeScript (Vite) client, KaTeX mathematical typesetting, SVG dynamic figures, and child-safe button controls.'
+        },
+        'pipeline': {
+          title: 'Content Pipeline Agent (Claude Code)',
+          body: 'Parses NCERT textbook chapters via PyMuPDF into structured lesson scripts, problem templates, and end-of-topic checks.'
+        },
+        'test-reviewer': {
+          title: 'Independent Test Reviewer Agent',
+          body: 'Rigorous reviewer running unit and integration suites to enforce regression prevention and test coverage across every PR.'
+        },
+        'maths-reviewer': {
+          title: 'Maths & Pedagogy Reviewer Agent',
+          body: 'Specialised reviewer verifying curriculum alignment, grade-level vocabulary, and exact symbolic algebra constraints.'
+        },
+        'student-below': {
+          title: 'Below-Average Student Agent (Playwright E2E)',
+          body: 'Simulates struggling students in a real browser, rigorously testing prerequisite gap detection, hints, and warm-up paths.'
+        },
+        'student-avg': {
+          title: 'Average Student Agent (Playwright E2E)',
+          body: 'Simulates typical grade-level navigation, validating textbook pace, practice exercise marking, and star achievements.'
+        },
+        'student-above': {
+          title: 'Above-Average Student Agent (Playwright E2E)',
+          body: 'Simulates advanced student journeys, testing fast progression, edge-case math inputs, and higher-order exercises.'
+        }
+      };
+
+      teamNodes.forEach(node => {
+        const key = node.getAttribute('data-node');
+        const info = TEAM_DESCRIPTIONS[key];
+        if (!info) return;
+
+        const updateNodeTooltip = () => {
+          teamNodes.forEach(n => n.classList.remove('selected'));
+          node.classList.add('selected');
+          if (teamTooltipTitle) teamTooltipTitle.textContent = info.title;
+          if (teamTooltipBody) teamTooltipBody.textContent = info.body;
+        };
+
+        node.addEventListener('mouseenter', updateNodeTooltip);
+        node.addEventListener('focus', updateNodeTooltip);
+        node.addEventListener('click', updateNodeTooltip);
+      });
+
+      // 7. Clickable Architecture Stack Diagram Tooltips
+      const stackLayers = section.querySelectorAll('.stack-layer-bar, .stack-side-lane');
+      const archTooltip = document.getElementById('archStackTooltip');
+
+      const STACK_DESCRIPTIONS = {
+        'frontend': 'Child\'s Browser Application: Built with React and TypeScript on Vite. Renders textbook equations with KaTeX and interactive geometry using SVG figures. Eliminates free-text prompts in favour of clear student action buttons.',
+        'backend': 'Back End Services: Python 3.12 and FastAPI. Hosts the SymPy verification engine, ElevenLabs voice integration, and session management containerised in Docker with Caddy reverse proxy.',
+        'database': 'Data & Privacy: PostgreSQL storing student learning state and ticks/stars progress. Built with privacy by design: minimal personal data, pseudonymous IDs in analytics, all learner-facing text keyed by locale.',
+        'pipeline': 'Offline Content Pipeline: PyMuPDF parses NCERT textbooks into structured chapters. Problem templates are verified by SymPy, human-reviewed by teachers, and only approved content is served to children.'
+      };
+
+      stackLayers.forEach(layer => {
+        const key = layer.getAttribute('data-layer');
+        const desc = STACK_DESCRIPTIONS[key];
+        if (!desc) return;
+
+        const updateStackTooltip = () => {
+          stackLayers.forEach(l => l.classList.remove('selected'));
+          layer.classList.add('selected');
+          if (archTooltip) {
+            const titleEl = layer.querySelector('strong, .side-lane-title');
+            const title = titleEl ? titleEl.textContent : 'Architecture Layer';
+            archTooltip.innerHTML = `<strong>${escapeHtml(title)}:</strong> ${escapeHtml(desc)}`;
+          }
+        };
+
+        layer.addEventListener('click', updateStackTooltip);
+        layer.addEventListener('focus', updateStackTooltip);
+      });
+    }
+
+    initLearnWithCharlieCenterpiece();
     initFrozenSectionHUD();
     setupMobileSimulator();
   }
