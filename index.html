@@ -54,7 +54,7 @@
   <link rel="manifest" href="site.webmanifest" />
   <meta name="theme-color" content="#06080e" />
 
-  <link rel="stylesheet" href="style.css?v=202" />
+  <link rel="stylesheet" href="style.css?v=203" />
   <link rel="prefetch" href="cv.html" />
 
   <!-- Navigation & Scroll Position Guard: Always land cleanly on the first page when returning from CV, Charlie Lab, or Full Screen -->
@@ -2706,50 +2706,7 @@
     </div>
   </div>
 
-  <!-- Learn with Charlie Interactive Flow Controller -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const tabBtns = document.querySelectorAll('.edu-tab-btn');
-      const flowViews = document.querySelectorAll('.edu-flow-view');
-      tabBtns.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          const flowId = 'flow-' + this.dataset.flow;
-          tabBtns.forEach(function (b) { b.classList.remove('active'); });
-          this.classList.add('active');
-          flowViews.forEach(function (v) {
-            if (v.id === flowId) {
-              v.style.display = 'block';
-              v.classList.add('active');
-            } else {
-              v.style.display = 'none';
-              v.classList.remove('active');
-            }
-          });
-        });
-      });
-
-      const modeChips = document.querySelectorAll('.edu-mode-chip');
-      const modeContents = document.querySelectorAll('.edu-mode-content');
-      modeChips.forEach(function (chip) {
-        chip.addEventListener('click', function () {
-          const modeId = 'mode-' + this.dataset.mode;
-          modeChips.forEach(function (c) { c.classList.remove('active'); });
-          this.classList.add('active');
-          modeContents.forEach(function (m) {
-            if (m.id === modeId) {
-              m.style.display = 'block';
-              m.classList.add('active');
-            } else {
-              m.style.display = 'none';
-              m.classList.remove('active');
-            }
-          });
-        });
-      });
-    });
-  </script>
-
-  <script src="app.js?v=202"></script>
+  <script src="app.js?v=203"></script>
 </body>
 
 </html>
