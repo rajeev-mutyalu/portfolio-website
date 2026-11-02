@@ -9286,12 +9286,14 @@ body.in-simulator .cv-topbar .btn-primary svg {
   .cv-summary-content {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    margin-bottom: 4px !important;
   }
 
   .cv-summary-text {
-    font-size: 7.8pt !important;
-    line-height: 1.4 !important;
+    font-size: 7.5pt !important;
+    line-height: 1.34 !important;
     color: #334155 !important;
+    margin-bottom: 3px !important;
     orphans: 3;
     widows: 3;
   }
