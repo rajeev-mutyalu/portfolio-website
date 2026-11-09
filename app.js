@@ -6355,6 +6355,13 @@
         document.body.classList.contains('mobile-chat-open');
 
       if (isFullscreen) {
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
+        if (window.portfolioCharlie) {
+          window.portfolioCharlie.isEscorting = true;
+          window.portfolioCharlie.sectionActive = false;
+        }
         if (typeof window.setCharlieFullscreen === 'function') {
           window.setCharlieFullscreen(false);
         } else if (typeof window.restoreCharlieTerminalFullscreen === 'function') {
@@ -7562,8 +7569,13 @@ INTELLIGENCE CAPABILITIES & SCOPE:
       safe = safe.replace(/(^|[^*])\*([^*]+)\*([^*]|$)/g, '$1<em>$2</em>$3');
 
       // Markdown links: [text](href)
-      safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, href) => {
-        const isInternal = href.startsWith('#') || href.endsWith('.html');
+      safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, rawHref) => {
+        let href = rawHref.trim()
+          .replace(/^https?:\/\/rajeev-mutyalu\.github\.io\/portfolio-website\/(#.*)$/i, '$1')
+          .replace(/^https?:\/\/rajeev-mutyalu\.github\.io\/portfolio-website\/(cv\.html.*)$/i, '$1')
+          .replace(/^https?:\/\/rajeev-mutyalu\.github\.io\/portfolio-website\/(charlie-lab\.html.*)$/i, '$1')
+          .replace(/^(?:\.\/|\/)?index\.html(#.*)$/i, '$1');
+        const isInternal = href.startsWith('#') || href.startsWith('cv.html');
         const target = isInternal ? '' : ' target="_blank" rel="noopener"';
         return `<a href="${href}" class="ai-section-link"${target}>${linkText}</a>`;
       });
@@ -10058,7 +10070,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
 
               // Arrived at Point C (Center of Screen) simultaneously: Return Dash to Point A (Home Anchor)
               setCharlieThinkingState(false);
-              if (!isMobile && window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+              if (!isMobile && window.portfolioCharlie && !window.portfolioCharlie.isEscorting && window.portfolioCharlie.state !== 'escort' && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
                 const homeAnchor = window.portfolioCharlie.getChatMascotAnchor();
                 window.portfolioCharlie.triggerReturnDash(endX, endY, homeAnchor.x, homeAnchor.y);
               }
@@ -10185,9 +10197,12 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
     // Delegated Click Listener for All Charlie Topic, Follow-up & Deep Link Buttons
     document.addEventListener('click', (e) => {
       // 1. In-page deep link click listener with Charlie Companion Escort Flight
-      const sectionLink = e.target.closest('.ai-section-link, .ai-chat-stream a[href^="#"], .ai-bot-terminal a[href^="#"]');
+      const sectionLink = e.target.closest('.ai-section-link, .ai-chat-stream a[href*="#"], .ai-bot-terminal a[href*="#"]');
       if (sectionLink) {
-        const href = sectionLink.getAttribute('href');
+        const rawHref = sectionLink.getAttribute('href') || '';
+        const hashIdx = rawHref.indexOf('#');
+        const isSamePageHash = rawHref.startsWith('#') || (hashIdx > 0 && (/rajeev-mutyalu\.github\.io\/portfolio-website\/?#/i.test(rawHref) || /(?:^|\/)index\.html#/i.test(rawHref)));
+        const href = isSamePageHash && hashIdx !== -1 ? rawHref.slice(hashIdx) : rawHref;
         if (href && href.startsWith('#') && href.length > 1) {
           const targetEl = document.querySelector(href);
           if (targetEl) {
@@ -10230,11 +10245,24 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             const isFullscreen = (terminal && terminal.classList.contains('is-fullscreen')) ||
               document.body.classList.contains('charlie-fullscreen-active') ||
               document.body.classList.contains('mobile-chat-open');
-            if (isFullscreen && typeof window.setCharlieFullscreen === 'function') {
-              window.setCharlieFullscreen(false);
-              setTimeout(executeScrollAndEscort, 120);
-            } else if (isFullscreen && typeof window.toggleCharlieFullscreen === 'function') {
-              window.toggleCharlieFullscreen(false);
+            if (isFullscreen) {
+              if (document.activeElement && typeof document.activeElement.blur === 'function') {
+                document.activeElement.blur();
+              }
+              if (window.portfolioCharlie) {
+                window.portfolioCharlie.isEscorting = true;
+                window.portfolioCharlie.sectionActive = false;
+              }
+              if (typeof window.setCharlieFullscreen === 'function') {
+                window.setCharlieFullscreen(false);
+              } else if (typeof window.toggleCharlieFullscreen === 'function') {
+                window.toggleCharlieFullscreen(false);
+              } else if (typeof window.restoreCharlieTerminalFullscreen === 'function') {
+                window.restoreCharlieTerminalFullscreen();
+              } else {
+                if (terminal) terminal.classList.remove('is-fullscreen');
+                document.body.classList.remove('charlie-fullscreen-active', 'mobile-chat-open');
+              }
               setTimeout(executeScrollAndEscort, 120);
             } else {
               executeScrollAndEscort();
@@ -11934,13 +11962,13 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie) return;
         if (engine.isEnabled) return; // Do not interrupt Game Mode!
-        if (engine.charlie.sectionActive || engine.charlie.state === 'cyber_dash') return;
+        if (engine.charlie.sectionActive || engine.charlie.state === 'cyber_dash' || engine.charlie.isEscorting || engine.charlie.state === 'escort') return;
 
         const executeDeploy = () => {
           if (isMob()) return;
           const eng = window.portfolioEngine;
           if (!eng || !eng.charlie || eng.isEnabled) return;
-          if (eng.charlie.sectionActive || eng.charlie.state === 'cyber_dash') return;
+          if (eng.charlie.sectionActive || eng.charlie.state === 'cyber_dash' || eng.charlie.isEscorting || eng.charlie.state === 'escort') return;
 
           const anchor = eng.charlie.getChatMascotAnchor();
           if (!anchor.isVisible) return false;
@@ -11997,7 +12025,8 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie) return;
         if (engine.isEnabled) return; // Game Mode controls its own return
-        if (!engine.charlie.sectionActive && engine.charlie.state !== 'waiting' && engine.charlie.state !== 'thinking' && engine.charlie.state !== 'writing' && engine.charlie.state !== 'victory') return;
+        if (engine.charlie.isEscorting || engine.charlie.state === 'escort' || engine.charlie.state === 'victory') return;
+        if (!engine.charlie.sectionActive && engine.charlie.state !== 'waiting' && engine.charlie.state !== 'thinking' && engine.charlie.state !== 'writing') return;
         if (engine.charlie.x < -200) return;
 
         const floatingBtn = document.getElementById('floatingCharlieBtn');
@@ -12030,7 +12059,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
         if (isMob()) return; // Completely disabled on mobile
         const engine = window.portfolioEngine;
         if (!engine || !engine.charlie || engine.isEnabled) return;
-        if (engine.charlie.state === 'cyber_dash') return;
+        if (engine.charlie.state === 'cyber_dash' || engine.charlie.isEscorting || engine.charlie.state === 'escort' || engine.charlie.state === 'victory') return;
 
         const anchor = engine.charlie.getChatMascotAnchor();
         if (anchor.isVisible) {
