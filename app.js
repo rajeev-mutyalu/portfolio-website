@@ -6301,7 +6301,7 @@
       const href = anchor.getAttribute('href');
       if (!href || href === '#' || href === '#!') return;
       
-      // Do not intercept AI terminal internal actions
+      // Do not intercept AI terminal internal actions (handled by Charlie's dedicated sectionLink listener)
       if (anchor.closest('.ai-bot-terminal, #aiChatStream, #mobileCharlieTopDock, .charlie-dock')) return;
 
       const targetEl = document.querySelector(href);
@@ -6317,15 +6317,58 @@
         }
       }
 
-      const nav = document.querySelector('.navbar');
-      const navH = (nav && window.getComputedStyle(nav).display !== 'none') ? nav.offsetHeight : 64;
-      const targetY = Math.max(0, targetEl.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop || 0) - navH + 2);
+      // Auto-switch architecture tab if data-arch-tab present
+      const archTab = anchor.getAttribute('data-arch-tab');
+      if (archTab && typeof window.switchArchitectureTab === 'function') {
+        window.switchArchitectureTab(archTab);
+      }
 
-      smoothScrollTo(targetY, 400);
+      // Extract clean section title for Charlie Companion Escort Flight
+      let sectionTitle = href.replace('#', '');
+      const heading = targetEl.querySelector('h1, h2, h3, .section-title');
+      if (heading) {
+        sectionTitle = heading.textContent.trim().replace(/^[\s⚡🎬📦🔒🎙️🎥🐍🐾🏆🌟🛑🌌💎☄️🎮🔇🔊•→]+\s*/g, '');
+      }
 
-      try {
-        history.pushState(null, '', href);
-      } catch (err) { }
+      const executeNavScrollAndEscort = () => {
+        const nav = document.querySelector('.navbar');
+        const navH = (nav && window.getComputedStyle(nav).display !== 'none') ? nav.offsetHeight : 64;
+        const targetY = Math.max(0, targetEl.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop || 0) - navH + 2);
+
+        smoothScrollTo(targetY, 400);
+
+        if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
+          window.portfolioCharlie.triggerSectionEscort(targetEl, sectionTitle);
+        } else if (window.portfolioEngine?.charlie) {
+          window.portfolioEngine.charlie.triggerSectionEscort(targetEl, sectionTitle);
+        }
+
+        try {
+          history.pushState(null, '', href);
+        } catch (err) { }
+      };
+
+      // If Charlie terminal is in full screen mode, exit full screen first, then scroll and escort (matching chat link behavior)
+      const terminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
+      const isFullscreen = (terminal && terminal.classList.contains('is-fullscreen')) ||
+        document.body.classList.contains('charlie-fullscreen-active') ||
+        document.body.classList.contains('mobile-chat-open');
+
+      if (isFullscreen) {
+        if (typeof window.setCharlieFullscreen === 'function') {
+          window.setCharlieFullscreen(false);
+        } else if (typeof window.restoreCharlieTerminalFullscreen === 'function') {
+          window.restoreCharlieTerminalFullscreen();
+        } else if (typeof window.exitCharlieTerminalFullscreen === 'function') {
+          window.exitCharlieTerminalFullscreen();
+        } else {
+          if (terminal) terminal.classList.remove('is-fullscreen');
+          document.body.classList.remove('charlie-fullscreen-active', 'mobile-chat-open');
+        }
+        setTimeout(executeNavScrollAndEscort, 120);
+      } else {
+        executeNavScrollAndEscort();
+      }
     });
 
     // 7b. Curriculum Vitae Specialisation Selector Modal Handler
@@ -10156,15 +10199,6 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               window.switchArchitectureTab(archTab);
             }
 
-            // Smooth scroll to target element
-            const headerOffset = 70;
-            const elPos = targetEl.getBoundingClientRect().top;
-            const offsetPos = elPos + window.pageYOffset - headerOffset;
-            window.scrollTo({
-              top: offsetPos,
-              behavior: 'smooth'
-            });
-
             // Extract clean title
             let sectionTitle = href.replace('#', '');
             const heading = targetEl.querySelector('h1, h2, h3, .section-title');
@@ -10173,13 +10207,11 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
             }
 
             const executeScrollAndEscort = () => {
-              const headerOffset = 70;
+              const nav = document.querySelector('.navbar');
+              const headerOffset = (nav && window.getComputedStyle(nav).display !== 'none') ? nav.offsetHeight : 70;
               const elPos = targetEl.getBoundingClientRect().top;
-              const offsetPos = elPos + window.pageYOffset - headerOffset;
-              window.scrollTo({
-                top: offsetPos,
-                behavior: 'smooth'
-              });
+              const offsetPos = Math.max(0, elPos + (window.pageYOffset || document.documentElement.scrollTop || 0) - headerOffset + 2);
+              smoothScrollTo(offsetPos, 400);
 
               // Trigger Charlie Companion Flight & Escort!
               if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
@@ -10187,6 +10219,10 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
               } else if (window.portfolioEngine?.charlie) {
                 window.portfolioEngine.charlie.triggerSectionEscort(targetEl, sectionTitle);
               }
+
+              try {
+                history.pushState(null, '', href);
+              } catch (err) { }
             };
 
             // If terminal is in full screen mode, restore first, then animate and scroll!
