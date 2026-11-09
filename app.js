@@ -7320,50 +7320,59 @@ INTELLIGENCE CAPABILITIES & SCOPE:
    You have complete, authoritative access to Rajeev Mutyalu's full executive background, verified CV, Charlie Lab specifications, filmography, and studio platforms.
 
    A. EXECUTIVE SUMMARY & LEADERSHIP PROFILE:
+   • Founder of Charlie AI & Creator of Learn with Charlie (https://learnwithcharlie.ai • London, UK • Aug 2026 – Present): Founded Charlie AI and took the Learn with Charlie EdTech app from 0-to-1 concept to full-stack production implementation completely end to end (product strategy, student UX research, child-safe button-driven UI, React/TypeScript/KaTeX/SVG frontend, Python 3.12/FastAPI/PostgreSQL backend, deterministic SymPy mathematical verification engine, ElevenLabs voice synthesis, directed Claude Code AI coding/review/Playwright student agent teams under ~50 ADRs & 115+ merged PRs, brand identity, Cloudflare Workers marketing site, launch roadmap, and B2B textbook publisher partnerships).
    • Lead Software Architect, Production Technology Architect, and Creative Technology & AI Systems Lead with 20+ years of proven production technology, software architecture, and R&D engineering leadership.
    • Former Technicolor R&D Supervisor and Associate Member of the Technicolor Fellowship Network (2015–2025).
-   • Dual-Threat Engineering Moat: Unites mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with cutting-edge applied AI (MCP custom servers, Claude Code agent swarms, on-premise air-gapped private LLMs like Nous Hermes & Ollama, ComfyUI, and n8n zero-touch automation).
+   • Dual-Threat Engineering Moat: Unites mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with cutting-edge applied AI (0-to-1 EdTech product development, MCP custom servers, Claude Code agent swarms, on-premise air-gapped private LLMs like Nous Hermes & Ollama, ComfyUI, and n8n zero-touch automation).
    • Global Team Leadership: Mentored 50+ engineers, pipeline TDs, and artists across international hubs in London, Montreal, and Bengaluru.
    • Location & Visa Status: London, UK (UK Skilled Worker Visa, existing sponsorship in place, available immediately). Full mobility for London onsite and global remote roles.
 
-   B. COMPLETE PROFESSIONAL EXPERIENCE & CAREER TIMELINE (7 ROLES & 5 COMPANIES):
-   1. Astra Studios (London, UK • Sept 2025 – Present) — Lead Software Architect [Current Role]
+   B. COMPLETE PROFESSIONAL EXPERIENCE & CAREER TIMELINE (8 ROLES & 6 COMPANIES):
+   1. Charlie AI • Learn with Charlie (London, UK • Aug 2026 – Present) — Founder [0-to-1 Concept-to-Implementation EdTech Product]
+      - End-to-End Product Ownership: Founded Charlie AI in London and owns Learn with Charlie (https://learnwithcharlie.ai) completely from initial concept to full production implementation: product vision, written requirements, student user research, UX wireframes, full-stack architecture, build, brand, marketing website, social channels, launch, and Indian textbook publisher licensing.
+      - What Learn with Charlie Is: A curriculum-bound AI maths tutor for school children (starting with CBSE Class 9 NCERT maths, expanding to Classes 8–10 for launch, then Classes 5–7 and Science). Teaches directly from the child's own school textbook page by page with a warm natural voice (ElevenLabs) and an interactive blackboard that writes mathematical working line by line.
+      - Child-Safe Button-Driven UX (No Chatbox): Eliminates free-text prompt boxes for children. Students interact through guided pedagogical buttons ("I don't get it", "Make it simpler", "Explain another way", "Show me an example", "Say that again"), switching between step-by-step working, balance scales, and smaller steps.
+      - Zero-Hallucination Maths Engine (1 Rule: The AI Never Decides the Answer): Every mathematical answer and worked step is computed and verified by a deterministic SymPy engine over parameterised problem templates. Practice exercises are marked line by line, and a two-question quick check detects earlier-grade prerequisite gaps (signs, fractions), runs a quick warm-up, and returns to the textbook page. Only human-reviewed and approved content reaches children.
+      - Production Stack & Directed AI Engineering Team: Built with React, TypeScript (Vite), KaTeX, dynamic SVG figures, Python 3.12, FastAPI, PostgreSQL, ElevenLabs, PyMuPDF, Docker Compose, and Caddy. Engineered by directing a specialised team of Claude Code builder agents (Backend, Frontend, Content Pipeline), independent Reviewer agents (Test Guard & Maths Pedagogy), and 3 Playwright Simulated Student Testers (below-average, average, above-average personas) under rigorous CI governance (nearly 50 ADRs, 115+ merged PRs, and Rajeev's personal approval on every merge).
+      - Launch Timeline: Free early access opens 15 November 2026; full commercial launch on 15 December 2026.
+
+   2. Astra Studios (London, UK • Sept 2025 – Present) — Lead Software Architect [Current Role]
       - Focus: Production Technology, OpenUSD, VFX Platforms & AI Systems.
       - Engineering Leadership: Lead Development and TD teams, defining production technology architecture and engineering standards.
       - Studio.AI GenAI Platform: Engineered from architecture to production; integrated prompt-to-video engines (Google Veo, Kling AI, Higgsfield, Seedance) with character identity consistency, artist-facing controls, and ACES color conforming.
       - OpenUSD Production Architecture: Architected an end-to-end production-grade OpenUSD pipeline bridging DCCs (Maya, Nuke) for full-CG and live-action VFX.
-      - Editorial Turnover, Conform & I/O: Engineered greenfield Editorial Turnover, Conform & I/O pipeline from scratch, integrating package inspection, DI discrepancy reporting, regex pattern generation, multi-track Hiero conform, CDL grades, shot LUTs, and USD plate sublayering.
+      - Editorial Turnover, Conform & I/O: Engineered greenfield Editorial Turnover, Conform & I/O pipeline from scratch, integrating package inspection, DI discrepancy reporting, regex pattern generation, multi-track Hiero conform, CDL grades, shot LUTs, and USD plate sublayering (99.4% pass rate).
       - Zero-Touch Automation: Orchestrated n8n studio automation hubs using inbound and reverse webhooks for automated show onboarding, smart plate validation, and ShotGrid metadata injection.
 
-   2. Technicolor Group (London, UK • Mar 2023 – Feb 2025) — R&D Supervisor
+   3. Technicolor Group (London, UK • Mar 2023 – Feb 2025) — R&D Supervisor
       - Global Review Platform (ReviewTool): Spearheaded architecture and productionisation of ReviewTool, a multi-facility VFX review platform with real-time 4K+ media caching, synchronisation, and RV integration supporting distributed production workflows across global studios.
       - ProNuke Modular Ecosystem: Architected and engineered a modular Nuke production ecosystem spanning automated shot assembly, sequence-level publishing, and batch render orchestration.
       - Meshroom Photogrammetry: Productionised Meshroom into matchmove and tracking workflows, cutting camera extraction turnaround from days to hours with fast switching between Meshroom, Maya, and 3D Equalizer.
       - Global R&D Leadership: Led globally distributed R&D software engineering teams across London, Montreal, and Bengaluru supporting Compositing, Roto, Paint Prep, Camera Tracking, and Rotoanim.
       - Conform Ingest: Supervised Conform Ingest workflows using Hiero and Nuke Studio, automated CDL/LUT grade processing, and ShotGrid frame range validation.
 
-   3. Technicolor Group (Bengaluru, India • Jan 2022 – Feb 2023) — R&D Supervisor
+   4. Technicolor Group (Bengaluru, India • Jan 2022 – Feb 2023) — R&D Supervisor
       - 2D Software Engineering: Headed 2D software engineering and pipeline development across Bengaluru and Montreal hubs.
       - Review Platform Prototyping: Architected core compositing automation tools and early prototypes of the studio VFX review platform (ReviewTool).
       - Agile Execution: Mentored engineers, established Agile/Scrum sprint frameworks, and aligned dev priorities with production executives.
 
-   4. MPC Film (Moving Picture Company, Bengaluru, India • Jul 2017 – Dec 2021) — Lead Pipeline Software Developer
+   5. MPC Film (Moving Picture Company, Bengaluru, India • Jul 2017 – Dec 2021) — Lead Pipeline Software Developer
       - Feature Production Pipelines: Led core 2D pipeline solutions across Academy Award-winning films and global tentpole productions (1917, RRR, The Lion King).
       - RPM Unification: Spearheaded the RPM Unification project across MPC, MR.X, and The Mill, consolidating and standardising software toolsets and UI/UX across compositing and tracking workflows to improve cross-studio consistency.
       - Nuke Bridge Hub: Developed Nuke Bridge integrating Tessa (AMS), ShotGrid (PMS), and Tractor (Render Farm), establishing a version-controlled, high-throughput pipeline.
       - Render Dispatcher: Engineered Nuke Render Dispatcher with automated render order traversal and Reserve & Commit dispatch mechanics.
 
-   5. Technicolor (Bengaluru, India • Jul 2012 – Jun 2017) — Team Lead – Technology & R&D Production
+   6. Technicolor (Bengaluru, India • Jul 2012 – Jun 2017) — Team Lead – Technology & R&D Production
       - Media Engines: Architected macOS AVFoundation and QuickTime media processing engines (Channel Mapper, Frame Rate Converter, Compliance Edit Lists).
       - Team Management: Managed engineering team of 7 developers across C++, Objective-C, Cocoa, and Java, optimising production compression and authoring pipelines.
       - Hardware Compliance: Primary technical contact for player manufacturers, resolving Blu-ray authoring framework and playback compatibility issues.
 
-   6. Technicolor International Collaborations (Los Angeles, USA & Hannover, Germany • May 2008 – Jun 2012) — Senior Software Engineer – Technology
+   7. Technicolor International Collaborations (Los Angeles, USA & Hannover, Germany • May 2008 – Jun 2012) — Senior Software Engineer – Technology
       - Disney Collaboration (Los Angeles, USA • Jul 2011 – Jun 2012): Collaborated on-site with Disney engineering in Los Angeles to architect the Fast Menu Load (FML) template and integrate Generation 2 Bootloaders (G2B).
       - World First 3D Blu-ray (Hannover, Germany • Oct 2009 – Jun 2011): Engineered core 3D capabilities into the BD-J Authoring framework at Technicolor R&I in Hannover, Germany, as a key contributor to the world's first released 3D Blu-ray disc.
       - Founding Engineer (Bengaluru, India • May 2008 – Oct 2009): Founding software engineer at Technicolor India, building runtime alignment engines ('Graphics Adjuster') and studio authoring templates.
 
-   7. Dhruva Interactive & e4e (Bengaluru, India • Sep 2006 – Apr 2008) — Application Engineer & Game Programmer [Foundational First 2 Companies]
+   8. Dhruva Interactive & e4e (Bengaluru, India • Sep 2006 – Apr 2008) — Application Engineer & Game Programmer [Foundational First 2 Companies]
       - Started 20+ year journey here: Ported mobile game titles to Nokia, Motorola, Samsung, and Sony Ericsson devices for T-Mobile and Verizon.
       - Trained on game physics (Bouncing Ball physics) and Java ME; engineered touchscreen interfaces for early mobile OS platforms.
 
@@ -7414,10 +7423,14 @@ INTELLIGENCE CAPABILITIES & SCOPE:
    • Physics Sandbox: Gravity, velocity damping, spring physics, interactive dials (scale, speed, glow intensity, trail persistence).
    • Direct Link: <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Cyber Charlie Character Lab &rarr;</a>
 
-   I. CRITICAL RULE FOR QUERIES ABOUT RAJEEV, HIS CV, WORK, OR CHARLIE LAB:
+   I. CRITICAL RULE FOR QUERIES ABOUT RAJEEV, PRODUCT OWNERSHIP (CONCEPT TO IMPLEMENTATION), LEARN WITH CHARLIE, CV, WORK, OR CHARLIE LAB:
+   • When asked ANY question relating to whether Rajeev can take a product from concept to implementation (0-to-1 product ownership, building a product from scratch, idea to launch):
+     ALWAYS lead with his flagship founder EdTech product **Learn with Charlie** (https://learnwithcharlie.ai, Charlie AI, London, Aug 2026 – Present), explaining how he took it from concept to full production implementation completely end to end (student UX research, button-driven child UI, React/TypeScript/KaTeX/SVG + Python 3.12/FastAPI/PostgreSQL + ElevenLabs voice + deterministic SymPy maths engine where the AI never guesses an answer, directed Claude Code AI coding/review/Playwright student agent teams under ~50 ADRs & 115+ merged PRs, brand identity, Cloudflare Workers marketing site, Early Access 15 Nov / Full Launch 15 Dec 2026, and Indian textbook publisher licensing), alongside his enterprise studio platforms (**Studio.AI** at Astra Studios, **ReviewTool** & **ProNuke** at Technicolor Group, **OpenUSD**, and **Editorial Turnover / Conform I/O**).
    • When asked ANY question relating to Rajeev Mutyalu, his career, his CV, his companies, his education, his awards, his films, or Charlie Lab:
      Draw directly and authoritatively from this verified ground truth dossier. Answer accurately and specifically with real numbers, tool names, and metrics.
-   • Always conclude portfolio/CV answers with appropriate interactive action chips:
+   • Always conclude portfolio/CV answers with appropriate interactive action chips (separated by spaces):
+     <a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie Section &rarr;</a>
+     <a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" class="ai-section-link">🌐 Visit learnwithcharlie.ai &rarr;</a>
      <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>
      <a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
      <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Charlie Character Lab &rarr;</a>
@@ -7516,7 +7529,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
       safe = safe.replace(/&lt;a\s+([^&>]*?)href="([^"]+)"([^&>]*?)&gt;([\s\S]*?)&lt;\/a&gt;/gi, (m, pre, href, post, text) => {
         const isExternal = href.startsWith('http') || href.endsWith('.html');
         const target = isExternal ? ' target="_blank" rel="noopener"' : '';
-        return `<a href="${href}" class="ai-section-link"${target}>${text.replace(/&amp;rarr;/g, '&rarr;')}</a>`;
+        return `<a href="${href}" class="ai-section-link"${target}>${text.replace(/&amp;rarr;/g, '&rarr;')}</a> `;
       });
 
       // Bullet lists
@@ -7539,8 +7552,8 @@ INTELLIGENCE CAPABILITIES & SCOPE:
 
       let systemPrompt = CHARLIE_SYSTEM_GROUNDING_PROMPT;
 
-      // Determine if query is asking about Rajeev, his career, CV, companies, projects, Charlie Lab, or Charlie identity/build
-      const isExplicitAboutRajeevOrPortfolio = /\b(rajeev|mutyalu|muthyalu|cv|resume|career|degree|education|university|college|b\.?tech|graduat|award|fellowship|certificat|hackathon|outskill|company|companies|studio|studios|employer|employers|1917|rrr|mufasa|lion\s*king|spaceman|prehistoric|back\s*in\s*action|charlie|cyber\s*charlie|charlie\s*lab|character\s*lab|motion\s*lab|locomotion|oled|visor|synth|synthesizer|reviewtool|pronuke|meshroom|rpm|nuke\s*bridge|tessa|tractor|avfoundation|openusd|usd|n8n|mcp|model\s*context|conform|ingest|turnover|aces|ocio|otio|comfyui|studio\.ai|scene\s*weaver|nous\s*hermes|ollama|game\s*mode|comet\s*cascade|hire|recruiting|contact|who\s+are\s+you|who\s+is\s+charlie|who\s+built?\s+you|who\s+made\s+you|who\s+created\s+you|how\s+you\s+got\s+build|how\s+did\s+you\s+got\s+build|how\s+were\s+you\s+built|how\s+was\s+charlie\s+built)\b/i.test(userQuery);
+      // Determine if query is asking about Rajeev, his career, CV, companies, projects, Learn with Charlie, Charlie Lab, or Charlie identity/build
+      const isExplicitAboutRajeevOrPortfolio = /\b(rajeev|mutyalu|muthyalu|learn\s*with\s*charlie|learnwithcharlie|edtech|sympy|cv|resume|career|degree|education|university|college|b\.?tech|graduat|award|fellowship|certificat|hackathon|outskill|company|companies|studio|studios|employer|employers|1917|rrr|mufasa|lion\s*king|spaceman|prehistoric|back\s*in\s*action|charlie|cyber\s*charlie|charlie\s*lab|character\s*lab|motion\s*lab|locomotion|oled|visor|synth|synthesizer|reviewtool|pronuke|meshroom|rpm|nuke\s*bridge|tessa|tractor|avfoundation|openusd|usd|n8n|mcp|model\s*context|conform|ingest|turnover|aces|ocio|otio|comfyui|studio\.ai|scene\s*weaver|nous\s*hermes|ollama|game\s*mode|comet\s*cascade|hire|recruiting|contact|who\s+are\s+you|who\s+is\s+charlie|who\s+built?\s+you|who\s+made\s+you|who\s+created\s+you|how\s+you\s+got\s+build|how\s+did\s+you\s+got\s+build|how\s+were\s+you\s+built|how\s+was\s+charlie\s+built)\b/i.test(userQuery);
 
       const isPortfolioTopic = Boolean(
         (matchedKnowledge && matchedKnowledge.id && matchedKnowledge.id !== 'fallback' && matchedKnowledge.id !== 'out_of_scope')
@@ -7561,11 +7574,14 @@ INTELLIGENCE CAPABILITIES & SCOPE:
         }
 
         systemPrompt += `\n\nPORTFOLIO & CV QUERY MODE:
-The user is inquiring about Rajeev Mutyalu's verified profile, CV, technical achievements, film credits, or Charlie Lab ("${userQuery || 'Portfolio inquiry'}").
+The user is inquiring about Rajeev Mutyalu's verified profile, 0-to-1 product ownership (Learn with Charlie), CV, technical achievements, film credits, or Charlie Lab ("${userQuery || 'Portfolio inquiry'}").
 You have FULL, UNRESTRICTED ACCESS to Rajeev's Master Ground Truth Dossier above.
-Draw directly and authoritatively from his complete career history (including his foundational first 2 companies Dhruva Interactive & e4e, Astra Studios, Technicolor Group, MPC Film, Disney on-site collaboration, and Technicolor R&I 3D Blu-ray), all 10 technical architecture competencies, verified awards, B.Tech education, and Charlie Lab vector engine.
+Draw directly and authoritatively from his complete career history (including his founder EdTech product Learn with Charlie / Charlie AI at learnwithcharlie.ai, Astra Studios, Technicolor Group, MPC Film, Disney on-site collaboration, Technicolor R&I 3D Blu-ray, and his foundational first 2 companies Dhruva Interactive & e4e), all 10 technical architecture competencies, verified awards, B.Tech education, and Charlie Lab vector engine.
+If the question asks whether Rajeev can take a product from concept to implementation (or build a product end to end / 0-to-1), ALWAYS highlight **Learn with Charlie** (https://learnwithcharlie.ai) as his flagship founder EdTech app built completely end to end from concept, student UX research, React/FastAPI/PostgreSQL/SymPy/ElevenLabs full-stack architecture, and directed Claude Code AI coding agent governance (~50 ADRs, 115+ PRs) to brand, marketing, and launch, alongside his enterprise studio platforms (**Studio.AI**, **ReviewTool**, **ProNuke**, **OpenUSD**, and **Editorial Conform I/O**).
 Answer accurately with real technical metrics, toolsets, and dates.
 Conclude with appropriate interactive navigation chips:
+<a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie Section &rarr;</a>
+<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" class="ai-section-link">🌐 Visit learnwithcharlie.ai &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV & Bio &rarr;</a>
 <a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
 <a href="charlie-lab.html" target="_blank" class="ai-section-link">🧪 Open Interactive Charlie Character Lab &rarr;</a>
@@ -7871,63 +7887,181 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         ]
       },
       {
+        id: 'concept_to_implementation',
+        keywords: [
+          'concept to implementation', 'concept to production', 'concept to reality', 'concept to launch',
+          'idea to implementation', 'idea to production', 'idea to launch', '0 to 1', 'zero to one',
+          'end to end product', 'end-to-end product', 'product from scratch', 'build a product',
+          'take a product', 'product ownership', 'product development', 'product from concept',
+          'from concept', 'full product lifecycle', 'founder product', 'independently take a product'
+        ],
+        title: '0-to-1 Product Execution: Concept to Implementation (Learn with Charlie & Studio Platforms)',
+        intros: [
+          '🚀 <strong>0-TO-1 PRODUCT EXECUTION // CONCEPT TO FULL IMPLEMENTATION</strong>',
+          '🎯 <strong>END-TO-END PRODUCT OWNERSHIP // LEARN WITH CHARLIE &amp; STUDIO PLATFORMS</strong>'
+        ],
+        responses: [
+          `<strong>Yes — 100%!</strong> Rajeev has a proven track record of independently taking products from blank-sheet concept to full production implementation across both <strong>0-to-1 Founder EdTech</strong> and <strong>Enterprise Studio Platforms</strong>:<br/><br/>
+1. 🚀 <strong>Flagship Independent 0-to-1 EdTech Product — Learn with Charlie (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>):</strong><br/>
+   Rajeev founded <strong>Charlie AI</strong> in London (August 2026) and independently conceived, architected, built, branded, and launched the <strong>Learn with Charlie</strong> EdTech app completely end to end:<br/>
+   &bull; <strong>Product &amp; UX Strategy:</strong> Conducted student user research, authored detailed written requirements and data schemas, and designed a distraction-free, child-safe <strong>button-driven UX</strong> (<em>"I don't get it"</em>, <em>"Make it simpler"</em>, <em>"Explain another way"</em> — zero free-text chatboxes) that teaches page by page from the child's own CBSE NCERT school textbook.<br/>
+   &bull; <strong>Full-Stack Architecture &amp; Build:</strong> Engineered the full production stack with <strong>React + TypeScript (Vite)</strong>, <strong>KaTeX + dynamic SVG figures</strong>, <strong>Python 3.12 + FastAPI</strong>, <strong>PostgreSQL</strong>, <strong>ElevenLabs</strong> natural voice synthesis, and an offline <strong>PyMuPDF + SymPy</strong> textbook ingestion and mathematical verification engine where <strong>the AI never guesses a maths answer</strong>.<br/>
+   &bull; <strong>Directed AI Engineering Team:</strong> Acted as sole Product Owner &amp; Architect directing a specialised team of <strong>Claude Code</strong> builder agents (Backend, Frontend, Content Pipeline), independent Reviewer agents (Test Guard &amp; Maths Pedagogy), and <strong>3 Playwright Simulated Student Testers</strong> under nearly <strong>50 ADRs</strong> and <strong>115+ merged PRs</strong>.<br/>
+   &bull; <strong>Brand, Go-to-Market &amp; Business:</strong> Built the brand identity, Cloudflare Workers marketing website with country-based pricing &amp; waitlist (Early Access <strong>15 Nov 2026</strong>, Full Launch <strong>15 Dec 2026</strong>), feature videos, social channels, and Indian textbook publisher licensing outreach.<br/><br/>
+2. 🎬 <strong>Enterprise Studio Platforms (Concept to Global Production):</strong><br/>
+   &bull; <strong>Studio.AI (Scene Weaver) at Astra Studios:</strong> Architected and productionised the multi-model GenAI prompt-to-video platform (Google Veo, Kling AI, Higgsfield, Seedance) with character identity consistency and ACES color conforming, alongside greenfield <strong>OpenUSD v3</strong> and <strong>Editorial Turnover / Conform I/O (99.4% pass rate)</strong>.<br/>
+   &bull; <strong>ReviewTool &amp; ProNuke at Technicolor Group:</strong> Spearheaded <strong>ReviewTool</strong> from early prototype in Bengaluru to a global multi-facility 4K+ VFX review platform across London, Montreal, and Bengaluru, plus <strong>RPM Unification</strong> &amp; <strong>Nuke Bridge</strong> at MPC Film (<em>1917, RRR, Mufasa: The Lion King</em>).<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie Section &rarr;</a>
+<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" class="ai-section-link">🌐 Visit learnwithcharlie.ai &rarr;</a>
+<a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
+<a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>`
+        ],
+        followupPool: [
+          'What is Learn with Charlie?',
+          'What has he achieved in VFX production technology?',
+          'What are his AI architecture capabilities?',
+          'Why should we hire Rajeev?',
+          'How does Charlie avoid wrong answers?',
+          'What stack is Learn with Charlie built on?'
+        ]
+      },
+      {
+        id: 'vfx_production_achievements',
+        keywords: [
+          'vfx production technology', 'achieved in vfx', 'vfx achievements', 'production technology achievements',
+          'what has he achieved in vfx', 'vfx pipeline achievements', 'vfx production systems', 'vfx engineering',
+          'production technology', 'vfx accomplishments', 'vfx track record'
+        ],
+        title: 'VFX Production Technology Achievements (20+ Years Across Astra, Technicolor & MPC)',
+        intros: [
+          '🎬 <strong>VFX PRODUCTION TECHNOLOGY ACHIEVEMENTS // 20+ YEAR TRACK RECORD</strong>',
+          '🏆 <strong>ENTERPRISE STUDIO SYSTEMS // ASTRA STUDIOS, TECHNICOLOR &amp; MPC FILM</strong>'
+        ],
+        responses: [
+          `Over <strong>20+ years</strong> across <strong>Astra Studios</strong>, <strong>Technicolor Group</strong>, and <strong>MPC Film</strong>, Rajeev has architected and productionised mission-critical VFX systems powering Oscar-winning blockbusters (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>):<br/><br/>
+1. 🎬 <strong>End-to-End OpenUSD v3 Production Pipeline (Astra Studios):</strong><br/>
+   &bull; Architected a 2-tier modular OpenUSD pipeline separating <strong>Tier 1 Asset Publishing</strong> (Modeling &rarr; Groom &rarr; LookDev &rarr; Rigging &rarr; Assembly) from <strong>Tier 2 Non-Destructive Shot Sublayering</strong> (<code>SH0010 usdShot</code> across Layout, Animation, CFX, FX, and Lighting) bridging Maya, Houdini Solaris, and Nuke with zero geometry duplication.<br/><br/>
+2. 📦 <strong>Greenfield Editorial Turnover, Conform &amp; I/O Engine (99.4% Pass Rate):</strong><br/>
+   &bull; Engineered automated turnover package inspection, instant DI discrepancy reporting, dynamic regex camera metadata extraction, multi-track Hiero/Nuke Studio conform, CDL/LUT grade application, OpenTimelineIO (OTIO) / OpenColorIO (ACEScg) color management, and USD plate sublayering.<br/><br/>
+3. 🖥️ <strong>Global Multi-Facility Review &amp; Nuke Ecosystems (Technicolor Group):</strong><br/>
+   &bull; <strong>ReviewTool:</strong> Spearheaded architecture and global productionisation from initial prototype in Bengaluru to a multi-facility 4K+ VFX review platform with real-time media caching and RV synchronization across London, Montreal, and Bengaluru.<br/>
+   &bull; <strong>ProNuke &amp; Meshroom Photogrammetry:</strong> Architected the modular <strong>ProNuke</strong> ecosystem (automated shot assembly, sequence publishing, batch render orchestration) and productionised <strong>Meshroom</strong> into matchmove/tracking workflows, cutting camera extraction turnaround from days to hours.<br/><br/>
+4. 🦁 <strong>Cross-Studio Unification &amp; Render Farm Dispatch (MPC Film):</strong><br/>
+   &bull; Spearheaded <strong>RPM Unification</strong> across MPC, MR.X, and The Mill; engineered <strong>Nuke Bridge</strong> (integrating Tessa AMS, ShotGrid PMS, and Tractor Render Farm) and <strong>Nuke Render Dispatcher</strong> on Academy Award-winning <em>1917</em>, <em>RRR</em>, and <em>The Lion King</em>.<br/><br/>
+5. ⚡ <strong>Zero-Touch n8n Studio Automation &amp; Early Media Engines:</strong><br/>
+   &bull; Orchestrated event-driven <strong>n8n</strong> inbound/reverse webhook hubs for automated show onboarding and plate QC; earlier collaborated on-site with <strong>Disney Engineering (Los Angeles)</strong> and contributed to the <strong>world's first 3D Blu-ray framework</strong> at Technicolor R&amp;I (Hannover).<br/><br/>
+<a href="#architecture" data-arch-tab="usd" class="ai-section-link">🎬 View Live Studio Architecture Visualizer &rarr;</a>
+<a href="#conform" class="ai-section-link">📦 Inspect Conform Ingest &amp; VFX I/O &rarr;</a>
+<a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
+<a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
+<a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
+        ],
+        followupPool: [
+          'What are his AI architecture capabilities?',
+          'Can he independently take a product from concept to implementation?',
+          'Why should we hire Rajeev?',
+          'What is Learn with Charlie?',
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture'
+        ]
+      },
+      {
+        id: 'ai_architecture_capabilities',
+        keywords: [
+          'ai architecture capabilities', 'ai capabilities', 'ai architecture', 'ai systems capabilities',
+          'what are his ai', 'his ai architecture', 'genai capabilities', 'genai architecture',
+          'ai engineering capabilities', 'ai skills', 'ai systems lead', 'ai stack'
+        ],
+        title: 'AI & Agentic Systems Architecture Capabilities',
+        intros: [
+          '🧠 <strong>AI &amp; AGENTIC SYSTEMS ARCHITECTURE // CAPABILITIES DOSSIER</strong>',
+          '⚡ <strong>APPLIED FRONTIER AI &amp; 0-TO-1 PRODUCT ARCHITECTURE</strong>'
+        ],
+        responses: [
+          `Rajeev architects production-grade AI systems across <strong>5 core engineering pillars</strong>—combining deterministic verification, multi-agent governance, and air-gapped studio security:<br/><br/>
+1. 🚀 <strong>0-to-1 AI EdTech &amp; Hybrid Symbolic-AI Architecture (Learn with Charlie):</strong><br/>
+   &bull; Founded <strong>Charlie AI</strong> and architected <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) using <strong>React/TypeScript/KaTeX/SVG</strong>, <strong>Python 3.12/FastAPI/PostgreSQL</strong>, <strong>ElevenLabs</strong> natural voice synthesis, and an offline <strong>PyMuPDF + SymPy</strong> symbolic verification pipeline where <strong>the AI never guesses a maths answer</strong> (100% deterministic mathematical accuracy).<br/><br/>
+2. 🤖 <strong>Directed Multi-Agent Engineering Swarms (Claude Code &amp; Antigravity):</strong><br/>
+   &bull; Directs specialised autonomous AI coding agent teams (Backend, Frontend, and Content Pipeline builders), independent Reviewer agents (Test Guard &amp; Maths Pedagogy), and <strong>3 Playwright Simulated Student Testers</strong> under strict governance: versioned data contracts, nearly <strong>50 ADRs</strong>, <strong>115+ merged PRs</strong>, automated CI test suites, and human architect approval on every merge.<br/><br/>
+3. 🔌 <strong>Model Context Protocol (MCP) Server Engineering:</strong><br/>
+   &bull; Builds custom <strong>JSON-RPC 2.0 MCP tool servers</strong> with sandboxed read-only security gates, exposing DCC applications (Maya, Houdini Solaris, Nuke), ShotGrid/Flow databases, filesystem inspectors, and render farm queues to frontier LLMs without custom glue code.<br/><br/>
+4. 🔒 <strong>Air-Gapped On-Premise Private LLMs (OpenClaw, Ollama &amp; vLLM):</strong><br/>
+   &bull; Deploys quantized open-weight models (<strong>Nous Hermes</strong>, <strong>Llama 3</strong>, <strong>Mistral</strong>, <strong>DeepSeek</strong> via 4-bit/8-bit GGUF &amp; AWQ) inside TPN/MPAA-compliant air-gapped studio networks—reducing GPU VRAM footprint by <strong>60%–75%</strong> with sub-50ms token latency and <strong>zero cloud IP leakage</strong>.<br/><br/>
+5. 🎥 <strong>Multi-Model Generative Video &amp; Zero-Touch Automation (Studio.AI &amp; n8n):</strong><br/>
+   &bull; Architected <strong>Studio.AI (Scene Weaver)</strong> at Astra Studios, routing prompts across <strong>Google Veo, Kling AI, Higgsfield, Seedance, and ComfyUI</strong> (ControlNet/IP-Adapter character identity locking &amp; ACEScg color conforming), paired with event-driven <strong>n8n</strong> webhook automation and low-latency <strong>Conversational Voice AI</strong> (Retell AI, Vapi, Whisper-1).<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie Architecture &rarr;</a>
+<a href="#initiatives" class="ai-section-link">🧠 Explore AI &amp; Technical Capabilities &rarr;</a>
+<a href="#architecture" data-arch-tab="genai" class="ai-section-link">✨ View Studio.AI Flow in Visualizer &rarr;</a>
+<a href="cv-ai-systems.html" class="ai-section-link">📄 Open AI Systems Specialist CV &rarr;</a>`
+        ],
+        followupPool: [
+          'Can he independently take a product from concept to implementation?',
+          'What has he achieved in VFX production technology?',
+          'What is Learn with Charlie?',
+          'What is Model Context Protocol (MCP) and how is it used in production?',
+          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?'
+        ]
+      },
+      {
         id: 'why_hire_rajeev',
-        keywords: ['why hire', 'why should we hire', 'hire rajeev', 'who is rajeev', 'who si rajeev', 'pitch', 'recruit', 'recruiting', 'strengths', 'why choose', 'value proposition', 'executive summary', 'about rajeev', 'why hire him', 'rajeev mutyalu', 'rajeev', 'muthyalu', 'mutyalu'],
+        keywords: ['why hire', 'why should we hire', 'hire rajeev', 'who is rajeev', 'who si rajeev', 'pitch', 'recruit', 'recruiting', 'strengths', 'why choose', 'value proposition', 'executive summary', 'about rajeev', 'why hire him', 'rajeev mutyalu'],
         title: 'Who is Rajeev Mutyalu & Why Hire Him? (Executive Pitch)',
         intros: [
-          '🌟 <strong>EXECUTIVE OVERVIEW // LEAD ARCHITECT &amp; SYSTEMS DIRECTOR</strong>',
+          '🌟 <strong>EXECUTIVE OVERVIEW // FOUNDER, LEAD ARCHITECT &amp; SYSTEMS DIRECTOR</strong>',
           '🎯 <strong>STRATEGIC VALUE PROPOSITION // RAJEEV MUTYALU</strong>',
           '💎 <strong>CORE LEADERSHIP PROFILE // 20-YEAR STUDIO PEDIGREE</strong>',
           '🚀 <strong>HIGH-LEVERAGE CAPABILITY BRIEF // RAJEEV MUTYALU</strong>'
         ],
         responses: [
-          `<strong>📌 20-Year Production Pedigree:</strong> Lead Software Architect &bull; Production Technology Architect &bull; Creative Technology &amp; AI Systems Lead with 20+ years of proven engineering leadership across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning blockbuster productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
+          `<strong>📌 Founder &amp; 20-Year Production Pedigree:</strong> Founder of <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) &bull; Lead Software Architect &bull; Production Technology Architect &bull; Creative Technology &amp; AI Systems Lead with 20+ years of proven engineering leadership across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning blockbuster productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
+• <strong>🚀 Proven 0-to-1 Product Builder:</strong> Founded Charlie AI in London and built the <strong>Learn with Charlie</strong> EdTech platform end to end from concept to implementation (React, FastAPI, PostgreSQL, SymPy deterministic maths verifier, ElevenLabs voice, and a directed team of Claude Code AI agents under ~50 ADRs &amp; 115+ PRs).<br/>
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
 • <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London, Montreal, and Bengaluru.<br/>
-• <strong>🚀 Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bengaluru under strict Hollywood delivery deadlines.<br/><br/>
-<a href="#initiatives" class="ai-section-link">🚀 Explore Technical Capabilities &rarr;</a>
+• <strong>⚡ Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bengaluru under strict Hollywood delivery deadlines.<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie &rarr;</a>
+<a href="#initiatives" class="ai-section-link">⚡ Explore Technical Capabilities &rarr;</a>
 <a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
-<a href="#architecture" class="ai-section-link">🎬 View Live Studio Architecture &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &amp; Bio &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Direct Contact Matrix &rarr;</a>`,
 
           `<strong>💎 The Rare "Dual-Threat" Engineering Moat:</strong><br/>
-Most senior leaders either manage people or write code; Rajeev bridges high-level architectural strategy with deep, daily code execution.<br/>
+Most senior leaders either manage people or write code; Rajeev bridges high-level architectural strategy, <strong>0-to-1 founder product execution</strong>, and deep daily code delivery.<br/>
+• <strong>🚀 0-to-1 Founder Product Ownership:</strong> Conceived, architected, and built <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) end to end in London—directing specialised Claude Code AI coding, review, and Playwright student test agents across React, FastAPI, PostgreSQL, ElevenLabs, and SymPy.<br/>
 • <strong>🏗️ Traditional Heavyweight Foundation:</strong> 20+ years building Linux render clusters, low-level Python/C++ OpenUSD composition arcs, ShotGrid databases, and automated DI conform engines across Astra Studios, Technicolor Group, and MPC Film.<br/>
-• <strong>⚡ Applied AI Frontier Leadership:</strong> Early pioneer in production MCP (Model Context Protocol) tool servers, autonomous Claude Code/Devin swarms, and air-gapped private LLM deployments (Nous Hermes, Ollama 4-bit GGUF).<br/>
-• <strong>🎬 Oscar-Winning &amp; Landmark Deliverables:</strong> Key pipeline architect across Academy Award-winning productions and global tentpoles (<em>1917</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>, <em>Back in Action</em>, <em>Spaceman</em>, <em>Prehistoric Planet</em>).<br/>
-• <strong>🏆 Production Heritage:</strong> Trusted technical leader on landmark VFX and animation sequences for Disney, Warner Bros, Universal, and Netflix.<br/><br/>
+• <strong>⚡ Applied AI Frontier Leadership:</strong> Early pioneer in production MCP (Model Context Protocol) tool servers, Studio.AI multi-model video platforms, and air-gapped private LLM deployments (Nous Hermes, Ollama 4-bit GGUF).<br/>
+• <strong>🎬 Oscar-Winning &amp; Landmark Deliverables:</strong> Key pipeline architect across Academy Award-winning productions and global tentpoles (<em>1917</em>, <em>RRR</em>, <em>Mufasa: The Lion King</em>, <em>Back in Action</em>, <em>Spaceman</em>, <em>Prehistoric Planet</em>).<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie &rarr;</a>
 <a href="#experience" class="ai-section-link">⏳ View Full Career Timeline &rarr;</a>
 <a href="#films" class="ai-section-link">🏆 Browse Oscar-Winning Filmography &rarr;</a>
-<a href="#initiatives" class="ai-section-link">🚀 Inspect Technical Capabilities &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`,
 
-          `<strong>🚀 Immediate Production ROI &amp; Engineering Velocity:</strong><br/>
-• <strong>⚡ 5x–10x Delivery Acceleration:</strong> Replaces manual studio friction with zero-touch event-driven automation (n8n webhooks, automated QC verification loops, and agentic workflows).<br/>
-• <strong>🎯 Zero Ramp-Up Time:</strong> Having architected pipelines for top-tier studios across London and Bengaluru, Rajeev steps into any enterprise VFX, animation, or AI pipeline and delivers immediate impact on Day 1.<br/>
-• <strong>👥 Cross-Continental Leadership:</strong> Mentored over 50+ TDs and engineers, establishing high-trust engineering cultures, automated code-review gates, and strict sprint cadences.<br/>
+          `<strong>🚀 Immediate Production ROI &amp; 0-to-1 Engineering Velocity:</strong><br/>
+• <strong>🎯 Independent Concept-to-Implementation Execution:</strong> Proven ability to take greenfield products from blank sheet to production—demonstrated by building <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) end to end under ~50 ADRs and 115+ merged PRs, as well as <strong>Studio.AI</strong> and <strong>ReviewTool</strong>.<br/>
+• <strong>⚡ 5x–10x Delivery Acceleration:</strong> Replaces manual studio friction with zero-touch event-driven automation (n8n webhooks, automated QC verification loops, and directed Claude Code agentic workflows).<br/>
+• <strong>👥 Cross-Continental Leadership:</strong> Mentored over 50+ TDs and engineers across London, Montreal, and Bengaluru, establishing high-trust engineering cultures and automated CI/CD gates.<br/>
 • <strong>📍 Location &amp; Status:</strong> Based in London, UK (UK Skilled Worker Visa • Existing Sponsorship in Place • Available Immediately) with full global remote/onsite mobility.<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie &rarr;</a>
 <a href="#experience" class="ai-section-link">⏳ Explore Career Timeline &rarr;</a>
 <a href="#contact" class="ai-section-link">📬 Connect with Rajeev Directly &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 View 1-Click ATS Resume &rarr;</a>`,
 
-          `<strong>🌐 Global Team Builder &amp; Technical Visionary:</strong><br/>
-• <strong>🤝 London–Bengaluru Engineering Bridge:</strong> Successfully aligned multi-site teams of 40+ software developers and pipeline TDs, delivering high-throughput 24/7 studio follow-the-sun workflows.<br/>
-• <strong>📦 Open Standards Champion:</strong> Proven expert in OpenUSD 2-tier composition, OpenTimelineIO (OTIO) cut conforms, and OpenColorIO (OCIO / ACEScg) color science.<br/>
-• <strong>🧠 Frontier AI Integration:</strong> Architect of <em>Scene Weaver (Studio.AI)</em>, integrating Google Veo, Kling, and Seedance into conformed VFX studio pipelines.<br/>
+          `<strong>🌐 Founder, Global Team Builder &amp; Technical Visionary:</strong><br/>
+• <strong>🚀 Founder of Learn with Charlie:</strong> Built a curriculum-bound AI maths tutor (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) with deterministic SymPy verification, voice + live blackboard teaching, and child-safe button-driven UX.<br/>
+• <strong>🤝 London–Bengaluru Engineering Bridge:</strong> Successfully aligned multi-site teams of 40+ software developers and pipeline TDs, delivering high-throughput 24/7 studio workflows.<br/>
+• <strong>📦 Open Standards &amp; Frontier AI Champion:</strong> Proven expert in OpenUSD 2-tier composition, OpenTimelineIO (OTIO), OpenColorIO (ACEScg), and architect of <em>Studio.AI (Scene Weaver)</em> integrating Google Veo, Kling, and Seedance.<br/>
 • <strong>🏆 Production Proof:</strong> Credits on <em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>.<br/><br/>
+<a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie &rarr;</a>
 <a href="#architecture" class="ai-section-link">🎬 Launch Interactive Pipeline Visualizer &rarr;</a>
 <a href="#experience" class="ai-section-link">⏳ View Career Timeline &rarr;</a>
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`
         ],
         followupPool: [
+          'Can he independently take a product from concept to implementation?',
+          'What has he achieved in VFX production technology?',
+          'What are his AI architecture capabilities?',
+          'What is Learn with Charlie?',
           'Tell me about Rajeev\'s AI certifications, accelerator credentials, and hackathons',
-          'Tell me about Rajeev\'s 20-year engineering leadership and mentorship background',
-          'What is Model Context Protocol (MCP) and how is it used in production?',
-          'Explain Rajeev\'s OpenUSD VFX pipeline architecture',
-          'How do you deploy On-Premise LLMs (Nous Hermes, Ollama) and OpenClaw agents?',
-          'How does zero-touch n8n studio automation orchestrate pipelines?',
-          'Tell me about GenAI video pipelines with Veo, Kling, and Studio.AI'
+          'Explain Rajeev\'s OpenUSD VFX pipeline architecture'
         ]
       },
       {
@@ -8976,7 +9110,7 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
       }
 
       // 4. Resilient "Who is Rajeev / Why hire him" Check
-      if (/\b(who\s+(is|si)\s+(rajeev|muthyalu|mutyalu|he|this|the\s+architect|the\s+lead|the\s+author|the\s+candidate)|why\s+hire(\s+rajeev|\s+him)?|hire\s+(rajeev|him)|about\s+rajeev|rajeev\s+mutyalu)\b/i.test(q) || q === 'rajeev' || q === 'why hire') {
+      if (/\b(who\s+(is|si)\s+(rajeev|muthyalu|mutyalu|he|this|the\s+architect|the\s+lead|the\s+author|the\s+candidate)|why\s+(should\s+(we|i|you|they)\s+)?hire(\s+rajeev|\s+him)?|hire\s+(rajeev|him)|about\s+rajeev|rajeev\s+mutyalu)\b/i.test(q) || q === 'rajeev' || q === 'why hire') {
         const whyHireItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'why_hire_rajeev');
         if (whyHireItem) {
           const chosenIntro = getRandomItem(whyHireItem.intros);
@@ -9020,9 +9154,26 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
         }
       }
 
+      // 4e-0. Product from Concept to Implementation / 0-to-1 Product Ownership
+      if (
+        /\b(concept\s+to\s+(implementation|production|reality|launch|delivery|market)|idea\s+to\s+(implementation|production|reality|launch|delivery|market)|0\s*(to|-)\s*1|zero\s+to\s+one|independently\s+(take|build|deliver|develop|create|own)|(take|build|deliver|own|create|develop)\s+(a\s+)?product(\s+from\s+(concept|scratch|idea|zero))?|product\s+from\s+(concept|scratch|idea|zero)|end[\s-]+to[\s-]+end\s+product|product\s+ownership|full\s+product\s+lifecycle)\b/i.test(q)
+      ) {
+        const conceptItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'concept_to_implementation');
+        if (conceptItem) {
+          const chosenIntro = getRandomItem(conceptItem.intros);
+          const chosenResponse = getRandomItem(conceptItem.responses);
+          return {
+            id: conceptItem.id,
+            title: conceptItem.title,
+            response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+            followups: getDynamicFollowups(conceptItem.followupPool, 4)
+          };
+        }
+      }
+
       // 4e-1. Learn with Charlie: Overview & What is Rajeev Building
       if (
-        /\b(what\s+is\s+learn\s+with\s+charlie|learn\s+with\s+charlie|about\s+learn\s+with\s+charlie|charlie\s+ai|what\s+is\s+rajeev\s+building|what\s+is\s+he\s+building|what\s+are\s+you\s+building|founder\s+product|his\s+startup|edtech|maths?\s+tutor)\b/i.test(q)
+        /\b((what|waht|wht|whats)\s+(is|si)\s+learn\s*with\s*charlie|learn\s*with\s*charlie|learnwithcharlie|about\s+learn\s*with\s*charlie|charlie\s+ai|what\s+is\s+rajeev\s+building|what\s+is\s+he\s+building|what\s+are\s+you\s+building|founder\s+product|his\s+startup|edtech|maths?\s+tutor)\b/i.test(q)
       ) {
         return {
           id: 'learn_with_charlie_overview',
@@ -9145,6 +9296,40 @@ Rajeev serves as <strong>Product Owner and Architect</strong>, directing a speci
             'How does he use AI agents to build it?'
           ], 4)
         };
+      }
+
+      // 4e-6. VFX Production Technology Achievements
+      if (
+        /\b(achieved\s+in\s+vfx|vfx\s+production\s+technology|vfx\s+achievements?|production\s+technology\s+achievements?|what\s+has\s+(he|rajeev)\s+achieved(\s+in\s+vfx)?|achievements?\s+in\s+vfx)\b/i.test(q)
+      ) {
+        const vfxAchItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'vfx_production_achievements');
+        if (vfxAchItem) {
+          const chosenIntro = getRandomItem(vfxAchItem.intros);
+          const chosenResponse = getRandomItem(vfxAchItem.responses);
+          return {
+            id: vfxAchItem.id,
+            title: vfxAchItem.title,
+            response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+            followups: getDynamicFollowups(vfxAchItem.followupPool, 4)
+          };
+        }
+      }
+
+      // 4e-7. AI Architecture Capabilities
+      if (
+        /\b(ai\s+architecture\s+capabilities|ai\s+capabilities|what\s+are\s+(his|rajeev'?s)\s+ai(\s+architecture)?(\s+capabilities)?|ai\s+systems\s+capabilities|genai\s+(architecture\s+)?capabilities|capabilities\s+in\s+ai)\b/i.test(q)
+      ) {
+        const aiCapItem = AI_KNOWLEDGE_BASE.find(item => item.id === 'ai_architecture_capabilities');
+        if (aiCapItem) {
+          const chosenIntro = getRandomItem(aiCapItem.intros);
+          const chosenResponse = getRandomItem(aiCapItem.responses);
+          return {
+            id: aiCapItem.id,
+            title: aiCapItem.title,
+            response: (chosenIntro ? chosenIntro + '<br/><br/>' : '') + chosenResponse,
+            followups: getDynamicFollowups(aiCapItem.followupPool, 4)
+          };
+        }
       }
 
       // 4d-1. Resilient "Who built you / Who build you / Who made you / Who is your creator" Check
