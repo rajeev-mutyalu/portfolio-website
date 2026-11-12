@@ -6323,24 +6323,15 @@
         window.switchArchitectureTab(archTab);
       }
 
-      // Extract clean section title for Charlie Companion Escort Flight
-      let sectionTitle = href.replace('#', '');
-      const heading = targetEl.querySelector('h1, h2, h3, .section-title');
-      if (heading) {
-        sectionTitle = heading.textContent.trim().replace(/^[\s⚡🎬📦🔒🎙️🎥🐍🐾🏆🌟🛑🌌💎☄️🎮🔇🔊•→]+\s*/g, '');
-      }
-
-      const executeNavScrollAndEscort = () => {
+      const executeNavScroll = () => {
         const nav = document.querySelector('.navbar');
         const navH = (nav && window.getComputedStyle(nav).display !== 'none') ? nav.offsetHeight : 64;
         const targetY = Math.max(0, targetEl.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop || 0) - navH + 2);
 
         smoothScrollTo(targetY, 400);
 
-        if (window.portfolioCharlie && (!window.portfolioEngine || !window.portfolioEngine.isEnabled)) {
-          window.portfolioCharlie.triggerSectionEscort(targetEl, sectionTitle);
-        } else if (window.portfolioEngine?.charlie) {
-          window.portfolioEngine.charlie.triggerSectionEscort(targetEl, sectionTitle);
+        if (href !== '#ai-assistant' && href !== '#charlie' && typeof window.returnCharlieToDock === 'function') {
+          window.returnCharlieToDock();
         }
 
         try {
@@ -6348,7 +6339,7 @@
         } catch (err) { }
       };
 
-      // If Charlie terminal is in full screen mode, exit full screen first, then scroll and escort (matching chat link behavior)
+      // If Charlie terminal is in full screen mode, exit full screen first, then scroll and dock (same behavior as normal size)
       const terminal = document.querySelector('.ai-bot-terminal') || document.getElementById('charlie');
       const isFullscreen = (terminal && terminal.classList.contains('is-fullscreen')) ||
         document.body.classList.contains('charlie-fullscreen-active') ||
@@ -6357,10 +6348,6 @@
       if (isFullscreen) {
         if (document.activeElement && typeof document.activeElement.blur === 'function') {
           document.activeElement.blur();
-        }
-        if (window.portfolioCharlie) {
-          window.portfolioCharlie.isEscorting = true;
-          window.portfolioCharlie.sectionActive = false;
         }
         if (typeof window.setCharlieFullscreen === 'function') {
           window.setCharlieFullscreen(false);
@@ -6372,9 +6359,9 @@
           if (terminal) terminal.classList.remove('is-fullscreen');
           document.body.classList.remove('charlie-fullscreen-active', 'mobile-chat-open');
         }
-        setTimeout(executeNavScrollAndEscort, 120);
+        setTimeout(executeNavScroll, 120);
       } else {
-        executeNavScrollAndEscort();
+        executeNavScroll();
       }
     });
 
@@ -7370,7 +7357,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
    You have complete, authoritative access to Rajeev Mutyalu's full executive background, verified CV, Charlie Lab specifications, filmography, and studio platforms.
 
    A. EXECUTIVE SUMMARY & LEADERSHIP PROFILE:
-   • Founder of Charlie AI & Creator of Learn with Charlie (https://learnwithcharlie.ai • London, UK • Aug 2026 – Present): Founded Charlie AI and took the Learn with Charlie EdTech app from 0-to-1 concept to full-stack production implementation completely end to end (product strategy, student UX research, child-safe button-driven UI, React/TypeScript/KaTeX/SVG frontend, Python 3.12/FastAPI/PostgreSQL backend, deterministic SymPy mathematical verification engine, ElevenLabs voice synthesis, directed Claude Code AI coding/review/Playwright student agent teams under ~50 ADRs & 115+ merged PRs, brand identity, Cloudflare Workers marketing site, launch roadmap, and B2B textbook publisher partnerships).
+   • Founder of Charlie AI & Creator of Learn with Charlie (https://learnwithcharlie.ai • London, UK • Aug 2026 – Present): Founded Charlie AI and took the Learn with Charlie EdTech app from 0-to-1 concept to full-stack production implementation completely end to end (product strategy, student UX research, child-safe button-driven UI, React/TypeScript/KaTeX/SVG frontend, Python 3.12/FastAPI/PostgreSQL backend, deterministic SymPy mathematical verification engine, ElevenLabs voice synthesis, directed Claude Code AI coding/review/Playwright student agent teams under 75+ ADRs & 175+ merged PRs, brand identity, Cloudflare Workers marketing site, launch roadmap, and B2B textbook publisher partnerships).
    • Lead Software Architect, Production Technology Architect, and Creative Technology & AI Systems Lead with 20+ years of proven production technology, software architecture, and R&D engineering leadership.
    • Former Technicolor R&D Supervisor and Associate Member of the Technicolor Fellowship Network (2015–2025).
    • Dual-Threat Engineering Moat: Unites mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with cutting-edge applied AI (0-to-1 EdTech product development, MCP custom servers, Claude Code agent swarms, on-premise air-gapped private LLMs like Nous Hermes & Ollama, ComfyUI, and n8n zero-touch automation).
@@ -7380,11 +7367,11 @@ INTELLIGENCE CAPABILITIES & SCOPE:
    B. COMPLETE PROFESSIONAL EXPERIENCE & CAREER TIMELINE (8 ROLES & 6 COMPANIES):
    1. Charlie AI • Learn with Charlie (London, UK • Aug 2026 – Present) — Founder [0-to-1 Concept-to-Implementation EdTech Product]
       - End-to-End Product Ownership: Founded Charlie AI in London and owns Learn with Charlie (https://learnwithcharlie.ai) completely from initial concept to full production implementation: product vision, written requirements, student user research, UX wireframes, full-stack architecture, build, brand, marketing website, social channels, launch, and Indian textbook publisher licensing.
-      - What Learn with Charlie Is: A curriculum-bound AI maths tutor for school children (starting with CBSE Class 9 NCERT maths, expanding to Classes 8–10 for launch, then Classes 5–7 and Science). Teaches directly from the child's own school textbook page by page with a warm natural voice (ElevenLabs) and an interactive blackboard that writes mathematical working line by line.
-      - Child-Safe Button-Driven UX (No Chatbox): Eliminates free-text prompt boxes for children. Students interact through guided pedagogical buttons ("I don't get it", "Make it simpler", "Explain another way", "Show me an example", "Say that again"), switching between step-by-step working, balance scales, and smaller steps.
+      - What Learn with Charlie Is: A curriculum-bound AI maths tutor for school children (Free early access from 15 November 2026 with one CBSE class 9 chapter, free until 15 January; rollout: CBSE classes 8 and 9 on 15 January 2027, class 10 around 15 February, around May 2027 CBSE 5 to 7 and ICSE 5 to 10, then Cambridge IGCSE and IB, then state boards and more subjects). Teaches directly from the child's own school textbook page by page with a warm natural voice (ElevenLabs) and an interactive blackboard that writes mathematical working line by line.
+      - Child-Safe Button-Driven UX (No Chatbox): Eliminates free-text prompt boxes for children. Students interact through guided pedagogical buttons ("Another way", "Smaller steps", "One more example"), switching between step-by-step working, balance scales, and smaller steps.
       - Zero-Hallucination Maths Engine (1 Rule: The AI Never Decides the Answer): Every mathematical answer and worked step is computed and verified by a deterministic SymPy engine over parameterised problem templates. Practice exercises are marked line by line, and a two-question quick check detects earlier-grade prerequisite gaps (signs, fractions), runs a quick warm-up, and returns to the textbook page. Only human-reviewed and approved content reaches children.
-      - Production Stack & Directed AI Engineering Team: Built with React, TypeScript (Vite), KaTeX, dynamic SVG figures, Python 3.12, FastAPI, PostgreSQL, ElevenLabs, PyMuPDF, Docker Compose, and Caddy. Engineered by directing a specialised team of Claude Code builder agents (Backend, Frontend, Content Pipeline), independent Reviewer agents (Test Guard & Maths Pedagogy), and 3 Playwright Simulated Student Testers (below-average, average, above-average personas) under rigorous CI governance (nearly 50 ADRs, 115+ merged PRs, and Rajeev's personal approval on every merge).
-      - Launch Timeline: Free early access opens 15 November 2026; full commercial launch on 15 December 2026.
+      - Production Stack & Directed AI Engineering Team: Built with React, TypeScript (Vite), KaTeX, dynamic SVG figures, Python 3.12, FastAPI, PostgreSQL, ElevenLabs, PyMuPDF, Docker Compose, and Caddy. Engineered by directing a specialised team of Claude Code builder agents (Backend, Frontend, Content Pipeline), independent Reviewer agents (Test Guard & Maths Pedagogy), and 3 Playwright Simulated Student Testers (below-average, average, above-average personas) under rigorous CI governance (75+ ADRs, 175+ merged PRs, and Rajeev's personal approval on every merge).
+      - Launch Timeline: Free early access from 15 November 2026 with one CBSE class 9 chapter, free until 15 January; full commercial launch on 15 January 2027 (CBSE classes 8 and 9 on 15 January 2027, class 10 around 15 February, around May 2027 CBSE 5 to 7 and ICSE 5 to 10, then Cambridge IGCSE and IB, then state boards and more subjects).
 
    2. Astra Studios (London, UK • Sept 2025 – Present) — Lead Software Architect [Current Role]
       - Focus: Production Technology, OpenUSD, VFX Platforms & AI Systems.
@@ -7475,7 +7462,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
 
    I. CRITICAL RULE FOR QUERIES ABOUT RAJEEV, PRODUCT OWNERSHIP (CONCEPT TO IMPLEMENTATION), LEARN WITH CHARLIE, CV, WORK, OR CHARLIE LAB:
    • When asked ANY question relating to whether Rajeev can take a product from concept to implementation (0-to-1 product ownership, building a product from scratch, idea to launch):
-     ALWAYS lead with his flagship founder EdTech product **Learn with Charlie** (https://learnwithcharlie.ai, Charlie AI, London, Aug 2026 – Present), explaining how he took it from concept to full production implementation completely end to end (student UX research, button-driven child UI, React/TypeScript/KaTeX/SVG + Python 3.12/FastAPI/PostgreSQL + ElevenLabs voice + deterministic SymPy maths engine where the AI never guesses an answer, directed Claude Code AI coding/review/Playwright student agent teams under ~50 ADRs & 115+ merged PRs, brand identity, Cloudflare Workers marketing site, Early Access 15 Nov / Full Launch 15 Dec 2026, and Indian textbook publisher licensing), alongside his enterprise studio platforms (**Studio.AI** at Astra Studios, **ReviewTool** & **ProNuke** at Technicolor Group, **OpenUSD**, and **Editorial Turnover / Conform I/O**).
+     ALWAYS lead with his flagship founder EdTech product **Learn with Charlie** (https://learnwithcharlie.ai, Charlie AI, London, Aug 2026 – Present), explaining how he took it from concept to full production implementation completely end to end (student UX research, button-driven child UI, React/TypeScript/KaTeX/SVG + Python 3.12/FastAPI/PostgreSQL + ElevenLabs voice + deterministic SymPy maths engine where the AI never guesses an answer, directed Claude Code AI coding/review/Playwright student agent teams under 75+ ADRs & 175+ merged PRs, brand identity, Cloudflare Workers marketing site, Free early access from 15 November 2026 with one CBSE class 9 chapter, free until 15 January / Full Launch 15 January 2027, and Indian textbook publisher licensing), alongside his enterprise studio platforms (**Studio.AI** at Astra Studios, **ReviewTool** & **ProNuke** at Technicolor Group, **OpenUSD**, and **Editorial Turnover / Conform I/O**).
    • When asked ANY question relating to Rajeev Mutyalu, his career, his CV, his companies, his education, his awards, his films, or Charlie Lab:
      Draw directly and authoritatively from this verified ground truth dossier. Answer accurately and specifically with real numbers, tool names, and metrics.
    • Always conclude portfolio/CV answers with appropriate interactive action chips (separated by spaces):
@@ -7632,7 +7619,7 @@ INTELLIGENCE CAPABILITIES & SCOPE:
 The user is inquiring about Rajeev Mutyalu's verified profile, 0-to-1 product ownership (Learn with Charlie), CV, technical achievements, film credits, or Charlie Lab ("${userQuery || 'Portfolio inquiry'}").
 You have FULL, UNRESTRICTED ACCESS to Rajeev's Master Ground Truth Dossier above.
 Draw directly and authoritatively from his complete career history (including his founder EdTech product Learn with Charlie / Charlie AI at learnwithcharlie.ai, Astra Studios, Technicolor Group, MPC Film, Disney on-site collaboration, Technicolor R&I 3D Blu-ray, and his foundational first 2 companies Dhruva Interactive & e4e), all 10 technical architecture competencies, verified awards, B.Tech education, and Charlie Lab vector engine.
-If the question asks whether Rajeev can take a product from concept to implementation (or build a product end to end / 0-to-1), ALWAYS highlight **Learn with Charlie** (https://learnwithcharlie.ai) as his flagship founder EdTech app built completely end to end from concept, student UX research, React/FastAPI/PostgreSQL/SymPy/ElevenLabs full-stack architecture, and directed Claude Code AI coding agent governance (~50 ADRs, 115+ PRs) to brand, marketing, and launch, alongside his enterprise studio platforms (**Studio.AI**, **ReviewTool**, **ProNuke**, **OpenUSD**, and **Editorial Conform I/O**).
+If the question asks whether Rajeev can take a product from concept to implementation (or build a product end to end / 0-to-1), ALWAYS highlight **Learn with Charlie** (https://learnwithcharlie.ai) as his flagship founder EdTech app built completely end to end from concept, student UX research, React/FastAPI/PostgreSQL/SymPy/ElevenLabs full-stack architecture, and directed Claude Code AI coding agent governance (75+ ADRs, 175+ PRs) to brand, marketing, and launch, alongside his enterprise studio platforms (**Studio.AI**, **ReviewTool**, **ProNuke**, **OpenUSD**, and **Editorial Conform I/O**).
 Answer accurately with real technical metrics, toolsets, and dates.
 Conclude with appropriate interactive navigation chips:
 <a href="#learn-with-charlie" class="ai-section-link">🚀 Explore Learn with Charlie Section &rarr;</a>
@@ -7959,10 +7946,10 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
           `<strong>Yes — 100%!</strong> Rajeev has a proven track record of independently taking products from blank-sheet concept to full production implementation across both <strong>0-to-1 Founder EdTech</strong> and <strong>Enterprise Studio Platforms</strong>:<br/><br/>
 1. 🚀 <strong>Flagship Independent 0-to-1 EdTech Product — Learn with Charlie (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>):</strong><br/>
    Rajeev founded <strong>Charlie AI</strong> in London (August 2026) and independently conceived, architected, built, branded, and launched the <strong>Learn with Charlie</strong> EdTech app completely end to end:<br/>
-   &bull; <strong>Product &amp; UX Strategy:</strong> Conducted student user research, authored detailed written requirements and data schemas, and designed a distraction-free, child-safe <strong>button-driven UX</strong> (<em>"I don't get it"</em>, <em>"Make it simpler"</em>, <em>"Explain another way"</em> — zero free-text chatboxes) that teaches page by page from the child's own CBSE NCERT school textbook.<br/>
+   &bull; <strong>Product &amp; UX Strategy:</strong> Conducted student user research, authored detailed written requirements and data schemas, and designed a distraction-free, child-safe <strong>button-driven UX</strong> (<em>"Another way"</em>, <em>"Smaller steps"</em>, <em>"One more example"</em> — zero free-text chatboxes) that teaches page by page from the child's own CBSE NCERT school textbook.<br/>
    &bull; <strong>Full-Stack Architecture &amp; Build:</strong> Engineered the full production stack with <strong>React + TypeScript (Vite)</strong>, <strong>KaTeX + dynamic SVG figures</strong>, <strong>Python 3.12 + FastAPI</strong>, <strong>PostgreSQL</strong>, <strong>ElevenLabs</strong> natural voice synthesis, and an offline <strong>PyMuPDF + SymPy</strong> textbook ingestion and mathematical verification engine where <strong>the AI never guesses a maths answer</strong>.<br/>
-   &bull; <strong>Directed AI Engineering Team:</strong> Acted as sole Product Owner &amp; Architect directing a specialised team of <strong>Claude Code</strong> builder agents (Backend, Frontend, Content Pipeline), independent Reviewer agents (Test Guard &amp; Maths Pedagogy), and <strong>3 Playwright Simulated Student Testers</strong> under nearly <strong>50 ADRs</strong> and <strong>115+ merged PRs</strong>.<br/>
-   &bull; <strong>Brand, Go-to-Market &amp; Business:</strong> Built the brand identity, Cloudflare Workers marketing website with country-based pricing &amp; waitlist (Early Access <strong>15 Nov 2026</strong>, Full Launch <strong>15 Dec 2026</strong>), feature videos, social channels, and Indian textbook publisher licensing outreach.<br/><br/>
+   &bull; <strong>Directed AI Engineering Team:</strong> Acted as sole Product Owner &amp; Architect directing a specialised team of <strong>Claude Code</strong> builder agents (Backend, Frontend, Content Pipeline), independent Reviewer agents (Test Guard &amp; Maths Pedagogy), and <strong>3 Playwright Simulated Student Testers</strong> under <strong>75+ ADRs</strong> and <strong>175+ merged PRs</strong>.<br/>
+   &bull; <strong>Brand, Go-to-Market &amp; Business:</strong> Built the brand identity, Cloudflare Workers marketing website with country-based pricing &amp; waitlist (Free early access from <strong>15 November 2026</strong> with one CBSE class 9 chapter, free until 15 January; Full Launch <strong>15 January 2027</strong>), feature videos, social channels, and Indian textbook publisher licensing outreach.<br/><br/>
 2. 🎬 <strong>Enterprise Studio Platforms (Concept to Global Production):</strong><br/>
    &bull; <strong>Studio.AI (Scene Weaver) at Astra Studios:</strong> Architected and productionised the multi-model GenAI prompt-to-video platform (Google Veo, Kling AI, Higgsfield, Seedance) with character identity consistency and ACES color conforming, alongside greenfield <strong>OpenUSD v3</strong> and <strong>Editorial Turnover / Conform I/O (99.4% pass rate)</strong>.<br/>
    &bull; <strong>ReviewTool &amp; ProNuke at Technicolor Group:</strong> Spearheaded <strong>ReviewTool</strong> from early prototype in Bengaluru to a global multi-facility 4K+ VFX review platform across London, Montreal, and Bengaluru, plus <strong>RPM Unification</strong> &amp; <strong>Nuke Bridge</strong> at MPC Film (<em>1917, RRR, Mufasa: The Lion King</em>).<br/><br/>
@@ -8037,7 +8024,7 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
 1. 🚀 <strong>0-to-1 AI EdTech &amp; Hybrid Symbolic-AI Architecture (Learn with Charlie):</strong><br/>
    &bull; Founded <strong>Charlie AI</strong> and architected <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) using <strong>React/TypeScript/KaTeX/SVG</strong>, <strong>Python 3.12/FastAPI/PostgreSQL</strong>, <strong>ElevenLabs</strong> natural voice synthesis, and an offline <strong>PyMuPDF + SymPy</strong> symbolic verification pipeline where <strong>the AI never guesses a maths answer</strong> (100% deterministic mathematical accuracy).<br/><br/>
 2. 🤖 <strong>Directed Multi-Agent Engineering Swarms (Claude Code &amp; Antigravity):</strong><br/>
-   &bull; Directs specialised autonomous AI coding agent teams (Backend, Frontend, and Content Pipeline builders), independent Reviewer agents (Test Guard &amp; Maths Pedagogy), and <strong>3 Playwright Simulated Student Testers</strong> under strict governance: versioned data contracts, nearly <strong>50 ADRs</strong>, <strong>115+ merged PRs</strong>, automated CI test suites, and human architect approval on every merge.<br/><br/>
+   &bull; Directs specialised autonomous AI coding agent teams (Backend, Frontend, and Content Pipeline builders), independent Reviewer agents (Test Guard &amp; Maths Pedagogy), and <strong>3 Playwright Simulated Student Testers</strong> under strict governance: versioned data contracts, <strong>75+ ADRs</strong>, <strong>175+ merged PRs</strong>, automated CI test suites, and human architect approval on every merge.<br/><br/>
 3. 🔌 <strong>Model Context Protocol (MCP) Server Engineering:</strong><br/>
    &bull; Builds custom <strong>JSON-RPC 2.0 MCP tool servers</strong> with sandboxed read-only security gates, exposing DCC applications (Maya, Houdini Solaris, Nuke), ShotGrid/Flow databases, filesystem inspectors, and render farm queues to frontier LLMs without custom glue code.<br/><br/>
 4. 🔒 <strong>Air-Gapped On-Premise Private LLMs (OpenClaw, Ollama &amp; vLLM):</strong><br/>
@@ -8069,7 +8056,7 @@ CRITICAL RULE: Do NOT include any portfolio action chips (do NOT include Direct 
         ],
         responses: [
           `<strong>📌 Founder &amp; 20-Year Production Pedigree:</strong> Founder of <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) &bull; Lead Software Architect &bull; Production Technology Architect &bull; Creative Technology &amp; AI Systems Lead with 20+ years of proven engineering leadership across Astra Studios, Technicolor Group, and MPC Film on Oscar-winning blockbuster productions (<em>1917, RRR, Mufasa: The Lion King, Back in Action, Spaceman, Prehistoric Planet</em>).<br/>
-• <strong>🚀 Proven 0-to-1 Product Builder:</strong> Founded Charlie AI in London and built the <strong>Learn with Charlie</strong> EdTech platform end to end from concept to implementation (React, FastAPI, PostgreSQL, SymPy deterministic maths verifier, ElevenLabs voice, and a directed team of Claude Code AI agents under ~50 ADRs &amp; 115+ PRs).<br/>
+• <strong>🚀 Proven 0-to-1 Product Builder:</strong> Founded Charlie AI in London and built the <strong>Learn with Charlie</strong> EdTech platform end to end from concept to implementation (React, FastAPI, PostgreSQL, SymPy deterministic maths verifier, ElevenLabs voice, and a directed team of Claude Code AI agents under 75+ ADRs &amp; 175+ PRs).<br/>
 • <strong>💎 The Rare "Dual-Threat" Moat:</strong> Bridges traditional mission-critical studio infrastructure (Python 3.x, PyQt/PySide, OpenUSD, ACES, OTIO, Conform Ingest) with applied AI frontier systems (Custom MCP Servers, Claude Code agent swarms, on-premise quantized LLMs like Nous Hermes, and n8n zero-touch automation).<br/>
 • <strong>👥 Global Team Mentorship:</strong> Mentored 50+ engineers and pipeline TDs across international studio sites in London, Montreal, and Bengaluru.<br/>
 • <strong>⚡ Immediate ROI &amp; Zero Ramp-Up:</strong> A strategic visionary who still writes production-grade code daily. Proven track record aligning global cross-continental teams across London and Bengaluru under strict Hollywood delivery deadlines.<br/><br/>
@@ -8091,7 +8078,7 @@ Most senior leaders either manage people or write code; Rajeev bridges high-leve
 <a href="cv.html" class="ai-section-link">📄 Open Executive CV &rarr;</a>`,
 
           `<strong>🚀 Immediate Production ROI &amp; 0-to-1 Engineering Velocity:</strong><br/>
-• <strong>🎯 Independent Concept-to-Implementation Execution:</strong> Proven ability to take greenfield products from blank sheet to production—demonstrated by building <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) end to end under ~50 ADRs and 115+ merged PRs, as well as <strong>Studio.AI</strong> and <strong>ReviewTool</strong>.<br/>
+• <strong>🎯 Independent Concept-to-Implementation Execution:</strong> Proven ability to take greenfield products from blank sheet to production—demonstrated by building <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) end to end under 75+ ADRs and 175+ merged PRs, as well as <strong>Studio.AI</strong> and <strong>ReviewTool</strong>.<br/>
 • <strong>⚡ 5x–10x Delivery Acceleration:</strong> Replaces manual studio friction with zero-touch event-driven automation (n8n webhooks, automated QC verification loops, and directed Claude Code agentic workflows).<br/>
 • <strong>👥 Cross-Continental Leadership:</strong> Mentored over 50+ TDs and engineers across London, Montreal, and Bengaluru, establishing high-trust engineering cultures and automated CI/CD gates.<br/>
 • <strong>📍 Location &amp; Status:</strong> Based in London, UK (UK Skilled Worker Visa • Existing Sponsorship in Place • Available Immediately) with full global remote/onsite mobility.<br/><br/>
@@ -9236,8 +9223,8 @@ Click <a href="javascript:void(0)" class="ai-section-link" onclick="document.get
           response: `🚀 <strong>LEARN WITH CHARLIE // CHARLIE AI</strong><br/><br/>
 Rajeev founded <strong>Charlie AI</strong> in <strong>London in August 2026</strong> and owns <strong>Learn with Charlie</strong> (<a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a>) end to end: product, UX, architecture, build, brand, launch, social media and publisher partnerships.<br/><br/>
 • <strong>What It Is:</strong> A curriculum-bound AI maths tutor for Indian school children. It teaches from the child's own school textbook, page by page, with a natural voice and a blackboard that writes the working line by line.<br/>
-• <strong>Scope:</strong> Starts with CBSE maths from Class 9 (NCERT). Classes 8 to 10 come first, then classes 5 to 7, then other subjects such as science.<br/>
-• <strong>Button-Led Teaching (No Chatbox):</strong> No free-text prompts for children. They use intuitive buttons: <em>"I don't get it"</em>, <em>"Explain another way"</em>, <em>"Make it simpler"</em>, <em>"Show me an example"</em>, <em>"Say that again"</em>, plus Break and play controls. Explanations switch between styles such as the working, balance scales, and smaller steps.<br/>
+• <strong>Scope &amp; Rollout:</strong> Free early access from 15 November 2026 with one CBSE class 9 chapter, free until 15 January. Full launch brings CBSE classes 8 and 9 on 15 January 2027, class 10 around 15 February, around May 2027 CBSE 5 to 7 and ICSE 5 to 10, then Cambridge IGCSE and IB, then state boards and more subjects.<br/>
+• <strong>Button-Led Teaching (No Chatbox):</strong> No free-text prompts for children. They learn through three guided buttons: <em>"Another way"</em>, <em>"Smaller steps"</em>, and <em>"One more example"</em>, plus Break and play controls. Explanations switch between styles such as the working, balance scales, and smaller steps.<br/>
 • <strong>Safety &amp; Accuracy:</strong> The AI never decides a maths answer. Every answer and worked step comes from a SymPy maths engine over parameterised templates, and only human-reviewed and approved teaching content reaches children.<br/>
 • <strong>Learning Features:</strong> End-of-topic checks, practice exercises marked line by line (pointing to the mistake without giving the answer away), two-question quick checks for earlier-class gaps (signs, fractions) with warm-ups, ticks/stars progress, and a parent view.<br/>
 • <strong>Privacy by Design:</strong> Minimal personal data collected, with pseudonymous IDs in analytics.<br/><br/>
@@ -9317,7 +9304,7 @@ Rajeev serves as <strong>Product Owner and Architect</strong>, directing a speci
 • <strong>Builder Agents:</strong> Dedicated agents for Backend (FastAPI/Python 3.12), Frontend (React/TypeScript/KaTeX), and the Offline Content Pipeline (PyMuPDF/SymPy).<br/>
 • <strong>Reviewer Agents:</strong> An independent test reviewer ensuring rigorous code quality, and a dedicated maths reviewer verifying pedagogical accuracy and symbolic constraints.<br/>
 • <strong>3 Simulated Student Agents:</strong> Below-average, average, and above-average student personas that autonomously navigate the real web application in a browser via Playwright to discover usability friction, edge cases, and regressions.<br/>
-• <strong>Strict Governance:</strong> Written requirements document, versioned data contracts, nearly 50 Architecture Decision Records (ADRs), one concern per pull request (over 115 PRs merged to date), automated unit/E2E test suites in CI, and Rajeev's personal review and approval on every merge.<br/><br/>
+• <strong>Strict Governance:</strong> Written requirements document, versioned data contracts, 75+ Architecture Decision Records (ADRs), one concern per pull request (175+ PRs merged to date), automated unit/E2E test suites in CI, and Rajeev's personal review and approval on every merge.<br/><br/>
 <a href="#learn-with-charlie" class="ai-section-link">👥 Inspect Interactive AI Engineering Team Graph &rarr;</a>
 <div style="margin-top:0.85rem;padding:0.5rem 0.75rem;background:rgba(56,189,248,0.08);border-left:3px solid var(--accent-cyan);border-radius:4px;font-size:0.82rem;color:var(--text-secondary);">ℹ️ <em>Please note: I am Rajeev's portfolio assistant (Cyber Charlie), which is separate from the product Learn with Charlie.</em></div>`,
           followups: getDynamicFollowups([
@@ -9331,16 +9318,15 @@ Rajeev serves as <strong>Product Owner and Architect</strong>, directing a speci
 
       // 4e-5. Launch Date & Roadmap
       if (
-        /\b(when\s+does\s+(it|learn\s+with\s+charlie|charlie)\s+launch|launch\s+date|release\s+date|when\s+launch|early\s+access|15\s+november|15\s+december)\b/i.test(q)
+        /\b(when\s+does\s+(it|learn\s+with\s+charlie|charlie)\s+launch|launch\s+date|release\s+date|when\s+launch|early\s+access|15\s+november|15\s+january)\b/i.test(q)
       ) {
         return {
           id: 'learn_with_charlie_launch',
           title: 'Learn with Charlie Launch Roadmap & Dates',
           response: `📅 <strong>LEARN WITH CHARLIE // LAUNCH TIMELINE &amp; ROADMAP</strong><br/><br/>
-• <strong>Free Early Access:</strong> Opens on <strong>15 November 2026</strong>.<br/>
-• <strong>Full Commercial Launch:</strong> Scheduled for <strong>15 December 2026</strong>.<br/>
-• <strong>Initial Scope:</strong> Starts with CBSE maths from Class 9 (NCERT). Classes 8 to 10 come first at launch.<br/>
-• <strong>Expansion Roadmap:</strong> Followed by Classes 5 to 7, and subsequent expansion into other subjects such as science.<br/>
+• <strong>Free Early Access:</strong> Free early access from <strong>15 November 2026</strong> with one CBSE class 9 chapter, free until 15 January.<br/>
+• <strong>Full Commercial Launch:</strong> Scheduled for <strong>15 January 2027</strong>.<br/>
+• <strong>Rollout Roadmap:</strong> CBSE classes 8 and 9 on 15 January 2027, class 10 around 15 February, around May 2027 CBSE 5 to 7 and ICSE 5 to 10, then Cambridge IGCSE and IB, then state boards and more subjects.<br/>
 • <strong>Access:</strong> Visit <a href="https://learnwithcharlie.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);">learnwithcharlie.ai</a> to join the early access waiting list with country-based pricing.<br/><br/>
 <a href="#learn-with-charlie" class="ai-section-link">⏳ View Live Countdown &amp; Roadmap &rarr;</a>
 <div style="margin-top:0.85rem;padding:0.5rem 0.75rem;background:rgba(56,189,248,0.08);border-left:3px solid var(--accent-cyan);border-radius:4px;font-size:0.82rem;color:var(--text-secondary);">ℹ️ <em>Please note: I am Rajeev's portfolio assistant (Cyber Charlie), which is separate from the product Learn with Charlie.</em></div>`,
@@ -12721,7 +12707,7 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const section = document.getElementById('learn-with-charlie');
       if (!section) return;
 
-      // 1. Live Launch Countdown Timer (15 Nov 2026 early access -> 15 Dec 2026 full launch)
+      // 1. Live Launch Countdown Timer (15 Nov 2026 early access -> 15 Jan 2027 full launch)
       const cntWrap = document.getElementById('charlieCountdownWrap');
       const cntLabel = document.getElementById('cntLabel');
       const cntDays = document.getElementById('cntDays');
@@ -12730,24 +12716,26 @@ I am currently running in <strong>Offline Local-KB Mode</strong>, which indexes 
       const cntSecs = document.getElementById('cntSecs');
       const cntNote = document.getElementById('cntNote');
 
-      const earlyAccessDate = new Date('2026-11-15T00:00:00Z').getTime();
-      const fullLaunchDate = new Date('2026-12-15T00:00:00Z').getTime();
+      const earlyAccessDate = new Date('2026-11-14T18:30:00Z').getTime();
 
       function updateCountdown() {
-        if (!cntWrap || !cntDays) return;
+        if (!cntWrap) return;
         const now = Date.now();
-        let target = earlyAccessDate;
 
-        if (now >= earlyAccessDate && now < fullLaunchDate) {
-          target = fullLaunchDate;
-          if (cntLabel) cntLabel.textContent = 'Full Launch Countdown';
-          if (cntNote) cntNote.innerHTML = 'Free Early Access is live! Full launch on 15 December 2026.';
-        } else if (now >= fullLaunchDate) {
-          cntWrap.style.display = 'none';
+        if (now >= earlyAccessDate) {
+          const digitsRow = cntWrap.querySelector('.countdown-digits-row');
+          if (digitsRow) {
+            digitsRow.innerHTML = '<span class="countdown-num">Early access is open</span>';
+          }
+          if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+          }
           return;
         }
+        if (!cntDays) return;
 
-        const diff = Math.max(0, target - now);
+        const diff = Math.max(0, earlyAccessDate - now);
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const mins = Math.floor((diff / (1000 * 60)) % 60);
